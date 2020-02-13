@@ -1,10 +1,8 @@
 # 🛠 Bitcoin-Standup
 
-> *Bitcoin-Standup* is a open source project and a suite of tools that helps users to install a [Bitcoin-Core](https://bitcoin.org/) full-node on a fresh computer or VPS and to add important privacy tools like onion services and eventually optional Bitcoin-related tools like [Electrum Personal Server](https://github.com/chris-belcher/electrum-personal-server), [C-Lightning](https://github.com/ElementsProject/lightning), [Esplora](https://github.com/Blockstream/esplora), [BTCPay Server](https://github.com/btcpayserver/btcpayserver), etc., as well as emerging technologies like Bitcoin-based Decentralized Identifiers. *Bitcoin-Standup* strives to provide the community with an easy to use "one-click" set up full-node complete with a purpose built remote app for securely connecting to your node over Tor from anywhere in the world, providing you with a powerful suite of tools.
+> *Bitcoin-Standup* is a open source project and a suite of tools that helps users to install a [Bitcoin-Core](https://bitcoin.org/) full-node on a fresh computer or VPS and to add important privacy tools like onion services and eventually optional Bitcoin-related tools like [Electrum Personal Server](https://github.com/chris-belcher/electrum-personal-server), [C-Lightning](https://github.com/ElementsProject/lightning), [Esplora](https://github.com/Blockstream/esplora), [BTCPay Server](https://github.com/btcpayserver/btcpayserver), etc., as well as emerging technologies like Bitcoin-based Decentralized Identifiers.
 >
-> This tool will also harden and secure your OS to current best practices, as well as adding sufficient system tools to support basic Bitcoin development. After setup, *Bitcoin-Standup* will present a QR code and/or special URI that can be used to securely link your full-node to other devices, such as your mobile phone for instance using [StandUp-Remote](https://testflight.apple.com/join/OQHyL0a8) or [Fully Noded](https://github.com/FontaineDenton/iOS/FullyNoded) on iOS or a remote desktop.
->
-> iOS *StandUp-Remote* is compatible with some of the most popular node manufacturers and Bitcoin products on the market making pairing to your own node easier than ever. Simply scan a QR code or tap a link and *StandUp-Remote* will be 100% powered by your own full-node.
+> This tool will also harden and secure your OS to current best practices, as well as adding sufficient system tools to support basic Bitcoin development. After setup, *Bitcoin-Standup* will present a QR code and/or special URI that can be used to securely link your full-node to other devices, such as your mobile phone (for instance using [StandUp-Remote](https://github.com/FontaineDenton/StandUp-Remote) on iOS) or a remote desktop.
 >
 > Once installed and fully synced, a *Bitcoin-Standup* full node can also be used with developer education courses like [Learning Bitcoin from the Command Line](https://github.com/ChristopherA/Learning-Bitcoin-from-the-Command-Line).
 
@@ -20,12 +18,10 @@
 - [Financial Support](#financial-support)
 - [Install](#install)
   - [macOS Install](#macos-install)
-  - [iOS Install](#ios-install)
-  - [Linode and Debian Linux Install](#linode-and-debian-linux-install)
 - [API](#api)
   - [Quick Connect URL using btcstandup](#quick-connect-url-using-btcstandup)
 - [Security](#security)
-  - [Tor V3 Authentication using macOS *StandUp* and iOS *StandUp-Remote*](#tor-v3-authentication*)
+  - [Tor V3 Authentication using StandUp and StandUp-Remote](#tor-v3-authentication-using-standup-and-StandUp-Remote)
 - [Maintainers](#maintainers)
 - [Contributing](#contributing)
 - [License](#license)
@@ -40,26 +36,9 @@ This project is an early **Work-In-Progress**, so that we can prototype, discove
 
 ## Background
 
-### Reasons to run a full node
+The most important reason to operate a Bitcoin full node is validation. With a full node, Bitcoin users can check whether transactions are valid according to all of Bitcoin's rules. Users can verify that any bitcoins they receive are legitimately mined, correctly signed, and more. This is what makes Bitcoin a trustless solution.
 
-##### 1.  Validation
-- The most important reason to operate a Bitcoin full node is validation. With a full node, Bitcoin users can check whether transactions are valid according to all of Bitcoin's rules. Users can verify that any bitcoins they receive are legitimately mined, correctly signed, and more. This is what makes Bitcoin a trustless solution. Without your own full node you are inherently trusting a third party to tell you how much Bitcoin you own and to construct transactions correctly, with your own full node you can verify with certainty that your bitcoins are real, yours, and get sent to the intended recipient.
-
-##### 2. Privacy
-- Generally speaking when you use a wallet or Bitcoin service you are relying on someone else's node, therefore they know all your addresses, spending habits, how much money you have etc, this is obviously not ideal. Utilizing your own node allows you to use Bitcoin in a much more private way whereby you do not necessarily have to leak all your spending habits to a third party.
-- *Bitcoin-Standup* uses Tor for enhanced privacy. Over the clearnet all of your devices network traffic is highly correlatable, meaning it is trivial for third parties to track which websites you visit and they could easily see the internet traffic related to your IP address that are Bitcoin related, considering IP addresses can be linked to physical locations it can pose certain risks to Bitcoin users. This is where Tor comes in, with *Bitcoin-Standup* all of your Bitcoin related internet traffic is obfuscated with Tor, for example you may use the *StandUp-Remote* iOS app over Tor to get information from your node and it would be very difficult for any third party to see that your device is speaking to a Bitcoin Core node, let alone what it is specifically doing.
-    
-##### 3. Security
-- Bitcoin Core is the reference implementation of Bitcoin, when using *Bitcoin-Standup* you are utilizing one of the most highly peer reviewed and scrutinized pieces of software in the world, the vast majority of the functionality for the iOS *StandUp-Remote* app is powered by Bitcoin-Core so you can rest at ease that critical bugs should be minimized.
-- Self custody can be scary as running a node properly over Tor may not be something most people are comfortable with. The entire purpose of the *Bitcoin-Standup* suite of tools is to make this achievable for anyone who can click a mouse and scan a QR code.
-- Native Tor V3 client authentication is integrated into *Bitcoin-StandUp* apps, this is the most secure way of communicating with your node remotely ensuring that *only* your device has access to your node even if all other credentials were compromised by an attacker. ToDo: insert link for Tor V3 security
-- In short accessing your Bitcoin Core node with a remote client is most securely done over the Tor network.
-    
-##### 4. Liquidity
-- Access to funds is a critical component to storing your Bitcoin in a sovereign way. With *Bitcoin-StandUp* you can copy and paste a one line command and recover your entire wallet with your own node at any time with guaranteed compatibility. *StandUp-Remote* iOS app also allows you to import seeds which will allow you to access your Bitcoins stored on other wallets or apps. If you are not using your own node you may be encumbered by the third parties software limitations which may not allow you to export your seed, private keys or be interoperable with other Bitcoin software.
-    
-##### 5. Testing and learning
-- Utilizing your own node allows you to test with the bitcoin network, simply run the node over testnet and you can experiment with fake money before committing any real funds. A ridiculous percentage of circulating Bitcoins have been lost due to misuse or mistakes. *Bitcoin-Standup* suite of tools allows you test everything over testnet with your own node ensuring you are comfortable with how it works and that it does work before utilizing mainnet.
+(TODO: Rewrite this paragraph, add other basic reasons why having your own full node rather than relying on others is powerful.)
 
 ## Financial Support
 
@@ -68,6 +47,38 @@ This project is an early **Work-In-Progress**, so that we can prototype, discove
 To financially support further development of *Bitcoin-Standup*, please consider becoming Patron of Blockchain Commons by contributing Bitcoin at our [BTCPay Server](https://btcpay.blockchaincommons.com/) or through ongoing fiat patronage by becoming a [Github Sponsor](https://github.com/sponsors/ChristopherA/) or by clicking on the ❤️ above.
 
 If you are a software developer you can join us by offering issues and pull requests in our [Bitcoin-Standup GitHub](https://github.com/BlockchainCommons/Bitcoin-Standup) or with other projects located in the [Blockchain Commons Community GitHub](https://github.com/BlockchainCommons/).
+
+## Functionality
+
+The application *Bitcoin Standup.app* currently installs, configures, and launches `tor stable v0.4.2.5` and `bitcoin-core v0.19.0.1`. The app is under development and as it stands will install and configure a Bitcoin Core full node, Tor as a service, a Tor V3 hidden service controlling each  `rpcport` with native client cookie authentication. The app allows the user to set custom settings including `txindex`, `prune`, `walletdisabled`, `testnet`, `mainnet`, `datadir` which should not interfere with any exisiting bitcoin.conf settings. It offeres a simple `go private` option which closes off your node to the clearnet only accepting connections over Tor. The user may refresh their hidden service at the push of a button.
+
+The default `bitcoin.conf` StandUp.app will create is:
+```
+testnet=1
+walletdisabled=0
+rpcuser=arandomstring
+rpcpassword=astrongrandompassword
+server=1
+prune=0
+txindex=1
+rpcallowip=127.0.0.1
+bindaddress=127.0.0.1
+proxy=127.0.0.1:9050
+listen=1
+debug=tor
+[main]
+rpcport=8332
+[test]
+rpcport=18332
+[regtest]
+rpcport=18443
+```
+
+If there is an exisiting `bitcoin.conf` in your `datadir` then *Bitcoin Standup.app* will simply check for and add `rpccredentials` if they are missing. 
+
+Once the app has completely installed and launched Bitcoin, it will present a *Quick Connect QR code* which can be used to securely link your full node remotely over Tor to other devices, such as the iOS application[StandUp-Remote](https://testflight.apple.com/join/OQHyL0a8) and [StandUp-Remote](https://github.com/FontaineDenton/StandUp-Remote).
+
+The app currently relies on initial installation of [Strap.sh](https://github.com/MikeMcQuaid/strap/) to install basic development tools before installing `tor` and `bitcoin-qt`. This tool also does some basic hardening of your Macintosh including turning on FileVault (the full-disk encryption services offered in macOS), turning on your Mac firewall, and turning off Java. Future versions of *Bitcoin Standup* will integrate *Strap.sh* features directly to offer additional macOS hardening configuration options.
 
 ## Install
 
@@ -108,17 +119,17 @@ Start by installing *Strap*, a script hosted on Github for bootstrapping a minim
      ```bash
      bash ~/Downloads/strap.sh
      ```
-     5. After *strap.sh* has finished processing, delete the customized `strap.sh` (it has a GitHub access token in it) by executing:
+     5. After *strap.sh* has finished processing, delete the customized `strap.sh` (it has a GitHub acces token in it) by executing:
      ```bash
      rm ~/Downloads/strap.sh
      ```
 2. After running the *Strap* script, download and run the *Bitcoin Standup.app*
 
-#### Download *StandUp.app*
+#### Install *StandUp.app*
 
-Download the `StandUp_Export.zip` from this [public google drive link](https://drive.google.com/open?id=1lXyl_zO6WPJN5tzWAVV3p42WPFtyesCR), unzip it and open the folder and you will see `StandUp.app`, if your mac has been strapped or has brew and xcode command line tools installed you will be good to go, just double click it the app to use it.
+To use the MacOS app you may download the `StandUp_Export.zip` from this [public google drive link](https://drive.google.com/open?id=1lXyl_zO6WPJN5tzWAVV3p42WPFtyesCR), unzip it and open the folder and you will see `StandUp.app`, if your mac has been strapped or has brew and xcode command line tools installed you will be good to go, just double click it the app to use it.
 
-Peter Denton GPG fingerprint: `3B37 97FA 0AE8 4BE5 B440 6591 8564 01D7 121C 32FC` signed the `StandUp_Export.zip` which produced the following signature:
+Peter Denton GPG fingerprint: `3B37 97FA 0AE8 4BE5 B440 6591 8564 01D7 121C 32FC` signed the above `StandUp_Export.zip` which produced the following signature:
 
 ```
 -----BEGIN PGP SIGNATURE-----
@@ -137,6 +148,7 @@ eYehwAF1LW0IrF/zM8mc45fpkHr+uCDjLZb6ctsUONPc7ARKt1vYZ+r1NM4sHq2m
 SijIlxPUugawiAn90sGhaTGviTWg1A06l3hpjzhaEdyIY2UOD7g=
 =V4d6
 -----END PGP SIGNATURE-----
+
 ```
 
 #### Build Mac App from source using Xcode
@@ -148,92 +160,14 @@ Instead of downloading binaries through *Strap*, you can build *Bitcoin-Standup*
 - In XCode, click "XCode" -> "preferences" -> "Accounts" -> add your github account
 - On the github repo click "Clone and Download" > "Open in XCode"; when XCode launches, just press the "play" button in the top left
 
-### iOS Install
-
-#### *StandUp-Remote* iOS Testflight
-
-We have a public link available for beta testing [here](https://testflight.apple.com/join/OQHyL0a8), please bear in mind the app may change drastically and may not be backwards compatible, please only use the app on testnet. You will need to first install the [Testflight app](https://testflight.apple.com) onto your device in order to be able to access the testflight beta of StandUp-Remote.
-
-### Linode and Debian Linux Installs
-
-If you are not on macOS you can utilize our [Linux based scripts](https://github.com/BlockchainCommons/Bitcoin-Standup/tree/master/Scripts) which will also produce a QuickConnect QR code upon completion for pairing to. Please read full details [here](https://github.com/BlockchainCommons/Bitcoin-Standup/blob/master/Scripts/README.md) on the dedicated readme. The scripts are simple to run and set you up with Tor and Bitcoin Core as services.
-
-##### By Hand
-
-This is currently a work in progress (there is no Quick Connect URI at the end of install yet), but these instructions and scripts from the [Learning Bitcoin from the Command Line](https://github.com/ChristopherA/Learning-Bitcoin-from-the-Command-Line) course will also install Bitcoin-Core on a VPS or on Debian Linux.
-
-- [Section One: Setting Up a Bitcoin Core VPS by Hand](https://github.com/ChristopherA/Learning-Bitcoin-from-the-Command-Line/blob/master/02_1_Setting_Up_a_Bitcoin-Core_VPS_by_Hand.md)
-- [Section Two: Setting Up a Bitcoin Core VPS with StackScript](https://github.com/ChristopherA/Learning-Bitcoin-from-the-Command-Line/blob/master/02_2_Setting_Up_a_Bitcoin-Core_VPS_with_StackScript.md)
-
-## Functionality
-
-### macOS - node/server
-
-The macOS application *Bitcoin Standup.app* currently installs, configures, and launches `tor stable v0.4.2.5` and `bitcoin-core v0.19.0.1`. The app is under development and as it stands will install and configure a Bitcoin Core full node, Tor as a service, a Tor V3 hidden service controlling each  `rpcport` with a GUI for native Tor V3 authentication. The app allows the user to set custom settings including `txindex`, `prune`, `walletdisabled`, `testnet`, `mainnet`,  and `datadir`. It offers a simple `go private` option which closes off your node to the clearnet, only accepting connections over Tor. The user may refresh their hidden service at the push of a button. The user can start/stop Tor and Bitcoin Core from the GUI, adjust bitcoin.conf settings, see the status of Bitcoin Core and Tor, the app will configure a hidden service and you bitcoin.conf so that it can display a QuickConnect QR code to connect to with the StandUp-Remote iOS app.
-
-Once the app has completely installed and launched Bitcoin Core, it will present a *Quick Connect QR code* which can be used to securely link your full node remotely over Tor to other devices, such as the iOS application [StandUp-Remote](https://testflight.apple.com/join/OQHyL0a8) and [Fully Noded](https://github.com/FontaineDenton/iOS/FullyNoded).
-
-The app currently relies on initial installation of [Strap.sh](https://github.com/MikeMcQuaid/strap/) to install basic development tools before installing `tor` and `bitcoin-core`. This tool also does some basic hardening of your Macintosh including turning on FileVault (the full-disk encryption services offered in macOS), turning on your Mac firewall, and turning off Java. Future versions of *Bitcoin Standup* will integrate *Strap.sh* features directly to offer additional macOS hardening configuration options.
-
-To read more details about macos *StandUp.app* please see the dedicated github [readme here](https://github.com/BlockchainCommons/Bitcoin-Standup/blob/master/MacOS/README.md).
-
-### iOS - remote app
-
-The iOS application *StandUp-Remote* utilizes your Bitcoin Core node as a backend, offering you a relatively secure, private, self sovereign means of accessing, spending, and receiving your Bitcoin on the go. Once you scan a QuickConnect QR code the app will automatically start firing off a carefully constructed list of RPC commands to your node to create a special type of wallet whereby no private keys are stored on your node. The iOS device holds your encrypted seed and simply derives the correct private keys to sign transactions with on demand whenever you go to spend, *never* reusing a private key or address. StandUp-Remote is a powerful but simple to use wallet that offers both advanced and basic functionality, giving users full control over their seed with the ability to import seeds.
-
-Because the app is accessing your node over Tor you may put your Bitcoin Core machine completely behind a firewall with no port forwarding whatsoever to access your node anywhere in the world, self sovereignty at its finest.
-
-- Full integrated Tor
-- Full coin control
-- Segwit, legacy and segwit wrapped addresses all compatible (BIP44, BIP84, BIP49)
-- Import seeds
-- Utilize your BIP39 recovery phrase with your own node
-- Customize derivation paths
-
-To see all the details please visit the dedicated github [readme here](https://github.com/BlockchainCommons/Bitcoin-Standup/tree/master/iOS/StandUp-Remote)
-
-## API
-
-### Quick Connect URL using btcstandup
-
-This section defines the spec for a deep link URI and a scannable QR Code. These ideally would have the same format among a number of different software projects and hardware products to ensure universal compatibility.
-
-The iOS application [StandUp-Remote](https://github.com/FontaineDenton/iOS/StandUp-Remote) and [FullyNoded](https://github.com/Fonta1n3/FullyNoded/blob/master/Readme.md) is a proof of concept of such a light client. The server side node manufacturers/providers supporting this protocol are [BTCPayServer](https://btcpayserver.org), [Nodl](https://www.nodl.it/), [MyNode](http://www.mynodebtc.com) and [RaspiBlitz](https://github.com/rootzoll/raspiblitz).
-
-#### Current Format
-
-This example URL follows the current format:
-
-```
-btcstandup://<your rpcuser>:<your rpcpassword>@<your tor hostname>.onion:<your hidden service port>/?label=<optional node label>
-```
-
-Example with `label` :
-
-```
-btcstandup://rpcuser:rpcpassword@kshcahsaihslalsichs78yb2ud8d.onion:8332/?label=Your%20Nodes%20Name
-```
-
-Example without `label` :
-
-```
-btcstandup://rpcuser:rpcpassword@kshcahsaihslalsichs78yb2ud8d.onion:8332/?
-```
-
-This allows node hardware manufacturers the option of hard coding a label for the node. Ideally, there would be a two-factor authentication where user inputs a V2 or V3 auth cookie into the client app manually, so that if the URL leaks somehow it would not give an attacker access to the node.
-
-#### Questions for the Developer Community
-
-We'd love to have more discussion with other developers about any additional requirements for this initial connection between a full node and a remote device. This could include a possible TOFU two-round auth so that the node can know that the specific remote device is the same one that requested it originally.
-
 ## Security
 
 ### Warning
 
 Don’t configure a VPS with the Bitcoin wallet feature turned on with any significant real funds; see http://blog.thestateofme.com/2012/03/03/lessons-to-be-learned-from-the-linode-bitcoin-incident/ . A higher level of safety is required for significant funds. A VPS-based install can be a useful as a wallet-less full node connected remotely to a more secure wallet that signs the keys elsewhere.
 
-### Tor V3 Authentication using StandUp and iOS *StandUp-Remote*
-Think of your StandUp node as a server, and iOS *StandUp-Remote* or your iPhone as a client. Tor V3 hidden services have new and improved built in functionality for authenticating client connections to servers, whereby the client stores a private key that is kept secret to everyone only ever existing on the client and the public key is stored in a special directory called `authorized_clients` on your StandUp server which (in StandUp) lives in your `HiddenServiceDir`  > `/usr/local/var/lib/tor/standup/authorized_clients`.
+### Tor V3 Authentication using StandUp and StandUp-Remote
+Think of your StandUp node as a server, and StandUp-Remote or your iPhone as a client. Tor V3 hidden services have new and improved built in functionality for authenticating client connections to servers, whereby the client stores a private key that is kept secret to everyone only ever existing on the client and the public key is stored in a special directory called `authorized_clients` on your StandUp server which (in StandUp) lives in your `HiddenServiceDir`  > `/usr/local/var/lib/tor/standup/authorized_clients`.
 
 #### The problem:
 The QuickConnect QR code that StandUp produces for you contains very sensitive information. If you had a malicious maid in your house or a hacker was remotely recording your computer screen then they would have access to your node and your bitcoin as soon as they got an image of the QuickConnect QR code. If the `authorized_clients` directory is empty then anyone with the QR code has full access to your node.
@@ -274,7 +208,7 @@ macOS *StandUp.app* then simply creates a random filename with a `.auth` extensi
 
 ### Supported Versions
 
-None yet.
+none yet
 
 ### Reporting a Vulnerability
 
@@ -381,3 +315,4 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 ## GitHub Codeowners
 
 @ChristopherA
+
