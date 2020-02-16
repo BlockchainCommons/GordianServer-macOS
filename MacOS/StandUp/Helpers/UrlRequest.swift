@@ -12,7 +12,7 @@ class FetchJSON {
         
     func getRequest(completion: @escaping ((dict:NSDictionary?, error:String?)) -> Void) {
         
-        let url = "https://api.github.com/repos/BlockchainCommons/Bitcoin-Standup/contents/MacOS/StandUp/JSON/SupportedVersion.json"
+        let url = "https://api.github.com/repos/BlockchainCommons/Bitcoin-Standup-MacOS/contents/MacOS/StandUp/JSON/SupportedVersion.json"
         guard let destination = URL(string: url) else { return }
         let request = URLRequest(url: destination)
         let session = URLSession.shared
