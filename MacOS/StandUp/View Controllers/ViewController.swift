@@ -805,6 +805,8 @@ class ViewController: NSViewController {
     func parseBitcoindResponse(result: String) {
         print("parsebitcoindresponse")
         
+        print("result = \(result)")
+        
         if result.contains("Bitcoin Core Daemon version") {
             
             let arr = result.components(separatedBy: "Copyright (C)")
