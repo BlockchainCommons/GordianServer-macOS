@@ -88,6 +88,21 @@ Once the app has completely installed and launched Bitcoin, it will present a *Q
 
 The app currently relies on initial installation of [Strap.sh](https://github.com/MikeMcQuaid/strap/) to install basic development tools before installing `tor` and `bitcoin-qt`. This tool also does some basic hardening of your Macintosh including turning on FileVault (the full-disk encryption services offered in macOS), turning on your Mac firewall, and turning off Java. Future versions of *Bitcoin Standup* will integrate *Strap.sh* features directly to offer additional macOS hardening configuration options.
 
+### iOS - remote app
+
+The iOS application *FullyNoded 2* utilizes your Bitcoin Core node as a backend, offering you a relatively secure, private, self sovereign means of accessing, spending, and receiving your Bitcoin on the go. Once you scan a QuickConnect QR code the app will automatically start firing off a carefully constructed list of RPC commands to your node to create a special type of wallet whereby no private keys are stored on your node. The iOS device holds your encrypted seed and simply derives the correct private keys to sign transactions with on demand whenever you go to spend, *never* reusing a private key or address. FullyNoded 2 is a powerful but simple to use wallet that offers both advanced and basic functionality, giving users full control over their seed with the ability to import seeds.
+
+Because the app is accessing your node over Tor you may put your Bitcoin Core machine completely behind a firewall with no port forwarding whatsoever to access your node anywhere in the world, self sovereignty at its finest.
+
+- Full integrated Tor
+- Full coin control
+- Segwit, legacy and segwit wrapped addresses all compatible (BIP44, BIP84, BIP49)
+- Import seeds
+- Utilize your BIP39 recovery phrase with your own node
+- Customize derivation paths
+
+To see all the details please visit the dedicated github [readme here](https://github.com/BlockchainCommons/Bitcoin-Standup/tree/master/iOS/FullyNoded-2)
+
 ## Install
 
 ### macOS Install
@@ -167,6 +182,10 @@ Instead of downloading binaries through *Strap*, you can build *Bitcoin-Standup*
 - You will need a free Apple developer account; [create one here](https://developer.apple.com/programs/enroll/)
 - In XCode, click "XCode" -> "preferences" -> "Accounts" -> add your github account
 - On the github repo click "Clone and Download" > "Open in XCode"; when XCode launches, just press the "play" button in the top left
+
+#### *FullyNoded 2* iOS Testflight
+
+We have a public link available for beta testing [here](https://testflight.apple.com/join/OQHyL0a8), please bear in mind the app may change drastically and may not be backwards compatible, please only use the app on testnet. You will need to first install the [Testflight app](https://testflight.apple.com) onto your device in order to be able to access the testflight beta of FullyNoded 2.
 
 ## Security
 
