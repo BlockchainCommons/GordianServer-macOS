@@ -119,7 +119,9 @@ SijIlxPUugawiAn90sGhaTGviTWg1A06l3hpjzhaEdyIY2UOD7g=
 
 ```
 
+
 ### Method Two: Build Mac App from source using Xcode
+
 
 Instead of downloading binaries through *Strap*, you can build *Bitcoin-Standup* by hand using Apple's *Xcode*.
 
