@@ -101,12 +101,16 @@ class RunBuildTask {
                         
                     for str in self.exitStrings {
                         
-                        if output != "" {
+                        if output != nil {
                             
-                            if (output as String).contains(str) {
+                            if output != "" {
                                 
-                                exitNow = true
-                                print("exitnow")
+                                if (output as String).contains(str) {
+                                    
+                                    exitNow = true
+                                    print("exitnow")
+                                    
+                                }
                                 
                             }
                             
