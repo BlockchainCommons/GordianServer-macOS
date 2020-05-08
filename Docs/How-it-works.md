@@ -1,6 +1,6 @@
 # How *Bitcoin-Standup* MacOS Works
 
-The application *Bitcoin Standup.app* currently installs, configures, and launches `tor stable v0.4.2.5` and `bitcoin-core v0.19.0.1`. The app is under development, but as it stands will install and configure a Bitcoin Core full node, Tor as a service, and a Tor V3 hidden service controlling each  `rpcport` with native client cookie authentication. 
+The application *Bitcoin Standup.app* currently installs, configures, and launches `tor stable v0.4.2.5` and `bitcoin-core v0.20.0rc1`. The app is under development, but as it stands will install and configure a Bitcoin Core full node, Tor as a service, and a Tor V3 hidden service controlling each  `rpcport` with native client cookie authentication. 
 
 *Bitcoin-Standup* allows the user to set custom settings including `txindex`, `prune`, `walletdisabled`, `testnet`, `mainnet`, `datadir`, which should not interfere with any exisiting `bitcoin.conf` settings. Finally, it offers a simple `go private` option that closes off your node to the clearnet, only accepting connections over Tor. The user may refresh their hidden service at the push of a button.
 

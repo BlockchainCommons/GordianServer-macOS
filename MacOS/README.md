@@ -50,7 +50,7 @@ If you are a software developer you can join us by offering issues and pull requ
 
 ## Functionality
 
-The application *Bitcoin Standup.app* currently installs, configures, and launches `tor stable v0.4.2.5` and `bitcoin-core v0.19.0.1`. The app is under development and as it stands will install and configure a Bitcoin Core full node, Tor as a service, a Tor V3 hidden service controlling each  `rpcport` with native client cookie authentication. The app allows the user to set custom settings including `txindex`, `prune`, `walletdisabled`, `testnet`, `mainnet`, `datadir` which should not interfere with any exisiting bitcoin.conf settings. It offeres a simple `go private` option which closes off your node to the clearnet only accepting connections over Tor. The user may refresh their hidden service at the push of a button.
+The application *Bitcoin Standup.app* currently installs, configures, and launches `tor stable v0.4.2.5` and `bitcoin-core v0.20.0rc1`. The app is under development and as it stands will install and configure a Bitcoin Core full node, Tor as a service, a Tor V3 hidden service controlling each  `rpcport` with native client cookie authentication. The app allows the user to set custom settings including `txindex`, `prune`, `walletdisabled`, `testnet`, `mainnet`, `datadir` which should not interfere with any exisiting bitcoin.conf settings. It offeres a simple `go private` option which closes off your node to the clearnet only accepting connections over Tor. The user may refresh their hidden service at the push of a button.
 
 The default `bitcoin.conf` StandUp.app will create is:
 ```
