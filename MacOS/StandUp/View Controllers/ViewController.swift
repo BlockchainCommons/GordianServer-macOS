@@ -35,6 +35,9 @@ class ViewController: NSViewController {
     var rpcpassword = ""
     var rpcuser = ""
     var torHostname = ""
+    var newestVersion = ""
+    var newestBinaryName = ""
+    var newestPrefix = ""
     
     var standingUp = Bool()
     var bitcoinInstalled = Bool()
@@ -49,18 +52,33 @@ class ViewController: NSViewController {
     
     var env = [String:String]()
     
+    let d = Defaults()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        /// Setting new defaults to start fresh.
+        let ud = UserDefaults.standard
+        if ud.object(forKey: "hasUpdated") == nil {
+            ud.set("0.20.0rc2", forKey: "version")
+            ud.set("bitcoin-0.20.0rc2-osx64.tar.gz", forKey: "macosBinary")
+            ud.set("bitcoin-0.20.0rc2", forKey: "binaryPrefix")
+            ud.set(true, forKey: "hasUpdated")
+        }
         setScene()
         
-        let d = Defaults()
-        d.setDefaults {
-            
-            self.setEnv { self.isBitcoinOn() }
-            
-        }
+    }
+    
+    override func viewDidAppear() {
         
+        d.setDefaults { [unowned vc = self] in
+            vc.getLatestVersion { [unowned vc = self] success in
+                if success {
+                    vc.setEnv()
+                } else {
+                    vc.showAlertMessage(message: "Network request error", info: "We had an issue getting a response from github, we use github to check to see if your current version of Bitcoin Core is out of date, please let us know about this so we can fix it.")
+                }
+            }
+        }
     }
     
     //MARK: User Action Segues
@@ -98,13 +116,13 @@ class ViewController: NSViewController {
                 } else {
                     
                     let version = dict!["version"] as! String
-                    actionAlert(message: "Upgrade to Bitcoin Core \(version)?", info: "Upgrading writes over the ~/StandUp directory completely.\n\nAre you sure you would like to upgrade to Bitcoin Core version \(version)?") { (response) in
+                    actionAlert(message: "Upgrade to Bitcoin Core \(version)?", info: "Are you sure?") { (response) in
                         
                         if response {
                             
-                            DispatchQueue.main.async {
-                                self.upgrading = true
-                                self.performSegue(withIdentifier: "goInstall", sender: self)
+                            DispatchQueue.main.async { [unowned vc = self] in
+                                vc.upgrading = true
+                                vc.performSegue(withIdentifier: "goInstall", sender: vc)
                             }
                             
                         }
@@ -134,7 +152,7 @@ class ViewController: NSViewController {
         self.startSpinner(description: "Fetching latest Bitcoin Core version...")
         
         let request = FetchJSON()
-        request.getRequest { (dict, error) in
+        request.getRequest { [unowned vc = self] (dict, error) in
             
             if error != "" {
                 
@@ -150,11 +168,10 @@ class ViewController: NSViewController {
                 
                 func standup() {
                     
-                    let d = Defaults()
-                    var chain = d.chain()
-                    let pruned = d.prune()
-                    let txindex = d.txindex()
-                    let directory = d.dataDir()
+                    var chain = vc.d.chain()
+                    let pruned = vc.d.prune()
+                    let txindex = vc.d.txindex()
+                    let directory = vc.d.dataDir()
                     var type = ""
                     
                     if chain == "main" || chain == "test" {
@@ -277,12 +294,14 @@ class ViewController: NSViewController {
     // MARK: Script Methods
     
     func isBitcoinOn() {
+        #if DEBUG
         print("isBitcoinOn")
+        #endif
         
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [unowned vc = self] in
             
-            self.taskDescription.stringValue = "checking if bitcoin core is running..."
-            self.runLaunchScript(script: .isBitcoinOn)
+            vc.taskDescription.stringValue = "checking if bitcoin core is running..."
+            vc.runLaunchScript(script: .isBitcoinOn)
             
         }
         
@@ -390,14 +409,16 @@ class ViewController: NSViewController {
     func runLaunchScript(script: SCRIPT) {
         print("runlaunchscript: \(script.rawValue)")
         
-        let d = Defaults()
-        
         switch script {
             
         case .isBitcoinOn, .checkForBitcoin, .startBitcoinqt, .stopBitcoin, .getRPCCredentials:
                         
-            self.env["CHAIN"] = d.chain()
-            self.env["DATADIR"] = d.dataDir()
+            env["CHAIN"] = d.chain()
+            env["DATADIR"] = d.dataDir()
+            #if DEBUG
+            print("CHAIN = \(d.chain())")
+            print("DATADIR = \(d.dataDir())")
+            #endif
                         
         default:
             
@@ -406,22 +427,24 @@ class ViewController: NSViewController {
         }
         
         let runBuildTask = RunBuildTask()
-        runBuildTask.stringToReturn = ""
+        //runBuildTask.stringToReturn = ""
         runBuildTask.terminate = false
         runBuildTask.errorBool = false
         runBuildTask.errorDescription = ""
         runBuildTask.isRunning = false
         runBuildTask.args = []
-        runBuildTask.env = self.env
+        runBuildTask.env = env
         runBuildTask.exitStrings = ["Done"]
         runBuildTask.showLog = false
-        runBuildTask.runScript(script: script) {
+        runBuildTask.runScript(script: script) { [unowned vc = self] in
             
             if !runBuildTask.errorBool {
                 
-                let str = runBuildTask.stringToReturn
-                self.parseScriptResult(script: script, result: str)
-                self.setLog(content: str)
+                vc.parseScriptResult(script: script, result: runBuildTask.stringToReturn)
+                vc.setLog(content: runBuildTask.stringToReturn)
+                #if DEBUG
+                print("result = \(runBuildTask.stringToReturn)")
+                #endif
                 
             } else {
                 
@@ -812,48 +835,26 @@ class ViewController: NSViewController {
             let arr = result.components(separatedBy: "Copyright (C)")
             let currentVersion = (arr[0]).replacingOccurrences(of: "Bitcoin Core Daemon version ", with: "")
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [unowned vc = self] in
                 
-                self.installBitcoindOutlet.isEnabled = true
-                self.verifyOutlet.isEnabled = true
-                self.bitcoinCoreStatusLabel.stringValue = "✓ Bitcoin Core \(currentVersion)"
-                self.bitcoinInstalled = true
+                vc.installBitcoindOutlet.isEnabled = true
+                vc.verifyOutlet.isEnabled = true
+                vc.bitcoinCoreStatusLabel.stringValue = "✓ Bitcoin Core \(currentVersion)"
+                vc.bitcoinInstalled = true
                 
-                let req = FetchJSON()
-                req.getRequest { (dict, error) in
+                if currentVersion.contains(vc.newestVersion) {
                     
-                    if error != "" {
-                        
-                        print("error getting supported version")
-                        DispatchQueue.main.async {
-                            self.updateBitcoinlabel.stringValue = "╳ Error getting latest version"
-                        }
-                        
-                    } else {
-                        
-                        let version = dict!["version"] as! String
-                        let binaryName = dict!["macosBinary"] as! String
-                        let prefix = dict!["binaryPrefix"] as! String
-                        self.env = ["BINARY_NAME":binaryName,"VERSION":version,"PREFIX":prefix]
-                        let latestVersion = "v" + version.replacingOccurrences(of: "\n", with: "")
-                        if currentVersion.contains(latestVersion) {
-                            
-                            print("up to date")
-                            
-                            DispatchQueue.main.async {
-                                self.updateBitcoinlabel.stringValue = "✓ Bitcoin Core up to date"
-                            }
-                            
-                        } else {
-                            
-                            print("not up to date")
-                            DispatchQueue.main.async {
-                                self.updateBitcoinlabel.stringValue = "╳ Bitcoin Core out of date"
-                                self.updateOutlet.isEnabled = true
-                            }
-                            
-                        }
-                        
+                    print("up to date")
+                    DispatchQueue.main.async { [unowned vc = self] in
+                        vc.updateBitcoinlabel.stringValue = "✓ Bitcoin Core up to date"
+                    }
+                    
+                } else {
+                    
+                    print("not up to date")
+                    DispatchQueue.main.async { [unowned vc = self] in
+                        vc.updateBitcoinlabel.stringValue = "╳ Bitcoin Core out of date"
+                        vc.updateOutlet.isEnabled = true
                     }
                     
                 }
@@ -865,48 +866,26 @@ class ViewController: NSViewController {
             let arr = result.components(separatedBy: "Copyright (C)")
             let currentVersion = (arr[0]).replacingOccurrences(of: "Bitcoin Core version ", with: "")
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [unowned vc = self] in
                 
-                self.installBitcoindOutlet.isEnabled = true
-                self.verifyOutlet.isEnabled = true
-                self.bitcoinCoreStatusLabel.stringValue = "✓ Bitcoin Core \(currentVersion)"
-                self.bitcoinInstalled = true
+                vc.installBitcoindOutlet.isEnabled = true
+                vc.verifyOutlet.isEnabled = true
+                vc.bitcoinCoreStatusLabel.stringValue = "✓ Bitcoin Core \(currentVersion)"
+                vc.bitcoinInstalled = true
                 
-                let req = FetchJSON()
-                req.getRequest { (dict, error) in
+                if currentVersion.contains(vc.newestVersion) {
                     
-                    if error != "" {
-                        
-                        print("error getting supported version")
-                        DispatchQueue.main.async {
-                            self.updateBitcoinlabel.stringValue = "╳ Error getting latest version"
-                        }
-                        
-                    } else {
-                        
-                        let version = dict!["version"] as! String
-                        let binaryName = dict!["macosBinary"] as! String
-                        let prefix = dict!["binaryPrefix"] as! String
-                        self.env = ["BINARY_NAME":binaryName,"VERSION":version,"PREFIX":prefix]
-                        let latestVersion = "v" + version.replacingOccurrences(of: "\n", with: "")
-                        if currentVersion.contains(latestVersion) {
-                            
-                            print("up to date")
-                            
-                            DispatchQueue.main.async {
-                                self.updateBitcoinlabel.stringValue = "✓ Bitcoin Core up to date"
-                            }
-                            
-                        } else {
-                            
-                            print("not up to date")
-                            DispatchQueue.main.async {
-                                self.updateBitcoinlabel.stringValue = "╳ Bitcoin Core out of date"
-                                self.updateOutlet.isEnabled = true
-                            }
-                            
-                        }
-                        
+                    print("up to date")
+                    DispatchQueue.main.async { [unowned vc = self] in
+                        vc.updateBitcoinlabel.stringValue = "✓ Bitcoin Core up to date"
+                    }
+                    
+                } else {
+                    
+                    print("not up to date")
+                    DispatchQueue.main.async { [unowned vc = self] in
+                        vc.updateBitcoinlabel.stringValue = "╳ Bitcoin Core out of date"
+                        vc.updateOutlet.isEnabled = true
                     }
                     
                 }
@@ -915,12 +894,12 @@ class ViewController: NSViewController {
             
         } else {
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [unowned vc = self] in
                 
-                self.bitcoinCoreStatusLabel.stringValue = "╳ Bitcoin Core not installed"
-                self.installBitcoindOutlet.isEnabled = false
-                self.bitcoinInstalled = false
-                self.updateBitcoinStatus(isOn: false)
+                vc.bitcoinCoreStatusLabel.stringValue = "╳ Bitcoin Core not installed"
+                vc.installBitcoindOutlet.isEnabled = false
+                vc.bitcoinInstalled = false
+                vc.updateBitcoinStatus(isOn: false)
                 
             }
             
@@ -960,7 +939,7 @@ class ViewController: NSViewController {
     
     func parseVerifyResult(result: String) {
         
-        let binaryName = self.env["BINARY_NAME"] ?? ""
+        let binaryName = env["BINARY_NAME"] ?? ""
         
         if result.contains("\(binaryName): OK") {
             
@@ -980,31 +959,13 @@ class ViewController: NSViewController {
     
     //MARK: User Inteface
     
-    func setEnv(completion: @escaping () -> Void) {
-        print("setenv")
-        
-        let req = FetchJSON()
-        req.getRequest { (dict, error) in
-            
-            if error != "" {
-                
-                print("error getting supported version")
-                self.hideSpinner()
-                setSimpleAlert(message: "Error", info: "We could not get a response from github... error: \(error ?? "unknown")", buttonLabel: "OK")
-                completion()
-                
-            } else {
-                
-                let version = dict!["version"] as! String
-                let binaryName = dict!["macosBinary"] as! String
-                let prefix = dict!["binaryPrefix"] as! String
-                self.env = ["BINARY_NAME":binaryName,"VERSION":version,"PREFIX":prefix]
-                completion()
-                
-            }
-            
-        }
-        
+    func setEnv() {
+        env = ["BINARY_NAME":d.existingBinary(),"VERSION":d.existingPrefix(),"PREFIX":d.existingPrefix()]
+        #if DEBUG
+        print("setEnv")
+        print("env = \(env)")
+        #endif
+        isBitcoinOn()
     }
     
     func showAlertMessage(message: String, info: String) {
@@ -1105,6 +1066,26 @@ class ViewController: NSViewController {
         let lg = Log()
         lg.writeToLog(content: content)
         
+    }
+    
+    private func getLatestVersion(completion: @escaping ((Bool)) -> Void) {
+        let fetchJson = FetchJSON()
+        fetchJson.getRequest { [unowned vc = self] (dict, error) in
+            if dict != nil {
+                if let version = dict!["version"] as? String,
+                    let binaryName = dict!["macosBinary"] as? String,
+                    let prefix = dict!["binaryPrefix"] as? String {
+                    vc.newestPrefix = prefix
+                    vc.newestVersion = version
+                    vc.newestBinaryName = binaryName
+                    completion(true)
+                } else {
+                    completion(false)
+                }
+            } else {
+                completion(false)
+            }
+        }
     }
     
     // MARK: Segue Prep

@@ -322,12 +322,12 @@ class Installer: NSViewController {
             
             if !runBuildTask.errorBool {
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [unowned vc = self] in
                     
-                    self.hideSpinner()
-                    self.setLog(content: self.consoleOutput.string)
+                    vc.hideSpinner()
+                    vc.setLog(content: vc.consoleOutput.string)
                     setSimpleAlert(message: "Success", info: "You have StoodDown", buttonLabel: "OK")
-                    self.goBack()
+                    vc.goBack()
                     
                 }
                 
@@ -392,14 +392,14 @@ class Installer: NSViewController {
         runBuildTask.textView = consoleOutput
         runBuildTask.env = ["":""]
         runBuildTask.exitStrings = ["Done"]
-        runBuildTask.runScript(script: .refreshHS) {
+        runBuildTask.runScript(script: .refreshHS) { [unowned vc = self] in
             
             if !runBuildTask.errorBool {
                 
-                self.setLog(content: runBuildTask.stringToReturn)
+                vc.setLog(content: runBuildTask.stringToReturn)
                 setSimpleAlert(message: "Success", info: "Tor hidden service was refreshed, go back and scan the new QR Code to connect", buttonLabel: "OK")
                 
-                self.goBack()
+                vc.goBack()
                 
             } else {
                 
@@ -415,15 +415,15 @@ class Installer: NSViewController {
         
         upgrading = false
         
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [unowned vc = self] in
             
             let runBuildTask = RunBuildTask()
             runBuildTask.args = []
             runBuildTask.env = ["BINARY_NAME":binaryName, "MACOS_URL":macosURL, "SHA_URL":shaURL, "VERSION":version]
-            runBuildTask.textView = self.consoleOutput
+            runBuildTask.textView = vc.consoleOutput
             runBuildTask.showLog = true
             runBuildTask.exitStrings = ["You have upgraded to Bitcoin Core", "Signatures do not match! Terminating..."]
-            runBuildTask.runScript(script: .upgradeBitcoin) {
+            runBuildTask.runScript(script: .upgradeBitcoin) { [unowned vc = self] in
                 
                 if !runBuildTask.errorBool {
                     
@@ -431,8 +431,9 @@ class Installer: NSViewController {
                         let ud = UserDefaults.standard
                         ud.set(prefix, forKey: "binaryPrefix")
                         ud.set(version, forKey: "version")
-                        self.setLog(content: self.consoleOutput.string)
-                        self.goBack()
+                        ud.set(binaryName, forKey: "macosBinary")
+                        vc.setLog(content: vc.consoleOutput.string)
+                        vc.goBack()
                     }
                     
                 } else {
@@ -499,7 +500,7 @@ class Installer: NSViewController {
             
             if !runBuildTask.errorBool {
                 
-                let conf = (runBuildTask.stringToReturn).components(separatedBy: "\n")
+                let conf = runBuildTask.stringToReturn.components(separatedBy: "\n")
                 
                 for item in conf {
                     
@@ -543,7 +544,7 @@ class Installer: NSViewController {
             
             if !runBuildTask.errorBool {
                 
-                var conf = (runBuildTask.stringToReturn).components(separatedBy: "\n")
+                var conf = runBuildTask.stringToReturn.components(separatedBy: "\n")
                 
                 for c in conf {
                     

@@ -152,7 +152,7 @@ class QRDisplayer: NSViewController {
     func getHostname() {
                 
         let runBuildTask = RunBuildTask()
-        runBuildTask.stringToReturn = ""
+        //runBuildTask.stringToReturn = ""
         runBuildTask.terminate = false
         runBuildTask.errorBool = false
         runBuildTask.errorDescription = ""
@@ -161,18 +161,18 @@ class QRDisplayer: NSViewController {
         runBuildTask.env = ["":""]
         runBuildTask.exitStrings = ["Done"]
         runBuildTask.showLog = false
-        runBuildTask.runScript(script: .getTorHostname) {
+        runBuildTask.runScript(script: .getTorHostname) { [unowned vc = self] in
             
             if !runBuildTask.errorBool {
                 
                 let str = runBuildTask.stringToReturn
                 print("new hostname = \(str)")
-                self.torHostname = str
-                self.updateImage()
+                vc.torHostname = str
+                vc.updateImage()
                 
             } else {
                 
-                self.hideSpinner()
+                vc.hideSpinner()
                 
                 setSimpleAlert(message: "Error", info: "There was an error getting your new hostname: \(runBuildTask.errorDescription)", buttonLabel: "OK")
                 

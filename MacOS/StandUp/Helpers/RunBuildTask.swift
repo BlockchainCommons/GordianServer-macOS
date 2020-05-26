@@ -13,6 +13,7 @@ class RunBuildTask {
     
     var isRunning = false
     var buildTask:Process!
+    var fileHandle:FileHandle!
     var args = [String]()
     var env = [String:String]()
     var stringToReturn = ""
@@ -22,8 +23,8 @@ class RunBuildTask {
     var exitStrings = [String]()
     var textView = NSTextView()
     var showLog = Bool()
-    let stdOut = Pipe()
-    let stdErr = Pipe()
+    var stdOut = Pipe()
+    var stdErr = Pipe()
     
     func runScript(script: SCRIPT, completion: @escaping () -> Void) {
         
@@ -31,31 +32,37 @@ class RunBuildTask {
         let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
         let resource = script.rawValue
         
-        taskQueue.async {
+        taskQueue.async { [unowned vc = self] in
             
             guard let path = Bundle.main.path(forResource: resource, ofType: "command") else {
                 print("Unable to locate \(resource).command")
                 return
             }
+            vc.buildTask = Process()
+            vc.buildTask.launchPath = path
+            vc.buildTask.arguments = vc.args
+            vc.buildTask.environment = vc.env
             
-            self.buildTask = Process()
-            self.buildTask.launchPath = path
-            self.buildTask.arguments = self.args
-            self.buildTask.environment = self.env
-            
-            self.buildTask.terminationHandler = {
-                
-                task in
-                
+            vc.buildTask.terminationHandler = { [unowned vc = self] task in
                 print("task did terminate")
-                
-                DispatchQueue.main.async {
-                    self.isRunning = false
-                    self.errorBool = false
-                    self.stdErr.fileHandleForReading.closeFile()
-                    self.stdOut.fileHandleForReading.closeFile()
-                    completion()
+                vc.isRunning = false
+                vc.errorBool = false
+                vc.stdErr.fileHandleForReading.closeFile()
+                vc.stdOut.fileHandleForReading.closeFile()
+                do {
+                    if #available(OSX 10.15, *) {
+                        if vc.fileHandle != nil {
+                            try vc.fileHandle.close()
+                            print("file closed")
+                        }
+                    } else {
+                        //handle older version here
+                    }
+                } catch {
+                    print("failed closing file")
                 }
+                
+                completion()
                 
             }
             
@@ -72,92 +79,66 @@ class RunBuildTask {
         task.standardOutput = stdOut
         task.standardError = stdErr
         
-        let handler = { (file: FileHandle!) -> Void in
+        let handler = { [unowned vc = self] (file: FileHandle!) -> Void in
             
-            let data = file.availableData
+            vc.fileHandle = file
+            let data = vc.fileHandle.availableData
             
-            if self.isRunning {
+            if vc.isRunning {
                 
-                guard let output = NSString(data: data, encoding: String.Encoding.utf8.rawValue) else {
-                    self.errorBool = true
-                    self.errorDescription = "failed to parse data into string"
+                guard let output = String(data: data, encoding: .utf8) else {
+                    vc.errorBool = true
+                    vc.errorDescription = "failed to parse data into string"
                     completion()
                     return
                 }
-
-                self.stringToReturn += output as String
-                                
-                DispatchQueue.main.async {
+                
+                vc.stringToReturn += output as String
+                
+                if vc.showLog {
                     
-                    if self.showLog {
+                    let prevOutput = vc.textView.string
+                    let nextOutput = prevOutput + (output as String)
+                    DispatchQueue.main.async { [unowned vc = self] in
+                        vc.textView.string = nextOutput
+                    }
+                    
+                }
+                
+                var exitNow = false
+                
+                for str in vc.exitStrings {
+                    
+                    if (output as String).contains(str) {
                         
-                        let prevOutput = self.textView.string
-                        let nextOutput = prevOutput + (output as String)
-                        self.textView.string = nextOutput
+                        exitNow = true
+                        print("exitnow")
                         
                     }
                     
-                    var exitNow = false
+                }
+                
+                if exitNow && vc.isRunning {
+                    
+                    if task.isRunning {
                         
-                    for str in self.exitStrings {
-                        
-                        if output != nil {
-                            
-                            if output != "" {
-                                
-                                if (output as String).contains(str) {
-                                    
-                                    exitNow = true
-                                    print("exitnow")
-                                    
-                                }
-                                
-                            }
-                            
-                        }
+                        task.terminate()
+                        print("terminate")
                         
                     }
+                    
+                } else {
+                    
+                    if vc.isRunning {
                         
-                    if exitNow && self.isRunning {
-                        
-                        if self.buildTask.isRunning {
-                            
-                            self.buildTask.terminate()
-                            print("terminate")
-                            
-                            do {
-                                
-                                if #available(OSX 10.15, *) {
-                                    
-                                    try file.close()
-                                    print("file closed")
-                                    
-                                } else {
-                                    
-                                    //handle older version here
-                                    
-                                }
-                                
-                            } catch {
-                                
-                                print("failed closing file")
-                                
-                            }
-                            
-                        }
-                        
-                    } else {
-                        
-                        if self.isRunning {
-                            
-                            self.textView.scrollToEndOfDocument(self)
-                            
+                        DispatchQueue.main.async { [unowned vc = self] in
+                            vc.textView.scrollToEndOfDocument(self)
                         }
                         
                     }
                     
                 }
-                                
+                
             }
             
         }
