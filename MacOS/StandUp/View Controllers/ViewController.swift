@@ -39,6 +39,7 @@ class ViewController: NSViewController {
     var newestBinaryName = ""
     var newestPrefix = ""
     
+    var strapping = Bool()
     var standingUp = Bool()
     var bitcoinInstalled = Bool()
     var torInstalled = Bool()
@@ -56,16 +57,7 @@ class ViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        /// Setting new defaults to start fresh.
-        let ud = UserDefaults.standard
-        if ud.object(forKey: "hasUpdated") == nil {
-            ud.set("0.20.0rc2", forKey: "version")
-            ud.set("bitcoin-0.20.0rc2-osx64.tar.gz", forKey: "macosBinary")
-            ud.set("bitcoin-0.20.0rc2", forKey: "binaryPrefix")
-            ud.set(true, forKey: "hasUpdated")
-        }
         setScene()
-        
     }
     
     override func viewDidAppear() {
@@ -293,6 +285,20 @@ class ViewController: NSViewController {
     
     // MARK: Script Methods
     
+    func checkForXcodeSelect() {
+        DispatchQueue.main.async { [unowned vc = self] in
+            vc.taskDescription.stringValue = "checking for xcode select..."
+            vc.runLaunchScript(script: .checkXcodeSelect)
+        }
+    }
+    
+    func checkForHomebrew() {
+        DispatchQueue.main.async { [unowned vc = self] in
+            vc.taskDescription.stringValue = "checking for homebrew..."
+            vc.runLaunchScript(script: .checkHomebrew)
+        }
+    }
+    
     func isBitcoinOn() {
         #if DEBUG
         print("isBitcoinOn")
@@ -371,10 +377,10 @@ class ViewController: NSViewController {
     func checkForStandUp() {
         print("checkforstandup")
         
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [unowned vc = self] in
             
-            self.taskDescription.stringValue = "checking for StandUp directory..."
-            self.runLaunchScript(script: .checkStandUp)
+            vc.taskDescription.stringValue = "checking for StandUp directory..."
+            vc.runLaunchScript(script: .checkStandUp)
             
         }
         
@@ -395,10 +401,10 @@ class ViewController: NSViewController {
     func isTorOn() {
         print("isTorOn")
         
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [unowned vc = self] in
             
-            self.taskDescription.stringValue = "checking tor status..."
-            self.runLaunchScript(script: .torStatus)
+            vc.taskDescription.stringValue = "checking tor status..."
+            vc.runLaunchScript(script: .torStatus)
             
         }
         
@@ -463,29 +469,47 @@ class ViewController: NSViewController {
         
         switch script {
             
-        case .checkStandUp: checkStandUpParser(result: result)
+        case .checkStandUp:
+            checkStandUpParser(result: result)
             
-        case .isBitcoinOn: parseIsBitcoinOnResponse(result: result)
+        case .isBitcoinOn:
+            parseIsBitcoinOnResponse(result: result)
             
-        case .checkForBitcoin: parseBitcoindResponse(result: result)
+        case .checkForBitcoin:
+            parseBitcoindResponse(result: result)
             
-        case .checkForTor: parseTorResult(result: result)
+        case .checkForTor:
+            parseTorResult(result: result)
             
-        case .getRPCCredentials: checkForRPCCredentials(response: result)
+        case .getRPCCredentials:
+            checkForRPCCredentials(response: result)
             
-        case .getTorrc: checkIfTorIsConfigured(response: result)
+        case .getTorrc:
+            checkIfTorIsConfigured(response: result)
             
-        case .getTorHostname: parseHostname(response: result)
+        case .getTorHostname:
+            parseHostname(response: result)
             
-        case .torStatus: parseTorStatus(result: result)
+        case .torStatus:
+            parseTorStatus(result: result)
             
-        case .verifyBitcoin: parseVerifyResult(result: result)
+        case .verifyBitcoin:
+            parseVerifyResult(result: result)
             
-        case .startBitcoinqt: parseStartBitcoinResponse(result: result)
+        case .startBitcoinqt:
+            parseStartBitcoinResponse(result: result)
             
-        case .startTor, .stopTor: torStarted(result: result)
+        case .startTor, .stopTor:
+            torStarted(result: result)
             
-        case .stopBitcoin: parseBitcoinStoppedResponse(result: result)
+        case .stopBitcoin:
+            parseBitcoinStoppedResponse(result: result)
+            
+        case .checkHomebrew:
+            parseHomebrewResult(result: result)
+            
+        case .checkXcodeSelect:
+            parseXcodeSelectResult(result: result)
             
         default: break
             
@@ -495,18 +519,43 @@ class ViewController: NSViewController {
     
     //MARK: Script Result Parsers
     
-    func checkStandUpParser(result: String) {
-        
-        if result.contains("False") {
-            
-            DispatchQueue.main.async {
-                self.standUpOutlet.isEnabled = true
+    private func parseXcodeSelectResult(result: String) {
+        hideSpinner()
+        if result.contains("XCode select not installed") {
+            /// Can all stop here and prompt user to get strapped first.
+            showAlertMessage(message: "Dependencies missing", info: "You do not appear to have XCode command line tools installed, StandUp.app relies on XCode command line tools for installing Bitcoin Core, therefore in order to continue please select \"Install Dependencies\".")
+        } else {
+            DispatchQueue.main.async { [unowned vc = self] in
+                vc.standUpOutlet.isEnabled = true
+            }
+        }
+    }
+    
+    private func parseHomebrewResult(result: String) {
+        if result.contains("Homebrew not installed") {
+            /// Can all stop here and prompt user to get strapped first.
+            hideSpinner()
+            actionAlert(message: "Install dependencies?", info: "You do not appear to have Homebrew installed, StandUp.app relies on homebrew for installing Tor. We use a well known open source script called Strap to setup your mac for best security and privacy practices, it also installs Homebrew and few other very useful tools. You can read more about Strap here: \"https://github.com/MikeMcQuaid/strap\". This will launch a terminal session and prompt you for your password to run through the process, once complete you can quit and open StandUp to continue." ) { [unowned vc = self] response in
+                
+                if response {
+                    
+                    /// Install Strap
+                    vc.strap()
+                }
             }
             
+        } else {
+            /// It is installed, therefore we can check for XCode select.
+            checkForXcodeSelect()
         }
-        
-        hideSpinner()
-        
+    }
+    
+    func checkStandUpParser(result: String) {
+        if result.contains("False") {
+            checkForHomebrew()
+        } else {
+            hideSpinner()
+        }
     }
     
     func parseStartBitcoinResponse(result: String) {
@@ -565,35 +614,34 @@ class ViewController: NSViewController {
         
         if result.contains("started") {
             
-            DispatchQueue.main.async {
-                self.torIsOn = true
-                self.installTorOutlet.title = "Stop Tor"
-                self.installTorOutlet.isEnabled = true
-                self.updateTorStatus(isOn: true)
+            DispatchQueue.main.async { [unowned vc = self] in
+                vc.torIsOn = true
+                vc.installTorOutlet.title = "Stop Tor"
+                vc.installTorOutlet.isEnabled = true
+                vc.updateTorStatus(isOn: true)
             }
             
         } else if result.contains("stopped") {
             
-            DispatchQueue.main.async {
-                self.torIsOn = false
-                self.installTorOutlet.title = "Start Tor"
-                self.installTorOutlet.isEnabled = true
-                self.updateTorStatus(isOn: false)
+            DispatchQueue.main.async { [unowned vc = self] in
+                vc.torIsOn = false
+                vc.installTorOutlet.title = "Start Tor"
+                vc.installTorOutlet.isEnabled = true
+                vc.updateTorStatus(isOn: false)
             }
             
         } else {
             
-            DispatchQueue.main.async {
-                self.torIsOn = false
-                self.installTorOutlet.title = "Start Tor"
-                self.installTorOutlet.isEnabled = false
-                self.updateTorStatus(isOn: false)
+            DispatchQueue.main.async { [unowned vc = self] in
+                vc.torIsOn = false
+                vc.installTorOutlet.title = "Start Tor"
+                vc.installTorOutlet.isEnabled = false
+                vc.updateTorStatus(isOn: false)
             }
             
         }
         
-        //self.hideSpinner()
-        self.checkForStandUp()
+        checkForStandUp()
         
     }
     
@@ -826,9 +874,10 @@ class ViewController: NSViewController {
     }
     
     func parseBitcoindResponse(result: String) {
+        #if DEBUG
         print("parsebitcoindresponse")
-        
         print("result = \(result)")
+        #endif
         
         if result.contains("Bitcoin Core Daemon version") {
             
@@ -916,24 +965,24 @@ class ViewController: NSViewController {
         
         if rpcuser != "" && rpcpassword != "" && torHostname != "" && !torHostname.contains("cat: /usr/local/var/lib/tor/standup/hostname: No such file or directory") {
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [unowned vc = self] in
                 
-                self.showQuickConnectOutlet.isEnabled = true
-                self.standUpOutlet.isEnabled = false
+                vc.showQuickConnectOutlet.isEnabled = true
+                vc.standUpOutlet.isEnabled = false
                 
             }
             
         } else {
             
-            DispatchQueue.main.async {
-                
-                self.standUpOutlet.isEnabled = true
-                
-            }
+//            DispatchQueue.main.async { [unowned vc = self] in
+//
+//                vc.standUpOutlet.isEnabled = true
+//
+//            }
             
         }
         
-        self.isTorOn()
+        isTorOn()
                 
     }
     
@@ -1088,6 +1137,10 @@ class ViewController: NSViewController {
         }
     }
     
+    private func strap() {
+        runLaunchScript(script: .launchStrap)
+    }
+    
     // MARK: Segue Prep
     
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
@@ -1112,6 +1165,7 @@ class ViewController: NSViewController {
                 vc.standingUp = standingUp
                 vc.upgrading = upgrading
                 vc.ignoreExistingBitcoin = ignoreExistingBitcoin
+                vc.strapping = strapping
                 
             }
             

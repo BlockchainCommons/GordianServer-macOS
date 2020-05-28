@@ -32,6 +32,10 @@ public enum SCRIPT: String {
     case showBitcoinLog = "ShowBitcoinCoreLog"
     case showTorLog = "ShowTorLog"
     case checkStandUp = "CheckStandUp"
+    case checkHomebrew = "CheckHomebrew"
+    case checkXcodeSelect = "CheckXCodeSelect"
+    case getStrapped = "Strap"
+    case launchStrap = "LaunchStrap"
     
 }
 

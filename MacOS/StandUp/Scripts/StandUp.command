@@ -64,7 +64,6 @@ function configureBitcoin () {
   fi
 
   echo "$CONF" > bitcoin.conf
-  echo "Done"
   
 }
 

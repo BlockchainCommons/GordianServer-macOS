@@ -42,6 +42,8 @@ class RunBuildTask {
             vc.buildTask.launchPath = path
             vc.buildTask.arguments = vc.args
             vc.buildTask.environment = vc.env
+            vc.buildTask.standardOutput = vc.stdOut
+            vc.buildTask.standardError = vc.stdErr
             
             vc.buildTask.terminationHandler = { [unowned vc = self] task in
                 print("task did terminate")
@@ -76,9 +78,6 @@ class RunBuildTask {
     
     func captureStandardOutputAndRouteToTextView(task: Process, script: SCRIPT, textView: NSTextView, completion: @escaping () -> Void) {
         
-        task.standardOutput = stdOut
-        task.standardError = stdErr
-        
         let handler = { [unowned vc = self] (file: FileHandle!) -> Void in
             
             vc.fileHandle = file
@@ -97,9 +96,9 @@ class RunBuildTask {
                 
                 if vc.showLog {
                     
-                    let prevOutput = vc.textView.string
-                    let nextOutput = prevOutput + (output as String)
-                    DispatchQueue.main.async { [unowned vc = self] in
+                    DispatchQueue.main.async {
+                        let prevOutput = vc.textView.string
+                        let nextOutput = prevOutput + (output as String)
                         vc.textView.string = nextOutput
                     }
                     

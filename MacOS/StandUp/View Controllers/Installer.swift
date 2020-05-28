@@ -19,6 +19,7 @@ class Installer: NSViewController {
     var seeLog = Bool()
     var standingUp = Bool()
     var args = [String]()
+    var strapping = Bool()
     var standingDown = Bool()
     var upgrading = Bool()
     var standUpConf = ""
@@ -91,13 +92,13 @@ class Installer: NSViewController {
             spinner.alphaValue = 0
             seeLog = false
             getLog { (log) in
-                DispatchQueue.main.async {
-                    self.consoleOutput.string = log
+                DispatchQueue.main.async { [unowned vc = self] in
+                    vc.consoleOutput.string = log
                 }
             }
             
-            DispatchQueue.main.async {
-                self.backButtonOutlet.isEnabled = true
+            DispatchQueue.main.async { [unowned vc = self] in
+                vc.backButtonOutlet.isEnabled = true
             }
 
         } else if standingUp {
@@ -108,7 +109,9 @@ class Installer: NSViewController {
         } else if standingDown {
 
             standingDown = false
-            spinner.startAnimation(self)
+            DispatchQueue.main.async { [unowned vc = self] in
+                vc.spinner.startAnimation(vc)
+            }
             desc = "Standing Down..."
             standDown()
 
@@ -121,12 +124,14 @@ class Installer: NSViewController {
             refreshing = false
             refreshHS()
             
+        } else if strapping {
+            
+            strapping = false
+            strap()
         }
         
-        DispatchQueue.main.async {
-            
-            self.spinnerDescription.stringValue = desc
-            
+        DispatchQueue.main.async { [unowned vc = self] in
+            vc.spinnerDescription.stringValue = desc
         }
         
     }
@@ -140,20 +145,20 @@ class Installer: NSViewController {
     func goBack() {
         print("go back")
         
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [unowned vc = self] in
             
-            self.hideSpinner()
+            vc.hideSpinner()
             
-            if let presenter = self.presentingViewController as? ViewController {
+            if let presenter = vc.presentingViewController as? ViewController {
                 
                 presenter.standingUp = false
                 presenter.isBitcoinOn()
                 
             }
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [unowned vc = self] in
                 
-                self.dismiss(self)
+                vc.dismiss(vc)
                 
             }
             
@@ -172,182 +177,151 @@ class Installer: NSViewController {
         var bindExists = false
         var listenExists = false
         
-        getBitcoinConf { (conf, error) in
-            
-            print("exisiting conf = \(conf)")
-            
+        getBitcoinConf { [unowned vc = self] (conf, error) in
             if !error {
-                
                 if conf.count > 0 {
-                    
                     for setting in conf {
-                        
                         if setting.contains("=") {
-                            
                             let arr = setting.components(separatedBy: "=")
                             let k = arr[0]
                             let existingValue = arr[1]
                             
                             switch k {
                             case "rpcuser":
-                                
                                 if existingValue != "" {
-                                    
                                     userExists = true
-                                    self.rpcuser = existingValue
+                                    vc.rpcuser = existingValue
                                 }
                                 
                             case "rpcpassword":
-                                
                                 if existingValue != "" {
-                                    
                                     passwordExists = true
-                                    self.rpcpassword = existingValue
-                                    
+                                    vc.rpcpassword = existingValue
                                 }
                                 
                             case "testnet":
-                                
                                 if existingValue != "" {
-                                    
                                     testnetExists = true
-                                    
                                 }
                                 
                             case "proxy":
-                                
                                 proxyExists = true
                                 
                             case "listen":
-                                
                                 listenExists = true
                                 
                             case "bind":
-                                
                                 bindExists = true
                                 
                             case "debug":
-                                
                                 debugExists = true
                                 
                             default:
                                 break
                             }
-                            
                         }
-                        
                     }
                     
                     if userExists && passwordExists {
-                        
                         // just use exisiting conf as is
-                        self.standUpConf = conf.joined(separator: "\n")
+                        vc.standUpConf = conf.joined(separator: "\n")
                         
                     } else if userExists && !passwordExists {
-                        
-                        self.standUpConf = "rpcpassword=\(randomString(length: 32))\n" + conf.joined(separator: "\n")
+                        vc.standUpConf = "rpcpassword=\(randomString(length: 32))\n" + conf.joined(separator: "\n")
                         
                     } else if passwordExists && !userExists {
-                        
-                        self.standUpConf = "rpcuser=\(randomString(length: 10))\n" + conf.joined(separator: "\n")
+                        vc.standUpConf = "rpcuser=\(randomString(length: 10))\n" + conf.joined(separator: "\n")
                         
                     } else {
-                        
                         // add rpcuser and rpcpassword
-                        self.standUpConf = "rpcuser=\(randomString(length: 10))\nrpcpassword=\(randomString(length: 32))\n" + conf.joined(separator: "\n")
-                        
+                        vc.standUpConf = "rpcuser=\(randomString(length: 10))\nrpcpassword=\(randomString(length: 32))\n" + conf.joined(separator: "\n")
                     }
                     
                     if !testnetExists {
-                        
-                        self.standUpConf = "testnet=\(d.testnet())\n" + self.standUpConf + "\n"
-                        
+                        vc.standUpConf = "testnet=\(d.testnet())\n" + vc.standUpConf + "\n"
                     }
                     
                     if !debugExists {
-                        
-                        self.standUpConf = "#debug=tor\n" + self.standUpConf + "\n"
+                        vc.standUpConf = "#debug=tor\n" + vc.standUpConf + "\n"
                     }
                     
                     if !proxyExists {
-                        
-                        self.standUpConf = "#proxy=127.0.0.1:9050\n" + self.standUpConf + "\n"
-                        
+                        vc.standUpConf = "#proxy=127.0.0.1:9050\n" + vc.standUpConf + "\n"
                     }
                     
                     if !listenExists {
-                        
-                        self.standUpConf = "#listen=1\n" + self.standUpConf + "\n"
-                        
+                        vc.standUpConf = "#listen=1\n" + vc.standUpConf + "\n"
                     }
                     
                     if !bindExists {
-                        
-                        self.standUpConf = "#bind=127.0.0.1\n" + self.standUpConf + "\n"
-                        
+                        vc.standUpConf = "#bind=127.0.0.1\n" + vc.standUpConf + "\n"
                     }
                     
-                    self.getURLs()
+                    vc.getURLs()
                     
                 } else {
                     
-                    //no exisiting settings - use default
-                    
-                    let prune = self.ud.object(forKey: "pruned") as? Int ?? 0
-                    let txindex = self.ud.object(forKey: "txindex") as? Int ?? 1
-                    let walletDisabled = self.ud.object(forKey: "walletDisabled") as? Int ?? 0
-                    self.rpcpassword = randomString(length: 32)
-                    self.rpcuser = randomString(length: 10)
-                    
-                    self.standUpConf = "testnet=\(d.testnet())\ndisablewallet=\(walletDisabled)\nrpcuser=\(self.rpcuser)\nrpcpassword=\(self.rpcpassword)\nserver=1\nprune=\(prune)\ntxindex=\(txindex)\nproxy=127.0.0.1:9050\nlisten=1\ndebug=tor\n[main]\nrpcbind=127.0.0.1\nrpcallowip=127.0.0.1\nbind=127.0.0.1\nrpcport=8332\n[test]\nrpcbind=127.0.0.1\nrpcallowip=127.0.0.1\nbind=127.0.0.1\nrpcport=18332\n[regtest]\nrpcbind=127.0.0.1\nrpcallowip=127.0.0.1\nbind=127.0.0.1\nrpcport=18443"
-                    
-                    self.getURLs()
+                    //no existing settings - use default
+                    let prune = vc.ud.object(forKey: "pruned") as? Int ?? 0
+                    let txindex = vc.ud.object(forKey: "txindex") as? Int ?? 1
+                    let walletDisabled = vc.ud.object(forKey: "walletDisabled") as? Int ?? 0
+                    vc.rpcpassword = randomString(length: 32)
+                    vc.rpcuser = randomString(length: 10)
+                    vc.standUpConf = "testnet=\(d.testnet())\ndisablewallet=\(walletDisabled)\nrpcuser=\(vc.rpcuser)\nrpcpassword=\(vc.rpcpassword)\nserver=1\nprune=\(prune)\ntxindex=\(txindex)\nproxy=127.0.0.1:9050\nlisten=1\ndebug=tor\n[main]\nrpcbind=127.0.0.1\nrpcallowip=127.0.0.1\nbind=127.0.0.1\nrpcport=8332\n[test]\nrpcbind=127.0.0.1\nrpcallowip=127.0.0.1\nbind=127.0.0.1\nrpcport=18332\n[regtest]\nrpcbind=127.0.0.1\nrpcallowip=127.0.0.1\nbind=127.0.0.1\nrpcport=18443"
+                    vc.getURLs()
                     
                 }
-                
             }
-            
         }
-        
+    }
+    
+    private func strap() {
+        let runBuildTask = RunBuildTask()
+        runBuildTask.showLog = true
+        runBuildTask.args = []
+        runBuildTask.textView = consoleOutput
+        runBuildTask.exitStrings = [""]
+        runBuildTask.runScript(script: .launchStrap) {
+            if !runBuildTask.errorBool {
+                DispatchQueue.main.async { [unowned vc = self] in
+                    vc.hideSpinner()
+                    //vc.setLog(content: vc.consoleOutput.string)
+                    setSimpleAlert(message: "Success", info: "Your system is now strapped", buttonLabel: "OK")
+                    vc.goBack()
+                }
+            } else {
+                setSimpleAlert(message: "Error", info: runBuildTask.errorDescription, buttonLabel: "OK")
+            }
+        }
     }
     
     func standDown() {
-        
         let runBuildTask = RunBuildTask()
         runBuildTask.showLog = true
         runBuildTask.args = []
         runBuildTask.textView = consoleOutput
         runBuildTask.exitStrings = ["Finished"]
         runBuildTask.runScript(script: .standDown) {
-            
             if !runBuildTask.errorBool {
-                
                 DispatchQueue.main.async { [unowned vc = self] in
-                    
                     vc.hideSpinner()
                     vc.setLog(content: vc.consoleOutput.string)
                     setSimpleAlert(message: "Success", info: "You have StoodDown", buttonLabel: "OK")
                     vc.goBack()
-                    
                 }
-                
             } else {
-                
                 setSimpleAlert(message: "Error", info: runBuildTask.errorDescription, buttonLabel: "OK")
-                
             }
-            
         }
-        
     }
     
     func standUp(binaryName: String, macosURL: String, shaURL: String, version: String, prefix: String) {
         
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [unowned vc = self] in
             
             var ignore = "NO"
             
-            if self.ignoreExistingBitcoin {
+            if vc.ignoreExistingBitcoin {
                 
                 ignore = "YES"
                 
@@ -356,20 +330,21 @@ class Installer: NSViewController {
             let d = Defaults()
             let runBuildTask = RunBuildTask()
             runBuildTask.args = []
-            runBuildTask.env = ["BINARY_NAME":binaryName, "MACOS_URL":macosURL, "SHA_URL":shaURL, "VERSION":version, "PREFIX":prefix, "CONF":self.standUpConf, "DATADIR":d.dataDir(), "IGNORE_EXISTING_BITCOIN":ignore, "RPCUSER": self.rpcuser, "RPCPASSWORD":self.rpcpassword]
-            runBuildTask.textView = self.consoleOutput
+            runBuildTask.env = ["BINARY_NAME":binaryName, "MACOS_URL":macosURL, "SHA_URL":shaURL, "VERSION":version, "PREFIX":prefix, "CONF":vc.standUpConf, "DATADIR":d.dataDir(), "IGNORE_EXISTING_BITCOIN":ignore, "RPCUSER": vc.rpcuser, "RPCPASSWORD":vc.rpcpassword]
+            runBuildTask.textView = vc.consoleOutput
             runBuildTask.showLog = true
             runBuildTask.exitStrings = ["Signatures do not match! Terminating...", "StandUp complete"]
             runBuildTask.runScript(script: .standUp) {
                 
                 if !runBuildTask.errorBool {
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [unowned vc = self] in
                         let ud = UserDefaults.standard
                         ud.set(prefix, forKey: "binaryPrefix")
+                        ud.set(binaryName, forKey: "macosBinary")
                         ud.set(version, forKey: "version")
-                        self.setLog(content: self.consoleOutput.string)
-                        self.goBack()
+                        vc.setLog(content: vc.consoleOutput.string)
+                        vc.goBack()
                     }
                     
                 } else {
@@ -449,37 +424,28 @@ class Installer: NSViewController {
     }
     
     func hideSpinner() {
-        
-        DispatchQueue.main.async {
-            
-            self.spinner.alphaValue = 0
-            self.backButtonOutlet.isEnabled = true
-            self.spinnerDescription.stringValue = ""
-            self.spinner.stopAnimation(self)
-            
+        DispatchQueue.main.async { [unowned vc = self] in
+            vc.spinner.alphaValue = 0
+            vc.backButtonOutlet.isEnabled = true
+            vc.spinnerDescription.stringValue = ""
+            vc.spinner.stopAnimation(vc)
         }
-        
     }
     
     func setScene() {
-        
         backButtonOutlet.isEnabled = false
         consoleOutput.textColor = NSColor.green
         consoleOutput.isEditable = false
         consoleOutput.isSelectable = false
         spinnerDescription.stringValue = ""
-        
     }
     
     func setLog(content: String) {
-        
         let lg = Log()
         lg.writeToLog(content: content)
-        
     }
     
     func getLog(completion: @escaping (String) -> Void) {
-        
         let lg = Log()
         lg.getLog {
             completion((lg.logText))
