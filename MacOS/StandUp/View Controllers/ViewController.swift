@@ -10,27 +10,29 @@ import Cocoa
 
 class ViewController: NSViewController {
     
+    @IBOutlet weak var bitcoinCoreWindow: NSView!
+    @IBOutlet weak var torWindow: NSView!
+    @IBOutlet weak var bitcoinMainnetWindow: NSView!
+    @IBOutlet weak var bitcoinTestnetWindow: NSView!
+    @IBOutlet weak var bitcoinRegtestWindow: NSView!
+    
+    @IBOutlet weak var torMainnetWindow: NSView!
+    @IBOutlet weak var torTestnetWindow: NSView!
+    @IBOutlet weak var torRegtestWindow: NSView!
+    @IBOutlet weak var torAuthWindow: NSView!
+    
+    
     @IBOutlet var taskDescription: NSTextField!
     @IBOutlet var spinner: NSProgressIndicator!
-    @IBOutlet var torStatusLabel: NSTextField!
-    @IBOutlet var bitcoinCoreStatusLabel: NSTextField!
-    @IBOutlet var torConfLabel: NSTextField!
-    @IBOutlet var bitcoinConfLabel: NSTextField!
-    @IBOutlet var updateBitcoinlabel: NSTextField!
     
     @IBOutlet var installTorOutlet: NSButton!
-    @IBOutlet var installBitcoindOutlet: NSButton!
     @IBOutlet var seeLogOutlet: NSButton!
     @IBOutlet var settingsOutlet: NSButton!
-    @IBOutlet var showQuickConnectOutlet: NSButton!
     @IBOutlet var standUpOutlet: NSButton!
     @IBOutlet var verifyOutlet: NSButton!
     @IBOutlet var updateOutlet: NSButton!
     @IBOutlet var icon: NSImageView!
     @IBOutlet var torRunningImage: NSImageView!
-    @IBOutlet var torRunningLabel: NSTextField!
-    @IBOutlet var bitcoinRunningImage: NSImageView!
-    @IBOutlet var bitcoinRunningLabel: NSTextField!
     
     var rpcpassword = ""
     var rpcuser = ""
@@ -74,6 +76,8 @@ class ViewController: NSViewController {
     }
     
     //MARK: User Action Segues
+    
+    
     
     @IBAction func getPairingCode(_ sender: Any) {
         print("getPairingCode")
@@ -258,8 +262,8 @@ class ViewController: NSViewController {
             DispatchQueue.main.async {
                 
                 self.bitcoinRunning = true
-                self.installBitcoindOutlet.title = "Stop Bitcoin"
-                self.installBitcoindOutlet.isEnabled = true
+                //self.installBitcoindOutlet.title = "Stop Bitcoin"
+                //self.installBitcoindOutlet.isEnabled = true
                 self.updateBitcoinStatus(isOn: true)
                 
             }
@@ -273,7 +277,7 @@ class ViewController: NSViewController {
                 
                 
                 self.startSpinner(description: "stopping bitcoin core...")
-                self.installBitcoindOutlet.isEnabled = false
+                //self.installBitcoindOutlet.isEnabled = false
                 
             }
             
@@ -651,8 +655,8 @@ class ViewController: NSViewController {
         DispatchQueue.main.async {
             
             self.bitcoinRunning = false
-            self.installBitcoindOutlet.title = "Start Bitcoin"
-            self.installBitcoindOutlet.isEnabled = true
+            //self.installBitcoindOutlet.title = "Start Bitcoin"
+            //self.installBitcoindOutlet.isEnabled = true
             self.updateBitcoinStatus(isOn: false)
             
         }
@@ -665,8 +669,8 @@ class ViewController: NSViewController {
         DispatchQueue.main.async {
             
             self.bitcoinRunning = true
-            self.installBitcoindOutlet.title = "Stop Bitcoin"
-            self.installBitcoindOutlet.isEnabled = true
+            //self.installBitcoindOutlet.title = "Stop Bitcoin"
+            //self.installBitcoindOutlet.isEnabled = true
             self.updateBitcoinStatus(isOn: true)
             
         }
@@ -713,18 +717,16 @@ class ViewController: NSViewController {
         if isOn {
             
             DispatchQueue.main.async {
-                self.torRunningLabel.alphaValue = 1
                 self.torRunningImage.alphaValue = 1
-                self.torRunningLabel.stringValue = "Tor on"
+                //self.torRunningLabel.stringValue = "Tor on"
                 self.torRunningImage.image = NSImage.init(imageLiteralResourceName: "NSStatusAvailable")
             }
             
         } else {
             
             DispatchQueue.main.async {
-                self.torRunningLabel.alphaValue = 1
                 self.torRunningImage.alphaValue = 1
-                self.torRunningLabel.stringValue = "Tor off"
+                //self.torRunningLabel.stringValue = "Tor off"
                 self.torRunningImage.image = NSImage.init(imageLiteralResourceName: "NSStatusUnavailable")
             }
             
@@ -737,19 +739,15 @@ class ViewController: NSViewController {
         if isOn {
             
             DispatchQueue.main.async {
-                self.bitcoinRunningLabel.alphaValue = 1
-                self.bitcoinRunningImage.alphaValue = 1
-                self.bitcoinRunningLabel.stringValue = "Bitcoin on"
-                self.bitcoinRunningImage.image = NSImage.init(imageLiteralResourceName: "NSStatusAvailable")
+                //self.bitcoinRunningLabel.stringValue = "Bitcoin on"
+                //self.bitcoinRunningImage.image = NSImage.init(imageLiteralResourceName: "NSStatusAvailable")
             }
             
         } else {
             
             DispatchQueue.main.async {
-                self.bitcoinRunningLabel.alphaValue = 1
-                self.bitcoinRunningImage.alphaValue = 1
-                self.bitcoinRunningLabel.stringValue = "Bitcoin off"
-                self.bitcoinRunningImage.image = NSImage.init(imageLiteralResourceName: "NSStatusUnavailable")
+                //self.bitcoinRunningLabel.stringValue = "Bitcoin off"
+                //self.bitcoinRunningImage.image = NSImage.init(imageLiteralResourceName: "NSStatusUnavailable")
             }
             
         }
@@ -761,7 +759,7 @@ class ViewController: NSViewController {
         
         DispatchQueue.main.async {
             
-            self.installBitcoindOutlet.isEnabled = false
+            //self.installBitcoindOutlet.isEnabled = false
             
         }
         
@@ -781,14 +779,14 @@ class ViewController: NSViewController {
             }
             
             DispatchQueue.main.async {
-                self.torStatusLabel.stringValue = "✓ Tor v\(version)"
+                //self.torStatusLabel.stringValue = "✓ Tor v\(version)"
                 self.installTorOutlet.title = "Start Tor"
             }
             
         } else {
             
             DispatchQueue.main.async {
-                self.torStatusLabel.stringValue = "╳ Tor not installed"
+                //self.torStatusLabel.stringValue = "╳ Tor not installed"
             }
             
         }
@@ -822,20 +820,18 @@ class ViewController: NSViewController {
         
         if rpcpassword != "" && rpcuser != "" {
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [unowned vc = self] in
                 
-                self.bitcoinConfigured = true
-                self.bitcoinConfLabel.stringValue = "✓ Bitcoin Core configured"
+                vc.bitcoinConfigured = true
                 
             }
             
             
         } else {
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [unowned vc = self] in
                 
-                self.bitcoinConfigured = false
-                self.bitcoinConfLabel.stringValue = "╳ Bitcoin Core not configured"
+                vc.bitcoinConfigured = false
                 
             }
             
@@ -851,19 +847,17 @@ class ViewController: NSViewController {
         if response.contains("HiddenServiceDir /usr/local/var/lib/tor/standup/") {
             
             // hidden service exists already
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [unowned vc = self] in
                 
-                self.torConfigured = true
-                self.torConfLabel.stringValue = "✓ Tor configured"
+                vc.torConfigured = true
                 
             }
             
         } else {
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [unowned vc = self] in
                 
-                self.torConfigured = false
-                self.torConfLabel.stringValue = "╳ Tor not configured"
+                vc.torConfigured = false
                 
             }
             
@@ -886,23 +880,23 @@ class ViewController: NSViewController {
             
             DispatchQueue.main.async { [unowned vc = self] in
                 
-                vc.installBitcoindOutlet.isEnabled = true
+                //vc.installBitcoindOutlet.isEnabled = true
                 vc.verifyOutlet.isEnabled = true
-                vc.bitcoinCoreStatusLabel.stringValue = "✓ Bitcoin Core \(currentVersion)"
+                //vc.bitcoinCoreStatusLabel.stringValue = "✓ Bitcoin Core \(currentVersion)"
                 vc.bitcoinInstalled = true
                 
                 if currentVersion.contains(vc.newestVersion) {
                     
                     print("up to date")
                     DispatchQueue.main.async { [unowned vc = self] in
-                        vc.updateBitcoinlabel.stringValue = "✓ Bitcoin Core up to date"
+                        //vc.updateBitcoinlabel.stringValue = "✓ Bitcoin Core up to date"
                     }
                     
                 } else {
                     
                     print("not up to date")
                     DispatchQueue.main.async { [unowned vc = self] in
-                        vc.updateBitcoinlabel.stringValue = "╳ Bitcoin Core out of date"
+                        //vc.updateBitcoinlabel.stringValue = "╳ Bitcoin Core out of date"
                         vc.updateOutlet.isEnabled = true
                     }
                     
@@ -917,23 +911,23 @@ class ViewController: NSViewController {
             
             DispatchQueue.main.async { [unowned vc = self] in
                 
-                vc.installBitcoindOutlet.isEnabled = true
+                //vc.installBitcoindOutlet.isEnabled = true
                 vc.verifyOutlet.isEnabled = true
-                vc.bitcoinCoreStatusLabel.stringValue = "✓ Bitcoin Core \(currentVersion)"
+                //vc.bitcoinCoreStatusLabel.stringValue = "✓ Bitcoin Core \(currentVersion)"
                 vc.bitcoinInstalled = true
                 
                 if currentVersion.contains(vc.newestVersion) {
                     
                     print("up to date")
                     DispatchQueue.main.async { [unowned vc = self] in
-                        vc.updateBitcoinlabel.stringValue = "✓ Bitcoin Core up to date"
+                        //vc.updateBitcoinlabel.stringValue = "✓ Bitcoin Core up to date"
                     }
                     
                 } else {
                     
                     print("not up to date")
                     DispatchQueue.main.async { [unowned vc = self] in
-                        vc.updateBitcoinlabel.stringValue = "╳ Bitcoin Core out of date"
+                        //vc.updateBitcoinlabel.stringValue = "╳ Bitcoin Core out of date"
                         vc.updateOutlet.isEnabled = true
                     }
                     
@@ -945,8 +939,8 @@ class ViewController: NSViewController {
             
             DispatchQueue.main.async { [unowned vc = self] in
                 
-                vc.bitcoinCoreStatusLabel.stringValue = "╳ Bitcoin Core not installed"
-                vc.installBitcoindOutlet.isEnabled = false
+                //vc.bitcoinCoreStatusLabel.stringValue = "╳ Bitcoin Core not installed"
+                //vc.installBitcoindOutlet.isEnabled = false
                 vc.bitcoinInstalled = false
                 vc.updateBitcoinStatus(isOn: false)
                 
@@ -967,7 +961,7 @@ class ViewController: NSViewController {
             
             DispatchQueue.main.async { [unowned vc = self] in
                 
-                vc.showQuickConnectOutlet.isEnabled = true
+                //vc.showQuickConnectOutlet.isEnabled = true
                 vc.standUpOutlet.isEnabled = false
                 
             }
@@ -1059,22 +1053,68 @@ class ViewController: NSViewController {
         isLoading = true
         
         updateOutlet.isEnabled = false
-        updateBitcoinlabel.stringValue = ""
-        torStatusLabel.stringValue = ""
-        bitcoinCoreStatusLabel.stringValue = ""
-        torConfLabel.stringValue = ""
-        bitcoinConfLabel.stringValue = ""
-        showQuickConnectOutlet.isEnabled = false
+        //bitcoinCoreStatusLabel.stringValue = ""
+        //showQuickConnectOutlet.isEnabled = false
         installTorOutlet.isEnabled = false
-        installBitcoindOutlet.isEnabled = false
+        //installBitcoindOutlet.isEnabled = false
         standUpOutlet.isEnabled = false
         verifyOutlet.isEnabled = false
         
-        torRunningLabel.alphaValue = 0
         torRunningImage.alphaValue = 0
-        bitcoinRunningLabel.alphaValue = 0
-        bitcoinRunningImage.alphaValue = 0
         
+        bitcoinCoreWindow.backgroundColor = #colorLiteral(red: 0.2313431799, green: 0.2313894629, blue: 0.2313401997, alpha: 1)
+        torWindow.backgroundColor = #colorLiteral(red: 0.2313431799, green: 0.2313894629, blue: 0.2313401997, alpha: 1)
+        
+        bitcoinMainnetWindow.backgroundColor = #colorLiteral(red: 0.2548701465, green: 0.2549202442, blue: 0.2548669279, alpha: 1)
+        bitcoinTestnetWindow.backgroundColor = #colorLiteral(red: 0.2548701465, green: 0.2549202442, blue: 0.2548669279, alpha: 1)
+        bitcoinRegtestWindow.backgroundColor = #colorLiteral(red: 0.2548701465, green: 0.2549202442, blue: 0.2548669279, alpha: 1)
+        
+        torMainnetWindow.backgroundColor = #colorLiteral(red: 0.2548701465, green: 0.2549202442, blue: 0.2548669279, alpha: 1)
+        torTestnetWindow.backgroundColor = #colorLiteral(red: 0.2548701465, green: 0.2549202442, blue: 0.2548669279, alpha: 1)
+        torRegtestWindow.backgroundColor = #colorLiteral(red: 0.2548701465, green: 0.2549202442, blue: 0.2548669279, alpha: 1)
+        torAuthWindow.backgroundColor = #colorLiteral(red: 0.2548701465, green: 0.2549202442, blue: 0.2548669279, alpha: 1)
+        
+        bitcoinCoreWindow.wantsLayer = true
+        torWindow.wantsLayer = true
+        bitcoinMainnetWindow.wantsLayer = true
+        bitcoinTestnetWindow.wantsLayer = true
+        bitcoinRegtestWindow.wantsLayer = true
+        torMainnetWindow.wantsLayer = true
+        torTestnetWindow.wantsLayer = true
+        torAuthWindow.wantsLayer = true
+        torRegtestWindow.wantsLayer = true
+        
+        bitcoinCoreWindow.layer?.borderWidth = 0.75
+        bitcoinCoreWindow.layer?.cornerRadius = 8
+        bitcoinMainnetWindow.layer?.borderWidth = 0.75
+        bitcoinMainnetWindow.layer?.cornerRadius = 8
+        torWindow.layer?.borderWidth = 0.75
+        torWindow.layer?.cornerRadius = 8
+        bitcoinRegtestWindow.layer?.borderWidth = 0.75
+        bitcoinRegtestWindow.layer?.cornerRadius = 8
+        bitcoinTestnetWindow.layer?.borderWidth = 0.75
+        bitcoinTestnetWindow.layer?.cornerRadius = 8
+        torMainnetWindow.layer?.borderWidth = 0.75
+        torMainnetWindow.layer?.cornerRadius = 8
+        torTestnetWindow.layer?.borderWidth = 0.75
+        torTestnetWindow.layer?.cornerRadius = 8
+        torRegtestWindow.layer?.borderWidth = 0.75
+        torRegtestWindow.layer?.cornerRadius = 8
+        torAuthWindow.layer?.borderWidth = 0.75
+        torAuthWindow.layer?.cornerRadius = 8
+        
+        bitcoinCoreWindow.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+        bitcoinMainnetWindow.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+        bitcoinTestnetWindow.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+        bitcoinRegtestWindow.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+        torWindow.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+        torMainnetWindow.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+        torTestnetWindow.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+        torRegtestWindow.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+        torAuthWindow.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+        
+        
+
     }
     
     func showstandUpAlert(message: String, info: String) {
@@ -1174,3 +1214,21 @@ class ViewController: NSViewController {
     
 }
 
+extension NSView {
+
+    var backgroundColor: NSColor? {
+
+        get {
+            if let colorRef = self.layer?.backgroundColor {
+                return NSColor(cgColor: colorRef)
+            } else {
+                return nil
+            }
+        }
+
+        set {
+            self.wantsLayer = true
+            self.layer?.backgroundColor = newValue?.cgColor
+        }
+    }
+}
