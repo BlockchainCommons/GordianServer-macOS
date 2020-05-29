@@ -10,6 +10,6 @@ FILENAME="$2"
 echo "Saving $PUBKEY to /usr/local/var/lib/tor/standup/authorized_clients/"$FILENAME".auth"
 echo $PUBKEY > /usr/local/var/lib/tor/standup/authorized_clients/"$FILENAME".auth
 echo "Restarting Tor..."
-sudo -u $(whoami) /usr/local/bin/brew services start tor
+sudo -u $(whoami) /usr/local/bin/brew services restart tor
 echo "Done"
 exit

@@ -35,7 +35,11 @@ class ViewController: NSViewController {
     var rpcpassword = ""
     var rpcuser = ""
     var torHostname = ""
+    var newestVersion = ""
+    var newestBinaryName = ""
+    var newestPrefix = ""
     
+    var strapping = Bool()
     var standingUp = Bool()
     var bitcoinInstalled = Bool()
     var torInstalled = Bool()
@@ -49,18 +53,24 @@ class ViewController: NSViewController {
     
     var env = [String:String]()
     
+    let d = Defaults()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setScene()
+    }
+    
+    override func viewDidAppear() {
         
-        let d = Defaults()
-        d.setDefaults {
-            
-            self.setEnv { self.isBitcoinOn() }
-            
+        d.setDefaults { [unowned vc = self] in
+            vc.getLatestVersion { [unowned vc = self] success in
+                if success {
+                    vc.setEnv()
+                } else {
+                    vc.showAlertMessage(message: "Network request error", info: "We had an issue getting a response from github, we use github to check to see if your current version of Bitcoin Core is out of date, please let us know about this so we can fix it.")
+                }
+            }
         }
-        
     }
     
     //MARK: User Action Segues
@@ -98,13 +108,13 @@ class ViewController: NSViewController {
                 } else {
                     
                     let version = dict!["version"] as! String
-                    actionAlert(message: "Upgrade to Bitcoin Core \(version)?", info: "Upgrading writes over the ~/StandUp directory completely.\n\nAre you sure you would like to upgrade to Bitcoin Core version \(version)?") { (response) in
+                    actionAlert(message: "Upgrade to Bitcoin Core \(version)?", info: "Are you sure?") { (response) in
                         
                         if response {
                             
-                            DispatchQueue.main.async {
-                                self.upgrading = true
-                                self.performSegue(withIdentifier: "goInstall", sender: self)
+                            DispatchQueue.main.async { [unowned vc = self] in
+                                vc.upgrading = true
+                                vc.performSegue(withIdentifier: "goInstall", sender: vc)
                             }
                             
                         }
@@ -134,7 +144,7 @@ class ViewController: NSViewController {
         self.startSpinner(description: "Fetching latest Bitcoin Core version...")
         
         let request = FetchJSON()
-        request.getRequest { (dict, error) in
+        request.getRequest { [unowned vc = self] (dict, error) in
             
             if error != "" {
                 
@@ -150,11 +160,10 @@ class ViewController: NSViewController {
                 
                 func standup() {
                     
-                    let d = Defaults()
-                    var chain = d.chain()
-                    let pruned = d.prune()
-                    let txindex = d.txindex()
-                    let directory = d.dataDir()
+                    var chain = vc.d.chain()
+                    let pruned = vc.d.prune()
+                    let txindex = vc.d.txindex()
+                    let directory = vc.d.dataDir()
                     var type = ""
                     
                     if chain == "main" || chain == "test" {
@@ -276,13 +285,29 @@ class ViewController: NSViewController {
     
     // MARK: Script Methods
     
+    func checkForXcodeSelect() {
+        DispatchQueue.main.async { [unowned vc = self] in
+            vc.taskDescription.stringValue = "checking for xcode select..."
+            vc.runLaunchScript(script: .checkXcodeSelect)
+        }
+    }
+    
+    func checkForHomebrew() {
+        DispatchQueue.main.async { [unowned vc = self] in
+            vc.taskDescription.stringValue = "checking for homebrew..."
+            vc.runLaunchScript(script: .checkHomebrew)
+        }
+    }
+    
     func isBitcoinOn() {
+        #if DEBUG
         print("isBitcoinOn")
+        #endif
         
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [unowned vc = self] in
             
-            self.taskDescription.stringValue = "checking if bitcoin core is running..."
-            self.runLaunchScript(script: .isBitcoinOn)
+            vc.taskDescription.stringValue = "checking if bitcoin core is running..."
+            vc.runLaunchScript(script: .isBitcoinOn)
             
         }
         
@@ -352,10 +377,10 @@ class ViewController: NSViewController {
     func checkForStandUp() {
         print("checkforstandup")
         
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [unowned vc = self] in
             
-            self.taskDescription.stringValue = "checking for StandUp directory..."
-            self.runLaunchScript(script: .checkStandUp)
+            vc.taskDescription.stringValue = "checking for StandUp directory..."
+            vc.runLaunchScript(script: .checkStandUp)
             
         }
         
@@ -376,10 +401,10 @@ class ViewController: NSViewController {
     func isTorOn() {
         print("isTorOn")
         
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [unowned vc = self] in
             
-            self.taskDescription.stringValue = "checking tor status..."
-            self.runLaunchScript(script: .torStatus)
+            vc.taskDescription.stringValue = "checking tor status..."
+            vc.runLaunchScript(script: .torStatus)
             
         }
         
@@ -390,14 +415,16 @@ class ViewController: NSViewController {
     func runLaunchScript(script: SCRIPT) {
         print("runlaunchscript: \(script.rawValue)")
         
-        let d = Defaults()
-        
         switch script {
             
         case .isBitcoinOn, .checkForBitcoin, .startBitcoinqt, .stopBitcoin, .getRPCCredentials:
                         
-            self.env["CHAIN"] = d.chain()
-            self.env["DATADIR"] = d.dataDir()
+            env["CHAIN"] = d.chain()
+            env["DATADIR"] = d.dataDir()
+            #if DEBUG
+            print("CHAIN = \(d.chain())")
+            print("DATADIR = \(d.dataDir())")
+            #endif
                         
         default:
             
@@ -406,22 +433,24 @@ class ViewController: NSViewController {
         }
         
         let runBuildTask = RunBuildTask()
-        runBuildTask.stringToReturn = ""
+        //runBuildTask.stringToReturn = ""
         runBuildTask.terminate = false
         runBuildTask.errorBool = false
         runBuildTask.errorDescription = ""
         runBuildTask.isRunning = false
         runBuildTask.args = []
-        runBuildTask.env = self.env
+        runBuildTask.env = env
         runBuildTask.exitStrings = ["Done"]
         runBuildTask.showLog = false
-        runBuildTask.runScript(script: script) {
+        runBuildTask.runScript(script: script) { [unowned vc = self] in
             
             if !runBuildTask.errorBool {
                 
-                let str = runBuildTask.stringToReturn
-                self.parseScriptResult(script: script, result: str)
-                self.setLog(content: str)
+                vc.parseScriptResult(script: script, result: runBuildTask.stringToReturn)
+                vc.setLog(content: runBuildTask.stringToReturn)
+                #if DEBUG
+                print("result = \(runBuildTask.stringToReturn)")
+                #endif
                 
             } else {
                 
@@ -440,29 +469,47 @@ class ViewController: NSViewController {
         
         switch script {
             
-        case .checkStandUp: checkStandUpParser(result: result)
+        case .checkStandUp:
+            checkStandUpParser(result: result)
             
-        case .isBitcoinOn: parseIsBitcoinOnResponse(result: result)
+        case .isBitcoinOn:
+            parseIsBitcoinOnResponse(result: result)
             
-        case .checkForBitcoin: parseBitcoindResponse(result: result)
+        case .checkForBitcoin:
+            parseBitcoindResponse(result: result)
             
-        case .checkForTor: parseTorResult(result: result)
+        case .checkForTor:
+            parseTorResult(result: result)
             
-        case .getRPCCredentials: checkForRPCCredentials(response: result)
+        case .getRPCCredentials:
+            checkForRPCCredentials(response: result)
             
-        case .getTorrc: checkIfTorIsConfigured(response: result)
+        case .getTorrc:
+            checkIfTorIsConfigured(response: result)
             
-        case .getTorHostname: parseHostname(response: result)
+        case .getTorHostname:
+            parseHostname(response: result)
             
-        case .torStatus: parseTorStatus(result: result)
+        case .torStatus:
+            parseTorStatus(result: result)
             
-        case .verifyBitcoin: parseVerifyResult(result: result)
+        case .verifyBitcoin:
+            parseVerifyResult(result: result)
             
-        case .startBitcoinqt: parseStartBitcoinResponse(result: result)
+        case .startBitcoinqt:
+            parseStartBitcoinResponse(result: result)
             
-        case .startTor, .stopTor: torStarted(result: result)
+        case .startTor, .stopTor:
+            torStarted(result: result)
             
-        case .stopBitcoin: parseBitcoinStoppedResponse(result: result)
+        case .stopBitcoin:
+            parseBitcoinStoppedResponse(result: result)
+            
+        case .checkHomebrew:
+            parseHomebrewResult(result: result)
+            
+        case .checkXcodeSelect:
+            parseXcodeSelectResult(result: result)
             
         default: break
             
@@ -472,18 +519,43 @@ class ViewController: NSViewController {
     
     //MARK: Script Result Parsers
     
-    func checkStandUpParser(result: String) {
-        
-        if result.contains("False") {
-            
-            DispatchQueue.main.async {
-                self.standUpOutlet.isEnabled = true
+    private func parseXcodeSelectResult(result: String) {
+        hideSpinner()
+        if result.contains("XCode select not installed") {
+            /// Can all stop here and prompt user to get strapped first.
+            showAlertMessage(message: "Dependencies missing", info: "You do not appear to have XCode command line tools installed, StandUp.app relies on XCode command line tools for installing Bitcoin Core, therefore in order to continue please select \"Install Dependencies\".")
+        } else {
+            DispatchQueue.main.async { [unowned vc = self] in
+                vc.standUpOutlet.isEnabled = true
+            }
+        }
+    }
+    
+    private func parseHomebrewResult(result: String) {
+        if result.contains("Homebrew not installed") {
+            /// Can all stop here and prompt user to get strapped first.
+            hideSpinner()
+            actionAlert(message: "Install dependencies?", info: "You do not appear to have Homebrew installed, StandUp.app relies on homebrew for installing Tor. We use a well known open source script called Strap to setup your mac for best security and privacy practices, it also installs Homebrew and few other very useful tools. You can read more about Strap here: \"https://github.com/MikeMcQuaid/strap\". This will launch a terminal session and prompt you for your password to run through the process, once complete you can quit and open StandUp to continue." ) { [unowned vc = self] response in
+                
+                if response {
+                    
+                    /// Install Strap
+                    vc.strap()
+                }
             }
             
+        } else {
+            /// It is installed, therefore we can check for XCode select.
+            checkForXcodeSelect()
         }
-        
-        hideSpinner()
-        
+    }
+    
+    func checkStandUpParser(result: String) {
+        if result.contains("False") {
+            checkForHomebrew()
+        } else {
+            hideSpinner()
+        }
     }
     
     func parseStartBitcoinResponse(result: String) {
@@ -542,35 +614,34 @@ class ViewController: NSViewController {
         
         if result.contains("started") {
             
-            DispatchQueue.main.async {
-                self.torIsOn = true
-                self.installTorOutlet.title = "Stop Tor"
-                self.installTorOutlet.isEnabled = true
-                self.updateTorStatus(isOn: true)
+            DispatchQueue.main.async { [unowned vc = self] in
+                vc.torIsOn = true
+                vc.installTorOutlet.title = "Stop Tor"
+                vc.installTorOutlet.isEnabled = true
+                vc.updateTorStatus(isOn: true)
             }
             
         } else if result.contains("stopped") {
             
-            DispatchQueue.main.async {
-                self.torIsOn = false
-                self.installTorOutlet.title = "Start Tor"
-                self.installTorOutlet.isEnabled = true
-                self.updateTorStatus(isOn: false)
+            DispatchQueue.main.async { [unowned vc = self] in
+                vc.torIsOn = false
+                vc.installTorOutlet.title = "Start Tor"
+                vc.installTorOutlet.isEnabled = true
+                vc.updateTorStatus(isOn: false)
             }
             
         } else {
             
-            DispatchQueue.main.async {
-                self.torIsOn = false
-                self.installTorOutlet.title = "Start Tor"
-                self.installTorOutlet.isEnabled = false
-                self.updateTorStatus(isOn: false)
+            DispatchQueue.main.async { [unowned vc = self] in
+                vc.torIsOn = false
+                vc.installTorOutlet.title = "Start Tor"
+                vc.installTorOutlet.isEnabled = false
+                vc.updateTorStatus(isOn: false)
             }
             
         }
         
-        //self.hideSpinner()
-        self.checkForStandUp()
+        checkForStandUp()
         
     }
     
@@ -803,57 +874,36 @@ class ViewController: NSViewController {
     }
     
     func parseBitcoindResponse(result: String) {
+        #if DEBUG
         print("parsebitcoindresponse")
-        
         print("result = \(result)")
+        #endif
         
         if result.contains("Bitcoin Core Daemon version") {
             
             let arr = result.components(separatedBy: "Copyright (C)")
             let currentVersion = (arr[0]).replacingOccurrences(of: "Bitcoin Core Daemon version ", with: "")
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [unowned vc = self] in
                 
-                self.installBitcoindOutlet.isEnabled = true
-                self.verifyOutlet.isEnabled = true
-                self.bitcoinCoreStatusLabel.stringValue = "✓ Bitcoin Core \(currentVersion)"
-                self.bitcoinInstalled = true
+                vc.installBitcoindOutlet.isEnabled = true
+                vc.verifyOutlet.isEnabled = true
+                vc.bitcoinCoreStatusLabel.stringValue = "✓ Bitcoin Core \(currentVersion)"
+                vc.bitcoinInstalled = true
                 
-                let req = FetchJSON()
-                req.getRequest { (dict, error) in
+                if currentVersion.contains(vc.newestVersion) {
                     
-                    if error != "" {
-                        
-                        print("error getting supported version")
-                        DispatchQueue.main.async {
-                            self.updateBitcoinlabel.stringValue = "╳ Error getting latest version"
-                        }
-                        
-                    } else {
-                        
-                        let version = dict!["version"] as! String
-                        let binaryName = dict!["macosBinary"] as! String
-                        let prefix = dict!["binaryPrefix"] as! String
-                        self.env = ["BINARY_NAME":binaryName,"VERSION":version,"PREFIX":prefix]
-                        let latestVersion = "v" + version.replacingOccurrences(of: "\n", with: "")
-                        if currentVersion.contains(latestVersion) {
-                            
-                            print("up to date")
-                            
-                            DispatchQueue.main.async {
-                                self.updateBitcoinlabel.stringValue = "✓ Bitcoin Core up to date"
-                            }
-                            
-                        } else {
-                            
-                            print("not up to date")
-                            DispatchQueue.main.async {
-                                self.updateBitcoinlabel.stringValue = "╳ Bitcoin Core out of date"
-                                self.updateOutlet.isEnabled = true
-                            }
-                            
-                        }
-                        
+                    print("up to date")
+                    DispatchQueue.main.async { [unowned vc = self] in
+                        vc.updateBitcoinlabel.stringValue = "✓ Bitcoin Core up to date"
+                    }
+                    
+                } else {
+                    
+                    print("not up to date")
+                    DispatchQueue.main.async { [unowned vc = self] in
+                        vc.updateBitcoinlabel.stringValue = "╳ Bitcoin Core out of date"
+                        vc.updateOutlet.isEnabled = true
                     }
                     
                 }
@@ -865,48 +915,26 @@ class ViewController: NSViewController {
             let arr = result.components(separatedBy: "Copyright (C)")
             let currentVersion = (arr[0]).replacingOccurrences(of: "Bitcoin Core version ", with: "")
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [unowned vc = self] in
                 
-                self.installBitcoindOutlet.isEnabled = true
-                self.verifyOutlet.isEnabled = true
-                self.bitcoinCoreStatusLabel.stringValue = "✓ Bitcoin Core \(currentVersion)"
-                self.bitcoinInstalled = true
+                vc.installBitcoindOutlet.isEnabled = true
+                vc.verifyOutlet.isEnabled = true
+                vc.bitcoinCoreStatusLabel.stringValue = "✓ Bitcoin Core \(currentVersion)"
+                vc.bitcoinInstalled = true
                 
-                let req = FetchJSON()
-                req.getRequest { (dict, error) in
+                if currentVersion.contains(vc.newestVersion) {
                     
-                    if error != "" {
-                        
-                        print("error getting supported version")
-                        DispatchQueue.main.async {
-                            self.updateBitcoinlabel.stringValue = "╳ Error getting latest version"
-                        }
-                        
-                    } else {
-                        
-                        let version = dict!["version"] as! String
-                        let binaryName = dict!["macosBinary"] as! String
-                        let prefix = dict!["binaryPrefix"] as! String
-                        self.env = ["BINARY_NAME":binaryName,"VERSION":version,"PREFIX":prefix]
-                        let latestVersion = "v" + version.replacingOccurrences(of: "\n", with: "")
-                        if currentVersion.contains(latestVersion) {
-                            
-                            print("up to date")
-                            
-                            DispatchQueue.main.async {
-                                self.updateBitcoinlabel.stringValue = "✓ Bitcoin Core up to date"
-                            }
-                            
-                        } else {
-                            
-                            print("not up to date")
-                            DispatchQueue.main.async {
-                                self.updateBitcoinlabel.stringValue = "╳ Bitcoin Core out of date"
-                                self.updateOutlet.isEnabled = true
-                            }
-                            
-                        }
-                        
+                    print("up to date")
+                    DispatchQueue.main.async { [unowned vc = self] in
+                        vc.updateBitcoinlabel.stringValue = "✓ Bitcoin Core up to date"
+                    }
+                    
+                } else {
+                    
+                    print("not up to date")
+                    DispatchQueue.main.async { [unowned vc = self] in
+                        vc.updateBitcoinlabel.stringValue = "╳ Bitcoin Core out of date"
+                        vc.updateOutlet.isEnabled = true
                     }
                     
                 }
@@ -915,12 +943,12 @@ class ViewController: NSViewController {
             
         } else {
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [unowned vc = self] in
                 
-                self.bitcoinCoreStatusLabel.stringValue = "╳ Bitcoin Core not installed"
-                self.installBitcoindOutlet.isEnabled = false
-                self.bitcoinInstalled = false
-                self.updateBitcoinStatus(isOn: false)
+                vc.bitcoinCoreStatusLabel.stringValue = "╳ Bitcoin Core not installed"
+                vc.installBitcoindOutlet.isEnabled = false
+                vc.bitcoinInstalled = false
+                vc.updateBitcoinStatus(isOn: false)
                 
             }
             
@@ -937,30 +965,30 @@ class ViewController: NSViewController {
         
         if rpcuser != "" && rpcpassword != "" && torHostname != "" && !torHostname.contains("cat: /usr/local/var/lib/tor/standup/hostname: No such file or directory") {
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [unowned vc = self] in
                 
-                self.showQuickConnectOutlet.isEnabled = true
-                self.standUpOutlet.isEnabled = false
+                vc.showQuickConnectOutlet.isEnabled = true
+                vc.standUpOutlet.isEnabled = false
                 
             }
             
         } else {
             
-            DispatchQueue.main.async {
-                
-                self.standUpOutlet.isEnabled = true
-                
-            }
+//            DispatchQueue.main.async { [unowned vc = self] in
+//
+//                vc.standUpOutlet.isEnabled = true
+//
+//            }
             
         }
         
-        self.isTorOn()
+        isTorOn()
                 
     }
     
     func parseVerifyResult(result: String) {
         
-        let binaryName = self.env["BINARY_NAME"] ?? ""
+        let binaryName = env["BINARY_NAME"] ?? ""
         
         if result.contains("\(binaryName): OK") {
             
@@ -980,31 +1008,13 @@ class ViewController: NSViewController {
     
     //MARK: User Inteface
     
-    func setEnv(completion: @escaping () -> Void) {
-        print("setenv")
-        
-        let req = FetchJSON()
-        req.getRequest { (dict, error) in
-            
-            if error != "" {
-                
-                print("error getting supported version")
-                self.hideSpinner()
-                setSimpleAlert(message: "Error", info: "We could not get a response from github... error: \(error ?? "unknown")", buttonLabel: "OK")
-                completion()
-                
-            } else {
-                
-                let version = dict!["version"] as! String
-                let binaryName = dict!["macosBinary"] as! String
-                let prefix = dict!["binaryPrefix"] as! String
-                self.env = ["BINARY_NAME":binaryName,"VERSION":version,"PREFIX":prefix]
-                completion()
-                
-            }
-            
-        }
-        
+    func setEnv() {
+        env = ["BINARY_NAME":d.existingBinary(),"VERSION":d.existingPrefix(),"PREFIX":d.existingPrefix()]
+        #if DEBUG
+        print("setEnv")
+        print("env = \(env)")
+        #endif
+        isBitcoinOn()
     }
     
     func showAlertMessage(message: String, info: String) {
@@ -1107,6 +1117,30 @@ class ViewController: NSViewController {
         
     }
     
+    private func getLatestVersion(completion: @escaping ((Bool)) -> Void) {
+        let fetchJson = FetchJSON()
+        fetchJson.getRequest { [unowned vc = self] (dict, error) in
+            if dict != nil {
+                if let version = dict!["version"] as? String,
+                    let binaryName = dict!["macosBinary"] as? String,
+                    let prefix = dict!["binaryPrefix"] as? String {
+                    vc.newestPrefix = prefix
+                    vc.newestVersion = version
+                    vc.newestBinaryName = binaryName
+                    completion(true)
+                } else {
+                    completion(false)
+                }
+            } else {
+                completion(false)
+            }
+        }
+    }
+    
+    private func strap() {
+        runLaunchScript(script: .launchStrap)
+    }
+    
     // MARK: Segue Prep
     
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
@@ -1131,6 +1165,7 @@ class ViewController: NSViewController {
                 vc.standingUp = standingUp
                 vc.upgrading = upgrading
                 vc.ignoreExistingBitcoin = ignoreExistingBitcoin
+                vc.strapping = strapping
                 
             }
             

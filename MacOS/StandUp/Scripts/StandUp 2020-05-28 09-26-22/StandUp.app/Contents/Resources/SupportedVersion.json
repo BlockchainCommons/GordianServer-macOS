@@ -1,0 +1,7 @@
+{
+    "version":"0.20.0rc2",
+    "binaryPrefix":"bitcoin-0.20.0rc2",
+    "macosBinary":"bitcoin-0.20.0rc2-osx64.tar.gz",
+    "macosURL":"https://bitcoincore.org/bin/bitcoin-core-0.20.0/test.rc2/bitcoin-0.20.0rc2-osx64.tar.gz",
+    "shaURL":"https://bitcoincore.org/bin/bitcoin-core-0.20.0/test.rc2/SHA256SUMS.asc"
+}

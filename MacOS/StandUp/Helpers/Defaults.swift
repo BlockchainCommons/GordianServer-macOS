@@ -22,7 +22,7 @@ class Defaults {
             
             if !runBuildTask.errorBool {
                 
-                let conf = (runBuildTask.stringToReturn).components(separatedBy: "\n")
+                let conf = runBuildTask.stringToReturn.components(separatedBy: "\n")
                 completion((conf, false))
                 
             } else {
@@ -278,6 +278,18 @@ class Defaults {
         
         ud.set(value, forKey: "dataDir")
         
+    }
+    
+    func existingVersion() -> String {
+        return ud.object(forKey: "version") as? String ?? "0.20.0rc1"
+    }
+    
+    func existingBinary() -> String {
+        return ud.object(forKey: "macosBinary") as? String ?? "bitcoin-\(existingVersion())-osx64.tar.gz"
+    }
+    
+    func existingPrefix() -> String {
+        return ud.object(forKey: "binaryPrefix") as? String ?? "bitcoin-\(existingVersion())"
     }
 
 }
