@@ -256,17 +256,10 @@ class ViewController: NSViewController {
                 
                 func standup() {
                     
-                    var chain = vc.d.chain()
                     let pruned = vc.d.prune()
                     let txindex = vc.d.txindex()
                     let directory = vc.d.dataDir()
                     var type = ""
-                    
-                    if chain == "main" || chain == "test" {
-                        
-                        chain += "net"
-                        
-                    }
                     
                     if pruned == 1 {
                         
@@ -280,7 +273,7 @@ class ViewController: NSViewController {
                         
                     }
                     
-                    self.showstandUpAlert(message: "Ready to StandUp?", info: "StandUp will install and configure a \(type) Bitcoin Core v\(version) \(chain) node and Tor v0.4.2.5\n\n~30gb of space needed for testnet and ~300gb for mainnet\n\nIf you would like to install a different node go to \"Settings\" for pruning, mainnet, data directory and tor related options, you can always adjust the settings and restart your node for the changes to take effect.\n\nStandUp will create the following directory: /Users/\(NSUserName())/StandUp\n\nBy default it will create or if one exists add any missing rpc credentials to the bitcoin.conf in \(directory).")
+                    self.showstandUpAlert(message: "Ready to StandUp?", info: "StandUp will install and configure a \(type) Bitcoin Core v\(version) node and Tor v0.4.3.5\n\n~30gb of space needed for testnet and ~300gb for mainnet\n\nIf you would like to install a different node go to \"Settings\" for pruning, mainnet, data directory and tor related options, you can always adjust the settings and restart your node for the changes to take effect.\n\nStandUp will create the following directory: /Users/\(NSUserName())/StandUp\n\nBy default it will create or if one exists add any missing rpc credentials to the bitcoin.conf in \(directory).")
                     
                 }
                 
@@ -519,10 +512,10 @@ class ViewController: NSViewController {
             
         case .isBitcoinOn, .checkForBitcoin, .startBitcoinqt, .stopBitcoin, .getRPCCredentials:
                         
-            env["CHAIN"] = d.chain()
+            //env["CHAIN"] = d.chain()
             env["DATADIR"] = d.dataDir()
             #if DEBUG
-            print("CHAIN = \(d.chain())")
+            //print("CHAIN = \(d.chain())")
             print("DATADIR = \(d.dataDir())")
             #endif
                         

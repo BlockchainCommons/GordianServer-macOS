@@ -70,14 +70,7 @@ class Settings: NSViewController {
     @IBAction func seeBtcLog(_ sender: Any) {
         
         let d = Defaults()
-        var path = d.dataDir()
-        let isTestnet = d.testnet()
-        
-        if isTestnet == 1 {
-            
-            path += "/testnet3"
-            
-        }
+        let path = d.dataDir()
         
         let runBuildTask = RunBuildTask()
         runBuildTask.args = []

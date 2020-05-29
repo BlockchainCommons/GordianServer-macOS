@@ -202,6 +202,7 @@ class Installer: NSViewController {
                             case "testnet":
                                 if existingValue != "" {
                                     testnetExists = true
+                                    // MARK: TODO - Throw an error here as specifying a network in the conf breaks Standup.
                                 }
                                 
                             case "proxy":
@@ -238,7 +239,7 @@ class Installer: NSViewController {
                     }
                     
                     if !testnetExists {
-                        vc.standUpConf = "testnet=\(d.testnet())\n" + vc.standUpConf + "\n"
+                        //vc.standUpConf = "testnet=\(d.testnet())\n" + vc.standUpConf + "\n"
                     }
                     
                     if !debugExists {
@@ -262,12 +263,12 @@ class Installer: NSViewController {
                 } else {
                     
                     //no existing settings - use default
-                    let prune = vc.ud.object(forKey: "pruned") as? Int ?? 0
-                    let txindex = vc.ud.object(forKey: "txindex") as? Int ?? 1
-                    let walletDisabled = vc.ud.object(forKey: "walletDisabled") as? Int ?? 0
+                    let prune = d.prune()
+                    let txindex = d.txindex()
+                    let walletDisabled = d.walletdisabled()
                     vc.rpcpassword = randomString(length: 32)
                     vc.rpcuser = randomString(length: 10)
-                    vc.standUpConf = "testnet=\(d.testnet())\ndisablewallet=\(walletDisabled)\nrpcuser=\(vc.rpcuser)\nrpcpassword=\(vc.rpcpassword)\nserver=1\nprune=\(prune)\ntxindex=\(txindex)\nproxy=127.0.0.1:9050\nlisten=1\ndebug=tor\n[main]\nrpcbind=127.0.0.1\nrpcallowip=127.0.0.1\nbind=127.0.0.1\nrpcport=8332\n[test]\nrpcbind=127.0.0.1\nrpcallowip=127.0.0.1\nbind=127.0.0.1\nrpcport=18332\n[regtest]\nrpcbind=127.0.0.1\nrpcallowip=127.0.0.1\nbind=127.0.0.1\nrpcport=18443"
+                    vc.standUpConf = "disablewallet=\(walletDisabled)\nrpcuser=\(vc.rpcuser)\nrpcpassword=\(vc.rpcpassword)\nserver=1\nprune=\(prune)\ntxindex=\(txindex)\n#proxy=127.0.0.1:9050\n#listen=1\n#debug=tor\n[main]\nrpcport=8332\n[test]\nrpcport=18332\n[regtest]\nrpcport=18443"
                     vc.getURLs()
                     
                 }

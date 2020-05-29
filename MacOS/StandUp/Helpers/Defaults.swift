@@ -40,24 +40,6 @@ class Defaults {
     
     func setDefaults(completion: @escaping () -> Void) {
         
-        if ud.object(forKey: "testnet") == nil {
-            
-            ud.set(1, forKey: "testnet")
-            
-        }
-        
-        if ud.object(forKey: "mainnet") == nil {
-            
-            ud.set(0, forKey: "mainnet")
-            
-        }
-        
-        if ud.object(forKey: "regtest") == nil {
-            
-            ud.set(0, forKey: "regtest")
-            
-        }
-        
         if ud.object(forKey: "dataDir") == nil {
             
             ud.set("/Users/\(NSUserName())/Library/Application Support/Bitcoin", forKey: "dataDir")
@@ -70,13 +52,13 @@ class Defaults {
             
             if ud.object(forKey: "pruned") == nil {
                 
-                ud.set(0, forKey: "pruned")
+                ud.set(1, forKey: "pruned")
                 
             }
             
             if ud.object(forKey: "txindex") == nil {
                 
-                ud.set(1, forKey: "txindex")
+                ud.set(0, forKey: "txindex")
                 
             }
             
@@ -135,12 +117,11 @@ class Defaults {
                                 }
                                 
                             case "testnet":
-                                
-                                self.ud.set(Int(existingValue), forKey: "testnet")
-                                
+                                                                
                                 if Int(existingValue) == 1 {
                                 
-                                    self.ud.set(0, forKey: "mainnet")
+                                    //self.ud.set(0, forKey: "mainnet")
+                                    // MARK: TODO - throw an error as specifying a network in the conf file is incompatible with Standup
                                 
                                 }
                                 
@@ -161,6 +142,12 @@ class Defaults {
                             case "txindex":
                                 
                                 self.ud.set(Int(existingValue), forKey: "txindex")
+                                
+                                if Int(existingValue) == 1 {
+                                
+                                    self.ud.set(0, forKey: "prune")
+                                
+                                }
                                 
                             default:
                                 
@@ -203,29 +190,6 @@ class Defaults {
         
     }
     
-    func chain() -> String {
-        
-        var chain = ""
-        let testnet = ud.object(forKey: "testnet") as! Int
-        let mainnet = ud.object(forKey: "mainnet") as! Int
-        let regtest = ud.object(forKey: "regtest") as! Int
-        
-        if mainnet == 1 {
-            chain = "main"
-        }
-        
-        if testnet == 1 {
-            chain = "test"
-        }
-        
-        if regtest == 1 {
-            chain = "regtest"
-        }
-        
-        return chain
-        
-    }
-    
     func dataDir() -> String {
         
         return ud.object(forKey:"dataDir") as? String ?? "/Users/\(NSUserName())/Application Support/Bitcoin"
@@ -253,24 +217,6 @@ class Defaults {
     func walletdisabled() -> Int {
         
         return ud.object(forKey: "disablewallet") as? Int ?? 0
-        
-    }
-    
-    func mainnet() -> Int {
-        
-        return ud.object(forKey: "mainnet") as? Int ?? 0
-        
-    }
-    
-    func testnet() -> Int {
-        
-        return ud.object(forKey: "testnet") as? Int ?? 1
-        
-    }
-    
-    func regtest() -> Int {
-        
-        return ud.object(forKey: "regtest") as? Int ?? 0
         
     }
     
