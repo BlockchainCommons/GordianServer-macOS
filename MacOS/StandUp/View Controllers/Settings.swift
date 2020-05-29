@@ -56,7 +56,6 @@ class Settings: NSViewController {
             if !runBuildTask.errorBool {
                 
                 
-                
             } else {
                 
                 setSimpleAlert(message: "Error", info: runBuildTask.errorDescription, buttonLabel: "OK")
@@ -859,11 +858,11 @@ class Settings: NSViewController {
             
             if !runBuildScript.errorBool {
                 
-                DispatchQueue.main.async {
-                    self.setLog(content: runBuildScript.stringToReturn)
+                DispatchQueue.main.async { [unowned vc = self] in
+                    vc.setLog(content: runBuildScript.stringToReturn)
                     setSimpleAlert(message: "Successfully added auth key", info: "Important! Tor is now restarting, authentication will not come into effect until this completes.\n\nYou may get an \"Internet not connected error\" when reconnecting to your node, just keep tapping the refresh button until the app connects, it is normal to have a connectivity issue immediately after restarting Tor.", buttonLabel: "OK")
-                    self.textInput.stringValue = ""
-                    self.textInput.resignFirstResponder()
+                    vc.textInput.stringValue = ""
+                    vc.textInput.resignFirstResponder()
                 }
                 
             } else {
@@ -888,7 +887,7 @@ class Settings: NSViewController {
             
             if !runBuildTask.errorBool {
                 
-                let conf = (runBuildTask.stringToReturn).components(separatedBy: "\n")
+                let conf = runBuildTask.stringToReturn.components(separatedBy: "\n")
                 completion((conf, false))
                 
             } else {
