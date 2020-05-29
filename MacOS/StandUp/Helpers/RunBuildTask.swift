@@ -32,29 +32,29 @@ class RunBuildTask {
         let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
         let resource = script.rawValue
         
-        taskQueue.async { [unowned vc = self] in
+        taskQueue.async {
             
             guard let path = Bundle.main.path(forResource: resource, ofType: "command") else {
                 print("Unable to locate \(resource).command")
                 return
             }
-            vc.buildTask = Process()
-            vc.buildTask.launchPath = path
-            vc.buildTask.arguments = vc.args
-            vc.buildTask.environment = vc.env
-            vc.buildTask.standardOutput = vc.stdOut
-            vc.buildTask.standardError = vc.stdErr
+            self.buildTask = Process()
+            self.buildTask.launchPath = path
+            self.buildTask.arguments = self.args
+            self.buildTask.environment = self.env
+            self.buildTask.standardOutput = self.stdOut
+            self.buildTask.standardError = self.stdErr
             
-            vc.buildTask.terminationHandler = { [unowned vc = self] task in
+            self.buildTask.terminationHandler = { task in
                 print("task did terminate")
-                vc.isRunning = false
-                vc.errorBool = false
-                vc.stdErr.fileHandleForReading.closeFile()
-                vc.stdOut.fileHandleForReading.closeFile()
+                self.isRunning = false
+                self.errorBool = false
+                self.stdErr.fileHandleForReading.closeFile()
+                self.stdOut.fileHandleForReading.closeFile()
                 do {
                     if #available(OSX 10.15, *) {
-                        if vc.fileHandle != nil {
-                            try vc.fileHandle.close()
+                        if self.fileHandle != nil {
+                            try self.fileHandle.close()
                             print("file closed")
                         }
                     } else {
