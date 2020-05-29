@@ -1039,17 +1039,12 @@ class ViewController: NSViewController {
     }
     
     func hideSpinner() {
-        print("hidespinner")
-        
-        DispatchQueue.main.async {
-            
-            self.taskDescription.stringValue = ""
-            self.spinner.stopAnimation(self)
-            self.spinner.alphaValue = 0
-            self.taskDescription.alphaValue = 0
-            
+        DispatchQueue.main.async { [unowned vc = self] in
+            vc.taskDescription.stringValue = ""
+            vc.spinner.stopAnimation(vc)
+            vc.spinner.alphaValue = 0
+            vc.taskDescription.alphaValue = 0
         }
-        
     }
     
     func setScene() {
