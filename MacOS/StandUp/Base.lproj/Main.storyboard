@@ -865,6 +865,9 @@
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
                                                                 <color key="contentTintColor" red="0.2313431799" green="0.23138946290000001" blue="0.2313401997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <connections>
+                                                                    <action selector="startMainnetAction:" target="XfG-lQ-9wD" id="V5W-bQ-tSU"/>
+                                                                </connections>
                                                             </button>
                                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7Ar-Jf-taH">
                                                                 <rect key="frame" x="18" y="6" width="126" height="32"/>
@@ -876,6 +879,9 @@
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
+                                                                <connections>
+                                                                    <action selector="showMainConnect:" target="XfG-lQ-9wD" id="ER2-o8-iLj"/>
+                                                                </connections>
                                                             </button>
                                                         </subviews>
                                                         <constraints>
@@ -924,6 +930,9 @@
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
+                                                                <connections>
+                                                                    <action selector="startTestnetAction:" target="XfG-lQ-9wD" id="TDx-0b-UPk"/>
+                                                                </connections>
                                                             </button>
                                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="XoJ-R6-Wcu">
                                                                 <rect key="frame" x="18" y="6" width="126" height="32"/>
@@ -935,6 +944,9 @@
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
+                                                                <connections>
+                                                                    <action selector="showTestConnect:" target="XfG-lQ-9wD" id="Q6s-hD-woj"/>
+                                                                </connections>
                                                             </button>
                                                         </subviews>
                                                         <constraints>
@@ -983,6 +995,9 @@
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
+                                                                <connections>
+                                                                    <action selector="startRegtestAction:" target="XfG-lQ-9wD" id="lIb-iZ-l8V"/>
+                                                                </connections>
                                                             </button>
                                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xZ9-Lf-Ed0">
                                                                 <rect key="frame" x="18" y="6" width="126" height="32"/>
@@ -994,6 +1009,9 @@
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
+                                                                <connections>
+                                                                    <action selector="showRegConnect:" target="XfG-lQ-9wD" id="zVp-JJ-rfl"/>
+                                                                </connections>
                                                             </button>
                                                         </subviews>
                                                         <constraints>
@@ -1045,6 +1063,9 @@
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
+                                                <connections>
+                                                    <action selector="bitcoinWindowHelp:" target="XfG-lQ-9wD" id="YQC-LW-mFH"/>
+                                                </connections>
                                             </button>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OfC-XQ-ENN">
                                                 <rect key="frame" x="72" y="369" width="51" height="11"/>
@@ -1128,6 +1149,9 @@
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
+                                                <connections>
+                                                    <action selector="torWindowHelp:" target="XfG-lQ-9wD" id="Qmk-j2-l4Q"/>
+                                                </connections>
                                             </button>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Oi9-qs-ufU">
                                                 <rect key="frame" x="86" y="383" width="24" height="16"/>
@@ -1164,7 +1188,7 @@
                                                     <font key="font" metaFont="systemBold" size="12"/>
                                                 </buttonCell>
                                                 <connections>
-                                                    <action selector="goToSettings:" target="XfG-lQ-9wD" id="HjH-Er-zmU"/>
+                                                    <action selector="torSettingsAction:" target="XfG-lQ-9wD" id="LS8-Hn-uM8"/>
                                                 </connections>
                                             </button>
                                             <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dK7-Zi-xyI">
@@ -1183,14 +1207,17 @@
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
+                                                                <connections>
+                                                                    <action selector="showMainnetHiddenService:" target="XfG-lQ-9wD" id="STs-z2-EMW"/>
+                                                                </connections>
                                                             </button>
                                                             <pathControl verticalHuggingPriority="750" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c7I-n5-3NK">
-                                                                <rect key="frame" x="0.0" y="0.0" width="163" height="22"/>
+                                                                <rect key="frame" x="-3" y="0.0" width="149" height="28"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="22" id="yep-kJ-xtF"/>
                                                                 </constraints>
-                                                                <pathCell key="cell" selectable="YES" editable="YES" alignment="left" id="2bN-38-7O9">
-                                                                    <font key="font" metaFont="system" size="6"/>
+                                                                <pathCell key="cell" selectable="YES" alignment="left" pathStyle="popUp" id="2bN-38-7O9">
+                                                                    <font key="font" metaFont="system" size="9"/>
                                                                     <url key="url" string="file://localhost/Applications/"/>
                                                                 </pathCell>
                                                             </pathControl>
@@ -1208,14 +1235,14 @@
                                                             </textField>
                                                         </subviews>
                                                         <constraints>
-                                                            <constraint firstAttribute="bottom" secondItem="c7I-n5-3NK" secondAttribute="bottom" id="1a1-WE-eMT"/>
+                                                            <constraint firstAttribute="bottom" secondItem="c7I-n5-3NK" secondAttribute="bottom" constant="4" id="1a1-WE-eMT"/>
                                                             <constraint firstAttribute="width" constant="163" id="2J5-5r-s2f"/>
                                                             <constraint firstAttribute="trailing" secondItem="nDH-Ah-gCr" secondAttribute="trailing" id="8NQ-7Y-hKa"/>
                                                             <constraint firstItem="nDH-Ah-gCr" firstAttribute="top" secondItem="JdA-zQ-PGE" secondAttribute="top" constant="5" id="93D-Nc-MHi"/>
                                                             <constraint firstItem="c7I-n5-3NK" firstAttribute="leading" secondItem="JdA-zQ-PGE" secondAttribute="leading" id="N6Z-ZI-S7P"/>
                                                             <constraint firstItem="kJi-oN-C0K" firstAttribute="leading" secondItem="JdA-zQ-PGE" secondAttribute="leading" constant="7" id="cMg-CP-gtt"/>
                                                             <constraint firstItem="kJi-oN-C0K" firstAttribute="top" secondItem="JdA-zQ-PGE" secondAttribute="top" constant="5" id="ksk-EU-SM2"/>
-                                                            <constraint firstAttribute="trailing" secondItem="c7I-n5-3NK" secondAttribute="trailing" id="vux-Eh-jCE"/>
+                                                            <constraint firstAttribute="trailing" secondItem="c7I-n5-3NK" secondAttribute="trailing" constant="20" id="vux-Eh-jCE"/>
                                                             <constraint firstAttribute="height" constant="51" id="xdk-Nk-4Lf"/>
                                                         </constraints>
                                                     </customView>
@@ -1232,11 +1259,14 @@
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
+                                                                <connections>
+                                                                    <action selector="showTestnetHiddenService:" target="XfG-lQ-9wD" id="YkP-RL-a9C"/>
+                                                                </connections>
                                                             </button>
                                                             <pathControl verticalHuggingPriority="750" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yHG-53-SEe">
-                                                                <rect key="frame" x="0.0" y="0.0" width="163" height="22"/>
-                                                                <pathCell key="cell" selectable="YES" editable="YES" alignment="left" id="qEc-oK-SSw">
-                                                                    <font key="font" metaFont="system" size="6"/>
+                                                                <rect key="frame" x="-3" y="0.0" width="149" height="25"/>
+                                                                <pathCell key="cell" selectable="YES" alignment="left" pathStyle="popUp" id="qEc-oK-SSw">
+                                                                    <font key="font" metaFont="system" size="9"/>
                                                                     <url key="url" string="file://localhost/Applications/"/>
                                                                 </pathCell>
                                                             </pathControl>
@@ -1255,11 +1285,11 @@
                                                         </subviews>
                                                         <constraints>
                                                             <constraint firstItem="yHG-53-SEe" firstAttribute="leading" secondItem="T0l-sS-qe9" secondAttribute="leading" id="Q5e-Ep-wzs"/>
-                                                            <constraint firstAttribute="bottom" secondItem="yHG-53-SEe" secondAttribute="bottom" id="SXg-na-2U2"/>
+                                                            <constraint firstAttribute="bottom" secondItem="yHG-53-SEe" secondAttribute="bottom" constant="4" id="SXg-na-2U2"/>
                                                             <constraint firstItem="oT6-bx-nyC" firstAttribute="top" secondItem="T0l-sS-qe9" secondAttribute="top" constant="6" id="Wfm-su-RnP"/>
                                                             <constraint firstAttribute="height" constant="52" id="as4-XA-s61"/>
                                                             <constraint firstAttribute="trailing" secondItem="4I9-02-Ddi" secondAttribute="trailing" id="bOs-7z-RVk"/>
-                                                            <constraint firstAttribute="trailing" secondItem="yHG-53-SEe" secondAttribute="trailing" id="bXQ-wY-UEL"/>
+                                                            <constraint firstAttribute="trailing" secondItem="yHG-53-SEe" secondAttribute="trailing" constant="20" id="bXQ-wY-UEL"/>
                                                             <constraint firstAttribute="width" constant="163" id="bt6-4h-jdL"/>
                                                             <constraint firstItem="4I9-02-Ddi" firstAttribute="top" secondItem="T0l-sS-qe9" secondAttribute="top" constant="6" id="ff3-mD-avs"/>
                                                             <constraint firstItem="oT6-bx-nyC" firstAttribute="leading" secondItem="T0l-sS-qe9" secondAttribute="leading" constant="7" id="fqa-Lf-N44"/>
@@ -1278,14 +1308,17 @@
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
+                                                                <connections>
+                                                                    <action selector="showRegtestHiddenService:" target="XfG-lQ-9wD" id="b3j-JZ-5K2"/>
+                                                                </connections>
                                                             </button>
                                                             <pathControl verticalHuggingPriority="750" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EWf-rB-NW2">
-                                                                <rect key="frame" x="0.0" y="0.0" width="163" height="22"/>
+                                                                <rect key="frame" x="-3" y="-1" width="149" height="28"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="22" id="lJt-5C-l9n"/>
                                                                 </constraints>
-                                                                <pathCell key="cell" selectable="YES" editable="YES" alignment="left" id="sH3-qW-2e9">
-                                                                    <font key="font" metaFont="system" size="6"/>
+                                                                <pathCell key="cell" selectable="YES" alignment="left" pathStyle="popUp" id="sH3-qW-2e9">
+                                                                    <font key="font" metaFont="system" size="9"/>
                                                                     <url key="url" string="file://localhost/Applications/"/>
                                                                 </pathCell>
                                                             </pathControl>
@@ -1307,9 +1340,9 @@
                                                             <constraint firstItem="LuE-3t-WOY" firstAttribute="top" secondItem="ENN-fh-aL9" secondAttribute="top" constant="6" id="AG9-u1-Ino"/>
                                                             <constraint firstItem="LuE-3t-WOY" firstAttribute="leading" secondItem="ENN-fh-aL9" secondAttribute="leading" constant="7" id="B1s-PO-ccU"/>
                                                             <constraint firstAttribute="trailing" secondItem="fFa-n8-8rX" secondAttribute="trailing" id="DSd-oT-GQL"/>
-                                                            <constraint firstAttribute="bottom" secondItem="EWf-rB-NW2" secondAttribute="bottom" id="FJk-xB-Ige"/>
+                                                            <constraint firstAttribute="bottom" secondItem="EWf-rB-NW2" secondAttribute="bottom" constant="3" id="FJk-xB-Ige"/>
                                                             <constraint firstItem="EWf-rB-NW2" firstAttribute="leading" secondItem="ENN-fh-aL9" secondAttribute="leading" id="GKH-Qb-Meh"/>
-                                                            <constraint firstAttribute="trailing" secondItem="EWf-rB-NW2" secondAttribute="trailing" id="TAu-mR-Fdb"/>
+                                                            <constraint firstAttribute="trailing" secondItem="EWf-rB-NW2" secondAttribute="trailing" constant="20" id="TAu-mR-Fdb"/>
                                                             <constraint firstAttribute="width" constant="163" id="oMq-bi-HOc"/>
                                                             <constraint firstItem="fFa-n8-8rX" firstAttribute="top" secondItem="ENN-fh-aL9" secondAttribute="top" constant="6" id="ttR-Dj-0Q4"/>
                                                         </constraints>
@@ -1361,7 +1394,7 @@
                                                             <constraint firstAttribute="width" constant="111" id="dMv-lI-5Zd"/>
                                                             <constraint firstAttribute="height" constant="16" id="uup-Fh-3R5"/>
                                                         </constraints>
-                                                        <buttonCell key="cell" type="inline" title="Update" bezelStyle="inline" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="3CG-j5-gF2">
+                                                        <buttonCell key="cell" type="inline" title="Install" bezelStyle="inline" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="3CG-j5-gF2">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="smallSystemBold"/>
                                                         </buttonCell>
@@ -1501,21 +1534,38 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="bitcoinCoreHeaderOutlet" destination="IBs-yd-qdH" id="BP3-aB-2Zv"/>
+                        <outlet property="bitcoinCoreVersionOutlet" destination="OfC-XQ-ENN" id="1a4-gR-VTi"/>
                         <outlet property="bitcoinCoreWindow" destination="i70-xH-6Bd" id="Q0s-D6-kKh"/>
                         <outlet property="bitcoinMainnetWindow" destination="Q63-OL-9lD" id="DBA-GJ-YOa"/>
                         <outlet property="bitcoinRegtestWindow" destination="2kZ-Ex-fSQ" id="g90-1p-w1G"/>
                         <outlet property="bitcoinTestnetWindow" destination="cl1-Xf-JYD" id="fmh-1I-x15"/>
+                        <outlet property="connectMainnetOutlet" destination="7Ar-Jf-taH" id="8PT-IX-i0I"/>
+                        <outlet property="connectRegtestOutlet" destination="xZ9-Lf-Ed0" id="7Y2-mU-4Ay"/>
+                        <outlet property="connectTestnetOutlet" destination="XoJ-R6-Wcu" id="H7D-Iw-6xO"/>
                         <outlet property="icon" destination="zZj-w8-TgT" id="mC2-fU-qbF"/>
                         <outlet property="installTorOutlet" destination="w4M-Pe-mtd" id="Pnf-UR-CsW"/>
+                        <outlet property="mainnetIsOnImage" destination="OTB-yn-8Wg" id="Xub-wH-kwI"/>
+                        <outlet property="regtestIsOnImage" destination="21y-LE-0cH" id="n9c-1r-jTQ"/>
                         <outlet property="settingsOutlet" destination="1Mv-9m-mvv" id="obO-VE-w6t"/>
                         <outlet property="spinner" destination="kdQ-HU-D0l" id="t8O-5u-PXb"/>
                         <outlet property="standUpOutlet" destination="eeZ-As-8fa" id="Kaj-cG-D36"/>
+                        <outlet property="startMainnetOutlet" destination="twO-63-MCl" id="WEZ-Qq-VGp"/>
+                        <outlet property="startRegtestOutlet" destination="QJ8-dR-m56" id="lkW-QK-rRi"/>
+                        <outlet property="startTestnetOutlet" destination="9KS-0R-sXK" id="nCB-kh-efR"/>
                         <outlet property="taskDescription" destination="K4o-Sf-dSl" id="Xb9-TC-9s2"/>
+                        <outlet property="testnetIsOnImage" destination="rGh-0q-Obk" id="AFB-bU-zHB"/>
+                        <outlet property="torAuthLockImage" destination="Nzy-A1-ER9" id="tCB-Cd-SHR"/>
+                        <outlet property="torAuthRemoveOutlet" destination="whm-EA-eFM" id="pCm-49-bcC"/>
                         <outlet property="torAuthWindow" destination="WGD-XP-1oR" id="ssD-dC-lnj"/>
+                        <outlet property="torMainnetPathOutlet" destination="c7I-n5-3NK" id="KYS-mp-VnH"/>
                         <outlet property="torMainnetWindow" destination="JdA-zQ-PGE" id="3p4-nK-KlX"/>
+                        <outlet property="torRegtestPathOutlet" destination="EWf-rB-NW2" id="fGg-Od-Pvl"/>
                         <outlet property="torRegtestWindow" destination="ENN-fh-aL9" id="EEt-6U-gjV"/>
                         <outlet property="torRunningImage" destination="mwn-Hz-Tc2" id="6iH-Pv-QIC"/>
+                        <outlet property="torTestnetPathOutlet" destination="yHG-53-SEe" id="ykN-io-xcf"/>
                         <outlet property="torTestnetWindow" destination="T0l-sS-qe9" id="Z7T-NG-PLo"/>
+                        <outlet property="torVersionOutlet" destination="2fT-tq-aCO" id="zpe-Z0-ULJ"/>
                         <outlet property="torWindow" destination="hmk-BW-J2q" id="xSN-4I-RFX"/>
                         <outlet property="updateOutlet" destination="tMm-82-jtg" id="b1B-LH-TKx"/>
                         <outlet property="verifyOutlet" destination="y6q-T1-byM" id="I3N-1T-qsP"/>

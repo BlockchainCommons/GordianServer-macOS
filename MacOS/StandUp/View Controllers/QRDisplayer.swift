@@ -15,6 +15,7 @@ class QRDisplayer: NSViewController {
     var rpcport = ""
     var torHostname = ""
     var nodeLabel = ""
+    var network = ""
     
     @IBOutlet var imageView: NSImageView!
     @IBOutlet var spinner: NSProgressIndicator!
@@ -62,7 +63,7 @@ class QRDisplayer: NSViewController {
     
     func setQR() {
         
-        let url = "btcstandup://\(rpcuser):\(rpcpassword)@\(torHostname):1309/?label=\(nodeLabel)"
+        let url = "btcstandup://\(rpcuser):\(rpcpassword)@\(torHostname):\(rpcport)/?label=\(nodeLabel) - \(network)"
         imageView.frame = CGRect(x: 30, y: 30, width: 100, height: 100)
         imageView.image = getQRCode(textInput: url)
         

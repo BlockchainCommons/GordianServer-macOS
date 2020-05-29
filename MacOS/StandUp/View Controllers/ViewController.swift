@@ -12,6 +12,7 @@ class ViewController: NSViewController {
     
     @IBOutlet weak var bitcoinCoreWindow: NSView!
     @IBOutlet weak var torWindow: NSView!
+    
     @IBOutlet weak var bitcoinMainnetWindow: NSView!
     @IBOutlet weak var bitcoinTestnetWindow: NSView!
     @IBOutlet weak var bitcoinRegtestWindow: NSView!
@@ -20,6 +21,28 @@ class ViewController: NSViewController {
     @IBOutlet weak var torTestnetWindow: NSView!
     @IBOutlet weak var torRegtestWindow: NSView!
     @IBOutlet weak var torAuthWindow: NSView!
+    
+    @IBOutlet weak var mainnetIsOnImage: NSImageView!
+    @IBOutlet weak var testnetIsOnImage: NSImageView!
+    @IBOutlet weak var regtestIsOnImage: NSImageView!
+    
+    @IBOutlet weak var startMainnetOutlet: NSButton!
+    @IBOutlet weak var connectMainnetOutlet: NSButton!
+    @IBOutlet weak var startTestnetOutlet: NSButton!
+    @IBOutlet weak var connectTestnetOutlet: NSButton!
+    @IBOutlet weak var startRegtestOutlet: NSButton!
+    @IBOutlet weak var connectRegtestOutlet: NSButton!
+    
+    @IBOutlet weak var bitcoinCoreHeaderOutlet: NSTextField!
+    @IBOutlet weak var bitcoinCoreVersionOutlet: NSTextField!
+    
+    @IBOutlet weak var torVersionOutlet: NSTextField!
+    @IBOutlet weak var torMainnetPathOutlet: NSPathControl!
+    @IBOutlet weak var torTestnetPathOutlet: NSPathControl!
+    @IBOutlet weak var torRegtestPathOutlet: NSPathControl!
+    
+    @IBOutlet weak var torAuthLockImage: NSImageView!
+    @IBOutlet weak var torAuthRemoveOutlet: NSButton!
     
     
     @IBOutlet var taskDescription: NSTextField!
@@ -37,6 +60,12 @@ class ViewController: NSViewController {
     var rpcpassword = ""
     var rpcuser = ""
     var torHostname = ""
+    var mainHostname = ""
+    var testHostname = ""
+    var regHostname = ""
+    var network = ""
+    var rpcport = ""
+    
     var newestVersion = ""
     var newestBinaryName = ""
     var newestPrefix = ""
@@ -77,11 +106,72 @@ class ViewController: NSViewController {
     
     //MARK: User Action Segues
     
+    @IBAction func showMainConnect(_ sender: Any) {
+        DispatchQueue.main.async { [unowned vc = self] in
+            vc.rpcport = "1309"
+            vc.network = "main"
+            vc.torHostname = vc.mainHostname
+            vc.performSegue(withIdentifier: "showPairingCode", sender: vc)
+        }
+    }
+    
+    @IBAction func showTestConnect(_ sender: Any) {
+        DispatchQueue.main.async { [unowned vc = self] in
+            vc.rpcport = "1310"
+            vc.network = "test"
+            vc.torHostname = vc.testHostname
+            vc.performSegue(withIdentifier: "showPairingCode", sender: vc)
+        }
+    }
+    
+    @IBAction func showRegConnect(_ sender: Any) {
+        DispatchQueue.main.async { [unowned vc = self] in
+            vc.rpcport = "1311"
+            vc.network = "regtest"
+            vc.torHostname = vc.regHostname
+            vc.performSegue(withIdentifier: "showPairingCode", sender: vc)
+        }
+    }
+    
+    @IBAction func startMainnetAction(_ sender: Any) {
+    }
+    
+    @IBAction func startTestnetAction(_ sender: Any) {
+    }
+    
+    @IBAction func startRegtestAction(_ sender: Any) {
+    }
+    
+    @IBAction func showMainnetHiddenService(_ sender: Any) {
+        runLaunchScript(script: .openMainnetHiddenService)
+    }
+    
+    @IBAction func showTestnetHiddenService(_ sender: Any) {
+        runLaunchScript(script: .openTestnetHiddenService)
+    }
+    
+    @IBAction func showRegtestHiddenService(_ sender: Any) {
+        runLaunchScript(script: .openRegtestHiddenService)
+    }
+    
+    
+    @IBAction func bitcoinWindowHelp(_ sender: Any) {
+        showAlertMessage(message: "Bitcoin Core Help", info: "Standup allows you to run multiple networks simultaneously which can be useful for development and testing purposes. Each network has a dedicated hidden service which gives you the ability to remotely connect to all 3 networks via FullyNoded. Just tap the QuickConnect button for whichever network you want to remotely connect to and scan the QR with FullyNoded. Mainnet is the main network where you can spend real Bitcoins, Testnet is a test network where you can connect to other nodes on the testnet3 network, which is useful for testing new features of Bitcoin Core that you may not be familiar with. Regtest is meant for developers who want to run a local network, it essentially gives you access to your own local Bitcoin blockchain, you can mine blocks easily and instantly and add multiple nodes all from your local dev environment. The verify button allows you to check the sha256 hash of the Bitcoin Core binary against what we expect it to be as per LaanWJ Vlaadmirs pgp signature. The install/update button will either setup Standup completely or update Bitcoin Core if there is a newer version available.")
+    }
+    
+    @IBAction func torWindowHelp(_ sender: Any) {
+        showAlertMessage(message: "Tor Help", info: "This window gives you direct access to the three hidden service directories by tapping the forward button for each network. This is useful if you want to use your node's onion addresses for other apps. It is also useful if you want to refresh your hidden service which can be accomplished by deleting the hidden service directory altogether.  You may add and remove Tor v3 authenticaction keys from the \"add\" and \"remove\" button. You may add up to 330 auth keys to each hidden service. Standup by default adds the auth key to all three hidden services, if you tap \"remove\" it will remove auth from all three hidden services so use it with caution. The start/stop button allows you to start and stop tor. If Tor is stopped your node will not be reachable remotely. You may use the install/update button to install Standup or to update Tor.")
+    }
+    
+    @IBAction func torSettingsAction(_ sender: Any) {
+        DispatchQueue.main.async { [unowned vc = self] in
+            vc.performSegue(withIdentifier: "goToSettings", sender: vc)
+        }
+    }
     
     
     @IBAction func getPairingCode(_ sender: Any) {
         print("getPairingCode")
-        
         DispatchQueue.main.async {
             self.performSegue(withIdentifier: "showPairingCode", sender: self)
         }
@@ -89,36 +179,41 @@ class ViewController: NSViewController {
     }
     
     @IBAction func goToSettings(_ sender: Any) {
-        print("gotosettings")
-        
-        DispatchQueue.main.async {
-            self.performSegue(withIdentifier: "goToSettings", sender: self)
+        DispatchQueue.main.async { [unowned vc = self] in
+            vc.performSegue(withIdentifier: "goToSettings", sender: vc)
         }
-        
     }
     
     @IBAction func updateBitcoin(_ sender: Any) {
-        print("update bitcoin core")
+        print("update or install bitcoin core")
         
-        DispatchQueue.main.async {
+        if !bitcoinInstalled {
             
-            let request = FetchJSON()
-            request.getRequest { (dict, err) in
+            installNow()
+            
+        } else {
+            
+            DispatchQueue.main.async {
                 
-                if err != "" {
+                let request = FetchJSON()
+                request.getRequest { (dict, err) in
                     
-                    setSimpleAlert(message: "Error", info: "Error fetching json values: \(err ?? "unknown error")", buttonLabel: "OK")
-                    
-                } else {
-                    
-                    let version = dict!["version"] as! String
-                    actionAlert(message: "Upgrade to Bitcoin Core \(version)?", info: "Are you sure?") { (response) in
+                    if err != "" {
                         
-                        if response {
+                        setSimpleAlert(message: "Error", info: "Error fetching json values: \(err ?? "unknown error")", buttonLabel: "OK")
+                        
+                    } else {
+                        
+                        let version = dict!["version"] as! String
+                        actionAlert(message: "Upgrade to Bitcoin Core \(version)?", info: "Are you sure?") { (response) in
                             
-                            DispatchQueue.main.async { [unowned vc = self] in
-                                vc.upgrading = true
-                                vc.performSegue(withIdentifier: "goInstall", sender: vc)
+                            if response {
+                                
+                                DispatchQueue.main.async { [unowned vc = self] in
+                                    vc.upgrading = true
+                                    vc.performSegue(withIdentifier: "goInstall", sender: vc)
+                                }
+                                
                             }
                             
                         }
@@ -128,7 +223,6 @@ class ViewController: NSViewController {
                 }
                 
             }
-            
         }
         
     }
@@ -142,9 +236,7 @@ class ViewController: NSViewController {
         
     }
     
-    @IBAction func standUp(_ sender: Any) {
-        print("standup")
-        
+    private func installNow() {
         self.startSpinner(description: "Fetching latest Bitcoin Core version...")
         
         let request = FetchJSON()
@@ -174,7 +266,7 @@ class ViewController: NSViewController {
                         
                         chain += "net"
                         
-                    }                    
+                    }
                     
                     if pruned == 1 {
                         
@@ -219,7 +311,11 @@ class ViewController: NSViewController {
             }
             
         }
-        
+    }
+    
+    @IBAction func standUp(_ sender: Any) {
+        print("standup")
+        installNow()
     }
     
     @IBAction func installTorAction(_ sender: Any) {
@@ -620,7 +716,7 @@ class ViewController: NSViewController {
             
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.torIsOn = true
-                vc.installTorOutlet.title = "Stop Tor"
+                vc.installTorOutlet.title = "Stop"
                 vc.installTorOutlet.isEnabled = true
                 vc.updateTorStatus(isOn: true)
             }
@@ -629,7 +725,7 @@ class ViewController: NSViewController {
             
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.torIsOn = false
-                vc.installTorOutlet.title = "Start Tor"
+                vc.installTorOutlet.title = "Start"
                 vc.installTorOutlet.isEnabled = true
                 vc.updateTorStatus(isOn: false)
             }
@@ -778,20 +874,22 @@ class ViewController: NSViewController {
                 
             }
             
-            DispatchQueue.main.async {
-                //self.torStatusLabel.stringValue = "✓ Tor v\(version)"
-                self.installTorOutlet.title = "Start Tor"
+            DispatchQueue.main.async { [unowned vc = self] in
+                vc.torVersionOutlet.stringValue = "v\(version)"
+                vc.installTorOutlet.title = "Start"
+                vc.standUpOutlet.isEnabled = false
             }
             
         } else {
             
-            DispatchQueue.main.async {
-                //self.torStatusLabel.stringValue = "╳ Tor not installed"
+            DispatchQueue.main.async { [unowned vc = self] in
+                vc.standUpOutlet.stringValue = "Install"
+                vc.standUpOutlet.isEnabled = true
             }
             
         }
         
-        self.checkBitcoinConfForRPCCredentials()
+        checkBitcoinConfForRPCCredentials()
         
     }
     
@@ -880,23 +978,23 @@ class ViewController: NSViewController {
             
             DispatchQueue.main.async { [unowned vc = self] in
                 
-                //vc.installBitcoindOutlet.isEnabled = true
                 vc.verifyOutlet.isEnabled = true
-                //vc.bitcoinCoreStatusLabel.stringValue = "✓ Bitcoin Core \(currentVersion)"
+                vc.bitcoinCoreVersionOutlet.stringValue = currentVersion
                 vc.bitcoinInstalled = true
                 
                 if currentVersion.contains(vc.newestVersion) {
                     
                     print("up to date")
                     DispatchQueue.main.async { [unowned vc = self] in
-                        //vc.updateBitcoinlabel.stringValue = "✓ Bitcoin Core up to date"
+                        vc.updateOutlet.isEnabled = false
+                        vc.updateOutlet.stringValue = "Update"
                     }
                     
                 } else {
                     
                     print("not up to date")
                     DispatchQueue.main.async { [unowned vc = self] in
-                        //vc.updateBitcoinlabel.stringValue = "╳ Bitcoin Core out of date"
+                        vc.updateOutlet.stringValue = "Update"
                         vc.updateOutlet.isEnabled = true
                     }
                     
@@ -911,23 +1009,23 @@ class ViewController: NSViewController {
             
             DispatchQueue.main.async { [unowned vc = self] in
                 
-                //vc.installBitcoindOutlet.isEnabled = true
                 vc.verifyOutlet.isEnabled = true
-                //vc.bitcoinCoreStatusLabel.stringValue = "✓ Bitcoin Core \(currentVersion)"
+                vc.bitcoinCoreVersionOutlet.stringValue = currentVersion
                 vc.bitcoinInstalled = true
                 
                 if currentVersion.contains(vc.newestVersion) {
                     
                     print("up to date")
                     DispatchQueue.main.async { [unowned vc = self] in
-                        //vc.updateBitcoinlabel.stringValue = "✓ Bitcoin Core up to date"
+                        vc.updateOutlet.isEnabled = false
+                        vc.updateOutlet.stringValue = "Update"
                     }
                     
                 } else {
                     
                     print("not up to date")
                     DispatchQueue.main.async { [unowned vc = self] in
-                        //vc.updateBitcoinlabel.stringValue = "╳ Bitcoin Core out of date"
+                        vc.updateOutlet.stringValue = "Update"
                         vc.updateOutlet.isEnabled = true
                     }
                     
@@ -941,6 +1039,8 @@ class ViewController: NSViewController {
                 
                 //vc.bitcoinCoreStatusLabel.stringValue = "╳ Bitcoin Core not installed"
                 //vc.installBitcoindOutlet.isEnabled = false
+                vc.updateOutlet.stringValue = "Install"
+                vc.updateOutlet.isEnabled = true
                 vc.bitcoinInstalled = false
                 vc.updateBitcoinStatus(isOn: false)
                 
@@ -955,24 +1055,28 @@ class ViewController: NSViewController {
     func parseHostname(response: String) {
         print("parsehostname")
         
-        torHostname = response.components(separatedBy: "\n")[0]
-        
-        if rpcuser != "" && rpcpassword != "" && torHostname != "" && !torHostname.contains("cat: /usr/local/var/lib/tor/standup/hostname: No such file or directory") {
+        if !response.contains("No such file or directory") {
+            
+            let hostnames = response.split(separator: "\n")
+            mainHostname = "\(hostnames[0])"
+            testHostname = "\(hostnames[1])"
+            regHostname = "\(hostnames[2])"
             
             DispatchQueue.main.async { [unowned vc = self] in
-                
-                //vc.showQuickConnectOutlet.isEnabled = true
-                vc.standUpOutlet.isEnabled = false
-                
+                vc.connectMainnetOutlet.isEnabled = true
+                vc.connectTestnetOutlet.isEnabled = true
+                vc.connectRegtestOutlet.isEnabled = true
             }
             
         } else {
             
-//            DispatchQueue.main.async { [unowned vc = self] in
-//
-//                vc.standUpOutlet.isEnabled = true
-//
-//            }
+            DispatchQueue.main.async { [unowned vc = self] in
+                vc.standUpOutlet.stringValue = "Install"
+                vc.standUpOutlet.isEnabled = true
+                vc.connectMainnetOutlet.isEnabled = false
+                vc.connectTestnetOutlet.isEnabled = false
+                vc.connectRegtestOutlet.isEnabled = false
+            }
             
         }
         
@@ -1053,6 +1157,7 @@ class ViewController: NSViewController {
         isLoading = true
         
         updateOutlet.isEnabled = false
+        bitcoinCoreVersionOutlet.stringValue = ""
         //bitcoinCoreStatusLabel.stringValue = ""
         //showQuickConnectOutlet.isEnabled = false
         installTorOutlet.isEnabled = false
@@ -1113,7 +1218,9 @@ class ViewController: NSViewController {
         torRegtestWindow.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
         torAuthWindow.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
         
-        
+        torMainnetPathOutlet.url = URL(fileURLWithPath: "/usr/local/var/lib/tor/standup/main")
+        torTestnetPathOutlet.url = URL(fileURLWithPath: "/usr/local/var/lib/tor/standup/test")
+        torRegtestPathOutlet.url = URL(fileURLWithPath: "/usr/local/var/lib/tor/standup/reg")
 
     }
     
@@ -1187,6 +1294,8 @@ class ViewController: NSViewController {
             
             if let vc = segue.destinationController as? QRDisplayer {
                 
+                vc.rpcport = rpcport
+                vc.network = network
                 vc.rpcpassword = rpcpassword
                 vc.rpcuser = rpcuser
                 vc.torHostname = torHostname

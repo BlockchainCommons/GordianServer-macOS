@@ -36,6 +36,9 @@ public enum SCRIPT: String {
     case checkXcodeSelect = "CheckXCodeSelect"
     case getStrapped = "Strap"
     case launchStrap = "LaunchStrap"
+    case openMainnetHiddenService = "OpenMainnetHiddenService"
+    case openTestnetHiddenService = "OpenTestnetHiddenService"
+    case openRegtestHiddenService = "OpenRegtestHiddenService"
     
 }
 

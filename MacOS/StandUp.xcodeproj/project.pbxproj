@@ -20,6 +20,9 @@
 		D076010C247E074D00706F70 /* CheckHomebrew.command in Resources */ = {isa = PBXBuildFile; fileRef = D076010B247E074D00706F70 /* CheckHomebrew.command */; };
 		D0760110247E084200706F70 /* CheckXCodeSelect.command in Resources */ = {isa = PBXBuildFile; fileRef = D076010F247E084200706F70 /* CheckXCodeSelect.command */; };
 		D0760114247F491E00706F70 /* LaunchStrap.command in Resources */ = {isa = PBXBuildFile; fileRef = D0760113247F491E00706F70 /* LaunchStrap.command */; };
+		D07601162480F79200706F70 /* OpenMainnetHiddenService.command in Resources */ = {isa = PBXBuildFile; fileRef = D07601152480F79200706F70 /* OpenMainnetHiddenService.command */; };
+		D07601182480F8F600706F70 /* OpenTestnetHiddenService.command in Resources */ = {isa = PBXBuildFile; fileRef = D07601172480F8F600706F70 /* OpenTestnetHiddenService.command */; };
+		D076011A2480F95E00706F70 /* OpenRegtestHiddenService.command in Resources */ = {isa = PBXBuildFile; fileRef = D07601192480F95E00706F70 /* OpenRegtestHiddenService.command */; };
 		D08210372389058B00E21EDC /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08210362389058B00E21EDC /* Defaults.swift */; };
 		D0821040238AA76000E21EDC /* tor_logo_redesign copy.png in Resources */ = {isa = PBXBuildFile; fileRef = D082103E238AA76000E21EDC /* tor_logo_redesign copy.png */; };
 		D0821041238AA76000E21EDC /* btccore copy.png in Resources */ = {isa = PBXBuildFile; fileRef = D082103F238AA76000E21EDC /* btccore copy.png */; };
@@ -96,6 +99,9 @@
 		D076010B247E074D00706F70 /* CheckHomebrew.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = CheckHomebrew.command; sourceTree = "<group>"; };
 		D076010F247E084200706F70 /* CheckXCodeSelect.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = CheckXCodeSelect.command; sourceTree = "<group>"; };
 		D0760113247F491E00706F70 /* LaunchStrap.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = LaunchStrap.command; sourceTree = "<group>"; };
+		D07601152480F79200706F70 /* OpenMainnetHiddenService.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = OpenMainnetHiddenService.command; sourceTree = "<group>"; };
+		D07601172480F8F600706F70 /* OpenTestnetHiddenService.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = OpenTestnetHiddenService.command; sourceTree = "<group>"; };
+		D07601192480F95E00706F70 /* OpenRegtestHiddenService.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = OpenRegtestHiddenService.command; sourceTree = "<group>"; };
 		D08210362389058B00E21EDC /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		D082103E238AA76000E21EDC /* tor_logo_redesign copy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tor_logo_redesign copy.png"; sourceTree = "<group>"; };
 		D082103F238AA76000E21EDC /* btccore copy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btccore copy.png"; sourceTree = "<group>"; };
@@ -216,6 +222,9 @@
 				D076010B247E074D00706F70 /* CheckHomebrew.command */,
 				D076010F247E084200706F70 /* CheckXCodeSelect.command */,
 				D0760113247F491E00706F70 /* LaunchStrap.command */,
+				D07601152480F79200706F70 /* OpenMainnetHiddenService.command */,
+				D07601172480F8F600706F70 /* OpenTestnetHiddenService.command */,
+				D07601192480F95E00706F70 /* OpenRegtestHiddenService.command */,
 			);
 			path = Scripts;
 			sourceTree = "<group>";
@@ -433,12 +442,14 @@
 				D0EB5319237E4E9F002212F8 /* fullynoded_generate.png in Resources */,
 				D0B9277A2383F8D400956651 /* CheckForBitcoinCore.command in Resources */,
 				D0DCD8EE236ACD6300F2D15A /* Installer.xib in Resources */,
+				D07601182480F8F600706F70 /* OpenTestnetHiddenService.command in Resources */,
 				D0F9352C238CAC48001FF151 /* onion.png in Resources */,
 				D076010C247E074D00706F70 /* CheckHomebrew.command in Resources */,
 				D0BCB337236A6D27000D8FDE /* Assets.xcassets in Resources */,
 				D0760114247F491E00706F70 /* LaunchStrap.command in Resources */,
 				D0534CCA237E4DF00093DE67 /* fullynoded_qr.png in Resources */,
 				D0DCD8EA236ACD5300F2D15A /* QRDisplayer.xib in Resources */,
+				D076011A2480F95E00706F70 /* OpenRegtestHiddenService.command in Resources */,
 				D0534CC6237E4CC20093DE67 /* ok.png in Resources */,
 				D0E74F2323B6A527008B1EC5 /* CheckStandUp.command in Resources */,
 				D0B927782383E59700956651 /* UpgradeBitcoin.command in Resources */,
@@ -466,6 +477,7 @@
 				D0B9278023840D3C00956651 /* IsBitcoinOn.command in Resources */,
 				D06E3938236BE46E0072924A /* Settings.xib in Resources */,
 				D0760106247DFEF200706F70 /* Strap.command in Resources */,
+				D07601162480F79200706F70 /* OpenMainnetHiddenService.command in Resources */,
 				D0A871CF237E4B9D006033C9 /* yes.png in Resources */,
 				D0B927842384DE1B00956651 /* GetTorrc.command in Resources */,
 				D0B927882384E2D400956651 /* GetHostname.command in Resources */,
