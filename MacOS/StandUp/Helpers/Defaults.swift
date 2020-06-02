@@ -58,7 +58,7 @@ class Defaults {
             if !error {
                 if conf.count > 0 {
                     for setting in conf {
-                        if setting.contains("=") {
+                        if setting.contains("=") && !setting.contains("#") {
                             let arr = setting.components(separatedBy: "=")
                             let k = arr[0]
                             let existingValue = arr[1]
@@ -78,7 +78,7 @@ class Defaults {
                                     bindOn = true
                                 }
                                 
-                            case "testnet":
+                            case "testnet", "regtest":
                                 if Int(existingValue) == 1 {
                                     // MARK: TODO - throw an error as specifying a network in the conf file is incompatible with Standup
                                 }
