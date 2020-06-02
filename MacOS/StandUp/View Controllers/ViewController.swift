@@ -779,11 +779,13 @@ class ViewController: NSViewController {
                     DispatchQueue.main.async { [unowned vc = self] in
                         vc.updateOutlet.isEnabled = false
                         vc.updateOutlet.title = "Update"
+                        vc.verifyOutlet.isEnabled = true
                     }
                 } else {
                     DispatchQueue.main.async { [unowned vc = self] in
                         vc.updateOutlet.title = "Update"
                         vc.updateOutlet.isEnabled = true
+                        vc.verifyOutlet.isEnabled = true
                     }
                 }
             }
@@ -792,6 +794,7 @@ class ViewController: NSViewController {
                 vc.updateOutlet.title = "Install"
                 vc.updateOutlet.isEnabled = true
                 vc.bitcoinInstalled = false
+                vc.verifyOutlet.isEnabled = false
             }
         }
         checkTorVersion()
