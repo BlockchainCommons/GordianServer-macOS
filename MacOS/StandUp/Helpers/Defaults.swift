@@ -15,21 +15,17 @@ class Defaults {
             return
         }
         let stdOut = Pipe()
-        let stdErr = Pipe()
         let task = Process()
         task.launchPath = path
         task.environment = ["DATADIR":dataDir()]
         task.standardOutput = stdOut
-        task.standardError = stdErr
         task.launch()
         task.waitUntilExit()
         let data = stdOut.fileHandleForReading.readDataToEndOfFile()
-        let errData = stdErr.fileHandleForReading.readDataToEndOfFile()
         if let output = String(data: data, encoding: .utf8) {
             let conf = output.components(separatedBy: "\n")
             completion((conf, false))
-        }
-        if let _ = String(data: errData, encoding: .utf8) {
+        } else {
             completion(([""], true))
         }
     }
@@ -42,6 +38,7 @@ class Defaults {
         }
         
         func setLocals() {
+            print("setLocals")
             if ud.object(forKey: "pruned") == nil {
                 ud.set(1, forKey: "pruned")
             }

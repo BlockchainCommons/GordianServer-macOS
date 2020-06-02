@@ -66,30 +66,26 @@ class QRDisplayer: NSViewController {
     }
     
     private func getQRCode(textInput: String) -> NSImage {
-        
         let data = textInput.data(using: .ascii)
         let filter = CIFilter(name: "CIQRCodeGenerator")
         filter!.setValue(data, forKey: "inputMessage")
         let transform = CGAffineTransform(scaleX: 10, y: 10)
         let output = filter?.outputImage?.transformed(by: transform)
-        
         let colorParameters = [
             "inputColor0": CIColor(color: NSColor.black), // Foreground
             "inputColor1": CIColor(color: NSColor.white) // Background
         ]
-        
         let colored = (output!.applyingFilter("CIFalseColor", parameters: colorParameters as [String : Any]))
         let rep = NSCIImageRep(ciImage: colored)
         let nsImage = NSImage(size: rep.size)
         nsImage.addRepresentation(rep)
-        
         return nsImage
-        
     }
     
     @IBAction func refreshHS(_ sender: Any) {
-        actionAlert(message: "Refresh Hidden Service?", info: "This refreshes your hidden service so that any clients that were connected to your node will no longer be able to connect, it's a good idea to do this if for some reason you think someone may have access to your node if for example your phone was lost or stolen.") { [unowned vc = self] (response) in
+        actionAlert(message: "Refresh \(network) hidden service?", info: "This refreshes your hidden service so that any clients that were connected to your node will no longer be able to connect, it's a good idea to do this if for some reason you think someone may have access to your node if for example your phone was lost or stolen.") { [unowned vc = self] (response) in
             if response {
+                vc.spinnerDescription.stringValue = "refreshing..."
                 vc.showSpinner()
                 vc.refreshHS {
                     vc.getHostname()
@@ -99,68 +95,71 @@ class QRDisplayer: NSViewController {
     }
     
     private func refreshHS(completion: @escaping () -> Void) {
-        guard let path = Bundle.main.path(forResource: SCRIPT.refreshHS.rawValue, ofType: "command") else {
-            return
-        }
-        let stdOut = Pipe()
-        let stdErr = Pipe()
-        let task = Process()
-        task.launchPath = path
-        task.standardOutput = stdOut
-        task.standardError = stdErr
-        task.launch()
-        task.waitUntilExit()
-        let data = stdOut.fileHandleForReading.readDataToEndOfFile()
-        let errData = stdErr.fileHandleForReading.readDataToEndOfFile()
-        var result = ""
-        if let output = String(data: data, encoding: .utf8) {
-            #if DEBUG
-            print("output: \(output)")
-            #endif
-            result += output
-            setLog(content: result)
-            completion()
-        }
-        if let errorOutput = String(data: errData, encoding: .utf8) {
-            #if DEBUG
-            print("error: \(errorOutput)")
-            #endif
-            result += errorOutput
-            setSimpleAlert(message: "Error", info: result, buttonLabel: "OK")
-            completion()
+        DispatchQueue.main.async { [unowned vc = self] in
+            var script:SCRIPT!
+            switch vc.rpcport {
+            case "1309":
+                script = .refreshMainHS
+            case "1310":
+                script = .refreshTestHS
+            case "1311":
+                script = .refreshRegHS
+            default:
+                break
+            }
+            guard let path = Bundle.main.path(forResource: script.rawValue, ofType: "command") else {
+                return
+            }
+            let stdOut = Pipe()
+            let task = Process()
+            task.launchPath = path
+            task.standardOutput = stdOut
+            task.launch()
+            task.waitUntilExit()
+            let data = stdOut.fileHandleForReading.readDataToEndOfFile()
+            var result = ""
+            if let output = String(data: data, encoding: .utf8) {
+                #if DEBUG
+                print("output: \(output)")
+                #endif
+                result += output
+                vc.setLog(content: result)
+                completion()
+            }
         }
     }
     
     private func getHostname() {
-        guard let path = Bundle.main.path(forResource: SCRIPT.getTorHostname.rawValue, ofType: "command") else {
-            return
-        }
-        let stdOut = Pipe()
-        let stdErr = Pipe()
-        let task = Process()
-        task.launchPath = path
-        task.standardOutput = stdOut
-        task.standardError = stdErr
-        task.launch()
-        task.waitUntilExit()
-        let data = stdOut.fileHandleForReading.readDataToEndOfFile()
-        let errData = stdErr.fileHandleForReading.readDataToEndOfFile()
-        var result = ""
-        if let output = String(data: data, encoding: .utf8) {
-            #if DEBUG
-            print("output: \(output)")
-            #endif
-            result += output
-            torHostname = result
-            updateImage()
-        }
-        if let errorOutput = String(data: errData, encoding: .utf8) {
-            #if DEBUG
-            print("error: \(errorOutput)")
-            #endif
-            result += errorOutput
-            hideSpinner()
-            setSimpleAlert(message: "Error", info: "There was an error getting your new hostname: \(result)", buttonLabel: "OK")
+        DispatchQueue.main.async { [unowned vc = self] in
+            guard let path = Bundle.main.path(forResource: SCRIPT.getTorHostname.rawValue, ofType: "command") else {
+                return
+            }
+            let stdOut = Pipe()
+            let task = Process()
+            task.launchPath = path
+            task.standardOutput = stdOut
+            task.launch()
+            task.waitUntilExit()
+            let data = stdOut.fileHandleForReading.readDataToEndOfFile()
+            if let output = String(data: data, encoding: .utf8) {
+                #if DEBUG
+                print("output: \(output)")
+                #endif
+                let hostnames = output.split(separator: "\n")
+                if hostnames.count == 3 {
+                    switch vc.rpcport {
+                    case "1309":
+                        vc.torHostname = "\(hostnames[0])"
+                    case "1310":
+                        vc.torHostname = "\(hostnames[1])"
+                    case "1311":
+                        vc.torHostname = "\(hostnames[2])"
+                    default:
+                        break
+                    }
+                }
+                vc.updateImage()
+            }
         }
     }
     

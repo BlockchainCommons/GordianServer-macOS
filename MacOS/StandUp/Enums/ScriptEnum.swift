@@ -25,7 +25,6 @@ public enum SCRIPT: String {
     case standDown = "StandDown"
     case updateBTCConf = "UpdateBTCConf"
     case upgradeBitcoin = "UpgradeBitcoin"
-    case refreshHS = "RefreshHS"
     case showBitcoinLog = "ShowBitcoinCoreLog"
     case showTorLog = "ShowTorLog"
     case checkStandUp = "CheckStandUp"
@@ -45,6 +44,9 @@ public enum SCRIPT: String {
     case stopMain = "StopMain"
     case stopTest = "StopTest"
     case stopReg = "StopReg"
+    case refreshMainHS = "RefreshMainHS"
+    case refreshTestHS = "RefreshTestHS"
+    case refreshRegHS = "RefreshRegHS"
 }
 
 public enum BTCCONF: String {

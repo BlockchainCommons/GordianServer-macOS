@@ -81,6 +81,7 @@ class ViewController: NSViewController {
     }
     
     override func viewDidAppear() {
+        print("viewDidAppear")
         d.setDefaults { [unowned vc = self] in
             vc.getLatestVersion { [unowned vc = self] success in
                 if success {
@@ -953,6 +954,7 @@ class ViewController: NSViewController {
     }
     
     private func getLatestVersion(completion: @escaping ((Bool)) -> Void) {
+        print("getLatestVersion")
         let fetchJson = FetchJSON()
         fetchJson.getRequest { [unowned vc = self] (dict, error) in
             if dict != nil {

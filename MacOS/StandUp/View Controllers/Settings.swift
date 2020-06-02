@@ -32,22 +32,16 @@ class Settings: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         let d = Defaults()
-        d.setDefaults() {
-            
-            self.getSettings()
-            
+        d.setDefaults() { [unowned vc = self] in
+            vc.getSettings()
         }
-        
     }
     
     // MARK: User Actions
-    
     @IBAction func seeTorLog(_ sender: Any) {
         runScript(script: .showTorLog, env: ["":""], args: []) { _ in }
     }
-    
     
     @IBAction func seeBtcLog(_ sender: Any) {
         let d = Defaults()
@@ -55,18 +49,16 @@ class Settings: NSViewController {
         let env = ["DATADIR":path]
         runScript(script: .showBitcoinLog, env: env, args: []) { _ in }
     }
-    
-    
-    
+        
     @IBAction func refreshHS(_ sender: Any) {
         
         actionAlert(message: "Refresh Hidden Service?", info: "This will remove your current Tor hidden service and start a new one, you will need to scan a new QuickConnect QR code to access your node remotely, all existing remote connections will fail.") { (response) in
             
             if response {
                 
-                DispatchQueue.main.async {
-                    self.refreshing = true
-                    self.performSegue(withIdentifier: "seeLog", sender: self)
+                DispatchQueue.main.async { [unowned vc = self] in
+                    vc.refreshing = true
+                    vc.performSegue(withIdentifier: "seeLog", sender: self)
                 }
                 
             }
@@ -82,15 +74,15 @@ class Settings: NSViewController {
         
         if value == .on {
             
-            actionAlert(message: "Go private?", info: "This sets your proxy to the local host and tors control port, binds localhost address, and sets listen to true in your bitcoin.conf, in plain english this means your node will only accept connections over the Tor network, this can make initial block download very slow, it is recommended to go private once your node is fully synced.") { (response) in
+            actionAlert(message: "Go private?", info: "This sets your proxy to the local host and tors control port, binds localhost address, and sets listen to true in your bitcoin.conf, in plain english this means your node will only accept connections over the Tor network, this can make initial block download very slow, it is recommended to go private once your node is fully synced.") { [unowned vc = self] (response) in
                 
                 if response {
                     
-                    self.privateOn()
+                    vc.privateOn()
                     
                 } else {
                     
-                    self.revert(outlet: self.goPrivateOutlet)
+                    vc.revert(outlet: vc.goPrivateOutlet)
                     
                 }
 
@@ -98,15 +90,15 @@ class Settings: NSViewController {
             
         } else {
             
-            actionAlert(message: "Disable?", info: "This will enable your node to connect to other nodes over the clearnet, not just over tor, it is recommended to disable this setting when your node is doing the initial block download.") { (response) in
+            actionAlert(message: "Disable?", info: "This will enable your node to connect to other nodes over the clearnet, not just over tor, it is recommended to disable this setting when your node is doing the initial block download.") { [unowned vc = self] (response) in
                 
                 if response {
                     
-                    self.privateOff()
+                    vc.privateOff()
                     
                 } else {
                     
-                    self.revert(outlet: self.goPrivateOutlet)
+                    vc.revert(outlet: vc.goPrivateOutlet)
                     
                 }
                 
@@ -788,21 +780,17 @@ class Settings: NSViewController {
             return
         }
         let stdOut = Pipe()
-        let stdErr = Pipe()
         let task = Process()
         task.launchPath = path
         task.environment = ["DATADIR":Defaults().dataDir()]
         task.standardOutput = stdOut
-        task.standardError = stdErr
         task.launch()
         task.waitUntilExit()
         let data = stdOut.fileHandleForReading.readDataToEndOfFile()
-        let errData = stdErr.fileHandleForReading.readDataToEndOfFile()
         if let output = String(data: data, encoding: .utf8) {
             let conf = output.components(separatedBy: "\n")
             completion((conf, false))
-        }
-        if let _ = String(data: errData, encoding: .utf8) {
+        } else {
             completion(([""], true))
         }
     }
@@ -810,42 +798,26 @@ class Settings: NSViewController {
     // MARK: Update User Interface
     
     func goBackAndRefresh() {
-        
-        DispatchQueue.main.async {
-            
-            if let presenter = self.presentingViewController as? ViewController {
-                
+        DispatchQueue.main.async { [unowned vc = self] in
+            if let presenter = vc.presentingViewController as? ViewController {
                 presenter.isBitcoinOn()
-                
             }
-            
-            DispatchQueue.main.async {
-                
-                self.dismiss(self)
-                
-            }
-            
+            vc.dismiss(vc)
         }
-        
     }
     
     func setState(int: Int, outlet: NSButton) {
-        
         print("int = \(int) outlet = \(outlet)")
-        
         if int == 1 {
-            
             DispatchQueue.main.async {
                 outlet.state = .on
             }
                         
         } else if int == 0 {
-            
             DispatchQueue.main.async {
                 outlet.state = .off
             }
         }
-        
     }
     
     func getSettings() {
@@ -958,28 +930,23 @@ class Settings: NSViewController {
             return
         }
         let stdOut = Pipe()
-        let stdErr = Pipe()
         let task = Process()
         task.launchPath = path
         task.environment = env
         task.arguments = args
         task.standardOutput = stdOut
-        task.standardError = stdErr
         task.launch()
         task.waitUntilExit()
-        //let data = stdOut.fileHandleForReading.readDataToEndOfFile()
-        let errData = stdErr.fileHandleForReading.readDataToEndOfFile()
+        let data = stdOut.fileHandleForReading.readDataToEndOfFile()
         var result = ""
-        if let errorOutput = String(data: errData, encoding: .utf8) {
+        if let output = String(data: data, encoding: .utf8) {
             #if DEBUG
-            print("error: \(errorOutput)")
+            print("result: \(output)")
             #endif
-            result += errorOutput
-            if errorOutput != "" {
-                completion(false)
-            } else {
-                completion(true)
-            }
+            result += output
+            completion(true)
+        } else {
+            completion(false)
         }
     }
     

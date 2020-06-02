@@ -321,16 +321,13 @@ class Installer: NSViewController {
             return
         }
         let stdOut = Pipe()
-        let stdErr = Pipe()
         let task = Process()
         task.launchPath = path
         task.environment = ["DATADIR":d.dataDir()]
         task.standardOutput = stdOut
-        task.standardError = stdErr
         task.launch()
         task.waitUntilExit()
         let data = stdOut.fileHandleForReading.readDataToEndOfFile()
-        let errData = stdErr.fileHandleForReading.readDataToEndOfFile()
         if let output = String(data: data, encoding: .utf8) {
             let conf = output.components(separatedBy: "\n")
             for item in conf {
@@ -344,8 +341,7 @@ class Installer: NSViewController {
                 }
                 completion((user: user, password: password))
             }
-        }
-        if let _ = String(data: errData, encoding: .utf8) {
+        } else {
             completion((user: "", password: ""))
         }
         
@@ -357,21 +353,17 @@ class Installer: NSViewController {
             return
         }
         let stdOut = Pipe()
-        let stdErr = Pipe()
         let task = Process()
         task.launchPath = path
         task.environment = ["DATADIR":d.dataDir()]
         task.standardOutput = stdOut
-        task.standardError = stdErr
         task.launch()
         task.waitUntilExit()
         let data = stdOut.fileHandleForReading.readDataToEndOfFile()
-        let errData = stdErr.fileHandleForReading.readDataToEndOfFile()
         if let output = String(data: data, encoding: .utf8) {
             let conf = output.components(separatedBy: "\n")
             completion((conf, false))
-        }
-        if let _ = String(data: errData, encoding: .utf8) {
+        } else {
             completion(([""], true))
         }
     }
@@ -399,7 +391,6 @@ class Installer: NSViewController {
             guard let output = String(data: data, encoding: .utf8) else {
                 return
             }
-            print("vc.showlog = \(vc.showLog)")
             if vc.showLog {
                 DispatchQueue.main.async { [unowned vc = self] in
                     let prevOutput = vc.consoleOutput.string
