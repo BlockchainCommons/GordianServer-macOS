@@ -162,7 +162,7 @@ class Installer: NSViewController {
                                     vc.rpcpassword = existingValue
                                 }
                                 
-                            case "testnet":
+                            case "testnet", "regtest":
                                 if existingValue != "" {
                                     // MARK: TODO - Throw an error here as specifying a network in the conf breaks Standup.
                                 }

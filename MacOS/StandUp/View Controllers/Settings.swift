@@ -466,20 +466,9 @@ class Settings: NSViewController {
         print("outlet = \(outlet)")
         print("newValue = \(newValue)")
         
-        var isUpdatingCorrectNetwork = false
         var isSectioned = false
         var sectionToUpdate = ""
         var section = ""
-        var network = ""
-        let mainnet = ud.object(forKey: "mainnet") as! Int
-        let testnet = ud.object(forKey: "testnet") as! Int
-        
-        if mainnet == 1 {
-            network = "mainnet"
-        }
-        if testnet == 1 {
-            network = "testnet"
-        }
         
         func alertSettingNotForCurrentNetwork() {
             
@@ -548,17 +537,27 @@ class Settings: NSViewController {
                 print("value = \(value)")
                 print("keytoupdate = \(keyToUpdate.rawValue)")
                 
-                func confirmForNetworkSpecificChange() {
+                
+                
+                if keyToUpdate.rawValue == key {
                     
-                    actionAlert(message: "Update bitcoin.conf?", info: "You are attemtping to update \(key)=\(value) to \(key)=\(newValue) in the \(section) section of your bitcoin.conf.\n\nIn order for the changes to take effect you will need to restart Bitcoin Core.\n\nAre you sure you want to proceed?") { (response) in
+                    print("global setting")
+                    print("this is the existing setting that we want to change")
+                    print("key = \(key)")
+                    print("existing value = \(value)")
+                    print("new value = \(newValue)")
+                    //prompt user that this is a global setting in the bitcoin.conf not network specific
+                    print("our key is global")
+                    
+                    actionAlert(message: "Update bitcoin.conf?", info: "You are attemtping to update \(key)=\(value) to \(key)=\(newValue).\n\nThis is a global setting and will apply to all networks.\n\nIn order for the changes to take effect you will need to restart Bitcoin Core.\n\nAre you sure you want to proceed?") { (response) in
                         
                         if response {
                             
-                            print("do it")
+                            print("user said do it")
                             
                             if let i = Int(value) {
                                 
-                                updateSectionConfArray(conf: conf, oldValue: i, newValue: newValue, key: key, sectionToUpdate: sectionToUpdate, network: network)
+                                self.updateGlobalConfArray(conf: conf, oldValue: i, newValue: newValue, key: key, outlet: outlet)
                                 
                             } else {
                                 
@@ -577,89 +576,6 @@ class Settings: NSViewController {
                     
                 }
                 
-                if keyToUpdate.rawValue == key {
-                    
-                    print("global setting")
-                    print("this is the existing setting that we want to change")
-                    print("key = \(key)")
-                    print("existing value = \(value)")
-                    print("new value = \(newValue)")
-                    //prompt user that this is a global setting in the bitcoin.conf not network specific
-                    
-                    if isSectioned {
-                        
-                        //we are in a section
-                        print("our key is in a section: \(section)")
-                        print("key = \(key)")
-                        print("value = \(value)")
-                        
-                        if network == "mainnet" {
-                            
-                            sectionToUpdate = "[main]"
-                            
-                        } else if network == "testnet" {
-                            
-                            sectionToUpdate = "[test]"
-                            
-                        } else if network == "regtest" {
-                            
-                            sectionToUpdate = "[regtest]"
-                            
-                        }
-                        
-                        print("sectionToUpdate = \(sectionToUpdate)")
-                        
-                        switch section {
-                            
-                        case "[main]", "[test]", "[regtest]":
-                            
-                            if sectionToUpdate == section {
-                                
-                                isUpdatingCorrectNetwork = true
-                                confirmForNetworkSpecificChange()
-                                
-                            }
-                            
-                        default:
-                            
-                            break
-                            
-                        }
-                        
-                    } else {
-                        
-                        print("our key is global")
-                        isUpdatingCorrectNetwork = true
-                        
-                        actionAlert(message: "Update bitcoin.conf?", info: "You are attemtping to update \(key)=\(value) to \(key)=\(newValue).\n\nThis is a global setting and will apply to all networks.\n\nIn order for the changes to take effect you will need to restart Bitcoin Core.\n\nAre you sure you want to proceed?") { (response) in
-                            
-                            if response {
-                                
-                                print("user said do it")
-                                
-                                if let i = Int(value) {
-                                    
-                                    self.updateGlobalConfArray(conf: conf, oldValue: i, newValue: newValue, key: key, outlet: outlet)
-                                    
-                                } else {
-                                    
-                                    setSimpleAlert(message: "Error", info: "We had an error updating your bitcoin.conf file", buttonLabel: "OK")
-                                    
-                                }
-                                
-                            } else {
-                                
-                                print("user said no")
-                                self.revert(outlet: outlet)
-                                
-                            }
-                            
-                        }
-                        
-                    }
-                    
-                }
-                
             } else {
                 
                 // these vaues are the sections, can specify network specific settings here
@@ -668,13 +584,6 @@ class Settings: NSViewController {
                 isSectioned = true
                 
             }
-            
-        }
-        
-        if !isUpdatingCorrectNetwork && section != "" {
-            
-            alertSettingNotForCurrentNetwork()
-            revert(outlet: outlet)
             
         }
         
@@ -705,6 +614,17 @@ class Settings: NSViewController {
                             
                             var stringConf = conf.joined(separator: "\n")
                             stringConf = stringConf.replacingOccurrences(of: "\(key + "=" + existingValue)", with: "\(key + "=")\(newValue)")
+                            
+                            if key == "txindex" && newValue == 1 {
+                                stringConf = stringConf.replacingOccurrences(of: "prune=1", with: "prune=0")
+                                setState(int: 0, outlet: pruneOutlet)
+                            }
+                            
+                            if key == "prune" && newValue == 1 {
+                                stringConf = stringConf.replacingOccurrences(of: "txindex=1", with: "txindex=0")
+                                setState(int: 0, outlet: txIndexOutlet)
+                            }
+                            
                             setBitcoinConf(conf: stringConf, activeOutlet: outlet, newValue: newValue, key: key)
                             
                         }
