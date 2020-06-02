@@ -141,9 +141,9 @@ class Installer: NSViewController {
         var listenExists = false
         
         getBitcoinConf { [unowned vc = self] (conf, error) in
-            if !error {
-                if conf.count > 0 {
-                    for setting in conf {
+            if !error && conf != nil {
+                if conf!.count > 0 {
+                    for setting in conf! {
                         if setting.contains("=") && !setting.contains("#") {
                             let arr = setting.components(separatedBy: "=")
                             let k = arr[0]
@@ -187,33 +187,33 @@ class Installer: NSViewController {
                     
                     if userExists && passwordExists {
                         // just use exisiting conf as is
-                        vc.standUpConf = conf.joined(separator: "\n")
+                        vc.standUpConf = conf!.joined(separator: "\n")
                         
                     } else if userExists && !passwordExists {
-                        vc.standUpConf = "rpcpassword=\(randomString(length: 32))\n" + conf.joined(separator: "\n")
+                        vc.standUpConf = "rpcpassword=\(randomString(length: 32))\n" + conf!.joined(separator: "\n")
                         
                     } else if passwordExists && !userExists {
-                        vc.standUpConf = "rpcuser=\(randomString(length: 10))\n" + conf.joined(separator: "\n")
+                        vc.standUpConf = "rpcuser=\(randomString(length: 10))\n" + conf!.joined(separator: "\n")
                         
                     } else {
                         // add rpcuser and rpcpassword
-                        vc.standUpConf = "rpcuser=\(randomString(length: 10))\nrpcpassword=\(randomString(length: 32))\n" + conf.joined(separator: "\n")
+                        vc.standUpConf = "rpcuser=\(randomString(length: 10))\nrpcpassword=\(randomString(length: 32))\n" + conf!.joined(separator: "\n")
                     }
                     
                     if !debugExists {
-                        vc.standUpConf = "#debug=tor\n" + vc.standUpConf + "\n"
+                        vc.standUpConf = "#debug=tor\n" + vc.standUpConf
                     }
                     
                     if !proxyExists {
-                        vc.standUpConf = "#proxy=127.0.0.1:9050\n" + vc.standUpConf + "\n"
+                        vc.standUpConf = "#proxy=127.0.0.1:9050\n" + vc.standUpConf
                     }
                     
                     if !listenExists {
-                        vc.standUpConf = "#listen=1\n" + vc.standUpConf + "\n"
+                        vc.standUpConf = "#listen=1\n" + vc.standUpConf
                     }
                     
                     if !bindExists {
-                        vc.standUpConf = "#bind=127.0.0.1\n" + vc.standUpConf + "\n"
+                        vc.standUpConf = "#bind=127.0.0.1\n" + vc.standUpConf
                     }
                     
                     vc.getURLs()
@@ -230,6 +230,15 @@ class Installer: NSViewController {
                     vc.getURLs()
                     
                 }
+            } else {
+                //no existing settings - use default
+                let prune = d.prune()
+                let txindex = d.txindex()
+                let walletDisabled = d.walletdisabled()
+                vc.rpcpassword = randomString(length: 32)
+                vc.rpcuser = randomString(length: 10)
+                vc.standUpConf = "disablewallet=\(walletDisabled)\nrpcuser=\(vc.rpcuser)\nrpcpassword=\(vc.rpcpassword)\nserver=1\nprune=\(prune)\ntxindex=\(txindex)\n#proxy=127.0.0.1:9050\n#listen=1\n#debug=tor\n[main]\nrpcport=8332\n[test]\nrpcport=18332\n[regtest]\nrpcport=18443"
+                vc.getURLs()
             }
         }
     }
@@ -347,7 +356,7 @@ class Installer: NSViewController {
         
     }
     
-    func getBitcoinConf(completion: @escaping ((conf: [String], error: Bool)) -> Void) {
+    func getBitcoinConf(completion: @escaping ((conf: [String]?, error: Bool)) -> Void) {
         let d = Defaults()
         guard let path = Bundle.main.path(forResource: SCRIPT.getRPCCredentials.rawValue, ofType: "command") else {
             return
@@ -361,10 +370,14 @@ class Installer: NSViewController {
         task.waitUntilExit()
         let data = stdOut.fileHandleForReading.readDataToEndOfFile()
         if let output = String(data: data, encoding: .utf8) {
-            let conf = output.components(separatedBy: "\n")
-            completion((conf, false))
+            if output != "" {
+                let conf = output.components(separatedBy: "\n")
+                completion((conf, false))
+            } else {
+                completion((nil, false))
+            }
         } else {
-            completion(([""], true))
+            completion((nil, true))
         }
     }
     

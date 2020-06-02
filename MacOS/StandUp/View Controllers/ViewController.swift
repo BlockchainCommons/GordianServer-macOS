@@ -811,12 +811,18 @@ class ViewController: NSViewController {
                     vc.connectMainnetOutlet.isEnabled = true
                     vc.connectTestnetOutlet.isEnabled = true
                     vc.connectRegtestOutlet.isEnabled = true
+                    vc.torMainnetPathOutlet.isEnabled = true
+                    vc.torTestnetPathOutlet.isEnabled = true
+                    vc.torRegtestPathOutlet.isEnabled = true
                 }
             } else {
                 DispatchQueue.main.async { [unowned vc = self] in
                     vc.connectMainnetOutlet.isEnabled = false
                     vc.connectTestnetOutlet.isEnabled = false
                     vc.connectRegtestOutlet.isEnabled = false
+                    vc.torMainnetPathOutlet.isEnabled = false
+                    vc.torTestnetPathOutlet.isEnabled = false
+                    vc.torRegtestPathOutlet.isEnabled = false
                 }
             }
             
@@ -827,6 +833,9 @@ class ViewController: NSViewController {
                 vc.connectMainnetOutlet.isEnabled = false
                 vc.connectTestnetOutlet.isEnabled = false
                 vc.connectRegtestOutlet.isEnabled = false
+                vc.torMainnetPathOutlet.isEnabled = false
+                vc.torTestnetPathOutlet.isEnabled = false
+                vc.torRegtestPathOutlet.isEnabled = false
             }
         }
         isTorOn()

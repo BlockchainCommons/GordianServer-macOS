@@ -114,7 +114,6 @@ if ! [ -x "$(command -v bitcoind)" ]; then
   installBitcoin
   configureBitcoin
   installTor
-  ~/StandUp/BitcoinCore/$PREFIX/bin/bitcoind -datadir="$DATADIR" -daemon
   
 else
   
@@ -127,7 +126,6 @@ else
     installBitcoin
     configureBitcoin
     installTor
-    ~/StandUp/BitcoinCore/$PREFIX/bin/bitcoind -datadir="$DATADIR" -daemon
   
   else
   
@@ -135,8 +133,6 @@ else
     
     configureBitcoin
     installTor
-    PATH="$(command -v bitcoind)"
-    $PATH -datadir="$DATADIR" -daemon
     
   fi
   

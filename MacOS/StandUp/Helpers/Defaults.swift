@@ -10,7 +10,7 @@ import Foundation
 
 class Defaults {
     
-    private func getBitcoinConf(completion: @escaping ((conf: [String], error: Bool)) -> Void) {
+    private func getBitcoinConf(completion: @escaping ((conf: [String]?, error: Bool)) -> Void) {
         guard let path = Bundle.main.path(forResource: SCRIPT.getRPCCredentials.rawValue, ofType: "command") else {
             return
         }
@@ -23,10 +23,14 @@ class Defaults {
         task.waitUntilExit()
         let data = stdOut.fileHandleForReading.readDataToEndOfFile()
         if let output = String(data: data, encoding: .utf8) {
-            let conf = output.components(separatedBy: "\n")
-            completion((conf, false))
+            if output != "" {
+                let conf = output.components(separatedBy: "\n")
+                completion((conf, false))
+            } else {
+                completion((nil, false))
+            }
         } else {
-            completion(([""], true))
+            completion((nil, true))
         }
     }
     
@@ -38,7 +42,6 @@ class Defaults {
         }
         
         func setLocals() {
-            print("setLocals")
             if ud.object(forKey: "pruned") == nil {
                 ud.set(1, forKey: "pruned")
             }
@@ -55,9 +58,9 @@ class Defaults {
             var proxyOn = false
             var listenOn = false
             var bindOn = false
-            if !error {
-                if conf.count > 0 {
-                    for setting in conf {
+            if !error && conf != nil {
+                if conf!.count > 0 {
+                    for setting in conf! {
                         if setting.contains("=") && !setting.contains("#") {
                             let arr = setting.components(separatedBy: "=")
                             let k = arr[0]

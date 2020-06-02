@@ -86,9 +86,9 @@ class Settings: NSViewController {
         var bindExists = false
         var listenExists = false
         getBitcoinConf { [unowned vc = self] (conf, error) in
-            if !error {
-                var stringConf = conf.joined(separator: "\n")
-                for c in conf {
+            if !error && conf != nil {
+                var stringConf = conf!.joined(separator: "\n")
+                for c in conf! {
                     if c.contains("=") {
                         let arr = c.components(separatedBy: "=")
                         let k = arr[0]
@@ -136,9 +136,9 @@ class Settings: NSViewController {
     
     func privateOff() {
         getBitcoinConf { [unowned vc = self] (conf, error) in
-            if !error {
-                var stringConf = conf.joined(separator: "\n")
-                for c in conf {
+            if !error && conf != nil {
+                var stringConf = conf!.joined(separator: "\n")
+                for c in conf! {
                     if c.contains("=") {
                         let arr = c.components(separatedBy: "=")
                         let k = arr[0]
@@ -223,8 +223,8 @@ class Settings: NSViewController {
     @IBAction func didSetWalletDisabled(_ sender: Any) {
         let value = walletDisabled.state.rawValue
         getBitcoinConf { [unowned vc = self] (conf, error) in
-            if !error {
-                vc.parseBitcoinConf(conf: conf, keyToUpdate: .disablewallet, outlet: vc.walletDisabled, newValue: value)
+            if !error && conf != nil {
+                vc.parseBitcoinConf(conf: conf!, keyToUpdate: .disablewallet, outlet: vc.walletDisabled, newValue: value)
             }
         }
     }
@@ -232,8 +232,16 @@ class Settings: NSViewController {
     @IBAction func didSetPrune(_ sender: Any) {
         let value = pruneOutlet.state.rawValue
         getBitcoinConf { [unowned vc = self] (conf, error) in
-            if !error {
-                vc.parseBitcoinConf(conf: conf, keyToUpdate: .prune, outlet: vc.pruneOutlet, newValue: value)
+            if !error && conf != nil {
+                if conf!.count > 0 {
+                    vc.parseBitcoinConf(conf: conf!, keyToUpdate: .prune, outlet: vc.pruneOutlet, newValue: value)
+                }
+            } else {
+                vc.ud.set(value, forKey: "prune")
+                if value == 1 {
+                    vc.setState(int: 0, outlet: vc.txIndexOutlet)
+                    vc.ud.set(0, forKey: "txindex")
+                }
             }
         }
     }
@@ -241,8 +249,16 @@ class Settings: NSViewController {
     @IBAction func didSetTxIndex(_ sender: Any) {
         let value = txIndexOutlet.state.rawValue
         getBitcoinConf { [unowned vc = self] (conf, error) in
-            if !error {
-                vc.parseBitcoinConf(conf: conf, keyToUpdate: .txindex, outlet: vc.txIndexOutlet, newValue: value)
+            if !error && conf != nil {
+                if conf!.count > 0 {
+                    vc.parseBitcoinConf(conf: conf!, keyToUpdate: .txindex, outlet: vc.txIndexOutlet, newValue: value)
+                }
+            } else {
+                vc.ud.set(value, forKey: "txindex")
+                if value == 1 {
+                    vc.setState(int: 0, outlet: vc.pruneOutlet)
+                    vc.ud.set(0, forKey: "prune")
+                }
             }
         }
     }
@@ -357,6 +373,8 @@ class Settings: NSViewController {
                                 stringConf = stringConf.replacingOccurrences(of: "txindex=1", with: "txindex=0")
                                 setState(int: 0, outlet: txIndexOutlet)
                             }
+                            /// Remove appended newline before saving.
+                            stringConf.removeLast()
                             setBitcoinConf(conf: stringConf, activeOutlet: outlet, newValue: newValue, key: key)
                         }
                     }
@@ -381,7 +399,7 @@ class Settings: NSViewController {
         }
     }
     
-    func getBitcoinConf(completion: @escaping ((conf: [String], error: Bool)) -> Void) {
+    func getBitcoinConf(completion: @escaping ((conf: [String]?, error: Bool)) -> Void) {
         guard let path = Bundle.main.path(forResource: SCRIPT.getRPCCredentials.rawValue, ofType: "command") else {
             return
         }
@@ -394,10 +412,14 @@ class Settings: NSViewController {
         task.waitUntilExit()
         let data = stdOut.fileHandleForReading.readDataToEndOfFile()
         if let output = String(data: data, encoding: .utf8) {
-            let conf = output.components(separatedBy: "\n")
-            completion((conf, false))
+            if output != "" {
+                let conf = output.components(separatedBy: "\n")
+                completion((conf, false))
+            } else {
+                completion((nil, true))
+            }
         } else {
-            completion(([""], true))
+            completion((nil, true))
         }
     }
         
