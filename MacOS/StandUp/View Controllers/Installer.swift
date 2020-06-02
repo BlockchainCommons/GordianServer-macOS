@@ -144,7 +144,7 @@ class Installer: NSViewController {
             if !error {
                 if conf.count > 0 {
                     for setting in conf {
-                        if setting.contains("=") {
+                        if setting.contains("=") && !setting.contains("#") {
                             let arr = setting.components(separatedBy: "=")
                             let k = arr[0]
                             let existingValue = arr[1]
