@@ -15,6 +15,4 @@ else
   $PATH -datadir="$DATADIR" -daemon
 
 fi
-
-echo "Done"
 exit 1

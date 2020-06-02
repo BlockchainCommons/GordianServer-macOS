@@ -142,5 +142,4 @@ else
   
 fi
 
-echo "StandUp complete"
 exit 1

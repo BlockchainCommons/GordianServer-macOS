@@ -24,5 +24,4 @@ rm -f /usr/local/var/lib/tor/standup/reg/hs_ed25519_secret_key
 
 echo "Starting Tor..."
 sudo -u $(whoami) /usr/local/bin/brew services start tor
-echo "Done"
 exit 1

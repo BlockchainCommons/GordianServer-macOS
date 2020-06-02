@@ -18,10 +18,10 @@ class Installer: NSViewController {
     let ud = UserDefaults.standard
     var seeLog = Bool()
     var standingUp = Bool()
-    var args = [String]()
     var strapping = Bool()
     var standingDown = Bool()
     var upgrading = Bool()
+    var showLog = Bool()
     var standUpConf = ""
     var refreshing = Bool()
     var ignoreExistingBitcoin = Bool()
@@ -30,21 +30,17 @@ class Installer: NSViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setScene()
         filterAction()
-        
     }
     
     func showSpinner(description: String) {
-        
-        DispatchQueue.main.async {
-            self.spinner.alphaValue = 1
-            self.spinnerDescription.stringValue = description
-            self.spinner.startAnimation(self)
-            self.spinnerDescription.alphaValue = 1
+        DispatchQueue.main.async { [unowned vc = self] in
+            vc.spinner.alphaValue = 1
+            vc.spinnerDescription.stringValue = description
+            vc.spinner.startAnimation(vc)
+            vc.spinnerDescription.alphaValue = 1
         }
-        
     }
     
     func getURLs() {
@@ -84,11 +80,8 @@ class Installer: NSViewController {
     }
     
     func filterAction() {
-        
         var desc = ""
-        
         if seeLog {
-
             spinner.alphaValue = 0
             seeLog = false
             getLog { (log) in
@@ -96,18 +89,15 @@ class Installer: NSViewController {
                     vc.consoleOutput.string = log
                 }
             }
-            
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.backButtonOutlet.isEnabled = true
             }
 
         } else if standingUp {
-
             standingUp = false
             checkExistingConf()
 
         } else if standingDown {
-
             standingDown = false
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.spinner.startAnimation(vc)
@@ -116,62 +106,35 @@ class Installer: NSViewController {
             standDown()
 
         } else if upgrading {
-            
             getURLs()
-
-        } else if refreshing {
-            
-            refreshing = false
-            refreshHS()
-            
-        } else if strapping {
-            
-            strapping = false
-            strap()
         }
         
         DispatchQueue.main.async { [unowned vc = self] in
             vc.spinnerDescription.stringValue = desc
         }
-        
     }
     
     @IBAction func backAction(_ sender: Any) {
-        
         goBack()
-        
     }
     
     func goBack() {
-        print("go back")
-        
         DispatchQueue.main.async { [unowned vc = self] in
-            
             vc.hideSpinner()
-            
             if let presenter = vc.presentingViewController as? ViewController {
-                
                 presenter.standingUp = false
                 presenter.isBitcoinOn()
-                
             }
-            
             DispatchQueue.main.async { [unowned vc = self] in
-                
                 vc.dismiss(vc)
-                
             }
-            
         }
-        
     }
     
     func checkExistingConf() {
-        
         let d = Defaults()
         var userExists = false
         var passwordExists = false
-        var testnetExists = false
         var proxyExists = false
         var debugExists = false
         var bindExists = false
@@ -201,7 +164,6 @@ class Installer: NSViewController {
                                 
                             case "testnet":
                                 if existingValue != "" {
-                                    testnetExists = true
                                     // MARK: TODO - Throw an error here as specifying a network in the conf breaks Standup.
                                 }
                                 
@@ -238,10 +200,6 @@ class Installer: NSViewController {
                         vc.standUpConf = "rpcuser=\(randomString(length: 10))\nrpcpassword=\(randomString(length: 32))\n" + conf.joined(separator: "\n")
                     }
                     
-                    if !testnetExists {
-                        //vc.standUpConf = "testnet=\(d.testnet())\n" + vc.standUpConf + "\n"
-                    }
-                    
                     if !debugExists {
                         vc.standUpConf = "#debug=tor\n" + vc.standUpConf + "\n"
                     }
@@ -276,152 +234,52 @@ class Installer: NSViewController {
         }
     }
     
-    private func strap() {
-        let runBuildTask = RunBuildTask()
-        runBuildTask.showLog = true
-        runBuildTask.args = []
-        runBuildTask.textView = consoleOutput
-        runBuildTask.exitStrings = [""]
-        runBuildTask.runScript(script: .launchStrap) {
-            if !runBuildTask.errorBool {
-                DispatchQueue.main.async { [unowned vc = self] in
-                    vc.hideSpinner()
-                    //vc.setLog(content: vc.consoleOutput.string)
-                    setSimpleAlert(message: "Success", info: "Your system is now strapped", buttonLabel: "OK")
-                    vc.goBack()
-                }
-            } else {
-                setSimpleAlert(message: "Error", info: runBuildTask.errorDescription, buttonLabel: "OK")
-            }
-        }
-    }
-    
     func standDown() {
-        let runBuildTask = RunBuildTask()
-        runBuildTask.showLog = true
-        runBuildTask.args = []
-        runBuildTask.textView = consoleOutput
-        runBuildTask.exitStrings = ["Finished"]
-        runBuildTask.runScript(script: .standDown) {
-            if !runBuildTask.errorBool {
-                DispatchQueue.main.async { [unowned vc = self] in
-                    vc.hideSpinner()
-                    vc.setLog(content: vc.consoleOutput.string)
-                    setSimpleAlert(message: "Success", info: "You have StoodDown", buttonLabel: "OK")
-                    vc.goBack()
-                }
-            } else {
-                setSimpleAlert(message: "Error", info: runBuildTask.errorDescription, buttonLabel: "OK")
+        showLog = true
+        run(script: .standDown, env: ["":""]) {
+            DispatchQueue.main.async { [unowned vc = self] in
+                vc.hideSpinner()
+                vc.setLog(content: vc.consoleOutput.string)
+                setSimpleAlert(message: "Success", info: "You have StoodDown", buttonLabel: "OK")
+                vc.goBack()
             }
         }
     }
     
     func standUp(binaryName: String, macosURL: String, shaURL: String, version: String, prefix: String) {
-        
-        DispatchQueue.main.async { [unowned vc = self] in
-            
-            var ignore = "NO"
-            
-            if vc.ignoreExistingBitcoin {
-                
-                ignore = "YES"
-                
-            }
-            
-            let d = Defaults()
-            let runBuildTask = RunBuildTask()
-            runBuildTask.args = []
-            runBuildTask.env = ["BINARY_NAME":binaryName, "MACOS_URL":macosURL, "SHA_URL":shaURL, "VERSION":version, "PREFIX":prefix, "CONF":vc.standUpConf, "DATADIR":d.dataDir(), "IGNORE_EXISTING_BITCOIN":ignore, "RPCUSER": vc.rpcuser, "RPCPASSWORD":vc.rpcpassword]
-            runBuildTask.textView = vc.consoleOutput
-            runBuildTask.showLog = true
-            runBuildTask.exitStrings = ["Signatures do not match! Terminating...", "StandUp complete"]
-            runBuildTask.runScript(script: .standUp) {
-                
-                if !runBuildTask.errorBool {
-                    
-                    DispatchQueue.main.async { [unowned vc = self] in
-                        let ud = UserDefaults.standard
-                        ud.set(prefix, forKey: "binaryPrefix")
-                        ud.set(binaryName, forKey: "macosBinary")
-                        ud.set(version, forKey: "version")
-                        vc.setLog(content: vc.consoleOutput.string)
-                        vc.goBack()
-                    }
-                    
-                } else {
-                    
-                   setSimpleAlert(message: "Error", info: runBuildTask.errorDescription, buttonLabel: "OK")
-                    
-                }
-                
-            }
-            
+        var ignore = "NO"
+        if ignoreExistingBitcoin {
+            ignore = "YES"
         }
-        
-    }
-    
-    func refreshHS() {
-        
-        let runBuildTask = RunBuildTask()
-        runBuildTask.args = []
-        runBuildTask.showLog = true
-        runBuildTask.textView = consoleOutput
-        runBuildTask.env = ["":""]
-        runBuildTask.exitStrings = ["Done"]
-        runBuildTask.runScript(script: .refreshHS) { [unowned vc = self] in
-            
-            if !runBuildTask.errorBool {
-                
-                vc.setLog(content: runBuildTask.stringToReturn)
-                setSimpleAlert(message: "Success", info: "Tor hidden service was refreshed, go back and scan the new QR Code to connect", buttonLabel: "OK")
-                
+        let d = Defaults()
+        showLog = true
+        let env = ["BINARY_NAME":binaryName, "MACOS_URL":macosURL, "SHA_URL":shaURL, "VERSION":version, "PREFIX":prefix, "CONF":standUpConf, "DATADIR":d.dataDir(), "IGNORE_EXISTING_BITCOIN":ignore]
+        run(script: .standUp, env: env) {
+            DispatchQueue.main.async { [unowned vc = self] in
+                let ud = UserDefaults.standard
+                ud.set(prefix, forKey: "binaryPrefix")
+                ud.set(binaryName, forKey: "macosBinary")
+                ud.set(version, forKey: "version")
+                vc.setLog(content: vc.consoleOutput.string)
                 vc.goBack()
-                
-            } else {
-                
-                setSimpleAlert(message: "Error", info: runBuildTask.errorDescription, buttonLabel: "OK")
-                
             }
-            
         }
-        
     }
     
     func upgradeBitcoinCore(binaryName: String, macosURL: String, shaURL: String, version: String, prefix: String) {
-        
         upgrading = false
-        
-        DispatchQueue.main.async { [unowned vc = self] in
-            
-            let runBuildTask = RunBuildTask()
-            runBuildTask.args = []
-            runBuildTask.env = ["BINARY_NAME":binaryName, "MACOS_URL":macosURL, "SHA_URL":shaURL, "VERSION":version]
-            runBuildTask.textView = vc.consoleOutput
-            runBuildTask.showLog = true
-            runBuildTask.exitStrings = ["You have upgraded to Bitcoin Core", "Signatures do not match! Terminating..."]
-            runBuildTask.runScript(script: .upgradeBitcoin) { [unowned vc = self] in
-                
-                if !runBuildTask.errorBool {
-                    
-                    DispatchQueue.main.async {
-                        let ud = UserDefaults.standard
-                        ud.set(prefix, forKey: "binaryPrefix")
-                        ud.set(version, forKey: "version")
-                        ud.set(binaryName, forKey: "macosBinary")
-                        vc.setLog(content: vc.consoleOutput.string)
-                        vc.goBack()
-                    }
-                    
-                } else {
-                    
-                   setSimpleAlert(message: "Error", info: runBuildTask.errorDescription, buttonLabel: "OK")
-                    
-                }
-                
+        let env = ["BINARY_NAME":binaryName, "MACOS_URL":macosURL, "SHA_URL":shaURL, "VERSION":version]
+        showLog = true
+        run(script: .upgradeBitcoin, env: env) {
+            DispatchQueue.main.async { [unowned vc = self] in
+                let ud = UserDefaults.standard
+                ud.set(prefix, forKey: "binaryPrefix")
+                ud.set(version, forKey: "version")
+                ud.set(binaryName, forKey: "macosBinary")
+                vc.setLog(content: vc.consoleOutput.string)
+                vc.goBack()
             }
-            
         }
-        
     }
     
     func hideSpinner() {
@@ -459,81 +317,102 @@ class Installer: NSViewController {
         var user = ""
         var password = ""
         let d = Defaults()
-        let runBuildTask = RunBuildTask()
-        runBuildTask.args = []
-        runBuildTask.env = ["DATADIR":d.dataDir()]
-        runBuildTask.exitStrings = ["Done"]
-        runBuildTask.runScript(script: .getRPCCredentials) {
-            
-            if !runBuildTask.errorBool {
-                
-                let conf = runBuildTask.stringToReturn.components(separatedBy: "\n")
-                
-                for item in conf {
-                    
-                    if item.contains("rpcuser") {
-                        
-                        let arr = item.components(separatedBy: "rpcuser=")
-                        user = arr[1]
-                        
-                    }
-                    
-                    if item.contains("rpcpassword") {
-                        
-                        let arr = item.components(separatedBy: "rpcpassword=")
-                        password = arr[1]
-                        
-                    }
-                    
-                    completion((user: user, password: password))
-                    
+        guard let path = Bundle.main.path(forResource: SCRIPT.getRPCCredentials.rawValue, ofType: "command") else {
+            return
+        }
+        let stdOut = Pipe()
+        let stdErr = Pipe()
+        let task = Process()
+        task.launchPath = path
+        task.environment = ["DATADIR":d.dataDir()]
+        task.standardOutput = stdOut
+        task.standardError = stdErr
+        task.launch()
+        task.waitUntilExit()
+        let data = stdOut.fileHandleForReading.readDataToEndOfFile()
+        let errData = stdErr.fileHandleForReading.readDataToEndOfFile()
+        if let output = String(data: data, encoding: .utf8) {
+            let conf = output.components(separatedBy: "\n")
+            for item in conf {
+                if item.contains("rpcuser") {
+                    let arr = item.components(separatedBy: "rpcuser=")
+                    user = arr[1]
                 }
-                
-            } else {
-                
-                completion((user: "", password: ""))
-                
+                if item.contains("rpcpassword") {
+                    let arr = item.components(separatedBy: "rpcpassword=")
+                    password = arr[1]
+                }
+                completion((user: user, password: password))
             }
-            
+        }
+        if let _ = String(data: errData, encoding: .utf8) {
+            completion((user: "", password: ""))
         }
         
     }
     
     func getBitcoinConf(completion: @escaping ((conf: [String], error: Bool)) -> Void) {
-        
         let d = Defaults()
-        let runBuildTask = RunBuildTask()
-        runBuildTask.args = []
-        runBuildTask.env = ["DATADIR":d.dataDir()]
-        runBuildTask.showLog = false
-        runBuildTask.exitStrings = ["Done"]
-        runBuildTask.runScript(script: .getRPCCredentials) {
-            
-            if !runBuildTask.errorBool {
-                
-                var conf = runBuildTask.stringToReturn.components(separatedBy: "\n")
-                
-                for c in conf {
-                    
-                    if c.contains("No such file or directory") {
-                        
-                        conf = []
-                        
-                    }
-                    
-                }
-                
-                completion((conf, false))
-                
-            } else {
-                
-                completion(([""], true))
-                setSimpleAlert(message: "Error", info: runBuildTask.errorDescription, buttonLabel: "OK")
-                
-            }
-            
+        guard let path = Bundle.main.path(forResource: SCRIPT.getRPCCredentials.rawValue, ofType: "command") else {
+            return
         }
-        
+        let stdOut = Pipe()
+        let stdErr = Pipe()
+        let task = Process()
+        task.launchPath = path
+        task.environment = ["DATADIR":d.dataDir()]
+        task.standardOutput = stdOut
+        task.standardError = stdErr
+        task.launch()
+        task.waitUntilExit()
+        let data = stdOut.fileHandleForReading.readDataToEndOfFile()
+        let errData = stdErr.fileHandleForReading.readDataToEndOfFile()
+        if let output = String(data: data, encoding: .utf8) {
+            let conf = output.components(separatedBy: "\n")
+            completion((conf, false))
+        }
+        if let _ = String(data: errData, encoding: .utf8) {
+            completion(([""], true))
+        }
+    }
+    
+    private func run(script: SCRIPT, env: [String:String], completion: @escaping () -> Void) {
+        #if DEBUG
+        print("script: \(script.rawValue)")
+        #endif
+        let resource = script.rawValue
+        guard let path = Bundle.main.path(forResource: resource, ofType: "command") else {
+            return
+        }
+        let stdOut = Pipe()
+        let stdErr = Pipe()
+        let task = Process()
+        task.launchPath = path
+        task.environment = env
+        task.standardOutput = stdOut
+        task.standardError = stdErr
+        task.terminationHandler = { _ in
+            completion()
+        }
+        let handler = { [unowned vc = self] (file: FileHandle!) -> Void in
+            let data = file.availableData
+            guard let output = String(data: data, encoding: .utf8) else {
+                return
+            }
+            print("vc.showlog = \(vc.showLog)")
+            if vc.showLog {
+                DispatchQueue.main.async { [unowned vc = self] in
+                    let prevOutput = vc.consoleOutput.string
+                    let nextOutput = prevOutput + output
+                    vc.consoleOutput.string = nextOutput
+                    vc.consoleOutput.scrollToEndOfDocument(vc)
+                }
+            }
+        }
+        stdErr.fileHandleForReading.readabilityHandler = handler
+        stdOut.fileHandleForReading.readabilityHandler = handler
+        task.launch()
+        task.waitUntilExit()
     }
     
 }

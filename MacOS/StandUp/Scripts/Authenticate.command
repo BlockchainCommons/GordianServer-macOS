@@ -13,5 +13,4 @@ echo $PUBKEY > /usr/local/var/lib/tor/standup/test/authorized_clients/"$FILENAME
 echo $PUBKEY > /usr/local/var/lib/tor/standup/reg/authorized_clients/"$FILENAME".auth
 echo "Restarting Tor..."
 sudo -u $(whoami) /usr/local/bin/brew services restart tor
-echo "Done"
 exit

@@ -45,51 +45,15 @@ class Settings: NSViewController {
     // MARK: User Actions
     
     @IBAction func seeTorLog(_ sender: Any) {
-        
-        let runBuildTask = RunBuildTask()
-        runBuildTask.args = []
-        runBuildTask.showLog = false
-        runBuildTask.env = ["":""]
-        runBuildTask.exitStrings = ["Done"]
-        runBuildTask.runScript(script: .showTorLog) {
-            
-            if !runBuildTask.errorBool {
-                
-                
-            } else {
-                
-                setSimpleAlert(message: "Error", info: runBuildTask.errorDescription, buttonLabel: "OK")
-                
-            }
-            
-        }
-        
+        runScript(script: .showTorLog, env: ["":""], args: []) { _ in }
     }
     
     
     @IBAction func seeBtcLog(_ sender: Any) {
-        
         let d = Defaults()
         let path = d.dataDir()
-        
-        let runBuildTask = RunBuildTask()
-        runBuildTask.args = []
-        runBuildTask.showLog = false
-        runBuildTask.env = ["DATADIR":path]
-        runBuildTask.exitStrings = ["Done"]
-        runBuildTask.runScript(script: .showBitcoinLog) {
-            
-            if !runBuildTask.errorBool {
-                
-                
-            } else {
-                
-                setSimpleAlert(message: "Error", info: runBuildTask.errorDescription, buttonLabel: "OK")
-                
-            }
-            
-        }
-        
+        let env = ["DATADIR":path]
+        runScript(script: .showBitcoinLog, env: env, args: []) { _ in }
     }
     
     
@@ -347,43 +311,21 @@ class Settings: NSViewController {
     }
     
     @IBAction func removeBitcoinCore(_ sender: Any) {
-        
-        DispatchQueue.main.async {
-            
-            actionAlert(message: "Danger!", info: "This will remove the Bitcoin directory! All Bitcoin Core data including your wallets will be deleted!\n\nAre you sure you want to continue?") { (response) in
-                                
+        DispatchQueue.main.async { [unowned vc = self] in
+            actionAlert(message: "Danger!", info: "This will remove the Bitcoin directory! All Bitcoin Core data including your wallets will be deleted!\n\nAre you sure you want to continue?") { response in
                 if response {
-                    
-                    let runBuildTask = RunBuildTask()
                     let d = Defaults()
-                    runBuildTask.args = []
-                    runBuildTask.showLog = false
-                    runBuildTask.env = ["DATADIR":d.dataDir()]
-                    runBuildTask.exitStrings = ["Done"]
-                    runBuildTask.runScript(script: .removeBitcoin) {
-                        
-                        if !runBuildTask.errorBool {
-                            
+                    let env = ["DATADIR":d.dataDir()]
+                    vc.runScript(script: .removeBitcoin, env: env, args: []) { success in
+                        if success {
                             setSimpleAlert(message: "Bitcoin directory and its contents were deleted", info: "", buttonLabel: "OK")
-                            
                         } else {
-                            
-                            setSimpleAlert(message: "Error", info: runBuildTask.errorDescription, buttonLabel: "OK")
-                            
+                           setSimpleAlert(message: "Error", info: "There was an issue deleting the directory", buttonLabel: "OK")
                         }
-                        
                     }
-                    
-                } else {
-                    
-                    print("tap no")
-                    
                 }
-                
             }
-            
         }
-        
     }
     
     @IBAction func saveNodeLabel(_ sender: Any) {
@@ -542,33 +484,18 @@ class Settings: NSViewController {
     }
     
     func setBitcoinConf(conf: String, activeOutlet: NSButton, newValue: Int, key: String) {
-        print("setBitcoinConf")
-        
-        let runBuildTask = RunBuildTask()
         let d = Defaults()
-        runBuildTask.args = args
-        runBuildTask.env = ["CONF":conf,"DATADIR":d.dataDir()]
-        runBuildTask.showLog = false
-        runBuildTask.exitStrings = ["Done"]
-        runBuildTask.runScript(script: .updateBTCConf) {
-            
-            if !runBuildTask.errorBool {
-                
+        let env = ["CONF":conf,"DATADIR":d.dataDir()]
+        runScript(script: .updateBTCConf, env: env, args: args) { [unowned vc = self] success in
+            if success {
                 if newValue < 2 {
-                    self.ud.set(newValue, forKey: key)
+                    vc.ud.set(newValue, forKey: key)
                 }
-                
-                self.setLog(content: runBuildTask.stringToReturn)
                 setSimpleAlert(message: "Success", info: "bitcoin.conf updated", buttonLabel: "OK")
-                
             } else {
-                
-                setSimpleAlert(message: "Error Updating bitcoin.conf", info: runBuildTask.errorDescription, buttonLabel: "OK")
-                
+                setSimpleAlert(message: "Error Updating bitcoin.conf", info: "", buttonLabel: "OK")
             }
-            
         }
-        
     }
     
     func revert(outlet: NSButton) {
@@ -843,55 +770,41 @@ class Settings: NSViewController {
         
         let filename = randomString(length: 10)
         let pubkey = self.textInput.stringValue
-        let runBuildScript = RunBuildTask()
-        runBuildScript.args = [pubkey,filename]
-        runBuildScript.exitStrings = ["Done"]
-        runBuildScript.showLog = false
-        runBuildScript.runScript(script: .authenticate) {
-            
-            if !runBuildScript.errorBool {
-                
+        runScript(script: .authenticate, env: ["":""], args: [pubkey,filename]) { success in
+            if success {
                 DispatchQueue.main.async { [unowned vc = self] in
-                    vc.setLog(content: runBuildScript.stringToReturn)
                     setSimpleAlert(message: "Successfully added auth key", info: "Important! Tor is now restarting, authentication will not come into effect until this completes.\n\nYou may get an \"Internet not connected error\" when reconnecting to your node, just keep tapping the refresh button until the app connects, it is normal to have a connectivity issue immediately after restarting Tor.", buttonLabel: "OK")
                     vc.textInput.stringValue = ""
                     vc.textInput.resignFirstResponder()
                 }
-                
             } else {
-                
-               setSimpleAlert(message: "Error", info: "error authenticating", buttonLabel: "OK")
-                
+                setSimpleAlert(message: "Error", info: "error authenticating", buttonLabel: "OK")
             }
-            
         }
-        
     }
     
     func getBitcoinConf(completion: @escaping ((conf: [String], error: Bool)) -> Void) {
-        
-        let runBuildTask = RunBuildTask()
-        let d = Defaults()
-        runBuildTask.args = []
-        runBuildTask.env = ["DATADIR":d.dataDir()]
-        runBuildTask.showLog = false
-        runBuildTask.exitStrings = ["Done"]
-        runBuildTask.runScript(script: .getRPCCredentials) {
-            
-            if !runBuildTask.errorBool {
-                
-                let conf = runBuildTask.stringToReturn.components(separatedBy: "\n")
-                completion((conf, false))
-                
-            } else {
-                
-                completion(([""], true))
-                setSimpleAlert(message: "Error", info: runBuildTask.errorDescription, buttonLabel: "OK")
-                
-            }
-            
+        guard let path = Bundle.main.path(forResource: SCRIPT.getRPCCredentials.rawValue, ofType: "command") else {
+            return
         }
-        
+        let stdOut = Pipe()
+        let stdErr = Pipe()
+        let task = Process()
+        task.launchPath = path
+        task.environment = ["DATADIR":Defaults().dataDir()]
+        task.standardOutput = stdOut
+        task.standardError = stdErr
+        task.launch()
+        task.waitUntilExit()
+        let data = stdOut.fileHandleForReading.readDataToEndOfFile()
+        let errData = stdErr.fileHandleForReading.readDataToEndOfFile()
+        if let output = String(data: data, encoding: .utf8) {
+            let conf = output.components(separatedBy: "\n")
+            completion((conf, false))
+        }
+        if let _ = String(data: errData, encoding: .utf8) {
+            completion(([""], true))
+        }
     }
         
     // MARK: Update User Interface
@@ -1034,6 +947,40 @@ class Settings: NSViewController {
             }
         }
         
+    }
+    
+    private func runScript(script: SCRIPT, env: [String:String], args: [String], completion: @escaping ((Bool)) -> Void) {
+        #if DEBUG
+        print("script: \(script.rawValue)")
+        #endif
+        let resource = script.rawValue
+        guard let path = Bundle.main.path(forResource: resource, ofType: "command") else {
+            return
+        }
+        let stdOut = Pipe()
+        let stdErr = Pipe()
+        let task = Process()
+        task.launchPath = path
+        task.environment = env
+        task.arguments = args
+        task.standardOutput = stdOut
+        task.standardError = stdErr
+        task.launch()
+        task.waitUntilExit()
+        //let data = stdOut.fileHandleForReading.readDataToEndOfFile()
+        let errData = stdErr.fileHandleForReading.readDataToEndOfFile()
+        var result = ""
+        if let errorOutput = String(data: errData, encoding: .utf8) {
+            #if DEBUG
+            print("error: \(errorOutput)")
+            #endif
+            result += errorOutput
+            if errorOutput != "" {
+                completion(false)
+            } else {
+                completion(true)
+            }
+        }
     }
     
     // MARK: Miscellaneous

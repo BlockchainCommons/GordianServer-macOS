@@ -7,5 +7,4 @@
 #  Copyright © 2019 Blockchain Commons, LLC
 echo "removing "$DATADIR""
 sudo -u $(whoami) rm -R "$DATADIR"
-"Done"
 exit 1

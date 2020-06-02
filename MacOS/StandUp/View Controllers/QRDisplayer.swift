@@ -23,67 +23,49 @@ class QRDisplayer: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         spinner.alphaValue = 0
         spinnerDescription.alphaValue = 0
         getValues()
         setQR()
-        
     }
     
     @IBAction func backAction(_ sender: Any) {
-        
-        DispatchQueue.main.async {
-            
-            self.dismiss(self)
-            
+        DispatchQueue.main.async { [unowned vc = self] in
+            vc.dismiss(vc)
         }
-        
     }
     
-    func showSpinner() {
-        
-        DispatchQueue.main.async {
-            self.spinner.startAnimation(self)
-            self.spinner.alphaValue = 1
-            self.spinnerDescription.alphaValue = 1
+    private func showSpinner() {
+        DispatchQueue.main.async { [unowned vc = self] in
+            vc.spinner.startAnimation(vc)
+            vc.spinner.alphaValue = 1
+            vc.spinnerDescription.alphaValue = 1
         }
-        
     }
     
-    func hideSpinner() {
-        
-        DispatchQueue.main.async {
-            self.spinner.stopAnimation(self)
-            self.spinner.alphaValue = 0
-            self.spinnerDescription.alphaValue = 0
+    private func hideSpinner() {
+        DispatchQueue.main.async { [unowned vc = self] in
+            vc.spinner.stopAnimation(vc)
+            vc.spinner.alphaValue = 0
+            vc.spinnerDescription.alphaValue = 0
         }
-        
     }
     
-    func setQR() {
-        
+    private func setQR() {
         let url = "btcstandup://\(rpcuser):\(rpcpassword)@\(torHostname):\(rpcport)/?label=\(nodeLabel)%20-%20\(network)"
         imageView.frame = CGRect(x: 30, y: 30, width: 100, height: 100)
         imageView.image = getQRCode(textInput: url)
-        
     }
     
-    func getValues() {
-        
+    private func getValues() {
         let ud = UserDefaults.standard
-        
         nodeLabel = ud.object(forKey: "nodeLabel") as? String ?? "StandUp%20Node"
-        
         if nodeLabel.contains(" ") {
-            
             nodeLabel = nodeLabel.replacingOccurrences(of: " ", with: "%20")
-            
         }
-        
     }
     
-    func getQRCode(textInput: String) -> NSImage {
+    private func getQRCode(textInput: String) -> NSImage {
         
         let data = textInput.data(using: .ascii)
         let filter = CIFilter(name: "CIQRCodeGenerator")
@@ -106,107 +88,99 @@ class QRDisplayer: NSViewController {
     }
     
     @IBAction func refreshHS(_ sender: Any) {
-        
-        actionAlert(message: "Refresh Hidden Service?", info: "This refreshes your hidden service so that any clients that were connected to your node will no longer be able to connect, it's a good idea to do this if for some reason you think someone may have access to your node if for example your phone was lost or stolen.") { (response) in
-            
+        actionAlert(message: "Refresh Hidden Service?", info: "This refreshes your hidden service so that any clients that were connected to your node will no longer be able to connect, it's a good idea to do this if for some reason you think someone may have access to your node if for example your phone was lost or stolen.") { [unowned vc = self] (response) in
             if response {
-                
-                self.showSpinner()
-                
-                self.refreshHS {
-                    
-                    self.getHostname()
-                    
+                vc.showSpinner()
+                vc.refreshHS {
+                    vc.getHostname()
                 }
-                
             }
-            
         }
-        
     }
     
-    func refreshHS(completion: @escaping () -> Void) {
-        
-        let runBuildTask = RunBuildTask()
-        runBuildTask.args = []
-        runBuildTask.showLog = false
-        runBuildTask.env = ["":""]
-        runBuildTask.exitStrings = ["Done"]
-        runBuildTask.runScript(script: .refreshHS) {
-            
-            if !runBuildTask.errorBool {
-                
-                self.setLog(content: runBuildTask.stringToReturn)
-                completion()
-                
-            } else {
-                
-                setSimpleAlert(message: "Error", info: runBuildTask.errorDescription, buttonLabel: "OK")
-                completion()
-                
-            }
-            
+    private func refreshHS(completion: @escaping () -> Void) {
+        guard let path = Bundle.main.path(forResource: SCRIPT.refreshHS.rawValue, ofType: "command") else {
+            return
         }
-        
+        let stdOut = Pipe()
+        let stdErr = Pipe()
+        let task = Process()
+        task.launchPath = path
+        task.standardOutput = stdOut
+        task.standardError = stdErr
+        task.launch()
+        task.waitUntilExit()
+        let data = stdOut.fileHandleForReading.readDataToEndOfFile()
+        let errData = stdErr.fileHandleForReading.readDataToEndOfFile()
+        var result = ""
+        if let output = String(data: data, encoding: .utf8) {
+            #if DEBUG
+            print("output: \(output)")
+            #endif
+            result += output
+            setLog(content: result)
+            completion()
+        }
+        if let errorOutput = String(data: errData, encoding: .utf8) {
+            #if DEBUG
+            print("error: \(errorOutput)")
+            #endif
+            result += errorOutput
+            setSimpleAlert(message: "Error", info: result, buttonLabel: "OK")
+            completion()
+        }
     }
     
-    func getHostname() {
-                
-        let runBuildTask = RunBuildTask()
-        //runBuildTask.stringToReturn = ""
-        runBuildTask.terminate = false
-        runBuildTask.errorBool = false
-        runBuildTask.errorDescription = ""
-        runBuildTask.isRunning = false
-        runBuildTask.args = []
-        runBuildTask.env = ["":""]
-        runBuildTask.exitStrings = ["Done"]
-        runBuildTask.showLog = false
-        runBuildTask.runScript(script: .getTorHostname) { [unowned vc = self] in
-            
-            if !runBuildTask.errorBool {
-                
-                let str = runBuildTask.stringToReturn
-                print("new hostname = \(str)")
-                vc.torHostname = str
-                vc.updateImage()
-                
-            } else {
-                
-                vc.hideSpinner()
-                
-                setSimpleAlert(message: "Error", info: "There was an error getting your new hostname: \(runBuildTask.errorDescription)", buttonLabel: "OK")
-                
-            }
-            
+    private func getHostname() {
+        guard let path = Bundle.main.path(forResource: SCRIPT.getTorHostname.rawValue, ofType: "command") else {
+            return
         }
-
+        let stdOut = Pipe()
+        let stdErr = Pipe()
+        let task = Process()
+        task.launchPath = path
+        task.standardOutput = stdOut
+        task.standardError = stdErr
+        task.launch()
+        task.waitUntilExit()
+        let data = stdOut.fileHandleForReading.readDataToEndOfFile()
+        let errData = stdErr.fileHandleForReading.readDataToEndOfFile()
+        var result = ""
+        if let output = String(data: data, encoding: .utf8) {
+            #if DEBUG
+            print("output: \(output)")
+            #endif
+            result += output
+            torHostname = result
+            updateImage()
+        }
+        if let errorOutput = String(data: errData, encoding: .utf8) {
+            #if DEBUG
+            print("error: \(errorOutput)")
+            #endif
+            result += errorOutput
+            hideSpinner()
+            setSimpleAlert(message: "Error", info: "There was an error getting your new hostname: \(result)", buttonLabel: "OK")
+        }
     }
     
-    func updateImage() {
-        
-        DispatchQueue.main.async {
-            
-            self.hideSpinner()
-            let url = "btcstandup://\(self.rpcuser):\(self.rpcpassword)@\(self.torHostname):1309/?label=\(self.nodeLabel)"
-            let newImage = self.getQRCode(textInput: url)
+    private func updateImage() {
+        DispatchQueue.main.async { [unowned vc = self] in
+            vc.hideSpinner()
+            let url = "btcstandup://\(vc.rpcuser):\(vc.rpcpassword)@\(vc.torHostname):\(vc.rpcport)/?label=\(vc.nodeLabel)%20-%20\(vc.network)"
+            let newImage = vc.getQRCode(textInput: url)
             let transition = CATransition() //create transition
             transition.duration = 0.75 //set duration time in seconds
             transition.type = .fade //animation type
             transition.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
-            self.imageView.layer?.add(transition, forKey: nil) //add animation to your imageView's layer
-            self.imageView.image = newImage //set the image
-            
+            vc.imageView.layer?.add(transition, forKey: nil) //add animation to your imageView's layer
+            vc.imageView.image = newImage //set the image
         }
-        
     }
     
-    func setLog(content: String) {
-        
+    private func setLog(content: String) {
         let lg = Log()
         lg.writeToLog(content: content)
-        
     }
-    
     
 }

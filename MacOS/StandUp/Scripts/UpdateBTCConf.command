@@ -9,5 +9,4 @@ echo "Updating bitcoin.conf"
 cd "$DATADIR"
 echo "$CONF" > bitcoin.conf
 echo "Updated "$DATADIR"/bitcoin.conf to "$CONF""
-echo "Done"
 exit 1

@@ -17,13 +17,10 @@ public enum SCRIPT: String {
     case getTorrc = "GetTorrc"
     case checkForTor = "CheckForTor"
     case verifyBitcoin = "Verify"
-    case stopBitcoin = "StopBitcoin"
-    case isBitcoinOn = "IsBitcoinOn"
     case checkForBitcoin = "CheckForBitcoinCore"
     case standUp = "StandUp"
     case startTor = "StartTor"
     case stopTor = "StopTor"
-    case startBitcoinqt = "LaunchBitcoin"
     case authenticate = "Authenticate"
     case standDown = "StandDown"
     case updateBTCConf = "UpdateBTCConf"
@@ -39,7 +36,15 @@ public enum SCRIPT: String {
     case openMainnetHiddenService = "OpenMainnetHiddenService"
     case openTestnetHiddenService = "OpenTestnetHiddenService"
     case openRegtestHiddenService = "OpenRegtestHiddenService"
-    
+    case isMainOn = "IsMainOn"
+    case isTestOn = "IsTestOn"
+    case isRegOn = "IsRegtestOn"
+    case startMain = "StartMaind"
+    case startRegtest = "StartRegd"
+    case startTestd = "StartTestd"
+    case stopMain = "StopMain"
+    case stopTest = "StopTest"
+    case stopReg = "StopReg"
 }
 
 public enum BTCCONF: String {
