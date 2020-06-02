@@ -778,18 +778,18 @@ class ViewController: NSViewController {
                 if currentVersion.contains(vc.newestVersion) {
                     DispatchQueue.main.async { [unowned vc = self] in
                         vc.updateOutlet.isEnabled = false
-                        vc.updateOutlet.stringValue = "Update"
+                        vc.updateOutlet.title = "Update"
                     }
                 } else {
                     DispatchQueue.main.async { [unowned vc = self] in
-                        vc.updateOutlet.stringValue = "Update"
+                        vc.updateOutlet.title = "Update"
                         vc.updateOutlet.isEnabled = true
                     }
                 }
             }
         } else {
             DispatchQueue.main.async { [unowned vc = self] in
-                vc.updateOutlet.stringValue = "Install"
+                vc.updateOutlet.title = "Install"
                 vc.updateOutlet.isEnabled = true
                 vc.bitcoinInstalled = false
             }
