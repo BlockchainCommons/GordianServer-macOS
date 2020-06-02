@@ -25,8 +25,6 @@ class Settings: NSViewController {
     @IBOutlet var nodeLabelField: NSTextField!
     @IBOutlet var walletDisabled: NSButton!
     @IBOutlet var pruneOutlet: NSButton!
-    @IBOutlet var mainnetOutlet: NSButton!
-    @IBOutlet var testnetOutlet: NSButton!
     @IBOutlet var txIndexOutlet: NSButton!
     @IBOutlet var goPrivateOutlet: NSButton!
     
@@ -366,43 +364,6 @@ class Settings: NSViewController {
             if !error {
                 
                 self.parseBitcoinConf(conf: conf, keyToUpdate: .txindex, outlet: self.txIndexOutlet, newValue: value)
-                
-            }
-            
-        }
-        
-    }
-    
-    @IBAction func didSetMainnet(_ sender: Any) {
-        
-        setOutlet(outlet: mainnetOutlet, keyOn: .mainnet)
-        let value = mainnetOutlet.state.rawValue
-        if value == 1 {
-            
-            // change testnet in bitcoin.conf
-            getBitcoinConf { (conf, error) in
-                
-                if !error {
-                    
-                    self.parseBitcoinConf(conf: conf, keyToUpdate: .testnet, outlet: self.testnetOutlet, newValue: 0)
-                    
-                }
-                
-            }
-            
-        }
-        
-    }
-    
-    @IBAction func didSetTestnet(_ sender: Any) {
-        
-        setOutlet(outlet: testnetOutlet, keyOn: .testnet)
-        let value = testnetOutlet.state.rawValue
-        getBitcoinConf { (conf, error) in
-            
-            if !error {
-                
-                self.parseBitcoinConf(conf: conf, keyToUpdate: .testnet, outlet: self.testnetOutlet, newValue: value)
                 
             }
             
@@ -822,10 +783,7 @@ class Settings: NSViewController {
     
     func getSettings() {
         print("getSettings")
-        
-        getSetting(key: .mainnet, button: mainnetOutlet, def: 0)
-        getSetting(key: .testnet, button: testnetOutlet, def: 1)
-        
+                
         let d = Defaults()
         setState(int: d.prune(), outlet: pruneOutlet)
         setState(int: d.txindex(), outlet: txIndexOutlet)
@@ -872,53 +830,14 @@ class Settings: NSViewController {
     
     func setOutlet(outlet: NSButton, keyOn: BTCCONF) {
         print("setoutlet")
-        
         let b = outlet.state.rawValue
         let key = keyOn.rawValue
         ud.set(b, forKey: key)
         print("set key: \(key) to \(b)")
-        let networkKeys = ["mainnet","testnet"]
-        
         if b == 0 {
-            
             ud.set(1, forKey: key)
             print("set key: \(key) to 1")
-            
-        } else {
-            
-            for k in networkKeys {
-                
-                if k != key {
-                    
-                    ud.set(0, forKey: k)
-                    print("set key: \(k) to 0")
-                    
-                }
-                
-            }
-            
         }
-        
-        updateOutlets(activeOutlet: outlet)
-        
-    }
-    
-    func updateOutlets(activeOutlet: NSButton) {
-
-        let outlets = [testnetOutlet, mainnetOutlet]
-        DispatchQueue.main.async {
-            for o in outlets {
-                if o != activeOutlet {
-                    let b = o!.state
-                    if b == .on {
-                        DispatchQueue.main.async {
-                            o!.state = .off
-                        }
-                    }
-                }
-            }
-        }
-        
     }
     
     private func runScript(script: SCRIPT, env: [String:String], args: [String], completion: @escaping ((Bool)) -> Void) {
