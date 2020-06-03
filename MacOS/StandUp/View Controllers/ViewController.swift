@@ -46,6 +46,21 @@ class ViewController: NSViewController {
     @IBOutlet var updateOutlet: NSButton!
     @IBOutlet var icon: NSImageView!
     @IBOutlet var torRunningImage: NSImageView!
+    @IBOutlet weak var mainnetSyncedView: NSView!
+    @IBOutlet weak var mainnetSyncedLabel: NSTextField!
+    @IBOutlet weak var mainnetPeersView: NSView!
+    @IBOutlet weak var mainnetIncomingPeersLabel: NSTextField!
+    @IBOutlet weak var mainnetOutgoingPeersLabel: NSTextField!
+    @IBOutlet weak var testnetSyncedView: NSView!
+    @IBOutlet weak var testnetSyncedLabel: NSTextField!
+    @IBOutlet weak var testnetPeersView: NSView!
+    @IBOutlet weak var testnetPeersIncomingLabel: NSTextField!
+    @IBOutlet weak var testnetPeersOutgoingLabel: NSTextField!
+    @IBOutlet weak var regtestSyncedView: NSView!
+    @IBOutlet weak var regtestSyncedLabel: NSTextField!
+    @IBOutlet weak var regtestPeersView: NSView!
+    @IBOutlet weak var regtestPeersIncomingLabel: NSTextField!
+    @IBOutlet weak var regtestPeersOutgoingLabel: NSTextField!
     
     var rpcpassword = ""
     var rpcuser = ""
@@ -577,10 +592,43 @@ class ViewController: NSViewController {
         }
     }
     
+    private func convertStringToDictionary(json: String) -> [String: AnyObject]? {
+        if let data = json.data(using: .utf8) {
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: [.mutableLeaves, .allowFragments]) as? [String: AnyObject]
+                return json
+            } catch {
+                return nil
+            }
+        }
+        return nil
+    }
+    
+    private func progress(dict: [String:AnyObject]) -> String {
+        if let verificationprogress = dict["verificationprogress"] as? Double {
+            if verificationprogress >= 0.99 {
+                return "fully synced"
+            } else {
+                return "\(Int(verificationprogress*100))% synced"
+            }
+        } else {
+            return ""
+        }
+    }
+    
     private func parseIsMainOn(result: String) {
         if result.contains("Could not connect to the server 127.0.0.1") {
             mainnetIsOff()
         } else if result.contains("chain") || result.contains("Loading block index...") {
+            
+            if result.contains("chain") {
+                if let dict = convertStringToDictionary(json: result) {
+                    DispatchQueue.main.async { [unowned vc = self] in
+                        vc.mainnetSyncedLabel.stringValue = vc.progress(dict: dict)
+                    }
+                }
+            }
+            
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.mainOn = true
                 vc.mainnetIsOnImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
@@ -602,6 +650,15 @@ class ViewController: NSViewController {
         if result.contains("Could not connect to the server 127.0.0.1") {
             testnetIsOff()
         } else if result.contains("chain") || result.contains("Loading block index...") {
+            
+            if result.contains("chain") {
+                if let dict = convertStringToDictionary(json: result) {
+                    DispatchQueue.main.async { [unowned vc = self] in
+                        vc.testnetSyncedLabel.stringValue = vc.progress(dict: dict)
+                    }
+                }
+            }
+            
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.testOn = true
                 vc.testnetIsOnImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
@@ -623,6 +680,15 @@ class ViewController: NSViewController {
         if result.contains("Could not connect to the server 127.0.0.1") {
             regtestIsOff()
         } else if result.contains("chain") || result.contains("Loading block index...") {
+            
+            if result.contains("chain") {
+                if let dict = convertStringToDictionary(json: result) {
+                    DispatchQueue.main.async { [unowned vc = self] in
+                        vc.regtestSyncedLabel.stringValue = vc.progress(dict: dict)
+                    }
+                }
+            }
+            
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.regTestOn = true
                 vc.regtestIsOnImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
@@ -639,6 +705,24 @@ class ViewController: NSViewController {
         }
         if isLoading {
             checkBitcoindVersion()
+        }
+    }
+    
+    private func command(chain: String, command: String, completion: @escaping ((Any?)) -> Void) {
+        let rpc = MakeRpcCall.shared
+        var port:String!
+        switch chain {
+        case "main":
+            port = "8332"
+        case "test":
+            port = "18332"
+        case "regtest":
+            port = "18443"
+        default:
+            break
+        }
+        rpc.command(method: command, port: port, user: rpcuser, password: rpcpassword) { response in
+            completion((response))
         }
     }
     
@@ -740,12 +824,57 @@ class ViewController: NSViewController {
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.bitcoinConfigured = true
             }
+            getPeerInfo()
         } else {
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.bitcoinConfigured = false
             }
         }
         getTorrcFile()
+    }
+    
+    private func getPeerInfo() {
+        command(chain: "test", command: "getpeerinfo") { response in
+            if let peerInfoArray = response as? NSArray {
+                DispatchQueue.main.async { [unowned vc = self] in
+                    vc.testnetPeersIncomingLabel.stringValue = vc.peerInfo(peerInfoArray).in
+                    vc.testnetPeersOutgoingLabel.stringValue = vc.peerInfo(peerInfoArray).out
+                }
+            }
+        }
+        command(chain: "main", command: "getpeerinfo") { response in
+            if let peerInfoArray = response as? NSArray {
+                DispatchQueue.main.async { [unowned vc = self] in
+                    vc.mainnetIncomingPeersLabel.stringValue = vc.peerInfo(peerInfoArray).in
+                    vc.mainnetOutgoingPeersLabel.stringValue = vc.peerInfo(peerInfoArray).out
+                }
+            }
+        }
+        command(chain: "regtest", command: "getpeerinfo") { response in
+            if let peerInfoArray = response as? NSArray {
+                DispatchQueue.main.async { [unowned vc = self] in
+                    vc.regtestPeersIncomingLabel.stringValue = vc.peerInfo(peerInfoArray).in
+                    vc.regtestPeersOutgoingLabel.stringValue = vc.peerInfo(peerInfoArray).out
+                }
+            }
+        }
+    }
+    
+    private func peerInfo(_ peerArray: NSArray) -> (in: String, out: String) {
+        var incomingCount = 0
+        var outgoingCount = 0
+        for peer in peerArray {
+            if let peerDict = peer as? NSDictionary {
+                if let incoming = peerDict["inbound"] as? Bool {
+                    if incoming {
+                        incomingCount += 1
+                    } else {
+                        outgoingCount += 1
+                    }
+                }
+            }
+        }
+        return ("\(incomingCount)", "\(outgoingCount)")
     }
     
     func checkIfTorIsConfigured(response: String) {
@@ -915,6 +1044,24 @@ class ViewController: NSViewController {
         torTestnetWindow.wantsLayer = true
         torAuthWindow.wantsLayer = true
         torRegtestWindow.wantsLayer = true
+        mainnetSyncedView.wantsLayer = true
+        mainnetPeersView.wantsLayer = true
+        testnetSyncedView.wantsLayer = true
+        testnetPeersView.wantsLayer = true
+        regtestSyncedView.wantsLayer = true
+        regtestPeersView.wantsLayer = true
+        mainnetSyncedView.layer?.borderWidth = 0.75
+        mainnetSyncedView.layer?.cornerRadius = 5
+        testnetSyncedView.layer?.borderWidth = 0.75
+        testnetSyncedView.layer?.cornerRadius = 5
+        regtestSyncedView.layer?.borderWidth = 0.75
+        regtestSyncedView.layer?.cornerRadius = 5
+        mainnetPeersView.layer?.borderWidth = 0.75
+        mainnetPeersView.layer?.cornerRadius = 5
+        testnetPeersView.layer?.borderWidth = 0.75
+        testnetPeersView.layer?.cornerRadius = 5
+        regtestPeersView.layer?.borderWidth = 0.75
+        regtestPeersView.layer?.cornerRadius = 5
         bitcoinCoreWindow.layer?.borderWidth = 0.75
         bitcoinCoreWindow.layer?.cornerRadius = 8
         bitcoinMainnetWindow.layer?.borderWidth = 0.75
@@ -933,6 +1080,12 @@ class ViewController: NSViewController {
         torRegtestWindow.layer?.cornerRadius = 8
         torAuthWindow.layer?.borderWidth = 0.75
         torAuthWindow.layer?.cornerRadius = 8
+        mainnetSyncedView.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+        mainnetPeersView.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+        testnetSyncedView.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+        testnetPeersView.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+        regtestSyncedView.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+        regtestPeersView.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
         bitcoinCoreWindow.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
         bitcoinMainnetWindow.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
         bitcoinTestnetWindow.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
@@ -945,6 +1098,15 @@ class ViewController: NSViewController {
         torMainnetPathOutlet.url = URL(fileURLWithPath: "/usr/local/var/lib/tor/standup/main")
         torTestnetPathOutlet.url = URL(fileURLWithPath: "/usr/local/var/lib/tor/standup/test")
         torRegtestPathOutlet.url = URL(fileURLWithPath: "/usr/local/var/lib/tor/standup/reg")
+        mainnetSyncedLabel.stringValue = "synced ?"
+        testnetSyncedLabel.stringValue = "synced ?"
+        regtestSyncedLabel.stringValue = "synced ?"
+        mainnetIncomingPeersLabel.stringValue = "?"
+        mainnetOutgoingPeersLabel.stringValue = "?"
+        testnetPeersIncomingLabel.stringValue = "?"
+        testnetPeersOutgoingLabel.stringValue = "?"
+        regtestPeersIncomingLabel.stringValue = "?"
+        regtestPeersOutgoingLabel.stringValue = "?"
     }
     
     func showstandUpAlert(message: String, info: String) {
