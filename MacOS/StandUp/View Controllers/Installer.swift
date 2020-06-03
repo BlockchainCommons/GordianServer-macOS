@@ -164,7 +164,7 @@ class Installer: NSViewController {
                                 
                             case "testnet", "regtest":
                                 if existingValue != "" {
-                                    // MARK: TODO - Throw an error here as specifying a network in the conf breaks Standup.
+                                    setSimpleAlert(message: "Incompatible bitcoin.conf setting!", info: "Standup allows you to run multiple networks simultaneously, we do this by specifying which chain we want to launch as a command line argument. Specifying a network in your bitcoin.conf is not compatible with this approach, please remove the line in your conf file which specifies a network.", buttonLabel: "OK")
                                 }
                                 
                             case "proxy":

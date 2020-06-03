@@ -2330,7 +2330,7 @@
                                 </constraints>
                                 <textFieldCell key="cell" selectable="YES" id="f8p-Yu-26B">
                                     <font key="font" metaFont="system"/>
-                                    <string key="title">Add your Tor V3 auth public key here. This key will be added to each rpc hidden service's "authorized_clients" directory so that all services are authenticated with the same key. This means only the device/app your authenticating with will have access to these hidden services. You may add up to ~330 auth keys.</string>
+                                    <string key="title">Add your Tor V3 auth public key here. This key will be added to each rpc hidden service's "authorized_clients" directory so that all services are authenticated with the same key. This means only the device/app your are authenticating will have access to these hidden services. You may add up to ~330 auth keys.</string>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
