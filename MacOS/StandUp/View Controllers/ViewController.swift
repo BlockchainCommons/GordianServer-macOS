@@ -119,11 +119,15 @@ class ViewController: NSViewController {
         }
     }
     
-    
-    @IBAction func addAuthAction(_ sender: Any) {
+    private func addAuth() {
         DispatchQueue.main.async { [unowned vc = self] in
             vc.performSegue(withIdentifier: "addAuth", sender: vc)
         }
+    }
+    
+    
+    @IBAction func addAuthAction(_ sender: Any) {
+        addAuth()
     }
     
     @IBAction func showMainConnect(_ sender: Any) {
@@ -317,6 +321,13 @@ class ViewController: NSViewController {
     
     // MARK: Script Methods
     
+    private func checkForAuth() {
+        DispatchQueue.main.async { [unowned vc = self] in
+            vc.taskDescription.stringValue = "checking for auth..."
+            vc.runScript(script: .checkForAuth)
+        }
+    }
+    
     func checkForXcodeSelect() {
         DispatchQueue.main.async { [unowned vc = self] in
             vc.taskDescription.stringValue = "checking for xcode select..."
@@ -494,7 +505,16 @@ class ViewController: NSViewController {
         case .checkXcodeSelect:
             parseXcodeSelectResult(result: result)
             
+        case .checkForAuth:
+            parseAuthCheck(result: result)
+            
         default: break
+        }
+    }
+    
+    private func parseAuthCheck(result: String) {
+        if result.contains("Unauthenticated") && torConfigured && bitcoinConfigured {
+            addAuth()
         }
     }
     
@@ -605,6 +625,7 @@ class ViewController: NSViewController {
             checkForHomebrew()
         } else {
             hideSpinner()
+            checkForAuth()
         }
     }
     
