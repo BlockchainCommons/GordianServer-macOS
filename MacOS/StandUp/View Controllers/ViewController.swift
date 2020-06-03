@@ -856,6 +856,9 @@ class ViewController: NSViewController {
                 let arr = item.components(separatedBy: "rpcpassword=")
                 rpcpassword = arr[1]
             }
+            if item.contains("testnet=1") || item.contains("testnet=0") || item.contains("regtest=1") || item.contains("regtest=0") {
+                setSimpleAlert(message: "Incompatible bitcoin.conf setting! Standup will not function properly.", info: "Standup allows you to run multiple networks simultaneously, we do this by specifying which chain we want to launch as a command line argument. Specifying a network in your bitcoin.conf is incompatible with this approach, please remove the line in your conf file which specifies a network to use Standup.", buttonLabel: "OK")
+            }
         }
         if rpcpassword != "" && rpcuser != "" {
             DispatchQueue.main.async { [unowned vc = self] in
