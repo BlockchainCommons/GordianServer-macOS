@@ -110,6 +110,22 @@ class ViewController: NSViewController {
     
     //MARK: User Action Segues
     
+    @IBAction func removeAuthAction(_ sender: Any) {
+        actionAlert(message: "Warning!", info: "Removing your authentication keys means anyone who gets your hidden service url will have access to it. Are you sure you want to remove all authentication keys?") { [unowned vc = self] response in
+            if response {
+                vc.runScript(script: .removeAuth)
+                vc.showAlertMessage(message: "Success", info: "Authorized clients directories removed, your rpc hidden services are no longer authenticated!")
+            }
+        }
+    }
+    
+    
+    @IBAction func addAuthAction(_ sender: Any) {
+        DispatchQueue.main.async { [unowned vc = self] in
+            vc.performSegue(withIdentifier: "addAuth", sender: vc)
+        }
+    }
+    
     @IBAction func showMainConnect(_ sender: Any) {
         DispatchQueue.main.async { [unowned vc = self] in
             vc.rpcport = "1309"

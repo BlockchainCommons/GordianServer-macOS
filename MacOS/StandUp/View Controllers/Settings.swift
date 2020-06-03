@@ -21,7 +21,6 @@ class Settings: NSViewController {
     var refreshing = Bool()
     
     @IBOutlet var directoryLabel: NSTextField!
-    @IBOutlet var textInput: NSTextField!
     @IBOutlet var nodeLabelField: NSTextField!
     @IBOutlet var walletDisabled: NSButton!
     @IBOutlet var pruneOutlet: NSButton!
@@ -281,23 +280,6 @@ class Settings: NSViewController {
         }
     }
     
-    @IBAction func addPubkey(_ sender: Any) {
-        if textInput.stringValue != "" {
-            let descriptor = textInput.stringValue.replacingOccurrences(of: " ", with: "")
-            if descriptor.hasPrefix("descriptor:x25519:") {
-                DispatchQueue.main.async { [unowned vc = self] in
-                    actionAlert(message: "Add Tor V3 authentication key?", info: descriptor) { (response) in
-                        if response {
-                            vc.authenticate()
-                        }
-                    }
-                }
-            } else {
-                setSimpleAlert(message: "Error", info: "Incorrect format, the correct format is:\n\ndescriptor:x25519:<public key here>", buttonLabel: "OK")
-            }
-        }
-    }
-    
     // MARK: Action Logic
     
     func setLog(content: String) {
@@ -383,21 +365,7 @@ class Settings: NSViewController {
         }
     }
     
-    func authenticate() {
-        let filename = randomString(length: 10)
-        let pubkey = self.textInput.stringValue
-        runScript(script: .authenticate, env: ["":""], args: [pubkey,filename]) { success in
-            if success {
-                DispatchQueue.main.async { [unowned vc = self] in
-                    setSimpleAlert(message: "Successfully added auth key", info: "Important! Tor is now restarting, authentication will not come into effect until this completes.\n\nYou may get an \"Internet not connected error\" when reconnecting to your node, just keep tapping the refresh button until the app connects, it is normal to have a connectivity issue immediately after restarting Tor.", buttonLabel: "OK")
-                    vc.textInput.stringValue = ""
-                    vc.textInput.resignFirstResponder()
-                }
-            } else {
-                setSimpleAlert(message: "Error", info: "error authenticating", buttonLabel: "OK")
-            }
-        }
-    }
+    
     
     func getBitcoinConf(completion: @escaping ((conf: [String]?, error: Bool)) -> Void) {
         guard let path = Bundle.main.path(forResource: SCRIPT.getRPCCredentials.rawValue, ofType: "command") else {

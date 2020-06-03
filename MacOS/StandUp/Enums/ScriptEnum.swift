@@ -47,6 +47,7 @@ public enum SCRIPT: String {
     case refreshMainHS = "RefreshMainHS"
     case refreshTestHS = "RefreshTestHS"
     case refreshRegHS = "RefreshRegHS"
+    case removeAuth = "RemoveAuth"
 }
 
 public enum BTCCONF: String {
