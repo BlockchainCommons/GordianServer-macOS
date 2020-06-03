@@ -25,7 +25,6 @@ class MakeRpcCall {
         request.setValue("text/plain", forHTTPHeaderField: "Content-Type")
         request.httpBody = "{\"jsonrpc\":\"1.0\",\"id\":\"curltest\",\"method\":\"\(method)\",\"params\":[]}".data(using: .utf8)
         let task = session.dataTask(with: request as URLRequest) { (data, response, error) in
-            print("response = \(response)")
             if error != nil {
                 completion((nil))
             } else {
