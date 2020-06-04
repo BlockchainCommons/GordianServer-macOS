@@ -79,6 +79,8 @@
 		D0EB531A237E4E9F002212F8 /* fullynoded_tap_pubkey.png in Resources */ = {isa = PBXBuildFile; fileRef = D0EB5317237E4E9F002212F8 /* fullynoded_tap_pubkey.png */; };
 		D0EBC02F2376834D008302D2 /* Authenticate.command in Resources */ = {isa = PBXBuildFile; fileRef = D0EBC02E2376834D008302D2 /* Authenticate.command */; };
 		D0EBC0312377EE65008302D2 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EBC0302377EE65008302D2 /* Utilities.swift */; };
+		D0F613EC2489278B0057CC93 /* CheckForOldHost.command in Resources */ = {isa = PBXBuildFile; fileRef = D0F613EB2489278B0057CC93 /* CheckForOldHost.command */; };
+		D0F613EE24892B680057CC93 /* RemoveOldHost.command in Resources */ = {isa = PBXBuildFile; fileRef = D0F613ED24892B680057CC93 /* RemoveOldHost.command */; };
 		D0F9352C238CAC48001FF151 /* onion.png in Resources */ = {isa = PBXBuildFile; fileRef = D0F9352B238CAC48001FF151 /* onion.png */; };
 /* End PBXBuildFile section */
 
@@ -179,6 +181,8 @@
 		D0EB5317237E4E9F002212F8 /* fullynoded_tap_pubkey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fullynoded_tap_pubkey.png; sourceTree = "<group>"; };
 		D0EBC02E2376834D008302D2 /* Authenticate.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = Authenticate.command; sourceTree = "<group>"; };
 		D0EBC0302377EE65008302D2 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		D0F613EB2489278B0057CC93 /* CheckForOldHost.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = CheckForOldHost.command; sourceTree = "<group>"; };
+		D0F613ED24892B680057CC93 /* RemoveOldHost.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = RemoveOldHost.command; sourceTree = "<group>"; };
 		D0F9352B238CAC48001FF151 /* onion.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = onion.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -267,6 +271,8 @@
 				D01B61032486178A005D3090 /* RefreshRegHS.command */,
 				D01B610B248789D1005D3090 /* RemoveAuth.command */,
 				D01B610D24878E07005D3090 /* CheckForAuth.command */,
+				D0F613EB2489278B0057CC93 /* CheckForOldHost.command */,
+				D0F613ED24892B680057CC93 /* RemoveOldHost.command */,
 			);
 			path = Scripts;
 			sourceTree = "<group>";
@@ -511,6 +517,7 @@
 				D0760110247E084200706F70 /* CheckXCodeSelect.command in Resources */,
 				D049E8A0237BFF9E00294E70 /* UpdateBTCConf.command in Resources */,
 				D01B60F42484C963005D3090 /* StartRegd.command in Resources */,
+				D0F613EC2489278B0057CC93 /* CheckForOldHost.command in Resources */,
 				D0821047238B66F300E21EDC /* ShowBitcoinCoreLog.command in Resources */,
 				D01B60FC2484CDB7005D3090 /* StopReg.command in Resources */,
 				D0B36C432373BBA5004B2D63 /* StopTor.command in Resources */,
@@ -524,6 +531,7 @@
 				D0821043238AA78900E21EDC /* blockchaincommons.png in Resources */,
 				D0B9277523839F7B00956651 /* SupportedVersion.json in Resources */,
 				D01471A12371354700F64329 /* LaunchBitcoin.command in Resources */,
+				D0F613EE24892B680057CC93 /* RemoveOldHost.command in Resources */,
 				D01B60F62484CC83005D3090 /* StartTestd.command in Resources */,
 				D0821049238B702100E21EDC /* ShowTorLog.command in Resources */,
 				D0B927862384E18500956651 /* GetBitcoinConf.command in Resources */,

@@ -49,6 +49,8 @@ public enum SCRIPT: String {
     case refreshRegHS = "RefreshRegHS"
     case removeAuth = "RemoveAuth"
     case checkForAuth = "CheckForAuth"
+    case checkForOldHost = "CheckForOldHost"
+    case removeOldHost = "RemoveOldHost"
 }
 
 public enum BTCCONF: String {

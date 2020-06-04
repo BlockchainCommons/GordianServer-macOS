@@ -62,6 +62,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var regtestPeersView: NSView!
     @IBOutlet weak var regtestPeersIncomingLabel: NSTextField!
     @IBOutlet weak var regtestPeersOutgoingLabel: NSTextField!
+    @IBOutlet weak var bitcoinIsOnHeaderImage: NSImageView!
     
     var rpcpassword = ""
     var rpcuser = ""
@@ -97,7 +98,6 @@ class ViewController: NSViewController {
     }
     
     override func viewDidAppear() {
-        print("viewDidAppear")
         d.setDefaults { [unowned vc = self] in
             vc.getLatestVersion { [unowned vc = self] success in
                 if success {
@@ -282,7 +282,7 @@ class ViewController: NSViewController {
                 
                 if vc.bitcoinInstalled {
                     
-                    actionAlert(message: "Install Bitcoin Core v\(version) and Tor with StandUp?", info: "You have an exisiting version of Bitcoin Core installed.\n\nSelecting yes will tell Standup to download, verify and install a fresh Bitcoin Core v\(version) installation in ~/StandUp/BitcoinCore and will only ever work with that instance of Bitcoin Core. Your existing bitcoin.conf file will be checked for rpc username and passowrd, if none exist Standup will create them for you, all other bitcoin.conf settings will remain in place. Standup will also install Tor v0.4.3.5 and configure hidden services for your nodes rpcport so that you may easily and securely connect to your node remotely.") { response in
+                    actionAlert(message: "Install Bitcoin Core v\(version) and Tor with StandUp?", info: "You have an exisiting version of Bitcoin Core installed.\n\nSelecting yes will tell Standup to download, verify and install a fresh Bitcoin Core v\(version) installation in ~/StandUp/BitcoinCore, Standup will not overwrite your existing node. Your existing bitcoin.conf file will be checked for rpc username and password, if none exist Standup will create them for you, all other bitcoin.conf settings will remain in place. Standup will also install Tor v0.4.3.5 and configure hidden services for your nodes rpcport so that you may easily and securely connect to your node remotely.") { response in
                         
                         if response {
                             DispatchQueue.main.async { [unowned vc = self] in
@@ -509,7 +509,23 @@ class ViewController: NSViewController {
         case .checkForAuth:
             parseAuthCheck(result: result)
             
+        case .checkForOldHost:
+            parseOldHostResponse(result: result)
+            
         default: break
+        }
+    }
+    
+    private func parseOldHostResponse(result: String) {
+        if result.contains("Exists") {
+            actionAlert(message: "You have an outdated version of Standup", info: "You need to run through the installation script again to configure your new Tor hidden services and to be able to run more then one network at a time, Standup may not function properly otherwise.") { [unowned vc = self] response in
+                if response {
+                    vc.runScript(script: .removeOldHost)
+                    vc.installNow()
+                }
+            }
+        } else {
+            checkForAuth()
         }
     }
     
@@ -627,7 +643,8 @@ class ViewController: NSViewController {
             checkForHomebrew()
         } else {
             hideSpinner()
-            checkForAuth()
+            runScript(script: .checkForOldHost)
+            //checkForAuth()
         }
     }
     
@@ -671,6 +688,7 @@ class ViewController: NSViewController {
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.mainOn = true
                 vc.mainnetIsOnImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
+                vc.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
                 vc.startMainnetOutlet.title = "Stop"
                 vc.startMainnetOutlet.isEnabled = true
             }
@@ -701,6 +719,7 @@ class ViewController: NSViewController {
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.testOn = true
                 vc.testnetIsOnImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
+                vc.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
                 vc.startTestnetOutlet.title = "Stop"
                 vc.startTestnetOutlet.isEnabled = true
             }
@@ -731,6 +750,7 @@ class ViewController: NSViewController {
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.regTestOn = true
                 vc.regtestIsOnImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
+                vc.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
                 vc.startRegtestOutlet.title = "Stop"
                 vc.startRegtestOutlet.isEnabled = true
             }
@@ -1054,6 +1074,7 @@ class ViewController: NSViewController {
         icon.layer?.cornerRadius = icon.frame.width / 2
         icon.layer?.masksToBounds = true
         isLoading = true
+        bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
         settingsOutlet.isHighlighted = false
         bitcoinSettingsOutlet.isHighlighted = false
         bitcoinSettingsOutlet.focusRingType = .none
