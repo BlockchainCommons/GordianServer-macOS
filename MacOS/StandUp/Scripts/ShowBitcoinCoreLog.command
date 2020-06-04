@@ -7,5 +7,4 @@
 #  Copyright © 2019 Blockchain Commons, LLC
 echo ""$DATADIR"/debug.log"
 open "$DATADIR"/debug.log
-echo "Done"
 exit 1

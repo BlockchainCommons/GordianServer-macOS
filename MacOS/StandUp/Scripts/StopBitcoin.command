@@ -16,5 +16,4 @@ else
 
 fi
 
-echo "Done"
 exit 1
