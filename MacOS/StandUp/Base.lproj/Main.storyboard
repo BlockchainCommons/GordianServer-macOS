@@ -685,7 +685,7 @@
         <scene sceneID="R2V-B0-nI4">
             <objects>
                 <windowController id="B8D-0N-5wS" sceneMemberID="viewController">
-                    <window key="window" title="Standup v0.0.1" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
+                    <window key="window" title="Standup v0.0.2" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="226" y="240" width="436" height="480"/>
@@ -1930,15 +1930,15 @@
                         <outlet property="torWindow" destination="hmk-BW-J2q" id="xSN-4I-RFX"/>
                         <outlet property="updateOutlet" destination="tMm-82-jtg" id="b1B-LH-TKx"/>
                         <outlet property="verifyOutlet" destination="y6q-T1-byM" id="I3N-1T-qsP"/>
-                        <segue destination="eC6-Cf-Cnx" kind="sheet" identifier="showPairingCode" id="Yl0-9Y-9DR"/>
-                        <segue destination="mY6-pf-cJ7" kind="sheet" identifier="goToSettings" id="qCM-WY-hFq"/>
-                        <segue destination="lGs-ue-8Wa" kind="sheet" identifier="goInstall" id="cqP-Ve-rOY"/>
+                        <segue destination="eC6-Cf-Cnx" kind="show" identifier="showPairingCode" id="Yl0-9Y-9DR"/>
+                        <segue destination="mY6-pf-cJ7" kind="show" identifier="goToSettings" id="qCM-WY-hFq"/>
+                        <segue destination="lGs-ue-8Wa" kind="show" identifier="goInstall" id="cqP-Ve-rOY"/>
                         <segue destination="ISO-tJ-wFf" kind="show" identifier="addAuth" id="Emg-xH-9n3"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="9" y="927.5"/>
+            <point key="canvasLocation" x="15" y="931"/>
         </scene>
         <!--Settings-->
         <scene sceneID="TTy-Zr-KGm">
@@ -2270,7 +2270,7 @@
                         <outlet property="textInput" destination="BZ9-GZ-pgd" id="HZ1-pJ-Xsi"/>
                         <outlet property="txIndexOutlet" destination="uMK-KT-7YU" id="8Ou-eA-AgL"/>
                         <outlet property="walletDisabled" destination="H4u-my-R0l" id="fEc-sI-7Md"/>
-                        <segue destination="lGs-ue-8Wa" kind="sheet" identifier="seeLog" id="Yel-Hw-wBk"/>
+                        <segue destination="lGs-ue-8Wa" kind="show" identifier="seeLog" id="Yel-Hw-wBk"/>
                     </connections>
                 </viewController>
                 <customObject id="UGA-2H-5l6" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -2489,7 +2489,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="cqP-Ve-rOY"/>
+        <segue reference="Yel-Hw-wBk"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="NSActionTemplate" width="14" height="14"/>
