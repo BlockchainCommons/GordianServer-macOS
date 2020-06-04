@@ -10,6 +10,7 @@ import Cocoa
 
 class Settings: NSViewController {
     
+    var window: NSWindow?
     var filesList: [URL] = []
     var showInvisibles = false
     var selectedFolder:URL!
@@ -33,6 +34,11 @@ class Settings: NSViewController {
         d.setDefaults() { [unowned vc = self] in
             vc.getSettings()
         }
+    }
+    
+    override func viewDidAppear() {
+        window = self.view.window!
+        self.view.window?.title = "Settings"
     }
     
     // MARK: User Actions
@@ -175,11 +181,6 @@ class Settings: NSViewController {
             vc.standingDown = false
             vc.performSegue(withIdentifier: "seeLog", sender: vc)
         }
-    }
-    
-    @IBAction func backAction(_ sender: Any) {
-        goBackAndRefresh()
-        
     }
     
     @IBAction func removeStandUp(_ sender: Any) {
@@ -398,7 +399,7 @@ class Settings: NSViewController {
             if let presenter = vc.presentingViewController as? ViewController {
                 presenter.isBitcoinOn()
             }
-            vc.dismiss(vc)
+            vc.window?.performClose(nil)
         }
     }
     

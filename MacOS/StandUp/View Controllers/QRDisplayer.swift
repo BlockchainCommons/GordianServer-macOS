@@ -10,6 +10,7 @@ import Cocoa
 
 class QRDisplayer: NSViewController {
     
+    var window: NSWindow?
     var rpcpassword = ""
     var rpcuser = ""
     var rpcport = ""
@@ -29,10 +30,9 @@ class QRDisplayer: NSViewController {
         setQR()
     }
     
-    @IBAction func backAction(_ sender: Any) {
-        DispatchQueue.main.async { [unowned vc = self] in
-            vc.dismiss(vc)
-        }
+    override func viewDidAppear() {
+        window = self.view.window!
+        self.view.window?.title = "Quickconnect QR"
     }
     
     private func showSpinner() {

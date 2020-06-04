@@ -9,12 +9,18 @@
 import Cocoa
 
 class AddAuthentication: NSViewController {
-
+    
+    var window: NSWindow?
     @IBOutlet weak var textInput: NSTextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
+    }
+    
+    override func viewDidAppear() {
+        window = self.view.window!
+        self.view.window?.title = "Tor V3 Authentication"
     }
     
     @IBAction func addAction(_ sender: Any) {
@@ -40,7 +46,7 @@ class AddAuthentication: NSViewController {
         DispatchQueue.main.async { [unowned vc = self] in
             let ud = UserDefaults.standard
             ud.set(true, forKey: "doNotAskForAuthAgain")
-            vc.dismiss(vc)
+            vc.window?.performClose(nil)
         }
     }
     

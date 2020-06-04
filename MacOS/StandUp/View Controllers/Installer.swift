@@ -12,9 +12,9 @@ class Installer: NSViewController {
     
     @IBOutlet var spinner: NSProgressIndicator!
     @IBOutlet var spinnerDescription: NSTextField!
-    @IBOutlet var backButtonOutlet: NSButton!
     @IBOutlet var consoleOutput: NSTextView!
     
+    var window: NSWindow?
     let ud = UserDefaults.standard
     var seeLog = Bool()
     var standingUp = Bool()
@@ -32,6 +32,11 @@ class Installer: NSViewController {
         super.viewDidLoad()
         setScene()
         filterAction()
+    }
+    
+    override func viewDidAppear() {
+        window = self.view.window!
+        self.view.window?.title = "Console"
     }
     
     func showSpinner(description: String) {
@@ -89,9 +94,6 @@ class Installer: NSViewController {
                     vc.consoleOutput.string = log
                 }
             }
-            DispatchQueue.main.async { [unowned vc = self] in
-                vc.backButtonOutlet.isEnabled = true
-            }
 
         } else if standingUp {
             standingUp = false
@@ -114,10 +116,6 @@ class Installer: NSViewController {
         }
     }
     
-    @IBAction func backAction(_ sender: Any) {
-        goBack()
-    }
-    
     func goBack() {
         DispatchQueue.main.async { [unowned vc = self] in
             vc.hideSpinner()
@@ -126,7 +124,7 @@ class Installer: NSViewController {
                 presenter.isBitcoinOn()
             }
             DispatchQueue.main.async { [unowned vc = self] in
-                vc.dismiss(vc)
+                vc.window?.performClose(nil)
             }
         }
     }
@@ -294,14 +292,12 @@ class Installer: NSViewController {
     func hideSpinner() {
         DispatchQueue.main.async { [unowned vc = self] in
             vc.spinner.alphaValue = 0
-            vc.backButtonOutlet.isEnabled = true
             vc.spinnerDescription.stringValue = ""
             vc.spinner.stopAnimation(vc)
         }
     }
     
     func setScene() {
-        backButtonOutlet.isEnabled = false
         consoleOutput.textColor = NSColor.green
         consoleOutput.isEditable = false
         consoleOutput.isSelectable = false

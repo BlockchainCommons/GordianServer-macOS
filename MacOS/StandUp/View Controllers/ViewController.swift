@@ -10,6 +10,7 @@ import Cocoa
 
 class ViewController: NSViewController {
     
+    @IBOutlet weak var mainnetIncomingImage: NSImageView!
     @IBOutlet weak var bitcoinCoreWindow: NSView!
     @IBOutlet weak var torWindow: NSView!
     @IBOutlet weak var bitcoinMainnetWindow: NSView!
@@ -277,9 +278,9 @@ class ViewController: NSViewController {
                     vc.showstandUpAlert(message: "Ready to StandUp?", info: "StandUp will install and configure a \(type) Bitcoin Core v\(version) node and Tor v0.4.3.5\n\n~30gb of space needed for testnet and ~300gb for mainnet\n\nIf you would like to install a different node go to \"Settings\" for pruning, mainnet, data directory and tor related options, you can always adjust the settings and restart your node for the changes to take effect.\n\nStandUp will create the following directory: /Users/\(NSUserName())/StandUp\n\nBy default it will create or if one exists add any missing rpc credentials to the bitcoin.conf in \(directory).")
                 }
                 
-                if vc.torConfigured && vc.bitcoinConfigured {
+                if vc.bitcoinInstalled {
                     
-                    actionAlert(message: "Install Bitcoin Core with StandUp?", info: "You have an exisiting version of Bitcoin Core installed.\n\nSelecting yes will tell StandUp to download, verify and install a fresh Bitcoin Core installation in ~/StandUp/BitcoinCore and will only ever work with that instance of Bitcoin Core.") { (response) in
+                    actionAlert(message: "Install Bitcoin Core v\(version) and Tor with StandUp?", info: "You have an exisiting version of Bitcoin Core installed.\n\nSelecting yes will tell Standup to download, verify and install a fresh Bitcoin Core v\(version) installation in ~/StandUp/BitcoinCore and will only ever work with that instance of Bitcoin Core. Your existing bitcoin.conf file will be checked for rpc username and passowrd, if none exist Standup will create them for you, all other bitcoin.conf settings will remain in place. Standup will also install Tor v0.4.3.5 and configure hidden services for your nodes rpcport so that you may easily and securely connect to your node remotely.") { response in
                         
                         if response {
                             DispatchQueue.main.async { [unowned vc = self] in
@@ -288,7 +289,6 @@ class ViewController: NSViewController {
                                 vc.performSegue(withIdentifier: "goInstall", sender: vc)
                             }
                         }
-                        
                     }
                 } else {
                     standup()
