@@ -41,7 +41,6 @@ class ViewController: NSViewController {
     @IBOutlet var installTorOutlet: NSButton!
     @IBOutlet var seeLogOutlet: NSButton!
     @IBOutlet var settingsOutlet: NSButton!
-    @IBOutlet var standUpOutlet: NSButton!
     @IBOutlet var verifyOutlet: NSButton!
     @IBOutlet var updateOutlet: NSButton!
     @IBOutlet var icon: NSImageView!
@@ -514,7 +513,10 @@ class ViewController: NSViewController {
     
     private func parseAuthCheck(result: String) {
         if result.contains("Unauthenticated") && torConfigured && bitcoinConfigured {
-            addAuth()
+            let ud = UserDefaults.standard
+            if ud.object(forKey: "doNotAskForAuthAgain") == nil {
+               addAuth()
+            }
         }
     }
     
@@ -601,9 +603,7 @@ class ViewController: NSViewController {
         if result.contains("XCode select not installed") {
             showAlertMessage(message: "Dependencies missing", info: "You do not appear to have XCode command line tools installed, StandUp.app relies on XCode command line tools for installing Bitcoin Core, therefore in order to continue please select \"Install Dependencies\".")
         } else {
-            DispatchQueue.main.async { [unowned vc = self] in
-                vc.standUpOutlet.isEnabled = true
-            }
+            installNow()
         }
     }
     
@@ -834,12 +834,6 @@ class ViewController: NSViewController {
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.torVersionOutlet.stringValue = "v\(version)"
                 vc.installTorOutlet.title = "Start"
-                vc.standUpOutlet.isEnabled = false
-            }
-        } else {
-            DispatchQueue.main.async { [unowned vc = self] in
-                vc.standUpOutlet.stringValue = "Install"
-                vc.standUpOutlet.isEnabled = true
             }
         }
         checkBitcoinConfForRPCCredentials()
@@ -997,8 +991,6 @@ class ViewController: NSViewController {
             
         } else {
             DispatchQueue.main.async { [unowned vc = self] in
-                vc.standUpOutlet.stringValue = "Install"
-                vc.standUpOutlet.isEnabled = true
                 vc.connectMainnetOutlet.isEnabled = false
                 vc.connectTestnetOutlet.isEnabled = false
                 vc.connectRegtestOutlet.isEnabled = false
@@ -1063,7 +1055,6 @@ class ViewController: NSViewController {
         updateOutlet.isEnabled = false
         bitcoinCoreVersionOutlet.stringValue = ""
         installTorOutlet.isEnabled = false
-        standUpOutlet.isEnabled = false
         verifyOutlet.isEnabled = false
         torRunningImage.alphaValue = 0
         bitcoinCoreWindow.backgroundColor = #colorLiteral(red: 0.2313431799, green: 0.2313894629, blue: 0.2313401997, alpha: 1)

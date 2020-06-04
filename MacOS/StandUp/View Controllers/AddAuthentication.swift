@@ -36,8 +36,10 @@ class AddAuthentication: NSViewController {
         }
     }
     
-    @IBAction func closeAction(_ sender: Any) {
+    @IBAction func doNotAskAgainAction(_ sender: Any) {
         DispatchQueue.main.async { [unowned vc = self] in
+            let ud = UserDefaults.standard
+            ud.set(true, forKey: "doNotAskForAuthAgain")
             vc.dismiss(vc)
         }
     }
