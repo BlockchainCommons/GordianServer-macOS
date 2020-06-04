@@ -41,6 +41,7 @@ class ViewController: NSViewController {
     @IBOutlet var spinner: NSProgressIndicator!
     @IBOutlet var installTorOutlet: NSButton!
     @IBOutlet var seeLogOutlet: NSButton!
+    @IBOutlet weak var bitcoinSettingsOutlet: NSButton!
     @IBOutlet var settingsOutlet: NSButton!
     @IBOutlet var verifyOutlet: NSButton!
     @IBOutlet var updateOutlet: NSButton!
@@ -206,6 +207,7 @@ class ViewController: NSViewController {
     
     @IBAction func torSettingsAction(_ sender: Any) {
         DispatchQueue.main.async { [unowned vc = self] in
+            vc.settingsOutlet.isHighlighted = false
             vc.performSegue(withIdentifier: "goToSettings", sender: vc)
         }
     }
@@ -1052,6 +1054,9 @@ class ViewController: NSViewController {
         icon.layer?.cornerRadius = icon.frame.width / 2
         icon.layer?.masksToBounds = true
         isLoading = true
+        settingsOutlet.isHighlighted = false
+        bitcoinSettingsOutlet.isHighlighted = false
+        bitcoinSettingsOutlet.focusRingType = .none
         updateOutlet.isEnabled = false
         bitcoinCoreVersionOutlet.stringValue = ""
         installTorOutlet.isEnabled = false
