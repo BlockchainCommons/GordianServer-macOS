@@ -173,6 +173,7 @@ Dependencies/
 !*.xcodeproj/project.pbxproj
 !*.xcodeproj/xcshareddata/
 !*.xcworkspace/contents.xcworkspacedata
+!*. xcodeproj/UserInterfaceState.xcuserstate
 /*.gcno
 
 ### Xcode Patch ###
