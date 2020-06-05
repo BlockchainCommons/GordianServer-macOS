@@ -9,11 +9,13 @@
 import Foundation
 import Cocoa
 
+extension Notification.Name {
+    public static let refresh = Notification.Name(rawValue: "refresh")
+}
+
 public func randomString(length: Int) -> String {
-    
     let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
     return String((0...length-1).map{ _ in letters.randomElement()! })
-    
 }
 
 public func setSimpleAlert(message: String, info: String, buttonLabel: String) {

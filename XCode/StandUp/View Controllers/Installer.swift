@@ -171,7 +171,7 @@ class Installer: NSViewController {
                             case "listen":
                                 listenExists = true
                                 
-                            case "bind":
+                            case "bindaddress":
                                 bindExists = true
                                 
                             case "debug":
@@ -235,7 +235,7 @@ class Installer: NSViewController {
                 let walletDisabled = d.walletdisabled()
                 vc.rpcpassword = randomString(length: 32)
                 vc.rpcuser = randomString(length: 10)
-                vc.standUpConf = "disablewallet=\(walletDisabled)\nrpcuser=\(vc.rpcuser)\nrpcpassword=\(vc.rpcpassword)\nserver=1\nprune=\(prune)\ntxindex=\(txindex)\n#proxy=127.0.0.1:9050\n#listen=1\n#debug=tor\n[main]\nrpcport=8332\n[test]\nrpcport=18332\n[regtest]\nrpcport=18443"
+                vc.standUpConf = "disablewallet=\(walletDisabled)\nrpcuser=\(vc.rpcuser)\nrpcpassword=\(vc.rpcpassword)\nserver=1\nprune=\(prune)\ntxindex=\(txindex)\n#bindaddress=127.0.0.1\n#proxy=127.0.0.1:9050\n#listen=1\n#debug=tor\n[main]\nrpcport=8332\n[test]\nrpcport=18332\n[regtest]\nrpcport=18443"
                 vc.getURLs()
             }
         }
@@ -268,6 +268,7 @@ class Installer: NSViewController {
                 ud.set(binaryName, forKey: "macosBinary")
                 ud.set(version, forKey: "version")
                 vc.setLog(content: vc.consoleOutput.string)
+                NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
                 vc.goBack()
             }
         }
@@ -284,6 +285,7 @@ class Installer: NSViewController {
                 ud.set(version, forKey: "version")
                 ud.set(binaryName, forKey: "macosBinary")
                 vc.setLog(content: vc.consoleOutput.string)
+                NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
                 vc.goBack()
             }
         }
