@@ -18,10 +18,8 @@ This repo includes the MacOS version of Bitcoin-*Standup*, which allows you to r
 
 For more information on *Bitcoin-Standup*:
 
-1. The [Main *Bitcoin-Standup* Repo](https://github.com/BlockchainCommons/Bitcoin-Standup) contains general information on the project.
-2. [How *Bitcoin-Standup* MacOS Works](Docs/How-it-works.md) describes the specifics of what *Bitcoin-Standup* does.
-3. [Why Run a Full Node?](Docs/Why-Full.md) details why you would want to run a full node in the first place.
-4. [Security for Bitcoin-Standup](Docs/Security) offers notes on ensuring the security of your *Bitcoin-Standup* node.
+1. [How *Bitcoin-Standup* MacOS Works](Docs/How-it-works.md) describes the specifics of what *Bitcoin-Standup* does.
+2. The [Main *Bitcoin-Standup* Repo](https://github.com/BlockchainCommons/Bitcoin-Standup) contains general information on the project.
 
 ## Status — Work-in-Progress
 
