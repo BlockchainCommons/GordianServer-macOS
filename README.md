@@ -6,19 +6,11 @@ This tool will also harden and secure your OS to current best practices and will
 
 This repo includes the MacOS version of Bitcoin-*Standup*, which allows you to run a full node on your Mac computer.
 
-<img src="./Images/1_standup.png" alt="" width="400"/>
+<img src="./Images/1_standup.png" alt="" width="400"/> <img src="./Images/2_standup.png" alt="" width="400"/>
 
-<img src="./Images/2_standup.png" alt="" width="400"/>
+<img src="./Images/0_standup.png" alt="" width="400"/> <img src="./Images/3_standup.png" alt="" width="400"/>
 
-<img src="./Images/0_standup.png" alt="" width="400"/>
-
-<img src="./Images/3_standup.png" alt="" width="400"/>
-
-<img src="./Images/4_standup.png" alt="" width="400"/>
-
-<img src="./Images/5_standup.png" alt="" width="400"/>
-
-<img src="./Images/6_standup.png" alt="" width="400"/>
+<img src="./Images/4_standup.png" alt="" width="400"/> <img src="./Images/6_standup.png" alt="" width="400"/>
 
 <img src="./Images/7_standup.png" alt="" width="400"/>
 
