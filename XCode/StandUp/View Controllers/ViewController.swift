@@ -98,6 +98,10 @@ class ViewController: NSViewController {
     }
     
     override func viewDidAppear() {
+        refresh()
+    }
+    
+    private func refresh() {
         d.setDefaults { [unowned vc = self] in
             vc.getLatestVersion { [unowned vc = self] success in
                 if success {
@@ -109,7 +113,15 @@ class ViewController: NSViewController {
         }
     }
     
-    //MARK: User Action Segues
+    //MARK: User Action
+    
+    @IBAction func refreshAction(_ sender: Any) {
+        taskDescription.stringValue = "checking system..."
+        spinner.startAnimation(self)
+        spinner.alphaValue = 1
+        taskDescription.alphaValue = 1
+        refresh()
+    }
     
     @IBAction func removeAuthAction(_ sender: Any) {
         actionAlert(message: "Warning!", info: "Removing your authentication keys means anyone who gets your hidden service url will have access to it. Are you sure you want to remove all authentication keys?") { [unowned vc = self] response in
