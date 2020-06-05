@@ -94,10 +94,15 @@ class ViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshNow), name: .refresh, object: nil)
         setScene()
     }
     
     override func viewDidAppear() {
+        refresh()
+    }
+    
+    @objc func refreshNow() {
         refresh()
     }
     
