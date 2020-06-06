@@ -42,6 +42,7 @@ function installBitcoin () {
   else
 
     echo "Signatures do not match! Terminating..."
+    exit 1
     
   fi
   
@@ -104,6 +105,7 @@ function installTor () {
   echo "Congratulations you are now StoodUp!\nClick the back button if this screen does not dismiss automatically"
   echo "Starting Tor as a service (it will automatically start every time you turn on your computer).."
   sudo -u $(whoami) /usr/local/bin/brew services start tor
+  exit 1
   
 }
 
@@ -137,5 +139,3 @@ else
   fi
   
 fi
-
-exit 1
