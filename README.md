@@ -31,7 +31,7 @@ For more information on *Bitcoin-Standup*:
 
 ## Installation Instructions
 
-You must meet minimum OS and space requirements to install *Bitcoin-Standup* on your Mac.
+You must meet minimum OS and space requirements to install *Bitcoin-Standup* on your Mac, as described below.     
 
 - Navigate to [Standup_0.1.1.dmg](./Standup_0.1.1.dmg)
 - Click `download`
