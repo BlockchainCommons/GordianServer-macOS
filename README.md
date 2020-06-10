@@ -22,6 +22,7 @@ This repo includes the MacOS version of Bitcoin-*Standup*, which allows you to r
 
 For more information on *Bitcoin-Standup*:
 
+1. [Using *Bitcoin-Standup*](Docs/Using-Standup.md) provides basic description of functions and some FAQs.
 1. [How *Bitcoin-Standup* MacOS Works](Docs/How-it-works.md) describes the specifics of what *Bitcoin-Standup* does.
 2. The [Main *Bitcoin-Standup* Repo](https://github.com/BlockchainCommons/Bitcoin-Standup) contains general information on the project.
 
