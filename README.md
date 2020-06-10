@@ -1,6 +1,6 @@
 # 🛠 Bitcoin-Standup MacOS
 
-*Bitcoin-Standup* is a open source project and a suite of tools that helps users to install a [Bitcoin-Core](https://bitcoin.org/) full-node on a fresh computer or VPS and to add important privacy tools like onion services. It will eventually also support optional Bitcoin-related tools like [Electrum Personal Server](https://github.com/chris-belcher/electrum-personal-server), [C-Lightning](https://github.com/ElementsProject/lightning), [Esplora](https://github.com/Blockstream/esplora), and [BTCPay Server](https://github.com/btcpayserver/btcpayserver) as well as emerging technologies like Bitcoin-based Decentralized Identifiers. *Bitcoin-Standup* strives to provide the community with an easy to use "one-click" set up full-node complete with a purpose built remote app for securely connecting to your node over Tor from anywhere in the world, providing you with a powerful suite of tools.
+*Bitcoin-Standup* is a open source project and a suite of tools that helps users to install a [Bitcoin-Core](https://bitcoin.org/) full-node on a fresh computer or VPS and to add important privacy tools like onion services. It will eventually also support optional Bitcoin-related tools like [Electrum Personal Server](https://github.com/chris-belcher/electrum-personal-server), [C-Lightning](https://github.com/ElementsProject/lightning), [Esplora](https://github.com/Blockstream/esplora), and [BTCPay Server](https://github.com/btcpayserver/btcpayserver) as well as emerging technologies like Bitcoin-based Decentralized Identifiers. *Bitcoin-Standup* strives to provide the community with an easy-to-use "one-click" setup for a full node, complete with a purpose-built remote app for securely connecting to your node over Tor from anywhere in the world, providing you with a powerful suite of tools.
 
 This tool will also harden and secure your OS to current best practices and will add sufficient system tools to support basic Bitcoin development. After setup, *Bitcoin-Standup* will present a QR code and/or special URI that can be used to securely link your full-node to other devices, such as a remote desktop or a mobile phone using [FullyNoded 2](https://testflight.apple.com/join/OQHyL0a8) or [Fully Noded 1](https://github.com/FontaineDenton/iOS/FullyNoded) on iOS.
 
@@ -22,6 +22,7 @@ This repo includes the MacOS version of Bitcoin-*Standup*, which allows you to r
 
 For more information on *Bitcoin-Standup*:
 
+1. [Using *Bitcoin-Standup*](Docs/Using-Standup.md) provides basic description of functions and some FAQs.
 1. [How *Bitcoin-Standup* MacOS Works](Docs/How-it-works.md) describes the specifics of what *Bitcoin-Standup* does.
 2. The [Main *Bitcoin-Standup* Repo](https://github.com/BlockchainCommons/Bitcoin-Standup) contains general information on the project.
 
@@ -31,13 +32,13 @@ For more information on *Bitcoin-Standup*:
 
 ## Installation Instructions
 
-You must meet minimum OS and space requirements to install *Bitcoin-Standup* on your Mac.
+You must meet minimum OS and space requirements to install *Bitcoin-Standup* on your Mac, as described below.     
 
-- Navigate to [Standup_0.0.2.dmg](./Standup_0.0.2.dmg)
+- Navigate to [Standup_0.1.1.dmg](./Standup_0.1.1.dmg)
 - Click `download`
-- Double click the downloaded `Standup_0.0.2.dmg` file, thats it.
+- Double click the downloaded `Standup_0.1.1.dmg` file. That's it.
 
-`Standup_0.0.2.dmg` has been pgp signed, the pgp signature can be viewed [here](/Docs/signed-dmg), the format of the signed filename is `<the_signed_filename>.<signing_git_username>.<signing_pgp_key>.asc`.
+`Standup_0.1.1.dmg` has been pgp signed, the pgp signature can be viewed [here](/Docs/signed-dmg), the format of the signed filename is `<the_signed_filename>.<signing_git_username>.<signing_pgp_key>.asc`.
 
 ### Build Mac App from source using Xcode
 
@@ -45,9 +46,16 @@ Instead of downloading binaries through our Github repo, you can build *Bitcoin-
 
 1. Install [*Xcode*](https://itunes.apple.com/id/app/xcode/id497799835?mt=12).
 2.  [Create](https://developer.apple.com/programs/enroll/) a free Apple developer account.
-3. In *XCode*, click "XCode" > "preferences" > "Accounts" > add your GitHub account.
-4. On the GitHub repo, click "Clone and Download" > "Open in XCode".
+3. Link your GitHub account
+   - In *XCode*, click "XCode" > "preferences" and choose the "Accounts" tab.
+   - Click "+" to link a new account.
+   - Choose "GitHub".
+   - Enter your GitHub credentials.
+4. On [this GitHub repo](https://github.com/BlockchainCommons/Bitcoin-Standup-MacOS), click "Clone and Download" > "Open in XCode".
+   - If "Open in XCode" does not show up as an option, try refreshing your browser's view of the GitHub repo
+   - If that doesn't work, you can instead download a clone via "Source Control > Clone" within XCode.
 5. When *XCode* launches, press the "play" button in the top left.
+   - If you had to download the clone by hand from within XCode, you'll likely need to navigate to the `xcodeproj` file in the `Xcode` directory.
 
 ### Dependencies
 
