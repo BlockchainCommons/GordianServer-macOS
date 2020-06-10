@@ -1,8 +1,8 @@
-# Using Bitcoin Standup
+# Using Bitcoin-Standup
 
 *Bitcoin-Standup* installs Bitcoin Core and Tor on your system. The following description of functions and FAQs can provide additional insight into using the system.
 
-## Bitcoin Standup Functions
+## Bitcoin-Standup Functions
 
 *Adding Tor Public Keys.* Shortly after installing *Standup*, you will be prompted to add a Tor public key. This will allow you to connect to *Standup* from an authorized client. The Tor public key can be retrieved from the client that you are using. For example, if you are using [FullyNoded 2](https://github.com/BlockchainCommons/FullyNoded-2), there is an "Export Tor V3 Authentication Public Key" option under its settings page. Your can later add addition public keys using the "Add" button to the right of the screen.
 
@@ -12,7 +12,7 @@
 
 *Changing Settings.* The gear icons at the top of the *Standup* screen give you access to Settings. Options allow you to change some `bitcoin.conf` settings, to shut down *Standup*, and to look at your logs.
 
-## Bitcoin Standup FAQs
+## Bitcoin-Standup FAQs
 
 ### How Do I Change the Location of My Data?
 
