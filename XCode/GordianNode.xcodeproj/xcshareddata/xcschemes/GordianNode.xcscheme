@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D0BCB32E236A6D22000D8FDE"
-               BuildableName = "StandUp.app"
-               BlueprintName = "StandUp"
-               ReferencedContainer = "container:StandUp.xcodeproj">
+               BuildableName = "GordianNode.app"
+               BlueprintName = "GordianNode"
+               ReferencedContainer = "container:GordianNode.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D0BCB340236A6D28000D8FDE"
-               BuildableName = "StandUpTests.xctest"
-               BlueprintName = "StandUpTests"
-               ReferencedContainer = "container:StandUp.xcodeproj">
+               BuildableName = "GordianNodeTests.xctest"
+               BlueprintName = "GordianNodeTests"
+               ReferencedContainer = "container:GordianNode.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D0BCB34B236A6D28000D8FDE"
-               BuildableName = "StandUpUITests.xctest"
-               BlueprintName = "StandUpUITests"
-               ReferencedContainer = "container:StandUp.xcodeproj">
+               BuildableName = "GordianNodeUITests.xctest"
+               BlueprintName = "GordianNodeUITests"
+               ReferencedContainer = "container:GordianNode.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -65,9 +65,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D0BCB32E236A6D22000D8FDE"
-            BuildableName = "StandUp.app"
-            BlueprintName = "StandUp"
-            ReferencedContainer = "container:StandUp.xcodeproj">
+            BuildableName = "GordianNode.app"
+            BlueprintName = "GordianNode"
+            ReferencedContainer = "container:GordianNode.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -82,9 +82,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D0BCB32E236A6D22000D8FDE"
-            BuildableName = "StandUp.app"
-            BlueprintName = "StandUp"
-            ReferencedContainer = "container:StandUp.xcodeproj">
+            BuildableName = "GordianNode.app"
+            BlueprintName = "GordianNode"
+            ReferencedContainer = "container:GordianNode.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

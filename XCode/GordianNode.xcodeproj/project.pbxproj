@@ -157,17 +157,17 @@
 		D0B927872384E2D400956651 /* GetHostname.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = GetHostname.command; sourceTree = "<group>"; };
 		D0B927892384E54900956651 /* RemoveBitcoin.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = RemoveBitcoin.command; sourceTree = "<group>"; };
 		D0B9278B2385045400956651 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
-		D0BCB32F236A6D22000D8FDE /* StandUp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StandUp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D0BCB32F236A6D22000D8FDE /* GordianNode.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GordianNode.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0BCB332236A6D22000D8FDE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D0BCB334236A6D22000D8FDE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		D0BCB336236A6D27000D8FDE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D0BCB339236A6D27000D8FDE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D0BCB33B236A6D27000D8FDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D0BCB33C236A6D27000D8FDE /* StandUp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StandUp.entitlements; sourceTree = "<group>"; };
-		D0BCB341236A6D28000D8FDE /* StandUpTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StandUpTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D0BCB33C236A6D27000D8FDE /* GordianNode.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GordianNode.entitlements; sourceTree = "<group>"; };
+		D0BCB341236A6D28000D8FDE /* GordianNodeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GordianNodeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0BCB345236A6D28000D8FDE /* StandUpTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandUpTests.swift; sourceTree = "<group>"; };
 		D0BCB347236A6D28000D8FDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D0BCB34C236A6D28000D8FDE /* StandUpUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StandUpUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D0BCB34C236A6D28000D8FDE /* GordianNodeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GordianNodeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0BCB350236A6D28000D8FDE /* StandUpUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandUpUITests.swift; sourceTree = "<group>"; };
 		D0BCB352236A6D28000D8FDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D0DCD8E5236ACC9E00F2D15A /* ScriptEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptEnum.swift; sourceTree = "<group>"; };
@@ -306,9 +306,9 @@
 		D0BCB326236A6D22000D8FDE = {
 			isa = PBXGroup;
 			children = (
-				D0BCB331236A6D22000D8FDE /* StandUp */,
-				D0BCB344236A6D28000D8FDE /* StandUpTests */,
-				D0BCB34F236A6D28000D8FDE /* StandUpUITests */,
+				D0BCB331236A6D22000D8FDE /* GordianNode */,
+				D0BCB344236A6D28000D8FDE /* GordianNodeTests */,
+				D0BCB34F236A6D28000D8FDE /* GordianNodeUITests */,
 				D0BCB330236A6D22000D8FDE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -316,14 +316,14 @@
 		D0BCB330236A6D22000D8FDE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D0BCB32F236A6D22000D8FDE /* StandUp.app */,
-				D0BCB341236A6D28000D8FDE /* StandUpTests.xctest */,
-				D0BCB34C236A6D28000D8FDE /* StandUpUITests.xctest */,
+				D0BCB32F236A6D22000D8FDE /* GordianNode.app */,
+				D0BCB341236A6D28000D8FDE /* GordianNodeTests.xctest */,
+				D0BCB34C236A6D28000D8FDE /* GordianNodeUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		D0BCB331236A6D22000D8FDE /* StandUp */ = {
+		D0BCB331236A6D22000D8FDE /* GordianNode */ = {
 			isa = PBXGroup;
 			children = (
 				D0A871CD237E4B81006033C9 /* Images */,
@@ -332,31 +332,31 @@
 				D0BCB336236A6D27000D8FDE /* Assets.xcassets */,
 				D0BCB338236A6D27000D8FDE /* Main.storyboard */,
 				D0BCB33B236A6D27000D8FDE /* Info.plist */,
-				D0BCB33C236A6D27000D8FDE /* StandUp.entitlements */,
+				D0BCB33C236A6D27000D8FDE /* GordianNode.entitlements */,
 				D0EBC03223791DEA008302D2 /* Enums */,
 				D099F3362375914300AC0EF6 /* Scripts */,
 				D0EBC03323791DFF008302D2 /* Helpers */,
 				D0B927762383AE4900956651 /* JSON */,
 			);
-			path = StandUp;
+			path = GordianNode;
 			sourceTree = "<group>";
 		};
-		D0BCB344236A6D28000D8FDE /* StandUpTests */ = {
+		D0BCB344236A6D28000D8FDE /* GordianNodeTests */ = {
 			isa = PBXGroup;
 			children = (
 				D0BCB345236A6D28000D8FDE /* StandUpTests.swift */,
 				D0BCB347236A6D28000D8FDE /* Info.plist */,
 			);
-			path = StandUpTests;
+			path = GordianNodeTests;
 			sourceTree = "<group>";
 		};
-		D0BCB34F236A6D28000D8FDE /* StandUpUITests */ = {
+		D0BCB34F236A6D28000D8FDE /* GordianNodeUITests */ = {
 			isa = PBXGroup;
 			children = (
 				D0BCB350236A6D28000D8FDE /* StandUpUITests.swift */,
 				D0BCB352236A6D28000D8FDE /* Info.plist */,
 			);
-			path = StandUpUITests;
+			path = GordianNodeUITests;
 			sourceTree = "<group>";
 		};
 		D0EBC03223791DEA008302D2 /* Enums */ = {
@@ -382,9 +382,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D0BCB32E236A6D22000D8FDE /* StandUp */ = {
+		D0BCB32E236A6D22000D8FDE /* GordianNode */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D0BCB355236A6D28000D8FDE /* Build configuration list for PBXNativeTarget "StandUp" */;
+			buildConfigurationList = D0BCB355236A6D28000D8FDE /* Build configuration list for PBXNativeTarget "GordianNode" */;
 			buildPhases = (
 				D0BCB32B236A6D22000D8FDE /* Sources */,
 				D0BCB32C236A6D22000D8FDE /* Frameworks */,
@@ -394,14 +394,14 @@
 			);
 			dependencies = (
 			);
-			name = StandUp;
+			name = GordianNode;
 			productName = StandUp;
-			productReference = D0BCB32F236A6D22000D8FDE /* StandUp.app */;
+			productReference = D0BCB32F236A6D22000D8FDE /* GordianNode.app */;
 			productType = "com.apple.product-type.application";
 		};
-		D0BCB340236A6D28000D8FDE /* StandUpTests */ = {
+		D0BCB340236A6D28000D8FDE /* GordianNodeTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D0BCB358236A6D28000D8FDE /* Build configuration list for PBXNativeTarget "StandUpTests" */;
+			buildConfigurationList = D0BCB358236A6D28000D8FDE /* Build configuration list for PBXNativeTarget "GordianNodeTests" */;
 			buildPhases = (
 				D0BCB33D236A6D28000D8FDE /* Sources */,
 				D0BCB33E236A6D28000D8FDE /* Frameworks */,
@@ -412,14 +412,14 @@
 			dependencies = (
 				D0BCB343236A6D28000D8FDE /* PBXTargetDependency */,
 			);
-			name = StandUpTests;
+			name = GordianNodeTests;
 			productName = StandUpTests;
-			productReference = D0BCB341236A6D28000D8FDE /* StandUpTests.xctest */;
+			productReference = D0BCB341236A6D28000D8FDE /* GordianNodeTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		D0BCB34B236A6D28000D8FDE /* StandUpUITests */ = {
+		D0BCB34B236A6D28000D8FDE /* GordianNodeUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D0BCB35B236A6D28000D8FDE /* Build configuration list for PBXNativeTarget "StandUpUITests" */;
+			buildConfigurationList = D0BCB35B236A6D28000D8FDE /* Build configuration list for PBXNativeTarget "GordianNodeUITests" */;
 			buildPhases = (
 				D0BCB348236A6D28000D8FDE /* Sources */,
 				D0BCB349236A6D28000D8FDE /* Frameworks */,
@@ -430,9 +430,9 @@
 			dependencies = (
 				D0BCB34E236A6D28000D8FDE /* PBXTargetDependency */,
 			);
-			name = StandUpUITests;
+			name = GordianNodeUITests;
 			productName = StandUpUITests;
-			productReference = D0BCB34C236A6D28000D8FDE /* StandUpUITests.xctest */;
+			productReference = D0BCB34C236A6D28000D8FDE /* GordianNodeUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -458,7 +458,7 @@
 					};
 				};
 			};
-			buildConfigurationList = D0BCB32A236A6D22000D8FDE /* Build configuration list for PBXProject "StandUp" */;
+			buildConfigurationList = D0BCB32A236A6D22000D8FDE /* Build configuration list for PBXProject "GordianNode" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -471,9 +471,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D0BCB32E236A6D22000D8FDE /* StandUp */,
-				D0BCB340236A6D28000D8FDE /* StandUpTests */,
-				D0BCB34B236A6D28000D8FDE /* StandUpUITests */,
+				D0BCB32E236A6D22000D8FDE /* GordianNode */,
+				D0BCB340236A6D28000D8FDE /* GordianNodeTests */,
+				D0BCB34B236A6D28000D8FDE /* GordianNodeUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -604,12 +604,12 @@
 /* Begin PBXTargetDependency section */
 		D0BCB343236A6D28000D8FDE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = D0BCB32E236A6D22000D8FDE /* StandUp */;
+			target = D0BCB32E236A6D22000D8FDE /* GordianNode */;
 			targetProxy = D0BCB342236A6D28000D8FDE /* PBXContainerItemProxy */;
 		};
 		D0BCB34E236A6D28000D8FDE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = D0BCB32E236A6D22000D8FDE /* StandUp */;
+			target = D0BCB32E236A6D22000D8FDE /* GordianNode */;
 			targetProxy = D0BCB34D236A6D28000D8FDE /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -743,14 +743,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = StandUp/StandUp.entitlements;
+				CODE_SIGN_ENTITLEMENTS = GordianNode/GordianNode.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 0.1.1;
 				DEVELOPMENT_TEAM = YZHG975W3A;
 				ENABLE_HARDENED_RUNTIME = YES;
-				INFOPLIST_FILE = StandUp/Info.plist;
+				INFOPLIST_FILE = GordianNode/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -767,14 +767,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = StandUp/StandUp.entitlements;
+				CODE_SIGN_ENTITLEMENTS = GordianNode/GordianNode.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 0.1.1;
 				DEVELOPMENT_TEAM = YZHG975W3A;
 				ENABLE_HARDENED_RUNTIME = YES;
-				INFOPLIST_FILE = StandUp/Info.plist;
+				INFOPLIST_FILE = GordianNode/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -805,7 +805,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.fontaine.StandUpTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/StandUp.app/Contents/MacOS/StandUp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GordianNode.app/Contents/MacOS/GordianNode";
 			};
 			name = Debug;
 		};
@@ -827,7 +827,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.fontaine.StandUpTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/StandUp.app/Contents/MacOS/StandUp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GordianNode.app/Contents/MacOS/GordianNode";
 			};
 			name = Release;
 		};
@@ -874,7 +874,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		D0BCB32A236A6D22000D8FDE /* Build configuration list for PBXProject "StandUp" */ = {
+		D0BCB32A236A6D22000D8FDE /* Build configuration list for PBXProject "GordianNode" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D0BCB353236A6D28000D8FDE /* Debug */,
@@ -883,7 +883,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D0BCB355236A6D28000D8FDE /* Build configuration list for PBXNativeTarget "StandUp" */ = {
+		D0BCB355236A6D28000D8FDE /* Build configuration list for PBXNativeTarget "GordianNode" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D0BCB356236A6D28000D8FDE /* Debug */,
@@ -892,7 +892,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D0BCB358236A6D28000D8FDE /* Build configuration list for PBXNativeTarget "StandUpTests" */ = {
+		D0BCB358236A6D28000D8FDE /* Build configuration list for PBXNativeTarget "GordianNodeTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D0BCB359236A6D28000D8FDE /* Debug */,
@@ -901,7 +901,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D0BCB35B236A6D28000D8FDE /* Build configuration list for PBXNativeTarget "StandUpUITests" */ = {
+		D0BCB35B236A6D28000D8FDE /* Build configuration list for PBXNativeTarget "GordianNodeUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D0BCB35C236A6D28000D8FDE /* Debug */,
