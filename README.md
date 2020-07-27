@@ -24,7 +24,7 @@ This repo includes *GordianNode-macOS*, which allows you to run a full node and 
 
 For more information on *GordianNode-macOS*:
 
-1. [Using *GordianNode* macOS](Docs/Using-GordianNode.md) provides basic description of functions and some FAQs.
+1. [Using *GordianNode* macOS](Docs/Using-GordianNode-macOS.md) provides basic description of functions and some FAQs.
 1. [How *GordianNode* macOS Works](Docs/How-it-works.md) describes the specifics of what *GordianNode-macOS* does.
 2. The [Main *GordianSystem* Repo](https://github.com/BlockchainCommons/GordianSystem) contains general information on the project.
 
