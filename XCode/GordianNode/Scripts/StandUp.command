@@ -16,10 +16,6 @@ function installBitcoin () {
   echo "Downloading $SHA_URL"
   curl $SHA_URL -o ~/StandUp/BitcoinCore/SHA256SUMS.asc -s
   echo "Saved to ~/StandUp/BitcoinCore/SHA256SUMS.asc"
-
-  echo "Downloading Laanwj PGP signature from https://bitcoincore.org/laanwj-releases.asc..."
-  curl https://bitcoincore.org/laanwj-releases.asc -o ~/StandUp/BitcoinCore/laanwj-releases.asc -s
-  echo "Saved to ~/StandUp/BitcoinCore/laanwj-releases.asc"
   
   echo "Downloading Bitcoin Core $VERSION from $MACOS_URL"
   cd ~/StandUp/BitcoinCore
@@ -42,6 +38,7 @@ function installBitcoin () {
   else
 
     echo "Signatures do not match! Terminating..."
+    exit 1
     
   fi
   
@@ -104,6 +101,7 @@ function installTor () {
   echo "Congratulations you are now StoodUp!\nClick the back button if this screen does not dismiss automatically"
   echo "Starting Tor as a service (it will automatically start every time you turn on your computer).."
   sudo -u $(whoami) /usr/local/bin/brew services start tor
+  exit 1
   
 }
 
@@ -137,5 +135,3 @@ else
   fi
   
 fi
-
-exit 1

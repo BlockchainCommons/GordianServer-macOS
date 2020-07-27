@@ -8,7 +8,7 @@ E-Mail: `$email`
 
 Legal Jurisdiction: Wyoming, United States of America
 
-Project: https://github.com/BlockchainCommons/Bitcoin-StandUp-MacOS
+Project: https://github.com/BlockchainCommons/GordianNode-macOS
 
 Date: `$date`
 
