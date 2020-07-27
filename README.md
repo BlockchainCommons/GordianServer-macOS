@@ -1,12 +1,12 @@
 # 🛠 GordianNode - macOS
 
-*(Was known as Bitcoin-Standup-MacOS, updates to rename still in progress)*
+*(Was known as Bitcoin-Standup-macOS, updates to rename still in progress)*
 
-**_GordianNode - macOS_** is a open source project and a suite of tools that helps users to install a [Bitcoin-Core](https://bitcoin.org/) full-node on a fresh computer or VPS and to add important privacy tools like onion services. It will eventually also support optional Bitcoin-related tools like [Electrum Personal Server](https://github.com/chris-belcher/electrum-personal-server), [C-Lightning](https://github.com/ElementsProject/lightning), [Esplora](https://github.com/Blockstream/esplora), and [BTCPay Server](https://github.com/btcpayserver/btcpayserver) as well as emerging technologies like Bitcoin-based Decentralized Identifiers. *Bitcoin-Standup* strives to provide the community with an easy-to-use "one-click" setup for a full node, complete with a purpose-built remote app for securely connecting to your node over Tor from anywhere in the world, providing you with a powerful suite of tools.
+**_GordianNode - macOS_** is a open source project and a suite of tools that helps users to install a [Bitcoin-Core](https://bitcoin.org/) full-node on a fresh computer or VPS and to add important privacy tools like onion services. It will eventually also support optional Bitcoin-related tools like [Electrum Personal Server](https://github.com/chris-belcher/electrum-personal-server), [C-Lightning](https://github.com/ElementsProject/lightning), [Esplora](https://github.com/Blockstream/esplora), and [BTCPay Server](https://github.com/btcpayserver/btcpayserver) as well as emerging technologies like Bitcoin-based Decentralized Identifiers. *GordianNode-macOS* strives to provide the community with an easy-to-use "one-click" setup for a full node, complete with a purpose-built remote app for securely connecting to your node over Tor from anywhere in the world, providing you with a powerful suite of tools.
 
-This tool will also harden and secure your OS to current best practices and will add sufficient system tools to support basic Bitcoin development. After setup, *Bitcoin-Standup* will present a QR code and/or special URI that can be used to securely link your full-node to other devices, such as a remote desktop or a mobile phone using [FullyNoded 2](https://testflight.apple.com/join/OQHyL0a8) or [Fully Noded 1](https://github.com/FontaineDenton/iOS/FullyNoded) on iOS.
+This tool will also harden and secure your OS to current best practices and will add sufficient system tools to support basic Bitcoin development. After setup, *GordianNode-macOS* will present a QR code and/or special URI that can be used to securely link your full-node to other devices, such as a remote desktop or a mobile phone using [Gordian Wallet 2](https://testflight.apple.com/join/OQHyL0a8) or [Fully Noded](https://apps.apple.com/us/app/fully-noded/id1436425586) on iOS.
 
-This repo includes the MacOS version of Bitcoin-*Standup*, which allows you to run a full node on your Mac computer.
+This repo includes the *GordianNode-macOS*, which allows you to run a full node and Tor on your Mac computer.
 
 <img src="./Images/1_standup.png" alt="" width="800"/> 
 
@@ -22,29 +22,29 @@ This repo includes the MacOS version of Bitcoin-*Standup*, which allows you to r
 
 ## Additional Information
 
-For more information on *Bitcoin-Standup*:
+For more information on *GordianNode-macOS*:
 
-1. [Using *Bitcoin-Standup*](Docs/Using-Standup.md) provides basic description of functions and some FAQs.
-1. [How *Bitcoin-Standup* MacOS Works](Docs/How-it-works.md) describes the specifics of what *Bitcoin-Standup* does.
-2. The [Main *Bitcoin-Standup* Repo](https://github.com/BlockchainCommons/Bitcoin-Standup) contains general information on the project.
+1. [Using *GordianNode-macOS*](Docs/Using-Standup.md) provides basic description of functions and some FAQs.
+1. [How *GordianNode-macOS* macOS Works](Docs/How-it-works.md) describes the specifics of what *GordianNode-macOS* does.
+2. The [Main *GordianSystem* Repo](https://github.com/BlockchainCommons/GordianSystem) contains general information on the project.
 
 ## Status — Work-in-Progress
 
-*Bitcoin-Standup* is an early **Work-In-Progress**, so that we can prototype, discover additional requirements, and get feedback from the broader Bitcoin-Core Developer Community. ***It has not yet been peer-reviewed or audited. It is not yet ready for production uses. Use at your own risk.***
+*GordianNode-macOS* is an early **Work-In-Progress**, so that we can prototype, discover additional requirements, and get feedback from the broader Bitcoin-Core Developer Community. ***It has not yet been peer-reviewed or audited. It is not yet ready for production uses. Use at your own risk.***
 
 ## Installation Instructions
 
-You must meet minimum OS and space requirements to install *Bitcoin-Standup* on your Mac, as described below.     
+You must meet minimum OS and space requirements to install *GordianNode-macOS* on your Mac, as described below.     
 
-- Navigate to [Standup_0.1.1.dmg](./Standup_0.1.1.dmg)
+- Navigate to [GordianNode_0.1.1.dmg](./GordianNode_0.1.1.dmg)
 - Click `download`
-- Double click the downloaded `Standup_0.1.1.dmg` file. That's it.
+- Double click the downloaded `GordianNode_0.1.1.dmg` file. That's it.
 
-`Standup_0.1.1.dmg` has been pgp signed, the pgp signature can be viewed [here](/Docs/signed-dmg), the format of the signed filename is `<the_signed_filename>.<signing_git_username>.<signing_pgp_key>.asc`.
+`GordianNode_0.1.1.dmg` has been pgp signed, the pgp signature can be viewed [here](/Docs/signed-dmg), the format of the signed filename is `<the_signed_filename>.<signing_git_username>.<signing_pgp_key>.asc`.
 
 ### Build Mac App from source using Xcode
 
-Instead of downloading binaries through our Github repo, you can build *Bitcoin-Standup* by hand using Apple's *Xcode*.
+Instead of downloading binaries through our Github repo, you can build *GordianNode-macOS* by hand using Apple's *Xcode*.
 
 1. Install [*Xcode*](https://itunes.apple.com/id/app/xcode/id497799835?mt=12).
 2.  [Create](https://developer.apple.com/programs/enroll/) a free Apple developer account.
@@ -53,7 +53,7 @@ Instead of downloading binaries through our Github repo, you can build *Bitcoin-
    - Click "+" to link a new account.
    - Choose "GitHub".
    - Enter your GitHub credentials.
-4. On [this GitHub repo](https://github.com/BlockchainCommons/Bitcoin-Standup-MacOS), click "Clone and Download" > "Open in XCode".
+4. On [this GitHub repo](https://github.com/BlockchainCommons/GordianNode-macOS), click "Clone and Download" > "Open in XCode".
    - If "Open in XCode" does not show up as an option, try refreshing your browser's view of the GitHub repo
    - If that doesn't work, you can instead download a clone via "Source Control > Clone" within XCode.
 5. When *XCode* launches, press the "play" button in the top left.
@@ -63,17 +63,17 @@ Instead of downloading binaries through our Github repo, you can build *Bitcoin-
 
 - macOS v10.15 Catalina (may work on earlier versions, not tested yet)
 - ~320 GB of free space for a full mainnet node with txindex; or ~30 GB for a full testnet3 node; or substantially less if the full node is pruned.
-- In order to install *Bitcoin Core* and *Tor* on your behalf, *Standup* uses *Brew* and *XCode Command Line Tools*, these will be automatically downloaded and installed for you within the app using a popular well reviewed open sourced script called *Strap*, you can read more about *Strap* [here](https://github.com/MikeMcQuaid/strap/blob/master/README.md). In addition to installing *Brew* and *XCode Command Line Tools*, *Strap* also sets up your Macbook for best security practices; including full disc encryption with *FileVault*, enables *MacOS Firewall* and disables *Java* for better security among others.
+- In order to install *Bitcoin Core* and *Tor* on your behalf, *GordianNode-macOS* uses *Brew* and *XCode Command Line Tools*, these will be automatically downloaded and installed for you within the app using a popular well reviewed open sourced script called *Strap*, you can read more about *Strap* [here](https://github.com/MikeMcQuaid/strap/blob/master/README.md). In addition to installing *Brew* and *XCode Command Line Tools*, *Strap* also sets up your Macbook for best security practices; including full disc encryption with *FileVault*, enables *macOS Firewall* and disables *Java* for better security among others.
 
 ### After Installation
 
-Once the app has completely installed (by either method) and once it has launched *Bitcoin Core*, it will present a *Quick Connect QR code* that can be used to securely link your full node remotely over Tor to other devices, such as the iOS application [FullyNoded 2](https://github.com/BlockchainCommons/FullyNoded-2). *Standup* allows you to run all three Bitcoin networks (`mainnet`, `testnet` and `regtest`) simultaneously via its user interface. *Standup* will present an independent *Quick Connect QR code* for each network so that you may remotely connect to and utilize each. 
+Once the app has completely installed (by either method) and once it has launched *Bitcoin Core*, it will present a *Quick Connect QR code* that can be used to securely link your full node remotely over Tor to other devices, such as the iOS application [GordianWallet](https://github.com/BlockchainCommons/GordianWallet-iOS). *Standup* allows you to run all three Bitcoin networks (`mainnet`, `testnet` and `regtest`) simultaneously via its user interface. *GordianNode-macOS* will present an independent *Quick Connect QR code* for each network so that you may remotely connect to and utilize each. 
 
 ## Financial Support
 
-*Bitcoin-Standup* is a project of [Blockchain Commons](https://www.blockchaincommons.com/). We are proudly a "not-for-profit" social benefit corporation committed to open source & open development. Our work is funded entirely by donations and collaborative partnerships with people like you. Every contribution will be spent on building open tools, technologies, and techniques that sustain and advance blockchain and internet security infrastructure and promote an open web.
+*GordianNode-macOS* is a project of [Blockchain Commons](https://www.blockchaincommons.com/). We are proudly a "not-for-profit" social benefit corporation committed to open source & open development. Our work is funded entirely by donations and collaborative partnerships with people like you. Every contribution will be spent on building open tools, technologies, and techniques that sustain and advance blockchain and internet security infrastructure and promote an open web.
 
-To financially support further development of *Bitcoin-Standup* and other projects, please consider becoming a Patron of Blockchain Commons through ongoing monthly patronage as a [GitHub Sponsor](https://github.com/sponsors/BlockchainCommons). You can also support Blockchain Commons with bitcoins at our [BTCPay Server](https://btcpay.blockchaincommons.com/).
+To financially support further development of *GordianNode-macOS* and other projects, please consider becoming a Patron of Blockchain Commons through ongoing monthly patronage as a [GitHub Sponsor](https://github.com/sponsors/BlockchainCommons). You can also support Blockchain Commons with bitcoins at our [BTCPay Server](https://btcpay.blockchaincommons.com/).
 
 ## Contributing
 

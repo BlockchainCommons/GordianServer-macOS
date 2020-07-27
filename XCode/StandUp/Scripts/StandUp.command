@@ -16,10 +16,6 @@ function installBitcoin () {
   echo "Downloading $SHA_URL"
   curl $SHA_URL -o ~/StandUp/BitcoinCore/SHA256SUMS.asc -s
   echo "Saved to ~/StandUp/BitcoinCore/SHA256SUMS.asc"
-
-  echo "Downloading Laanwj PGP signature from https://bitcoincore.org/laanwj-releases.asc..."
-  curl https://bitcoincore.org/laanwj-releases.asc -o ~/StandUp/BitcoinCore/laanwj-releases.asc -s
-  echo "Saved to ~/StandUp/BitcoinCore/laanwj-releases.asc"
   
   echo "Downloading Bitcoin Core $VERSION from $MACOS_URL"
   cd ~/StandUp/BitcoinCore
