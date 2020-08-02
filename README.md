@@ -1,12 +1,12 @@
-# 🛠 GordianNode-macOS
+# 🛠 GordianServer-macOS
 
 *(Previously known as Bitcoin-Standup-macOS.)*
 
-**_GordianNode-macOS_** is a open-source project and a suite of tools that uses Bitcoin Standup to install a [Bitcoin-Core](https://bitcoin.org/) full-node on a fresh MacOS computer or VPS and to add important privacy tools like onion services. It will also harden and secure your OS to current best practices and will add sufficient system tools to support basic Bitcoin development.  It will eventually also support optional Bitcoin-related tools like [Electrum Personal Server](https://github.com/chris-belcher/electrum-personal-server), [C-Lightning](https://github.com/ElementsProject/lightning), [Esplora](https://github.com/Blockstream/esplora), and [BTCPay Server](https://github.com/btcpayserver/btcpayserver) as well as emerging technologies like Bitcoin-based Decentralized Identifiers. *GordianNode-macOS* strives to provide the community with an easy-to-use "one-click" setup for a full node, complete with a purpose-built remote app for securely connecting to your node over Tor from anywhere in the world, providing you with a powerful suite of tools.
+**_GordianServer-macOS_** is a open-source project and a suite of tools that uses Bitcoin Standup to install a [Bitcoin-Core](https://bitcoin.org/) full-node on a fresh MacOS computer or VPS and to add important privacy tools like onion services. It will also harden and secure your OS to current best practices and will add sufficient system tools to support basic Bitcoin development.  It will eventually also support optional Bitcoin-related tools like [Electrum Personal Server](https://github.com/chris-belcher/electrum-personal-server), [C-Lightning](https://github.com/ElementsProject/lightning), [Esplora](https://github.com/Blockstream/esplora), and [BTCPay Server](https://github.com/btcpayserver/btcpayserver) as well as emerging technologies like Bitcoin-based Decentralized Identifiers. *GordianNode-macOS* strives to provide the community with an easy-to-use "one-click" setup for a full node, complete with a purpose-built remote app for securely connecting to your node over Tor from anywhere in the world, providing you with a powerful suite of tools.
 
 *GordianNode* is part of the [GordianSystem](https://github.com/BlockchainCommons/GordianSystem). After setup, it will present a QR code and/or special URI that can be used to securely link your full-node to other devices, such as a remote desktop or a mobile phone using [GordianWallet](https://testflight.apple.com/join/OQHyL0a8) or [Fully Noded](https://apps.apple.com/us/app/fully-noded/id1436425586) on iOS.
 
-This repo includes *GordianNode-macOS*, which allows you to run a full node and Tor on your macOS computer.
+This repo includes *GordianServer-macOS*, which allows you to run a full node and Tor on your macOS computer.
 
 <img src="./Images/1_standup.png" alt="" width="800"/> 
 
