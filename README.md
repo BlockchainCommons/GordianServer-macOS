@@ -37,11 +37,11 @@ For more information on *GordianServer-macOS*:
 You must meet minimum OS and space requirements to install *GordianServer-macOS* on your Mac, as described below.     
 
 - minimum macOS 10.10 Yosemite (not yet tested on versions older then Mojave but it should work)
-- Navigate to [GordianServer_0.1.1.dmg](./GordianNode_0.1.1.dmg)
+- Navigate to [GordianServer-macOS-v0.1.2.dmg](./GordianServer-macOS-v0.1.2.dmg)
 - Click `download`
-- Double click the downloaded `GordianNode_0.1.1.dmg` file. That's it.
+- Double click the downloaded `GordianServer-macOS-v0.1.2.dmg` file. That's it.
 
-`GordianNode_0.1.1.dmg` has been pgp signed, the pgp signature can be viewed [here](/Docs/signed-dmg), the format of the signed filename is `<the_signed_filename>.<signing_git_username>.<signing_pgp_key>.asc`.
+`GordianServer-macOS-v0.1.2.dmg` has been pgp signed, the pgp signature can be viewed [here](./GordianServer-macOS-v0.1.2.dmg.fonta1n3.3B3797FA0AE84BE5B4406591856401D7121C32FC.asc), the format of the signed filename is `<the_signed_filename>.<signing_git_username>.<signing_pgp_key>.asc`.
 
 ### Build Mac App from source using Xcode
 
@@ -50,19 +50,19 @@ Instead of downloading binaries through our Github repo, you can build *GordianS
 1. Install [*Xcode*](https://itunes.apple.com/id/app/xcode/id497799835?mt=12).
 2.  [Create](https://developer.apple.com/programs/enroll/) a free Apple developer account.
 3. Link your GitHub account
-   - In *XCode*, click "XCode" > "preferences" and choose the "Accounts" tab.
+   - In *Xcode*, click "Xcode" > "preferences" and choose the "Accounts" tab.
    - Click "+" to link a new account.
    - Choose "GitHub".
    - Enter your GitHub credentials.
-4. On [this GitHub repo](https://github.com/BlockchainCommons/GordianServer-macOS), click "Clone and Download" > "Open in XCode".
-   - If "Open in XCode" does not show up as an option, try refreshing your browser's view of the GitHub repo
+4. On [this GitHub repo](https://github.com/BlockchainCommons/GordianServer-macOS), click "Clone and Download" > "Open in Xcode".
+   - If "Open in Xcode" does not show up as an option, try refreshing your browser's view of the GitHub repo
    - If that doesn't work, you can instead download a clone via "Source Control > Clone" within XCode.
-5. When *XCode* launches, press the "play" button in the top left.
+5. When *Xcode* launches, press the "play" button in the top left.
    - If you had to download the clone by hand from within XCode, you'll likely need to navigate to the `xcodeproj` file in the `Xcode` directory.
 
 ### Dependencies
 
-- macOS v10.15 Catalina (may work on earlier versions, not tested yet)
+- macOS 10.10 Yosemite (not yet tested on versions older then Mojave but it should work)
 - ~320 GB of free space for a full mainnet node with txindex; or ~30 GB for a full testnet3 node; or substantially less if the full node is pruned.
 - In order to install *Bitcoin Core* and *Tor* on your behalf, *GordianServer-macOS* uses *Brew* and *XCode Command Line Tools*, these will be automatically downloaded and installed for you within the app using a popular well reviewed open sourced script called *Strap*, you can read more about *Strap* [here](https://github.com/MikeMcQuaid/strap/blob/master/README.md). In addition to installing *Brew* and *XCode Command Line Tools*, *Strap* also sets up your Macbook for best security practices; including full disc encryption with *FileVault*, enables *macOS Firewall* and disables *Java* for better security among others.
 
