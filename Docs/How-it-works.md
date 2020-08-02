@@ -1,12 +1,12 @@
-# How *GordianNode-macOS* Works
+# How GordianNode-macOS Works
 
-The application *GordianNode.app* currently installs, configures, and launches `Tor stable v0.4.3.5` and `Bitcoin-Core v0.20.0`. The app is under development, but as it stands, it will install and configure a pruned *Bitcoin Core* full node, Tor as a service, and a Tor V3 hidden service for each  `rpcport` with native client cookie authentication. 
+The application *GordianNode.app* uses Bitcoin Standup to install, configure, and launch `Tor stable v0.4.3.5` and `Bitcoin-Core v0.20.0`. The app is under development, but as it stands, it will install and configure a pruned *Bitcoin Core* full node, Tor as a service, and a Tor V3 hidden service for each  `rpcport` with native client cookie authentication. 
 
 *GordianNode-macOS* allows the user to set custom settings including `txindex`, `prune`, `walletdisabled`, and `datadir`, which should not interfere with any exisiting `bitcoin.conf` settings. Setting `txindex` to `1` will automatically set `prune` to `0` and vice versa as these settings are mutually exclusive.
 
 ⚠️ Tampering with `txindex` and `prune` can have major consequences. If you already have a fully indexed blockchain synced on your machine and you enable pruning, you will lose your fully indexed blockchain! Please use the pruning setting only if you are absolutely sure you want your node to be pruned. If you install *Bitcoin Core* on a machine that already has a fully indexed blockchain it *will not* interfere with it unless you explicitly enable pruning. *GordianNode-macOS* does however enable pruning by default if no exisiting *Bitcoin Core* instance is found on your machine.
 
-Finally, it offers a simple `go private` option that closes off your node to the clearnet, only accepting connections over Tor. This setting is by default *disabled* in order to keep your initial block download at a reasonable pace.
+Finally, *GordianNode-macOS* offers a simple `go private` option that closes off your node to the clearnet, only accepting connections over Tor. This setting is by default *disabled* in order to keep your initial block download at a reasonable pace.
 
 There are three hidden services setup, one for each `rpcport`. They can be found at:
 
