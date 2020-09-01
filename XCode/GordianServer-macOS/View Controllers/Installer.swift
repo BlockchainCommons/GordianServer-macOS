@@ -249,8 +249,8 @@ class Installer: NSViewController {
         #debug=tor
         [main]
         rpcport=8332
-        [test
-        nrpcport=18332
+        [test]
+        rpcport=18332
         [regtest]
         rpcport=18443
         """

@@ -530,7 +530,6 @@ class Settings: NSViewController, NSTextFieldDelegate {
     }
     
     func control(_ control: NSControl, textShouldEndEditing fieldEditor: NSText) -> Bool {
-        print("textShouldEndEditing")
         if fieldEditor.string != "" {
             if let int = Int(fieldEditor.string) {
                 if int > 549 || int == 0 || int == 1 {
@@ -545,6 +544,17 @@ class Settings: NSViewController, NSTextFieldDelegate {
         getBitcoinConf { [unowned vc = self] (conf, error) in
             if !error && conf != nil {
                 vc.parseBitcoinConf(conf: conf!, keyToUpdate: .prune, outlet: vc.pruneOutlet, newValue: amount)
+            } else {
+                var info = "It looks like you do not have an existing bitcoin.conf. Updating this setting will change the prune setting to \(amount)MiB"
+                if amount <= 1 {
+                    info = "It looks like you do not have an existing bitcoin.conf. Updating this setting will change the prune setting to \(amount)"
+                }
+                actionAlert(message: "Update prune setting?", info: info) { (response) in
+                    if response {
+                        self.ud.set(amount, forKey: "prune")
+                        setSimpleAlert(message: "Success ✅", info: "Prune setting updated", buttonLabel: "OK")
+                    }
+                }
             }
         }
     }

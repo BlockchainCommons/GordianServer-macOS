@@ -66,7 +66,7 @@ function configureBitcoin () {
 
 function installTor () {
     
-    if ! command -v sudo -u $(whoami) /usr/local/bin/tor --version &> /dev/null
+    if ! command -v /usr/local/bin/tor &> /dev/null
     then
     
         echo "Installing tor..."
@@ -150,7 +150,7 @@ HiddenServicePort 1311 127.0.0.1:18443/g' /usr/local/etc/tor/torrc
     # We now check if each directory exists before creating it
     mkdir /usr/local/var/lib
     if [ -d /usr/local/var/lib ]; then
-        echo "/usr/local/var/lib exists."
+        echo "/usr/local/var/lib created"
     else
         echo "There was an error creating /usr/local/var/lib"
         exit 1
@@ -158,7 +158,7 @@ HiddenServicePort 1311 127.0.0.1:18443/g' /usr/local/etc/tor/torrc
     
     mkdir /usr/local/var/lib/tor
     if [ -d /usr/local/var/lib/tor ]; then
-        echo "/usr/local/var/lib/tor exists."
+        echo "/usr/local/var/lib/tor created"
     else
         echo "There was an error creating /usr/local/var/lib/tor"
         exit 1
@@ -166,7 +166,7 @@ HiddenServicePort 1311 127.0.0.1:18443/g' /usr/local/etc/tor/torrc
     
     mkdir /usr/local/var/lib/tor/standup
     if [ -d /usr/local/var/lib/tor/standup ]; then
-        echo "/usr/local/var/lib/tor/standup exists."
+        echo "/usr/local/var/lib/tor/standup created"
     else
         echo "There was an error creating /usr/local/var/lib/tor/standup"
         exit 1
@@ -174,7 +174,7 @@ HiddenServicePort 1311 127.0.0.1:18443/g' /usr/local/etc/tor/torrc
     
     mkdir /usr/local/var/lib/tor/standup/main
     if [ -d /usr/local/var/lib/tor/standup/main ]; then
-        echo "/usr/local/var/lib/tor/standup/main exists."
+        echo "/usr/local/var/lib/tor/standup/main created"
     else
         echo "There was an error creating /usr/local/var/lib/tor/standup/main"
         exit 1
@@ -182,7 +182,7 @@ HiddenServicePort 1311 127.0.0.1:18443/g' /usr/local/etc/tor/torrc
     
     mkdir /usr/local/var/lib/tor/standup/test
     if [ -d /usr/local/var/lib/tor/standup/test ]; then
-        echo "/usr/local/var/lib/tor/standup/test exists."
+        echo "/usr/local/var/lib/tor/standup/test created"
     else
         echo "There was an error creating /usr/local/var/lib/tor/standup/test"
         exit 1
@@ -190,7 +190,7 @@ HiddenServicePort 1311 127.0.0.1:18443/g' /usr/local/etc/tor/torrc
     
     mkdir /usr/local/var/lib/tor/standup/reg
     if [ -d /usr/local/var/lib/tor/standup/reg ]; then
-        echo "/usr/local/var/lib/tor/standup/reg exists."
+        echo "/usr/local/var/lib/tor/standup/reg created"
     else
         echo "There was an error creating /usr/local/var/lib/tor/standup/reg"
         exit 1
