@@ -32,7 +32,7 @@ class QRDisplayer: NSViewController {
     
     override func viewDidAppear() {
         window = self.view.window!
-        self.view.window?.title = "Quickconnect QR"
+        self.view.window?.title = "\(network)"
     }
     
     private func showSpinner() {

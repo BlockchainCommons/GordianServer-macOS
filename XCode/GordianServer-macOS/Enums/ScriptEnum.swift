@@ -51,6 +51,8 @@ public enum SCRIPT: String {
     case checkForAuth = "CheckForAuth"
     case checkForOldHost = "CheckForOldHost"
     case removeOldHost = "RemoveOldHost"
+    case showBitcoinConf = "ShowBitcoinConf"
+    case openTorrc = "OpenTorrc"
 }
 
 public enum BTCCONF: String {

@@ -5,9 +5,9 @@
 #
 #  Created by Peter on 05/11/19.
 #  Copyright © 2019 Blockchain Commons, LLC
-if [ -d ~/StandUp/BitcoinCore ]; then
+if [ -d ~/.standup/BitcoinCore ]; then
 
-  ~/StandUp/BitcoinCore/$PREFIX/bin/bitcoind -datadir="$DATADIR" -daemon
+  ~/.standup/BitcoinCore/$PREFIX/bin/bitcoind -datadir="$DATADIR" -daemon
 
 else
 

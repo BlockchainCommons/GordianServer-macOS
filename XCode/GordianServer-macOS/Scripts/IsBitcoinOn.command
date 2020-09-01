@@ -7,10 +7,10 @@
 #  Copyright © 2019 Blockchain Commons, LLC
 
 # Check if StandUp exists
-if [ -d ~/StandUp/BitcoinCore/$PREFIX/bin ]; then
+if [ -d ~/.standup/BitcoinCore/$PREFIX/bin ]; then
 
 # if it does use it
-  ~/StandUp/BitcoinCore/$PREFIX/bin/bitcoin-cli -datadir="$DATADIR" getblockchaininfo
+  ~/.standup/BitcoinCore/$PREFIX/bin/bitcoin-cli -datadir="$DATADIR" getblockchaininfo
 
 else
 
