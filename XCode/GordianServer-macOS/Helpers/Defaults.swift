@@ -151,7 +151,7 @@ class Defaults {
     }
     
     func existingVersion() -> String {
-        return ud.object(forKey: "version") as? String ?? "0.20.0rc1"
+        return ud.object(forKey: "version") as? String ?? "0.20.1"
     }
     
     func existingBinary() -> String {
