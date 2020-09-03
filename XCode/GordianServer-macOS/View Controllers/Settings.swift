@@ -44,6 +44,13 @@ class Settings: NSViewController, NSTextFieldDelegate {
     }
     
     // MARK: User Actions
+    @IBAction func deleteWalletsAction(_ sender: Any) {
+        DispatchQueue.main.async { [weak self] in
+            self?.performSegue(withIdentifier: "segueToDeleteWallets", sender: self)
+        }
+    }
+    
+    
     @IBAction func seeBitcoinConf(_ sender: Any) {
         let d = Defaults()
         let path = d.dataDir()

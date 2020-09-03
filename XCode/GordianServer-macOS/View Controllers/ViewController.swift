@@ -64,6 +64,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var regtestPeersOutgoingLabel: NSTextField!
     @IBOutlet weak var bitcoinIsOnHeaderImage: NSImageView!
     
+    var chain = ""
     var rpcpassword = ""
     var rpcuser = ""
     var torHostname = ""
@@ -120,6 +121,28 @@ class ViewController: NSViewController {
     }
     
     //MARK: User Action
+    
+    @IBAction func showMainWallets(_ sender: Any) {
+        DispatchQueue.main.async { [weak self] in
+            self?.chain = "main"
+            self?.performSegue(withIdentifier: "segueToWallets", sender: self)
+        }
+    }
+    
+    @IBAction func showTestWallets(_ sender: Any) {
+        DispatchQueue.main.async { [weak self] in
+            self?.chain = "test"
+            self?.performSegue(withIdentifier: "segueToWallets", sender: self)
+        }
+    }
+    
+    @IBAction func showRegWallets(_ sender: Any) {
+        DispatchQueue.main.async { [weak self] in
+            self?.chain = "regtest"
+            self?.performSegue(withIdentifier: "segueToWallets", sender: self)
+        }
+    }
+    
     
     @IBAction func refreshAction(_ sender: Any) {
         taskDescription.stringValue = "checking system..."
@@ -1170,8 +1193,7 @@ class ViewController: NSViewController {
         installTorOutlet.isEnabled = false
         verifyOutlet.isEnabled = false
         torRunningImage.alphaValue = 0
-        bitcoinCoreWindow.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)//#colorLiteral(red: 0.2313431799, green: 0.2313894629, blue: 0.2313401997, alpha: 1)
-        //torWindow.backgroundColor = #colorLiteral(red: 0.2313431799, green: 0.2313894629, blue: 0.2313401997, alpha: 1)
+        bitcoinCoreWindow.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)
         torWindow.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)
         bitcoinMainnetWindow.backgroundColor = #colorLiteral(red: 0.2548701465, green: 0.2549202442, blue: 0.2548669279, alpha: 1)
         bitcoinTestnetWindow.backgroundColor = #colorLiteral(red: 0.2548701465, green: 0.2549202442, blue: 0.2548669279, alpha: 1)
@@ -1315,6 +1337,11 @@ class ViewController: NSViewController {
                 vc.upgrading = upgrading
                 vc.ignoreExistingBitcoin = ignoreExistingBitcoin
                 vc.strapping = strapping
+            }
+            
+        case "segueToWallets":
+            if let vc = segue.destinationController as? WalletsViewController {
+                vc.chain = chain
             }
             
         default:

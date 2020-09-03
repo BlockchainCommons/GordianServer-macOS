@@ -53,6 +53,7 @@ public enum SCRIPT: String {
     case removeOldHost = "RemoveOldHost"
     case showBitcoinConf = "ShowBitcoinConf"
     case openTorrc = "OpenTorrc"
+    case rpc = "RPC"
 }
 
 public enum BTCCONF: String {
