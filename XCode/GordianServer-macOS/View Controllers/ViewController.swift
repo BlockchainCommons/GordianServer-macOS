@@ -283,11 +283,12 @@ class ViewController: NSViewController {
                     let txindex = vc.d.txindex()
                     let directory = vc.d.dataDir()
                     let pruneInGb = Double(pruned) / 954.0
+                    let rounded = Double(round(100 * pruneInGb) / 100)
                     
                     var info = """
                     GordianServer will by default install and configure a pruned Bitcoin Core v\(version) node and Tor v0.4.3.6
                     
-                    You can always edit the pruning size in settings. By default we prune the blockchain to half your available disc space which is currently \(pruneInGb)gb.
+                    You can always edit the pruning size in settings. By default we prune the blockchain to half your available disc space which is currently \(rounded)gb.
                     
                     If you would like to install a different node go to \"Settings\" for pruning, mainnet, data directory and tor related options, you can always adjust the settings and restart your node for the changes to take effect.
                     
@@ -295,6 +296,20 @@ class ViewController: NSViewController {
                     
                     By default it will create or add missing rpc credentials to the bitcoin.conf in \(directory).
                     """
+                    
+                    if pruned == 0 || pruned == 1 {
+                        info = """
+                        GordianServer will install and configure Bitcoin Core v\(version) node and Tor v0.4.3.6
+                        
+                        You have set pruning to \(pruned), you can always edit the pruning amount in settings.
+                        
+                        If you would like to install a different node go to \"Settings\" for pruning, mainnet, data directory and tor related options, you can always adjust the settings and restart your node for the changes to take effect.
+                        
+                        GordianServer will create the following directory: /Users/\(NSUserName())/.standup
+                        
+                        By default it will create or add missing rpc credentials to the bitcoin.conf in \(directory).
+                        """
+                    }
                     
                     if txindex == 1 {
                         info = """
@@ -309,7 +324,6 @@ class ViewController: NSViewController {
                         By default it will create or add missing rpc credentials to the bitcoin.conf in \(directory).
                         """
                     }
-                    
                     
                     vc.showstandUpAlert(message: "Ready to Standup?", info: info)
                 }

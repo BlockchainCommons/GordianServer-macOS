@@ -258,7 +258,7 @@ class Installer: NSViewController {
     }
     
     private func optimumCache() -> Int {
-        // Converts devices ram to gb, divides it by two and converts that to mebibytes. That way we use half the RAM for IBD cache
+        /// Converts devices ram to gb, divides it by two and converts that to mebibytes. That way we use half the RAM for IBD cache as a reasonable default.
         return Int(((Double(ProcessInfo.processInfo.physicalMemory) / 1073741824.0) / 2.0) * 954.0)
     }
     

@@ -147,7 +147,7 @@ HiddenServicePort 1311 127.0.0.1:18443/g' /usr/local/etc/tor/torrc
 
     echo "Creating hidden service directories at /usr/local/var/lib/tor/standup"
     
-    # We now check if each directory exists before creating it
+    # We now check if directory creation fails which happens if Tor installation fails, if so exit the script
     mkdir /usr/local/var/lib
     if [ -d /usr/local/var/lib ]; then
         echo "/usr/local/var/lib created"
