@@ -200,6 +200,9 @@ class Settings: NSViewController, NSTextFieldDelegate {
         DispatchQueue.main.async {
             actionAlert(message: "Danger!", info: "This will remove the StandUp directory including all its contents!\n\nThis will remove tor config, tor hidden services and uninstall tor.\n\nAre you aure you want to do this?") { [unowned vc = self] response in
                 if response {
+                    let domain = Bundle.main.bundleIdentifier!
+                    UserDefaults.standard.removePersistentDomain(forName: domain)
+                    UserDefaults.standard.synchronize()
                     vc.seeLog = false
                     vc.standingDown = true
                     vc.performSegue(withIdentifier: "seeLog", sender: vc)
