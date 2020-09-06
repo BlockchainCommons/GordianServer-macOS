@@ -11,19 +11,23 @@ import Cocoa
 class WalletsViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {
     
     var window: NSWindow?
-    var wallets = [[String:String]]()
+    var wallets = [String]()
+    var selectedWallet = ""
     var env = [String:String]()
     var index = 0
     var chain = ""
     let d = Defaults()
     @IBOutlet weak var tableView: NSTableView!
+    @IBOutlet weak var spinner: NSProgressIndicator!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
-        setEnv()
-        getWallets()
+        tableView.target = self
+        tableView.doubleAction = #selector(tableViewDoubleClick(_:))
+        NotificationCenter.default.addObserver(self, selector: #selector(reload), name: .reloadWallets, object: nil)
+        loadTable()
     }
     
     override func viewDidAppear() {
@@ -31,8 +35,20 @@ class WalletsViewController: NSViewController, NSTableViewDelegate, NSTableViewD
         self.view.window?.title = "Wallets \(chain)"
     }
     
+    @objc func reload() {
+        loadTable()
+    }
+    
+    private func loadTable() {
+        wallets.removeAll()
+        index = 0
+        setEnv()
+        getWallets()
+    }
+    
     enum CellIdentifiers {
-      static let WalletNameCell = "WalletNameCellID"
+        static let WalletNameCell = "WalletNameCellID"
+        static let WalletLoadedCell = "WalletLoadedCellID"
     }
     
     func setEnv() {
@@ -51,8 +67,7 @@ class WalletsViewController: NSViewController, NSTableViewDelegate, NSTableViewD
                     if name == "" {
                         name = "Default wallet"
                     }
-                    let w = ["name":name]
-                    self?.wallets.append(w)
+                    self?.wallets.append(name)
                     if i + 1 == ws!.count {
                         DispatchQueue.main.async { [weak self] in
                             self?.tableView.reloadData()
@@ -66,31 +81,38 @@ class WalletsViewController: NSViewController, NSTableViewDelegate, NSTableViewD
     func numberOfRows(in tableView: NSTableView) -> Int {
         return wallets.count
     }
-    
+        
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-
-      var text: String = ""
-      var cellIdentifier: String = ""
-
-      let dateFormatter = DateFormatter()
-      dateFormatter.dateStyle = .long
-      dateFormatter.timeStyle = .long
-      
-      // 1
-      let item = wallets[row]
-
-      // 2
-      if tableColumn == tableView.tableColumns[0] {
-        text = item["name"] ?? "Default wallet"
-        cellIdentifier = CellIdentifiers.WalletNameCell
-      }
-
-      // 3
-        if let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSTableCellView {
-        cell.textField?.stringValue = text
-        return cell
-      }
-      return nil
+        var text: String = ""
+        let wallet = wallets[row]
+        
+        if tableColumn?.identifier == NSUserInterfaceItemIdentifier(rawValue: "nameColumn") {
+            text = wallet
+            let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "WalletNameCellID"), owner: self) as! NSTableCellView
+            cell.textField?.stringValue = text
+            cell.imageView?.image = NSImage(imageLiteralResourceName: "btccore-copy.png")
+            return cell
+            
+        } else {
+            return nil
+        }
+        
+    }
+    
+//    func tableViewSelectionDidChange(_ notification: Notification) {
+//
+//    }
+    
+    @objc func tableViewDoubleClick(_ sender:AnyObject) {
+        guard tableView.selectedRow >= 0 else { return }
+        selectedWallet = wallets[tableView.selectedRow]
+        goToDetail()
+    }
+    
+    private func goToDetail() {
+        DispatchQueue.main.async { [weak self] in
+            self?.performSegue(withIdentifier: "segueToWalletDetail", sender: self)
+        }
     }
     
     private func runScript(script: SCRIPT, env: [String:String], args: [String], completion: @escaping ((NSArray?)) -> Void) {
@@ -128,11 +150,17 @@ class WalletsViewController: NSViewController, NSTableViewDelegate, NSTableViewD
                 } else {
                     completion((nil))
                 }
-            } else {
-                completion(nil)
             }
         } catch {
             completion((nil))
+        }
+    }
+    
+    override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
+        if segue.identifier == "segueToWalletDetail" {
+            if let vc = segue.destinationController as? WalletDetail {
+                vc.name = selectedWallet
+            }
         }
     }
     

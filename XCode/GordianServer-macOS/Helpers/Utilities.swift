@@ -11,6 +11,8 @@ import Cocoa
 
 extension Notification.Name {
     public static let refresh = Notification.Name(rawValue: "refresh")
+    public static let reloadWallets = Notification.Name(rawValue: "reloadWallets")
+    
 }
 
 public func randomString(length: Int) -> String {
@@ -41,6 +43,31 @@ public func actionAlert(message: String, info: String, result: @escaping (Bool) 
         a.informativeText = info
         a.addButton(withTitle: "Yes")
         a.addButton(withTitle: "No")
+        let response = a.runModal()
+        
+        if response == .alertFirstButtonReturn {
+            
+            result((true))
+            
+        } else {
+            
+            result((false))
+            
+        }
+        
+    }
+    
+}
+
+public func destructiveActionAlert(message: String, info: String, result: @escaping (Bool) -> Void) {
+    
+    DispatchQueue.main.async {
+        
+        let a = NSAlert()
+        a.messageText = message
+        a.informativeText = info
+        a.addButton(withTitle: "Delete")
+        a.addButton(withTitle: "Cancel")
         let response = a.runModal()
         
         if response == .alertFirstButtonReturn {

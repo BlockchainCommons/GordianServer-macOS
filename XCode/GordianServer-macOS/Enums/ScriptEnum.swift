@@ -54,6 +54,7 @@ public enum SCRIPT: String {
     case showBitcoinConf = "ShowBitcoinConf"
     case openTorrc = "OpenTorrc"
     case rpc = "RPC"
+    case deleteWallet = "DeleteWallet"
 }
 
 public enum BTCCONF: String {
