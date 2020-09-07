@@ -35,6 +35,7 @@
 		D0534CCA237E4DF00093DE67 /* fullynoded_qr.png in Resources */ = {isa = PBXBuildFile; fileRef = D0534CC9237E4DF00093DE67 /* fullynoded_qr.png */; };
 		D06E3937236BE46E0072924A /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06E3935236BE46D0072924A /* Settings.swift */; };
 		D06E3938236BE46E0072924A /* Settings.xib in Resources */ = {isa = PBXBuildFile; fileRef = D06E3936236BE46E0072924A /* Settings.xib */; };
+		D06FD7BE2505DA3700481185 /* OpenAuth.command in Resources */ = {isa = PBXBuildFile; fileRef = D06FD7BD2505DA3700481185 /* OpenAuth.command */; };
 		D0760106247DFEF200706F70 /* Strap.command in Resources */ = {isa = PBXBuildFile; fileRef = D0760105247DFEF200706F70 /* Strap.command */; };
 		D076010C247E074D00706F70 /* CheckHomebrew.command in Resources */ = {isa = PBXBuildFile; fileRef = D076010B247E074D00706F70 /* CheckHomebrew.command */; };
 		D0760110247E084200706F70 /* CheckXCodeSelect.command in Resources */ = {isa = PBXBuildFile; fileRef = D076010F247E084200706F70 /* CheckXCodeSelect.command */; };
@@ -135,6 +136,7 @@
 		D0534CC9237E4DF00093DE67 /* fullynoded_qr.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fullynoded_qr.png; sourceTree = "<group>"; };
 		D06E3935236BE46D0072924A /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		D06E3936236BE46E0072924A /* Settings.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Settings.xib; sourceTree = "<group>"; };
+		D06FD7BD2505DA3700481185 /* OpenAuth.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = OpenAuth.command; sourceTree = "<group>"; };
 		D0760105247DFEF200706F70 /* Strap.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = Strap.command; sourceTree = "<group>"; };
 		D076010B247E074D00706F70 /* CheckHomebrew.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = CheckHomebrew.command; sourceTree = "<group>"; };
 		D076010F247E084200706F70 /* CheckXCodeSelect.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = CheckXCodeSelect.command; sourceTree = "<group>"; };
@@ -289,6 +291,7 @@
 				D03063B824FE2375003B44BE /* OpenTorrc.command */,
 				D0C9439D2500C5AA00DF7339 /* RPC.command */,
 				D0211A4F250497C100F7517A /* DeleteWallet.command */,
+				D06FD7BD2505DA3700481185 /* OpenAuth.command */,
 			);
 			path = Scripts;
 			sourceTree = "<group>";
@@ -551,6 +554,7 @@
 				D0760106247DFEF200706F70 /* Strap.command in Resources */,
 				D01B60F82484CD65005D3090 /* StopMain.command in Resources */,
 				D07601162480F79200706F70 /* OpenMainnetHiddenService.command in Resources */,
+				D06FD7BE2505DA3700481185 /* OpenAuth.command in Resources */,
 				D0A871CF237E4B9D006033C9 /* yes.png in Resources */,
 				D0B927842384DE1B00956651 /* GetTorrc.command in Resources */,
 				D0B927882384E2D400956651 /* GetHostname.command in Resources */,

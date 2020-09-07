@@ -122,6 +122,22 @@ class ViewController: NSViewController {
     
     //MARK: User Action
     
+    @IBAction func openMainnetAuthAction(_ sender: Any) {
+        env = ["BINARY_NAME":d.existingBinary(),"VERSION":d.existingPrefix(),"PREFIX":d.existingPrefix(),"DATADIR":d.dataDir(), "AUTH_DIR":"/usr/local/var/lib/tor/standup/main/authorized_clients/"]
+        runScript(script: .openAuth)
+    }
+    
+    @IBAction func openTestnetAuthAction(_ sender: Any) {
+        env = ["BINARY_NAME":d.existingBinary(),"VERSION":d.existingPrefix(),"PREFIX":d.existingPrefix(),"DATADIR":d.dataDir(), "AUTH_DIR":"/usr/local/var/lib/tor/standup/test/authorized_clients/"]
+        runScript(script: .openAuth)
+    }
+    
+    @IBAction func openRegAuthAction(_ sender: Any) {
+        env = ["BINARY_NAME":d.existingBinary(),"VERSION":d.existingPrefix(),"PREFIX":d.existingPrefix(),"DATADIR":d.dataDir(), "AUTH_DIR":"/usr/local/var/lib/tor/standup/reg/authorized_clients/"]
+        runScript(script: .openAuth)
+    }
+    
+    
     @IBAction func showMainWallets(_ sender: Any) {
         DispatchQueue.main.async { [weak self] in
             self?.chain = "main"
