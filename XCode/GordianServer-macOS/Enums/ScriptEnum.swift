@@ -56,6 +56,7 @@ public enum SCRIPT: String {
     case rpc = "RPC"
     case deleteWallet = "DeleteWallet"
     case openAuth = "OpenAuth"
+    case installLightning = "InstallLightning"
 }
 
 public enum BTCCONF: String {

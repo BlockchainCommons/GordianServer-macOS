@@ -906,7 +906,7 @@
                                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Vdd-w0-AhZ">
                                                                                 <rect key="frame" x="31" y="3" width="69" height="14"/>
                                                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="80% synced" id="ozm-OW-79F">
-                                                                                    <font key="font" metaFont="menu" size="11"/>
+                                                                                    <font key="font" metaFont="controlContent" size="11"/>
                                                                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                 </textFieldCell>
@@ -947,7 +947,7 @@
                                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PMt-yp-b2E">
                                                                                         <rect key="frame" x="48" y="4" width="17" height="14"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="10" id="bLz-2O-SuY">
-                                                                                            <font key="font" metaFont="menu" size="11"/>
+                                                                                            <font key="font" metaFont="controlContent" size="11"/>
                                                                                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                         </textFieldCell>
@@ -962,7 +962,7 @@
                                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="E12-C7-dPa">
                                                                                         <rect key="frame" x="91" y="4" width="12" height="14"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="8" id="UiY-sO-Qsr">
-                                                                                            <font key="font" metaFont="menu" size="11"/>
+                                                                                            <font key="font" metaFont="controlContent" size="11"/>
                                                                                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                         </textFieldCell>
@@ -1120,7 +1120,7 @@
                                                                                     <constraint firstAttribute="height" constant="14" id="Xux-VQ-lg0"/>
                                                                                 </constraints>
                                                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="80% synced" id="wyy-cu-Wf8">
-                                                                                    <font key="font" metaFont="menu" size="11"/>
+                                                                                    <font key="font" metaFont="controlContent" size="11"/>
                                                                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                 </textFieldCell>
@@ -1159,7 +1159,7 @@
                                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ect-43-g9J">
                                                                                         <rect key="frame" x="46" y="4" width="17" height="14"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="10" id="iJu-BP-GJE">
-                                                                                            <font key="font" metaFont="menu" size="11"/>
+                                                                                            <font key="font" metaFont="controlContent" size="11"/>
                                                                                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                         </textFieldCell>
@@ -1171,7 +1171,7 @@
                                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dmc-4L-u8J">
                                                                                         <rect key="frame" x="87" y="4" width="16" height="14"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" alignment="center" title="8" id="XjG-AO-eDo">
-                                                                                            <font key="font" metaFont="menu" size="11"/>
+                                                                                            <font key="font" metaFont="controlContent" size="11"/>
                                                                                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                         </textFieldCell>
@@ -1328,7 +1328,7 @@
                                                                                     <constraint firstAttribute="height" constant="14" id="2SS-xN-4Qz"/>
                                                                                 </constraints>
                                                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="80% synced" id="ilY-0r-bCs">
-                                                                                    <font key="font" metaFont="menu" size="11"/>
+                                                                                    <font key="font" metaFont="controlContent" size="11"/>
                                                                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                 </textFieldCell>
@@ -1366,7 +1366,7 @@
                                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="W5v-QO-qKh">
                                                                                         <rect key="frame" x="48" y="4" width="17" height="14"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="10" id="U9M-PE-Oq6">
-                                                                                            <font key="font" metaFont="menu" size="11"/>
+                                                                                            <font key="font" metaFont="controlContent" size="11"/>
                                                                                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                         </textFieldCell>
@@ -1378,7 +1378,7 @@
                                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4Ex-S4-ZNF">
                                                                                         <rect key="frame" x="91" y="4" width="12" height="14"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="8" id="6yo-v6-NaN">
-                                                                                            <font key="font" metaFont="menu" size="11"/>
+                                                                                            <font key="font" metaFont="controlContent" size="11"/>
                                                                                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                         </textFieldCell>
@@ -1839,7 +1839,7 @@
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Km0-EQ-Y42">
                                                 <rect key="frame" x="15" y="539" width="167" height="14"/>
                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="RPC hidden services:" id="v9t-98-a0c">
-                                                    <font key="font" metaFont="menu" size="11"/>
+                                                    <font key="font" metaFont="controlContent" size="11"/>
                                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
@@ -2107,6 +2107,7 @@
                         <outlet property="connectRegtestOutlet" destination="xZ9-Lf-Ed0" id="7Y2-mU-4Ay"/>
                         <outlet property="connectTestnetOutlet" destination="XoJ-R6-Wcu" id="H7D-Iw-6xO"/>
                         <outlet property="icon" destination="zZj-w8-TgT" id="mC2-fU-qbF"/>
+                        <outlet property="installLightningOutlet" destination="bP4-ed-3HE" id="LYy-NR-4CD"/>
                         <outlet property="installTorOutlet" destination="w4M-Pe-mtd" id="Pnf-UR-CsW"/>
                         <outlet property="lightningWindow" destination="fWo-K4-6bE" id="YOE-lM-gQR"/>
                         <outlet property="mainnetIncomingImage" destination="JPv-7r-MC8" id="q5g-9e-aUv"/>
@@ -2923,7 +2924,7 @@
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pH6-kX-TGp">
                                         <rect key="frame" x="22" y="2" width="239" height="14"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="refreshing your hidden service, please wait..." id="RTS-8e-RwL">
-                                            <font key="font" metaFont="menu" size="11"/>
+                                            <font key="font" metaFont="controlContent" size="11"/>
                                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>

@@ -10,6 +10,7 @@ import Cocoa
 
 class ViewController: NSViewController, NSWindowDelegate {
     
+    @IBOutlet weak var installLightningOutlet: NSButton!
     @IBOutlet weak var lightningWindow: NSView!
     @IBOutlet weak var mainnetIncomingImage: NSImageView!
     @IBOutlet weak var bitcoinCoreWindow: NSView!
@@ -65,6 +66,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     @IBOutlet weak var regtestPeersOutgoingLabel: NSTextField!
     @IBOutlet weak var bitcoinIsOnHeaderImage: NSImageView!
     
+    var installingLightning = Bool()
     var chain = ""
     var rpcpassword = ""
     var rpcuser = ""
@@ -133,7 +135,13 @@ class ViewController: NSViewController, NSWindowDelegate {
     //MARK: User Action
     
     @IBAction func installLightningAction(_ sender: Any) {
-        
+        installingLightning = true
+        standingUp = false
+        upgrading = false
+        strapping = false
+        DispatchQueue.main.async { [weak self] in
+            self?.performSegue(withIdentifier: "goInstall", sender: self)
+        }
     }
     
     
@@ -1092,6 +1100,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                 vc.verifyOutlet.isEnabled = true
                 vc.bitcoinCoreVersionOutlet.stringValue = currentVersion
                 vc.bitcoinInstalled = true
+                vc.installLightningOutlet.isEnabled = true
                 if currentVersion.contains(vc.newestVersion) {
                     DispatchQueue.main.async { [unowned vc = self] in
                         vc.updateOutlet.isEnabled = false
@@ -1219,6 +1228,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         settingsOutlet.isHighlighted = false
         bitcoinSettingsOutlet.isHighlighted = false
         bitcoinSettingsOutlet.focusRingType = .none
+        installLightningOutlet.isEnabled = false
         updateOutlet.isEnabled = false
         bitcoinCoreVersionOutlet.stringValue = ""
         installTorOutlet.isEnabled = false
@@ -1369,6 +1379,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             
         case "goInstall":
             if let vc = segue.destinationController as? Installer {
+                vc.installLightning = installingLightning
                 vc.standingUp = standingUp
                 vc.upgrading = upgrading
                 vc.ignoreExistingBitcoin = ignoreExistingBitcoin

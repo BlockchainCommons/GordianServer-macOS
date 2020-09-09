@@ -22,6 +22,7 @@ class Installer: NSViewController {
     var standingDown = Bool()
     var upgrading = Bool()
     var showLog = Bool()
+    var installLightning = Bool()
     var standUpConf = ""
     var refreshing = Bool()
     var ignoreExistingBitcoin = Bool()
@@ -402,6 +403,19 @@ class Installer: NSViewController {
             }
         } else {
             completion((nil, true))
+        }
+    }
+    
+    private func installLightningAction() {
+        showLog = true
+        run(script: .installLightning, env: ["":""]) {
+            DispatchQueue.main.async { [weak self] in
+                if self != nil {
+                    self?.setLog(content: self!.consoleOutput.string)
+                }
+                NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
+                self?.goBack()
+            }
         }
     }
     
