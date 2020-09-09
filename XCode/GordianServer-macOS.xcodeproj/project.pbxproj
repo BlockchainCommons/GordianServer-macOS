@@ -74,6 +74,7 @@
 		D0BCB351236A6D28000D8FDE /* StandUpUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BCB350236A6D28000D8FDE /* StandUpUITests.swift */; };
 		D0C9439625009D0A00DF7339 /* WalletsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C9439525009D0A00DF7339 /* WalletsViewController.swift */; };
 		D0C9439E2500C5AA00DF7339 /* RPC.command in Resources */ = {isa = PBXBuildFile; fileRef = D0C9439D2500C5AA00DF7339 /* RPC.command */; };
+		D0DCD8812508BAF100243916 /* InstallLightning.command in Resources */ = {isa = PBXBuildFile; fileRef = D0DCD8802508BAF100243916 /* InstallLightning.command */; };
 		D0DCD8E6236ACC9E00F2D15A /* ScriptEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DCD8E5236ACC9E00F2D15A /* ScriptEnum.swift */; };
 		D0DCD8E9236ACD5300F2D15A /* QRDisplayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DCD8E7236ACD5300F2D15A /* QRDisplayer.swift */; };
 		D0DCD8EA236ACD5300F2D15A /* QRDisplayer.xib in Resources */ = {isa = PBXBuildFile; fileRef = D0DCD8E8236ACD5300F2D15A /* QRDisplayer.xib */; };
@@ -182,6 +183,7 @@
 		D0BCB352236A6D28000D8FDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D0C9439525009D0A00DF7339 /* WalletsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletsViewController.swift; sourceTree = "<group>"; };
 		D0C9439D2500C5AA00DF7339 /* RPC.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = RPC.command; sourceTree = "<group>"; };
+		D0DCD8802508BAF100243916 /* InstallLightning.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = InstallLightning.command; sourceTree = "<group>"; };
 		D0DCD8E5236ACC9E00F2D15A /* ScriptEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptEnum.swift; sourceTree = "<group>"; };
 		D0DCD8E7236ACD5300F2D15A /* QRDisplayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRDisplayer.swift; sourceTree = "<group>"; };
 		D0DCD8E8236ACD5300F2D15A /* QRDisplayer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QRDisplayer.xib; sourceTree = "<group>"; };
@@ -292,6 +294,7 @@
 				D0C9439D2500C5AA00DF7339 /* RPC.command */,
 				D0211A4F250497C100F7517A /* DeleteWallet.command */,
 				D06FD7BD2505DA3700481185 /* OpenAuth.command */,
+				D0DCD8802508BAF100243916 /* InstallLightning.command */,
 			);
 			path = Scripts;
 			sourceTree = "<group>";
@@ -531,6 +534,7 @@
 				D01B60F42484C963005D3090 /* StartRegd.command in Resources */,
 				D0F613EC2489278B0057CC93 /* CheckForOldHost.command in Resources */,
 				D0821047238B66F300E21EDC /* ShowBitcoinCoreLog.command in Resources */,
+				D0DCD8812508BAF100243916 /* InstallLightning.command in Resources */,
 				D01B60FC2484CDB7005D3090 /* StopReg.command in Resources */,
 				D0B36C432373BBA5004B2D63 /* StopTor.command in Resources */,
 				D01B60FE2484D908005D3090 /* StartMaind.command in Resources */,

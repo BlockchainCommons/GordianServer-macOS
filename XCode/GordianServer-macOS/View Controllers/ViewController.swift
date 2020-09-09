@@ -8,8 +8,9 @@
 
 import Cocoa
 
-class ViewController: NSViewController {
+class ViewController: NSViewController, NSWindowDelegate {
     
+    @IBOutlet weak var lightningWindow: NSView!
     @IBOutlet weak var mainnetIncomingImage: NSImageView!
     @IBOutlet weak var bitcoinCoreWindow: NSView!
     @IBOutlet weak var torWindow: NSView!
@@ -99,7 +100,16 @@ class ViewController: NSViewController {
         setScene()
     }
     
+    override func viewWillAppear() {
+        self.view.window?.delegate = self
+        self.view.window?.minSize = NSSize(width: 710, height: 658)
+    }
+    
     override func viewDidAppear() {
+        var frame = self.view.window!.frame
+        let initialSize = NSSize(width: 710, height: 658)
+        frame.size = initialSize
+        self.view.window?.setFrame(frame, display: true)
         refresh()
     }
     
@@ -121,6 +131,11 @@ class ViewController: NSViewController {
     }
     
     //MARK: User Action
+    
+    @IBAction func installLightningAction(_ sender: Any) {
+        
+    }
+    
     
     @IBAction func openMainnetAuthAction(_ sender: Any) {
         env = ["BINARY_NAME":d.existingBinary(),"VERSION":d.existingPrefix(),"PREFIX":d.existingPrefix(),"DATADIR":d.dataDir(), "AUTH_DIR":"/usr/local/var/lib/tor/standup/main/authorized_clients/"]
@@ -1211,6 +1226,7 @@ class ViewController: NSViewController {
         torRunningImage.alphaValue = 0
         bitcoinCoreWindow.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)
         torWindow.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)
+        lightningWindow.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)
         bitcoinMainnetWindow.backgroundColor = #colorLiteral(red: 0.2548701465, green: 0.2549202442, blue: 0.2548669279, alpha: 1)
         bitcoinTestnetWindow.backgroundColor = #colorLiteral(red: 0.2548701465, green: 0.2549202442, blue: 0.2548669279, alpha: 1)
         bitcoinRegtestWindow.backgroundColor = #colorLiteral(red: 0.2548701465, green: 0.2549202442, blue: 0.2548669279, alpha: 1)
@@ -1220,6 +1236,7 @@ class ViewController: NSViewController {
         torAuthWindow.backgroundColor = #colorLiteral(red: 0.2548701465, green: 0.2549202442, blue: 0.2548669279, alpha: 1)
         bitcoinCoreWindow.wantsLayer = true
         torWindow.wantsLayer = true
+        lightningWindow.wantsLayer = true
         bitcoinMainnetWindow.wantsLayer = true
         bitcoinTestnetWindow.wantsLayer = true
         bitcoinRegtestWindow.wantsLayer = true
@@ -1233,6 +1250,8 @@ class ViewController: NSViewController {
         testnetPeersView.wantsLayer = true
         regtestSyncedView.wantsLayer = true
         regtestPeersView.wantsLayer = true
+        lightningWindow.layer?.borderWidth = 0.75
+        lightningWindow.layer?.cornerRadius = 8
         mainnetSyncedView.layer?.borderWidth = 0.75
         mainnetSyncedView.layer?.cornerRadius = 5
         testnetSyncedView.layer?.borderWidth = 0.75
@@ -1263,6 +1282,7 @@ class ViewController: NSViewController {
         torRegtestWindow.layer?.cornerRadius = 8
         torAuthWindow.layer?.borderWidth = 0.75
         torAuthWindow.layer?.cornerRadius = 8
+        lightningWindow.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
         mainnetSyncedView.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
         mainnetPeersView.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
         testnetSyncedView.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
