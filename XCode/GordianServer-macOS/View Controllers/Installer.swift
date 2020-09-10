@@ -32,12 +32,12 @@ class Installer: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setScene()
-        filterAction()
     }
     
     override func viewDidAppear() {
         window = self.view.window!
         self.view.window?.title = "Console"
+        filterAction()
     }
     
     func showSpinner(description: String) {
@@ -410,6 +410,7 @@ class Installer: NSViewController {
     }
     
     private func installLightningAction() {
+        print("installLightningAction")
         showLog = true
         run(script: .installLightning, env: ["":""]) {
             DispatchQueue.main.async { [weak self] in
