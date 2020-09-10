@@ -5,8 +5,8 @@
 #
 #  Created by Peter on 13/11/19.
 #  Copyright © 2019 Blockchain Commons, LLC
-echo "Removing ~/StandUp"
-rm -R ~/StandUp
+echo "Removing ~/.standup"
+rm -R ~/.standup
 echo "Removing /usr/local/etc/tor"
 rm -R /usr/local/etc/tor
 echo "Removing /usr/local/var/lib/tor"

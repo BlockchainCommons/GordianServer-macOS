@@ -6,10 +6,10 @@
 #  Created by Peter on 19/11/19.
 #  Copyright © 2019 Blockchain Commons, LLC
 echo "Updating to $VERSION"
-echo "Removing ~/StandUp"
-rm -R ~/StandUp
-mkdir ~/StandUp
-mkdir ~/StandUp/BitcoinCore
+echo "Removing ~/.standup"
+rm -R ~/.standup
+mkdir ~/.standup
+mkdir ~/.standup/BitcoinCore
 
 echo "Downloading $SHA_URL"
 curl $SHA_URL -o ~/StandUp/BitcoinCore/SHA256SUMS.asc -s
@@ -20,8 +20,8 @@ curl https://bitcoin.org/laanwj-releases.asc -o ~/StandUp/BitcoinCore/laanwj-rel
 echo "Saved to ~/StandUp/BitcoinCore/laanwj-releases.asc"
 
 echo "Downloading Bitcoin Core $VERSION from $MACOS_URL"
-cd ~/StandUp/BitcoinCore
-curl $MACOS_URL -o ~/StandUp/BitcoinCore/$BINARY_NAME --progress-bar
+cd ~/.standup/BitcoinCore
+curl $MACOS_URL -o ~/.standup/BitcoinCore/$BINARY_NAME --progress-bar
 
 echo "Checking sha256 checksums $BINARY_NAME against SHA256SUMS.asc"
 ACTUAL_SHA=$(shasum -a 256 $BINARY_NAME | awk '{print $1}')

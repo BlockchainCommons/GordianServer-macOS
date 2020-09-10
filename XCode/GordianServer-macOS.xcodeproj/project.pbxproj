@@ -24,6 +24,10 @@
 		D01B610A2487873F005D3090 /* AddAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01B61092487873F005D3090 /* AddAuthentication.swift */; };
 		D01B610C248789D1005D3090 /* RemoveAuth.command in Resources */ = {isa = PBXBuildFile; fileRef = D01B610B248789D1005D3090 /* RemoveAuth.command */; };
 		D01B610E24878E07005D3090 /* CheckForAuth.command in Resources */ = {isa = PBXBuildFile; fileRef = D01B610D24878E07005D3090 /* CheckForAuth.command */; };
+		D0211A4E250493CB00F7517A /* WalletDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0211A4D250493CB00F7517A /* WalletDetail.swift */; };
+		D0211A50250497C100F7517A /* DeleteWallet.command in Resources */ = {isa = PBXBuildFile; fileRef = D0211A4F250497C100F7517A /* DeleteWallet.command */; };
+		D03063B524FE1FCA003B44BE /* ShowBitcoinConf.command in Resources */ = {isa = PBXBuildFile; fileRef = D03063B424FE1FCA003B44BE /* ShowBitcoinConf.command */; };
+		D03063B924FE2375003B44BE /* OpenTorrc.command in Resources */ = {isa = PBXBuildFile; fileRef = D03063B824FE2375003B44BE /* OpenTorrc.command */; };
 		D049E89E237BD09200294E70 /* StandDown.command in Resources */ = {isa = PBXBuildFile; fileRef = D049E89D237BD09200294E70 /* StandDown.command */; };
 		D049E8A0237BFF9E00294E70 /* UpdateBTCConf.command in Resources */ = {isa = PBXBuildFile; fileRef = D049E89F237BFF9E00294E70 /* UpdateBTCConf.command */; };
 		D0534CC6237E4CC20093DE67 /* ok.png in Resources */ = {isa = PBXBuildFile; fileRef = D0534CC5237E4CC20093DE67 /* ok.png */; };
@@ -31,6 +35,7 @@
 		D0534CCA237E4DF00093DE67 /* fullynoded_qr.png in Resources */ = {isa = PBXBuildFile; fileRef = D0534CC9237E4DF00093DE67 /* fullynoded_qr.png */; };
 		D06E3937236BE46E0072924A /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06E3935236BE46D0072924A /* Settings.swift */; };
 		D06E3938236BE46E0072924A /* Settings.xib in Resources */ = {isa = PBXBuildFile; fileRef = D06E3936236BE46E0072924A /* Settings.xib */; };
+		D06FD7BE2505DA3700481185 /* OpenAuth.command in Resources */ = {isa = PBXBuildFile; fileRef = D06FD7BD2505DA3700481185 /* OpenAuth.command */; };
 		D0760106247DFEF200706F70 /* Strap.command in Resources */ = {isa = PBXBuildFile; fileRef = D0760105247DFEF200706F70 /* Strap.command */; };
 		D076010C247E074D00706F70 /* CheckHomebrew.command in Resources */ = {isa = PBXBuildFile; fileRef = D076010B247E074D00706F70 /* CheckHomebrew.command */; };
 		D0760110247E084200706F70 /* CheckXCodeSelect.command in Resources */ = {isa = PBXBuildFile; fileRef = D076010F247E084200706F70 /* CheckXCodeSelect.command */; };
@@ -40,7 +45,7 @@
 		D076011A2480F95E00706F70 /* OpenRegtestHiddenService.command in Resources */ = {isa = PBXBuildFile; fileRef = D07601192480F95E00706F70 /* OpenRegtestHiddenService.command */; };
 		D08210372389058B00E21EDC /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08210362389058B00E21EDC /* Defaults.swift */; };
 		D0821040238AA76000E21EDC /* tor_logo_redesign copy.png in Resources */ = {isa = PBXBuildFile; fileRef = D082103E238AA76000E21EDC /* tor_logo_redesign copy.png */; };
-		D0821041238AA76000E21EDC /* btccore copy.png in Resources */ = {isa = PBXBuildFile; fileRef = D082103F238AA76000E21EDC /* btccore copy.png */; };
+		D0821041238AA76000E21EDC /* btccore-copy.png in Resources */ = {isa = PBXBuildFile; fileRef = D082103F238AA76000E21EDC /* btccore-copy.png */; };
 		D0821043238AA78900E21EDC /* blockchaincommons.png in Resources */ = {isa = PBXBuildFile; fileRef = D0821042238AA78800E21EDC /* blockchaincommons.png */; };
 		D0821047238B66F300E21EDC /* ShowBitcoinCoreLog.command in Resources */ = {isa = PBXBuildFile; fileRef = D0821046238B66F300E21EDC /* ShowBitcoinCoreLog.command */; };
 		D0821049238B702100E21EDC /* ShowTorLog.command in Resources */ = {isa = PBXBuildFile; fileRef = D0821048238B702100E21EDC /* ShowTorLog.command */; };
@@ -67,6 +72,8 @@
 		D0BCB33A236A6D27000D8FDE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D0BCB338236A6D27000D8FDE /* Main.storyboard */; };
 		D0BCB346236A6D28000D8FDE /* StandUpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BCB345236A6D28000D8FDE /* StandUpTests.swift */; };
 		D0BCB351236A6D28000D8FDE /* StandUpUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BCB350236A6D28000D8FDE /* StandUpUITests.swift */; };
+		D0C9439625009D0A00DF7339 /* WalletsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C9439525009D0A00DF7339 /* WalletsViewController.swift */; };
+		D0C9439E2500C5AA00DF7339 /* RPC.command in Resources */ = {isa = PBXBuildFile; fileRef = D0C9439D2500C5AA00DF7339 /* RPC.command */; };
 		D0DCD8E6236ACC9E00F2D15A /* ScriptEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DCD8E5236ACC9E00F2D15A /* ScriptEnum.swift */; };
 		D0DCD8E9236ACD5300F2D15A /* QRDisplayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DCD8E7236ACD5300F2D15A /* QRDisplayer.swift */; };
 		D0DCD8EA236ACD5300F2D15A /* QRDisplayer.xib in Resources */ = {isa = PBXBuildFile; fileRef = D0DCD8E8236ACD5300F2D15A /* QRDisplayer.xib */; };
@@ -118,6 +125,10 @@
 		D01B61092487873F005D3090 /* AddAuthentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAuthentication.swift; sourceTree = "<group>"; };
 		D01B610B248789D1005D3090 /* RemoveAuth.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = RemoveAuth.command; sourceTree = "<group>"; };
 		D01B610D24878E07005D3090 /* CheckForAuth.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = CheckForAuth.command; sourceTree = "<group>"; };
+		D0211A4D250493CB00F7517A /* WalletDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletDetail.swift; sourceTree = "<group>"; };
+		D0211A4F250497C100F7517A /* DeleteWallet.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = DeleteWallet.command; sourceTree = "<group>"; };
+		D03063B424FE1FCA003B44BE /* ShowBitcoinConf.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ShowBitcoinConf.command; sourceTree = "<group>"; };
+		D03063B824FE2375003B44BE /* OpenTorrc.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = OpenTorrc.command; sourceTree = "<group>"; };
 		D049E89D237BD09200294E70 /* StandDown.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = StandDown.command; sourceTree = "<group>"; };
 		D049E89F237BFF9E00294E70 /* UpdateBTCConf.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = UpdateBTCConf.command; sourceTree = "<group>"; };
 		D0534CC5237E4CC20093DE67 /* ok.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ok.png; sourceTree = "<group>"; };
@@ -125,6 +136,7 @@
 		D0534CC9237E4DF00093DE67 /* fullynoded_qr.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fullynoded_qr.png; sourceTree = "<group>"; };
 		D06E3935236BE46D0072924A /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		D06E3936236BE46E0072924A /* Settings.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Settings.xib; sourceTree = "<group>"; };
+		D06FD7BD2505DA3700481185 /* OpenAuth.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = OpenAuth.command; sourceTree = "<group>"; };
 		D0760105247DFEF200706F70 /* Strap.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = Strap.command; sourceTree = "<group>"; };
 		D076010B247E074D00706F70 /* CheckHomebrew.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = CheckHomebrew.command; sourceTree = "<group>"; };
 		D076010F247E084200706F70 /* CheckXCodeSelect.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = CheckXCodeSelect.command; sourceTree = "<group>"; };
@@ -134,7 +146,7 @@
 		D07601192480F95E00706F70 /* OpenRegtestHiddenService.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = OpenRegtestHiddenService.command; sourceTree = "<group>"; };
 		D08210362389058B00E21EDC /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		D082103E238AA76000E21EDC /* tor_logo_redesign copy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tor_logo_redesign copy.png"; sourceTree = "<group>"; };
-		D082103F238AA76000E21EDC /* btccore copy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btccore copy.png"; sourceTree = "<group>"; };
+		D082103F238AA76000E21EDC /* btccore-copy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btccore-copy.png"; sourceTree = "<group>"; };
 		D0821042238AA78800E21EDC /* blockchaincommons.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blockchaincommons.png; sourceTree = "<group>"; };
 		D0821046238B66F300E21EDC /* ShowBitcoinCoreLog.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ShowBitcoinCoreLog.command; sourceTree = "<group>"; };
 		D0821048238B702100E21EDC /* ShowTorLog.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ShowTorLog.command; sourceTree = "<group>"; };
@@ -168,6 +180,8 @@
 		D0BCB34C236A6D28000D8FDE /* GordianServer-macOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "GordianServer-macOSUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0BCB350236A6D28000D8FDE /* StandUpUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandUpUITests.swift; sourceTree = "<group>"; };
 		D0BCB352236A6D28000D8FDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D0C9439525009D0A00DF7339 /* WalletsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletsViewController.swift; sourceTree = "<group>"; };
+		D0C9439D2500C5AA00DF7339 /* RPC.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = RPC.command; sourceTree = "<group>"; };
 		D0DCD8E5236ACC9E00F2D15A /* ScriptEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptEnum.swift; sourceTree = "<group>"; };
 		D0DCD8E7236ACD5300F2D15A /* QRDisplayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRDisplayer.swift; sourceTree = "<group>"; };
 		D0DCD8E8236ACD5300F2D15A /* QRDisplayer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QRDisplayer.xib; sourceTree = "<group>"; };
@@ -220,6 +234,8 @@
 				D06E3935236BE46D0072924A /* Settings.swift */,
 				D06E3936236BE46E0072924A /* Settings.xib */,
 				D01B61092487873F005D3090 /* AddAuthentication.swift */,
+				D0C9439525009D0A00DF7339 /* WalletsViewController.swift */,
+				D0211A4D250493CB00F7517A /* WalletDetail.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -271,6 +287,11 @@
 				D01B610D24878E07005D3090 /* CheckForAuth.command */,
 				D0F613EB2489278B0057CC93 /* CheckForOldHost.command */,
 				D0F613ED24892B680057CC93 /* RemoveOldHost.command */,
+				D03063B424FE1FCA003B44BE /* ShowBitcoinConf.command */,
+				D03063B824FE2375003B44BE /* OpenTorrc.command */,
+				D0C9439D2500C5AA00DF7339 /* RPC.command */,
+				D0211A4F250497C100F7517A /* DeleteWallet.command */,
+				D06FD7BD2505DA3700481185 /* OpenAuth.command */,
 			);
 			path = Scripts;
 			sourceTree = "<group>";
@@ -279,7 +300,7 @@
 			isa = PBXGroup;
 			children = (
 				D0F9352B238CAC48001FF151 /* onion.png */,
-				D082103F238AA76000E21EDC /* btccore copy.png */,
+				D082103F238AA76000E21EDC /* btccore-copy.png */,
 				D0821042238AA78800E21EDC /* blockchaincommons.png */,
 				D082103E238AA76000E21EDC /* tor_logo_redesign copy.png */,
 				D0A871CE237E4B9D006033C9 /* yes.png */,
@@ -480,6 +501,7 @@
 				D0EB5319237E4E9F002212F8 /* fullynoded_generate.png in Resources */,
 				D01B60E62484BAE1005D3090 /* IsMainOn.command in Resources */,
 				D0B9277A2383F8D400956651 /* CheckForBitcoinCore.command in Resources */,
+				D03063B524FE1FCA003B44BE /* ShowBitcoinConf.command in Resources */,
 				D01B60FA2484CD9A005D3090 /* StopTest.command in Resources */,
 				D0DCD8EE236ACD6300F2D15A /* Installer.xib in Resources */,
 				D01B60EA2484BC3E005D3090 /* IsRegtestOn.command in Resources */,
@@ -500,9 +522,10 @@
 				D0B927822384DD7100956651 /* CheckForTor.command in Resources */,
 				D0EBC02F2376834D008302D2 /* Authenticate.command in Resources */,
 				D0821040238AA76000E21EDC /* tor_logo_redesign copy.png in Resources */,
+				D0211A50250497C100F7517A /* DeleteWallet.command in Resources */,
 				D01B60E82484BC20005D3090 /* IsTestOn.command in Resources */,
 				D0A871CC237E3C57006033C9 /* TorStatus.command in Resources */,
-				D0821041238AA76000E21EDC /* btccore copy.png in Resources */,
+				D0821041238AA76000E21EDC /* btccore-copy.png in Resources */,
 				D0760110247E084200706F70 /* CheckXCodeSelect.command in Resources */,
 				D049E8A0237BFF9E00294E70 /* UpdateBTCConf.command in Resources */,
 				D01B60F42484C963005D3090 /* StartRegd.command in Resources */,
@@ -514,9 +537,11 @@
 				D01B610E24878E07005D3090 /* CheckForAuth.command in Resources */,
 				D049E89E237BD09200294E70 /* StandDown.command in Resources */,
 				D0B9277E2383FCD000956651 /* StopBitcoin.command in Resources */,
+				D0C9439E2500C5AA00DF7339 /* RPC.command in Resources */,
 				D0534CC8237E4CE70093DE67 /* paste.png in Resources */,
 				D0EB5318237E4E9F002212F8 /* fullynoded_share.png in Resources */,
 				D0BCB33A236A6D27000D8FDE /* Main.storyboard in Resources */,
+				D03063B924FE2375003B44BE /* OpenTorrc.command in Resources */,
 				D0821043238AA78900E21EDC /* blockchaincommons.png in Resources */,
 				D01471A12371354700F64329 /* LaunchBitcoin.command in Resources */,
 				D0F613EE24892B680057CC93 /* RemoveOldHost.command in Resources */,
@@ -529,6 +554,7 @@
 				D0760106247DFEF200706F70 /* Strap.command in Resources */,
 				D01B60F82484CD65005D3090 /* StopMain.command in Resources */,
 				D07601162480F79200706F70 /* OpenMainnetHiddenService.command in Resources */,
+				D06FD7BE2505DA3700481185 /* OpenAuth.command in Resources */,
 				D0A871CF237E4B9D006033C9 /* yes.png in Resources */,
 				D0B927842384DE1B00956651 /* GetTorrc.command in Resources */,
 				D0B927882384E2D400956651 /* GetHostname.command in Resources */,
@@ -561,6 +587,7 @@
 				D01B610824877301005D3090 /* MakeRPCCall.swift in Sources */,
 				D01B610A2487873F005D3090 /* AddAuthentication.swift in Sources */,
 				D0B9278C2385045400956651 /* Log.swift in Sources */,
+				D0211A4E250493CB00F7517A /* WalletDetail.swift in Sources */,
 				D0DCD8E9236ACD5300F2D15A /* QRDisplayer.swift in Sources */,
 				D0EBC0312377EE65008302D2 /* Utilities.swift in Sources */,
 				D0DCD8ED236ACD6300F2D15A /* Installer.swift in Sources */,
@@ -568,6 +595,7 @@
 				D0DCD8E6236ACC9E00F2D15A /* ScriptEnum.swift in Sources */,
 				D0BCB333236A6D22000D8FDE /* AppDelegate.swift in Sources */,
 				D0B9277123837AB400956651 /* UrlRequest.swift in Sources */,
+				D0C9439625009D0A00DF7339 /* WalletsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -735,7 +763,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 0.1.2;
+				CURRENT_PROJECT_VERSION = 0.1.3;
 				DEVELOPMENT_TEAM = YZHG975W3A;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "GordianServer-macOS/Info.plist";
@@ -744,7 +772,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				MARKETING_VERSION = 0.1.2;
+				MARKETING_VERSION = 0.1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.blockchaincommons.BitcoinStandUp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -760,7 +788,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 0.1.2;
+				CURRENT_PROJECT_VERSION = 0.1.3;
 				DEVELOPMENT_TEAM = YZHG975W3A;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "GordianServer-macOS/Info.plist";
@@ -769,7 +797,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				MARKETING_VERSION = 0.1.2;
+				MARKETING_VERSION = 0.1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.blockchaincommons.BitcoinStandUp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

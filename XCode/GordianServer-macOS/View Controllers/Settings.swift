@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class Settings: NSViewController {
+class Settings: NSViewController, NSTextFieldDelegate {
     
     var window: NSWindow?
     var filesList: [URL] = []
@@ -21,6 +21,7 @@ class Settings: NSViewController {
     var args = [String]()
     var refreshing = Bool()
     
+    @IBOutlet weak var pruneValueField: NSTextField!
     @IBOutlet var directoryLabel: NSTextField!
     @IBOutlet var nodeLabelField: NSTextField!
     @IBOutlet var walletDisabled: NSButton!
@@ -30,6 +31,7 @@ class Settings: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        pruneValueField.delegate = self
         let d = Defaults()
         d.setDefaults() { [unowned vc = self] in
             vc.getSettings()
@@ -42,6 +44,24 @@ class Settings: NSViewController {
     }
     
     // MARK: User Actions
+    @IBAction func deleteWalletsAction(_ sender: Any) {
+        DispatchQueue.main.async { [weak self] in
+            self?.performSegue(withIdentifier: "segueToDeleteWallets", sender: self)
+        }
+    }
+    
+    
+    @IBAction func seeBitcoinConf(_ sender: Any) {
+        let d = Defaults()
+        let path = d.dataDir()
+        let env = ["DATADIR":path]
+        runScript(script: .showBitcoinConf, env: env, args: []) { _ in }
+    }
+    
+    @IBAction func seeTorrc(_ sender: Any) {
+        runScript(script: .openTorrc, env: ["":""], args: []) { _ in }
+    }
+    
     @IBAction func seeTorLog(_ sender: Any) {
         runScript(script: .showTorLog, env: ["":""], args: []) { _ in }
     }
@@ -187,6 +207,9 @@ class Settings: NSViewController {
         DispatchQueue.main.async {
             actionAlert(message: "Danger!", info: "This will remove the StandUp directory including all its contents!\n\nThis will remove tor config, tor hidden services and uninstall tor.\n\nAre you aure you want to do this?") { [unowned vc = self] response in
                 if response {
+                    let domain = Bundle.main.bundleIdentifier!
+                    UserDefaults.standard.removePersistentDomain(forName: domain)
+                    UserDefaults.standard.synchronize()
                     vc.seeLog = false
                     vc.standingDown = true
                     vc.performSegue(withIdentifier: "seeLog", sender: vc)
@@ -234,13 +257,32 @@ class Settings: NSViewController {
         getBitcoinConf { [unowned vc = self] (conf, error) in
             if !error && conf != nil {
                 if conf!.count > 0 {
-                    vc.parseBitcoinConf(conf: conf!, keyToUpdate: .prune, outlet: vc.pruneOutlet, newValue: value)
+                    DispatchQueue.main.async { [weak self] in
+                        var newValue = value
+                        if self?.pruneValueField.stringValue != "" {
+                            if value == 0 {
+                                //self?.pruneValueField.isEnabled = false
+                                //self?.pruneValueField.stringValue = "0"
+                            } else {
+                                if self != nil {
+                                    if let int = Int(self!.pruneValueField.stringValue) {
+                                        self?.pruneValueField.isEnabled = true
+                                        newValue = int
+                                    }
+                                }
+                            }
+                        }
+                        vc.parseBitcoinConf(conf: conf!, keyToUpdate: .prune, outlet: vc.pruneOutlet, newValue: newValue)
+                    }
                 }
             } else {
                 vc.ud.set(value, forKey: "prune")
                 if value == 1 {
                     vc.setState(int: 0, outlet: vc.txIndexOutlet)
                     vc.ud.set(0, forKey: "txindex")
+                    DispatchQueue.main.async { [weak self] in
+                        self?.pruneValueField.stringValue = "\(value)"
+                    }
                 }
             }
         }
@@ -293,7 +335,7 @@ class Settings: NSViewController {
         let env = ["CONF":conf,"DATADIR":d.dataDir()]
         runScript(script: .updateBTCConf, env: env, args: args) { [unowned vc = self] success in
             if success {
-                if newValue < 2 {
+                if newValue < 2 || key == "prune" {
                     vc.ud.set(newValue, forKey: key)
                 }
                 setSimpleAlert(message: "Success", info: "bitcoin.conf updated", buttonLabel: "OK")
@@ -352,7 +394,7 @@ class Settings: NSViewController {
                                 stringConf = stringConf.replacingOccurrences(of: "prune=1", with: "prune=0")
                                 setState(int: 0, outlet: pruneOutlet)
                             }
-                            if key == "prune" && newValue == 1 {
+                            if key == "prune" && newValue > 0 {
                                 stringConf = stringConf.replacingOccurrences(of: "txindex=1", with: "txindex=0")
                                 setState(int: 0, outlet: txIndexOutlet)
                             }
@@ -418,7 +460,12 @@ class Settings: NSViewController {
     
     func getSettings() {
         let d = Defaults()
-        setState(int: d.prune(), outlet: pruneOutlet)
+        let pruneValue = d.prune()
+        var isPruned = 0
+        if pruneValue > 0 {
+            isPruned = 1
+        }
+        setState(int: isPruned, outlet: pruneOutlet)
         setState(int: d.txindex(), outlet: txIndexOutlet)
         setState(int: d.walletdisabled(), outlet: walletDisabled)
         setState(int: d.isPrivate(), outlet: goPrivateOutlet)
@@ -431,6 +478,9 @@ class Settings: NSViewController {
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.nodeLabelField.stringValue = vc.ud.object(forKey: "nodeLabel") as! String
             }
+        }
+        DispatchQueue.main.async { [weak self] in
+            self?.pruneValueField.stringValue = "\(pruneValue)"
         }
     }
     
@@ -486,6 +536,36 @@ class Settings: NSViewController {
             completion(true)
         } else {
             completion(false)
+        }
+    }
+    
+    func control(_ control: NSControl, textShouldEndEditing fieldEditor: NSText) -> Bool {
+        if fieldEditor.string != "" {
+            if let int = Int(fieldEditor.string) {
+                if int > 549 || int == 0 || int == 1 {
+                    updatePruneValue(amount: int)
+                }
+            }
+        }
+        return true
+    }
+    
+    private func updatePruneValue(amount: Int) {
+        getBitcoinConf { [unowned vc = self] (conf, error) in
+            if !error && conf != nil {
+                vc.parseBitcoinConf(conf: conf!, keyToUpdate: .prune, outlet: vc.pruneOutlet, newValue: amount)
+            } else {
+                var info = "It looks like you do not have an existing bitcoin.conf. Updating this setting will change the prune setting to \(amount)MiB"
+                if amount <= 1 {
+                    info = "It looks like you do not have an existing bitcoin.conf. Updating this setting will change the prune setting to \(amount)"
+                }
+                actionAlert(message: "Update prune setting?", info: info) { (response) in
+                    if response {
+                        self.ud.set(amount, forKey: "prune")
+                        setSimpleAlert(message: "Success ✅", info: "Prune setting updated", buttonLabel: "OK")
+                    }
+                }
+            }
         }
     }
     
