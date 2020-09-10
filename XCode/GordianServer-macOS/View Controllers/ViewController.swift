@@ -660,7 +660,6 @@ class ViewController: NSViewController {
     }
     
     private func mainnetIsOff() {
-        print("mainnet is off")
         DispatchQueue.main.async { [unowned vc = self] in
             vc.mainOn = false
             vc.mainnetIsOnImage.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
