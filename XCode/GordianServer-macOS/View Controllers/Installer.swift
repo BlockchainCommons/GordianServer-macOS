@@ -109,6 +109,9 @@ class Installer: NSViewController {
 
         } else if upgrading {
             getURLs()
+            
+        } else if installLightning {
+            installLightningAction()
         }
         
         DispatchQueue.main.async { [unowned vc = self] in
