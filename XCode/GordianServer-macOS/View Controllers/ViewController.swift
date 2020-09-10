@@ -63,7 +63,12 @@ class ViewController: NSViewController {
     @IBOutlet weak var regtestPeersIncomingLabel: NSTextField!
     @IBOutlet weak var regtestPeersOutgoingLabel: NSTextField!
     @IBOutlet weak var bitcoinIsOnHeaderImage: NSImageView!
+    @IBOutlet weak var mainWalletOutlet: NSButton!
+    @IBOutlet weak var testWalletsOutlet: NSButton!
+    @IBOutlet weak var regWalletsOutlet: NSButton!
     
+    
+    var timer: Timer?
     var chain = ""
     var rpcpassword = ""
     var rpcuser = ""
@@ -661,6 +666,7 @@ class ViewController: NSViewController {
             vc.mainnetIsOnImage.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
             vc.startMainnetOutlet.title = "Start"
             vc.startMainnetOutlet.isEnabled = true
+            vc.mainWalletOutlet.isEnabled = false
         }
     }
     
@@ -670,6 +676,7 @@ class ViewController: NSViewController {
             vc.testnetIsOnImage.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
             vc.startTestnetOutlet.title = "Start"
             vc.startTestnetOutlet.isEnabled = true
+            vc.testWalletsOutlet.isEnabled = false
         }
     }
     
@@ -679,6 +686,7 @@ class ViewController: NSViewController {
             vc.regtestIsOnImage.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
             vc.startRegtestOutlet.title = "Start"
             vc.startRegtestOutlet.isEnabled = true
+            vc.regWalletsOutlet.isEnabled = false
         }
     }
     
@@ -799,6 +807,10 @@ class ViewController: NSViewController {
                         vc.mainnetSyncedLabel.stringValue = vc.progress(dict: dict)
                     }
                 }
+            } else if result.contains("Loading block index...") {
+                DispatchQueue.main.async { [unowned vc = self] in
+                    vc.mainnetSyncedLabel.stringValue = "Loading blocks..."
+                }
             }
             
             DispatchQueue.main.async { [unowned vc = self] in
@@ -807,12 +819,15 @@ class ViewController: NSViewController {
                 vc.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
                 vc.startMainnetOutlet.title = "Stop"
                 vc.startMainnetOutlet.isEnabled = true
+                vc.mainWalletOutlet.isEnabled = true
+                vc.setTimer()
             }
         } else {
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.mainOn = false
                 vc.mainnetIsOnImage.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
                 vc.startMainnetOutlet.title = "Start"
+                vc.mainWalletOutlet.isEnabled = false
                 vc.startMainnetOutlet.isEnabled = false
             }
         }
@@ -830,6 +845,10 @@ class ViewController: NSViewController {
                         vc.testnetSyncedLabel.stringValue = vc.progress(dict: dict)
                     }
                 }
+            } else if result.contains("Loading block index...") {
+                DispatchQueue.main.async { [unowned vc = self] in
+                    vc.testnetSyncedLabel.stringValue = "Loading blocks..."
+                }
             }
             
             DispatchQueue.main.async { [unowned vc = self] in
@@ -838,12 +857,15 @@ class ViewController: NSViewController {
                 vc.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
                 vc.startTestnetOutlet.title = "Stop"
                 vc.startTestnetOutlet.isEnabled = true
+                vc.testWalletsOutlet.isEnabled = true
+                vc.setTimer()
             }
         } else {
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.testOn = false
                 vc.testnetIsOnImage.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
                 vc.startTestnetOutlet.title = "Start"
+                vc.testWalletsOutlet.isEnabled = false
                 vc.startTestnetOutlet.isEnabled = false
             }
         }
@@ -861,6 +883,10 @@ class ViewController: NSViewController {
                         vc.regtestSyncedLabel.stringValue = vc.progress(dict: dict)
                     }
                 }
+            } else if result.contains("Loading block index...") {
+                DispatchQueue.main.async { [unowned vc = self] in
+                    vc.regtestSyncedLabel.stringValue = "Loading blocks..."
+                }
             }
             
             DispatchQueue.main.async { [unowned vc = self] in
@@ -869,6 +895,8 @@ class ViewController: NSViewController {
                 vc.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
                 vc.startRegtestOutlet.title = "Stop"
                 vc.startRegtestOutlet.isEnabled = true
+                vc.regWalletsOutlet.isEnabled = true
+                vc.setTimer()
             }
         } else {
             DispatchQueue.main.async { [unowned vc = self] in
@@ -876,6 +904,7 @@ class ViewController: NSViewController {
                 vc.regtestIsOnImage.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
                 vc.startRegtestOutlet.title = "Start"
                 vc.startRegtestOutlet.isEnabled = false
+                vc.regWalletsOutlet.isEnabled = false
             }
         }
         if isLoading {
@@ -1162,6 +1191,24 @@ class ViewController: NSViewController {
     
     //MARK: User Inteface
     
+    /*
+     var helloWorldTimer = Timer.scheduledTimer(timeInterval: 60.0, target: self, selector: #selector(ViewController.sayHello), userInfo: nil, repeats: true)
+
+     @objc func sayHello()
+     {
+         NSLog("hello World")
+     }
+     */
+    
+    private func setTimer() {
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(timeInterval: 15.0, target: self, selector: #selector(automaticRefresh), userInfo: nil, repeats: true)
+    }
+    
+    @objc func automaticRefresh() {
+        refresh()
+    }
+    
     func setEnv() {
         env = ["BINARY_NAME":d.existingBinary(),"VERSION":d.existingPrefix(),"PREFIX":d.existingPrefix(),"DATADIR":d.dataDir()]
         #if DEBUG
@@ -1208,6 +1255,9 @@ class ViewController: NSViewController {
         bitcoinCoreVersionOutlet.stringValue = ""
         installTorOutlet.isEnabled = false
         verifyOutlet.isEnabled = false
+        mainWalletOutlet.isEnabled = false
+        testWalletsOutlet.isEnabled = false
+        regWalletsOutlet.isEnabled = false
         torRunningImage.alphaValue = 0
         bitcoinCoreWindow.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)
         torWindow.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)
