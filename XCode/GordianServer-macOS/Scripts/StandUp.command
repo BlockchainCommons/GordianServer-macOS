@@ -143,7 +143,11 @@ HiddenServicePort 1310 127.0.0.1:18332\
 \
 HiddenServiceDir \/usr\/local\/var\/lib\/tor\/standup\/reg\/\
 HiddenServiceVersion 3\
-HiddenServicePort 1311 127.0.0.1:18443/g' /usr/local/etc/tor/torrc
+HiddenServicePort 1311 127.0.0.1:18443\
+\
+HiddenServiceDir \/usr\/local\/var\/lib\/tor\/standup\/lightning\/\
+HiddenServiceVersion 3\
+HiddenServicePort 1312 127.0.0.1:1312/g' /usr/local/etc/tor/torrc
 
     echo "Creating hidden service directories at /usr/local/var/lib/tor/standup"
     

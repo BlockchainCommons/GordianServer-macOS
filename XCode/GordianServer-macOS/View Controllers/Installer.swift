@@ -28,6 +28,7 @@ class Installer: NSViewController {
     var ignoreExistingBitcoin = Bool()
     var rpcuser = ""
     var rpcpassword = ""
+    var lightningHostname = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -111,7 +112,12 @@ class Installer: NSViewController {
             getURLs()
             
         } else if installLightning {
-            installLightningAction()
+            DispatchQueue.main.async { [unowned vc = self] in
+                vc.spinner.startAnimation(vc)
+            }
+            desc = "Installing Lightning..."
+            //installLightningAction()
+            checkExistingConf()
         }
         
         DispatchQueue.main.async { [unowned vc = self] in
@@ -216,13 +222,21 @@ class Installer: NSViewController {
                         vc.standUpConf = "#bindaddress=127.0.0.1\n" + vc.standUpConf
                     }
                     
-                    vc.getURLs()
-                    
+                    if !vc.installLightning {
+                        vc.getURLs()
+                    } else {
+                        vc.installLightningAction()
+                    }
+                                        
                 } else {
-                    vc.setDefaultBitcoinConf()
+                    if !vc.installLightning {
+                        vc.setDefaultBitcoinConf()
+                    }
                 }
             } else {
-                vc.setDefaultBitcoinConf()
+                if !vc.installLightning {
+                    vc.setDefaultBitcoinConf()
+                }
             }
         }
     }
@@ -412,15 +426,20 @@ class Installer: NSViewController {
     private func installLightningAction() {
         print("installLightningAction")
         showLog = true
-        run(script: .installLightning, env: ["":""]) {
-            DispatchQueue.main.async { [weak self] in
-                if self != nil {
-                    self?.setLog(content: self!.consoleOutput.string)
-                }
-                NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
-                self?.goBack()
-            }
-        }
+        let d = Defaults()
+        let env = ["RPC_PASSWORD":rpcpassword, "RPC_USER":rpcuser, "LIGHTNING_P2P_ONION":lightningHostname.replacingOccurrences(of: "\n", with: ""), "HTTP_PASS":randomString(length: 32), "PREFIX": d.existingPrefix(), "DATA_DIR": d.dataDir()]
+        print("env: \(env)")
+        
+//        run(script: .installLightning, env: env) {
+//            DispatchQueue.main.async { [weak self] in
+//                if self != nil {
+//                    self?.setLog(content: self!.consoleOutput.string)
+//                }
+//                NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
+//                self?.goBack()
+//            }
+//        }
+        
     }
     
     private func run(script: SCRIPT, env: [String:String], completion: @escaping () -> Void) {

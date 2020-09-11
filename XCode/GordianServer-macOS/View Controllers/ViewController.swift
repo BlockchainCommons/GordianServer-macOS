@@ -84,6 +84,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     var newestVersion = ""
     var newestBinaryName = ""
     var newestPrefix = ""
+    var lightningHostname = ""
     var strapping = Bool()
     var standingUp = Bool()
     var bitcoinInstalled = Bool()
@@ -144,9 +145,8 @@ class ViewController: NSViewController, NSWindowDelegate {
         standingUp = false
         upgrading = false
         strapping = false
-        DispatchQueue.main.async { [weak self] in
-            self?.performSegue(withIdentifier: "goInstall", sender: self)
-        }
+        runScript(script: .getLightningHostname)
+        
     }
 
 
@@ -316,6 +316,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                             if response {
                                 DispatchQueue.main.async { [unowned vc = self] in
                                     vc.upgrading = true
+                                    vc.timer?.invalidate()
                                     vc.performSegue(withIdentifier: "goInstall", sender: vc)
                                 }
                             }
@@ -432,6 +433,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                             DispatchQueue.main.async { [unowned vc = self] in
                                 vc.standingUp = true
                                 vc.ignoreExistingBitcoin = true
+                                vc.timer?.invalidate()
                                 vc.performSegue(withIdentifier: "goInstall", sender: vc)
                             }
                         }
@@ -655,6 +657,13 @@ class ViewController: NSViewController, NSWindowDelegate {
 
         case .checkForOldHost:
             parseOldHostResponse(result: result)
+            
+        case .getLightningHostname:
+            DispatchQueue.main.async { [weak self] in
+                self?.lightningHostname = result
+                self?.timer?.invalidate()
+                self?.performSegue(withIdentifier: "goInstall", sender: self)
+            }
 
         default: break
         }
@@ -1144,6 +1153,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                             if response {
                                 DispatchQueue.main.async { [unowned vc = self] in
                                     vc.upgrading = true
+                                    vc.timer?.invalidate()
                                     vc.performSegue(withIdentifier: "goInstall", sender: vc)
                                 }
                             }
@@ -1213,15 +1223,6 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     //MARK: User Inteface
-
-    /*
-     var helloWorldTimer = Timer.scheduledTimer(timeInterval: 60.0, target: self, selector: #selector(ViewController.sayHello), userInfo: nil, repeats: true)
-
-     @objc func sayHello()
-     {
-         NSLog("hello World")
-     }
-     */
 
     private func setTimer() {
         timer?.invalidate()
@@ -1377,6 +1378,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                 if response {
                     DispatchQueue.main.async { [unowned vc = self] in
                         vc.standingUp = true
+                        vc.timer?.invalidate()
                         vc.performSegue(withIdentifier: "goInstall", sender: vc)
                     }
                 }
@@ -1433,6 +1435,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                 vc.upgrading = upgrading
                 vc.ignoreExistingBitcoin = ignoreExistingBitcoin
                 vc.strapping = strapping
+                vc.lightningHostname = lightningHostname
             }
 
         case "segueToWallets":

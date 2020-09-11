@@ -5,6 +5,21 @@
 #
 #  Created by Peter on 9/9/20.
 #  Copyright © 2020 Peter. All rights reserved.
+CONFIG="alias=Gordian-Server\
+bitcoin-rpcpassword="$RPC_PASSWORD"\
+bitcoin-rpcuser="$RPC_USER"\
+bitcoin-cli="$HOME"/.standup/BitcoinCore/"$PREFIX"/bin\
+bitcoin-datadir="$DATA_DIR"\
+network=bitcoin\
+plugin="$HOME"/.lightning/plugins/c-lightning-http-plugin/target/release/c-lightning-http-plugin\
+proxy=127.0.0.1:9050\
+announce-addr="$LIGHTNING_P2P_ONION"\
+bind-addr=127.0.0.1:9735\
+log-file="$HOME"/.lightning/lightning.log\
+log-level=debug:plugin\
+http-pass="$HTTP_PASS"\
+http-port=1312"
+
 function installDependencies () {
 
     echo "Installing lightning dependencies..."
@@ -122,7 +137,6 @@ function installDependencies () {
 }
 
 function installLightning () {
-    installDependencies
 
     ln -s /usr/local/Cellar/gettext/0.20.1/bin/xgettext /usr/local/opt
     export PATH="/usr/local/opt:$PATH"
@@ -130,21 +144,96 @@ function installLightning () {
     export LDFLAGS="-L/usr/local/opt/sqlite/lib"
     export CPPFLAGS="-I/usr/local/opt/sqlite/include"
 
-    echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init -)"\nfi' >> ~/.bash_profile
-    source ~/.bash_profile
-    pyenv install 3.7.4
-    pip install --upgrade pip
+    /usr/local/bin/pyenv install 3.7.4
+    /usr/local/bin/pip3 install --upgrade pip
 
-    cd ~/.standup
+    cd "$HOME"/.standup
     git clone https://github.com/ElementsProject/lightning.git
     cd lightning
+    git checkout tags/v0.9.0-1
 
-    pyenv local 3.7.4
-    pip install mako
+    /usr/local/bin/pyenv local 3.7.4
+    /usr/local/bin/pip3 install mako
 
     ./configure
-    make
+    /usr/bin/make
 }
 
+function configureLightning () {
+    
+    if ! [ -d "$HOME"/.lightning ]; then
+    
+        echo "Creating "$HOME"/.lightning directory..."
+        mkdir "$HOME"/.lightning
+        
+    else
+        
+        echo ""$HOME"/.lightning directory already exists"
+    
+    fi
+    
+    
+    if ! test -f "$HOME"/.lightning/config; then
+    
+        echo "Create "$HOME"/.lightning/config"
+        touch "$HOME"/.lightning/config
+        echo "$CONFIG" > "$HOME"/.lightning/config
+        
+    else
+        
+        echo ""$HOME"/.lightning config already exists..."
+    
+    fi
+    
+    
+    if ! [ -d "$HOME"/.lightning/plugins ]; then
+    
+        echo "Creating "$HOME"/.lightning/plugins directory..."
+        mkdir "$HOME"/.lightning/plugins
+        
+    else
+        
+        echo ""$HOME"/.lightning/plugins directory already exists"
+    
+    fi
+    
+    if ! test -f "$HOME"/.lightning/lightning.log; then
+    
+        echo "Create "$HOME"/.lightning/lightning.log"
+        touch "$HOME"/.lightning/lightning.log
+        
+    else
+        
+        echo ""$HOME"/.lightning/lightning.log already exists..."
+    
+    fi
+
+}
+
+function installHttpPlugin () {
+
+    if ! [ -d /usr/local/Cellar/rustup ]; then
+    
+        echo "Installing rust..."
+        sudo -u $(whoami) /usr/local/bin/brew install rustup
+        rustup-init
+        
+    else
+        
+        echo "rustup already installed"
+    
+    fi
+    
+    cd "$HOME"/.lightning/plugins
+    git clone https://github.com/Start9Labs/c-lightning-http-plugin.git
+    cd c-lightning-http-plugin
+    /usr/local/bin/cargo build --release
+    chmod a+x "$HOME"/.lightning/plugins/c-lightning-http-plugin/target/release/c-lightning-http-plugin
+    echo "C-Lightning installation complete!"
+    exit 1
+}
+
+installDependencies
 installLightning
-exit 1
+configureLightning
+installHttpPlugin

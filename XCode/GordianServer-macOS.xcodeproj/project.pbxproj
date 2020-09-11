@@ -28,6 +28,7 @@
 		D0211A50250497C100F7517A /* DeleteWallet.command in Resources */ = {isa = PBXBuildFile; fileRef = D0211A4F250497C100F7517A /* DeleteWallet.command */; };
 		D03063B524FE1FCA003B44BE /* ShowBitcoinConf.command in Resources */ = {isa = PBXBuildFile; fileRef = D03063B424FE1FCA003B44BE /* ShowBitcoinConf.command */; };
 		D03063B924FE2375003B44BE /* OpenTorrc.command in Resources */ = {isa = PBXBuildFile; fileRef = D03063B824FE2375003B44BE /* OpenTorrc.command */; };
+		D042FAB8250B521B00E99D9B /* GetLightningHostname.command in Resources */ = {isa = PBXBuildFile; fileRef = D042FAB7250B521B00E99D9B /* GetLightningHostname.command */; };
 		D049E89E237BD09200294E70 /* StandDown.command in Resources */ = {isa = PBXBuildFile; fileRef = D049E89D237BD09200294E70 /* StandDown.command */; };
 		D049E8A0237BFF9E00294E70 /* UpdateBTCConf.command in Resources */ = {isa = PBXBuildFile; fileRef = D049E89F237BFF9E00294E70 /* UpdateBTCConf.command */; };
 		D0534CC6237E4CC20093DE67 /* ok.png in Resources */ = {isa = PBXBuildFile; fileRef = D0534CC5237E4CC20093DE67 /* ok.png */; };
@@ -130,6 +131,7 @@
 		D0211A4F250497C100F7517A /* DeleteWallet.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = DeleteWallet.command; sourceTree = "<group>"; };
 		D03063B424FE1FCA003B44BE /* ShowBitcoinConf.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ShowBitcoinConf.command; sourceTree = "<group>"; };
 		D03063B824FE2375003B44BE /* OpenTorrc.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = OpenTorrc.command; sourceTree = "<group>"; };
+		D042FAB7250B521B00E99D9B /* GetLightningHostname.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = GetLightningHostname.command; sourceTree = "<group>"; };
 		D049E89D237BD09200294E70 /* StandDown.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = StandDown.command; sourceTree = "<group>"; };
 		D049E89F237BFF9E00294E70 /* UpdateBTCConf.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = UpdateBTCConf.command; sourceTree = "<group>"; };
 		D0534CC5237E4CC20093DE67 /* ok.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ok.png; sourceTree = "<group>"; };
@@ -295,6 +297,7 @@
 				D0211A4F250497C100F7517A /* DeleteWallet.command */,
 				D06FD7BD2505DA3700481185 /* OpenAuth.command */,
 				D0DCD8802508BAF100243916 /* InstallLightning.command */,
+				D042FAB7250B521B00E99D9B /* GetLightningHostname.command */,
 			);
 			path = Scripts;
 			sourceTree = "<group>";
@@ -538,6 +541,7 @@
 				D01B60FC2484CDB7005D3090 /* StopReg.command in Resources */,
 				D0B36C432373BBA5004B2D63 /* StopTor.command in Resources */,
 				D01B60FE2484D908005D3090 /* StartMaind.command in Resources */,
+				D042FAB8250B521B00E99D9B /* GetLightningHostname.command in Resources */,
 				D01B610E24878E07005D3090 /* CheckForAuth.command in Resources */,
 				D049E89E237BD09200294E70 /* StandDown.command in Resources */,
 				D0B9277E2383FCD000956651 /* StopBitcoin.command in Resources */,
