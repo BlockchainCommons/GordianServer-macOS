@@ -664,8 +664,26 @@ class ViewController: NSViewController, NSWindowDelegate {
                 self?.timer?.invalidate()
                 self?.performSegue(withIdentifier: "goInstall", sender: self)
             }
+            
+        case .isLightningInstalled:
+            parseLightningInstalledResponse(result: result)
 
         default: break
+        }
+    }
+    
+    private func parseLightningInstalledResponse(result: String) {
+        print("parseLightningInstalledResponse: \(result)")
+        if result.contains("lightning installed") {
+            DispatchQueue.main.async { [weak self] in
+                //self?.installLightningOutlet.labe
+            }
+        } else {
+            if bitcoinInstalled {
+                DispatchQueue.main.async { [weak self] in
+                    self?.installLightningOutlet.isEnabled = true
+                }
+            }
         }
     }
 
@@ -689,6 +707,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                addAuth()
             }
         }
+        runScript(script: .isLightningInstalled)
     }
 
     private func mainnetIsOff() {
@@ -1137,7 +1156,6 @@ class ViewController: NSViewController, NSWindowDelegate {
                 vc.verifyOutlet.isEnabled = true
                 vc.bitcoinCoreVersionOutlet.stringValue = currentVersion
                 vc.bitcoinInstalled = true
-                vc.installLightningOutlet.isEnabled = true
                 if currentVersion.contains(vc.newestVersion) {
                     DispatchQueue.main.async { [unowned vc = self] in
                         vc.updateOutlet.isEnabled = false
@@ -1436,6 +1454,8 @@ class ViewController: NSViewController, NSWindowDelegate {
                 vc.ignoreExistingBitcoin = ignoreExistingBitcoin
                 vc.strapping = strapping
                 vc.lightningHostname = lightningHostname
+                timer?.invalidate()
+                timer = nil
             }
 
         case "segueToWallets":

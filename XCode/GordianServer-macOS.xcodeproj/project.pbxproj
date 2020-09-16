@@ -75,6 +75,7 @@
 		D0BCB351236A6D28000D8FDE /* StandUpUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BCB350236A6D28000D8FDE /* StandUpUITests.swift */; };
 		D0C9439625009D0A00DF7339 /* WalletsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C9439525009D0A00DF7339 /* WalletsViewController.swift */; };
 		D0C9439E2500C5AA00DF7339 /* RPC.command in Resources */ = {isa = PBXBuildFile; fileRef = D0C9439D2500C5AA00DF7339 /* RPC.command */; };
+		D0DACF482512023B00846590 /* IsLightningInstalled.command in Resources */ = {isa = PBXBuildFile; fileRef = D0DACF472512023B00846590 /* IsLightningInstalled.command */; };
 		D0DCD8812508BAF100243916 /* InstallLightning.command in Resources */ = {isa = PBXBuildFile; fileRef = D0DCD8802508BAF100243916 /* InstallLightning.command */; };
 		D0DCD8E6236ACC9E00F2D15A /* ScriptEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DCD8E5236ACC9E00F2D15A /* ScriptEnum.swift */; };
 		D0DCD8E9236ACD5300F2D15A /* QRDisplayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DCD8E7236ACD5300F2D15A /* QRDisplayer.swift */; };
@@ -185,6 +186,7 @@
 		D0BCB352236A6D28000D8FDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D0C9439525009D0A00DF7339 /* WalletsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletsViewController.swift; sourceTree = "<group>"; };
 		D0C9439D2500C5AA00DF7339 /* RPC.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = RPC.command; sourceTree = "<group>"; };
+		D0DACF472512023B00846590 /* IsLightningInstalled.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = IsLightningInstalled.command; sourceTree = "<group>"; };
 		D0DCD8802508BAF100243916 /* InstallLightning.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = InstallLightning.command; sourceTree = "<group>"; };
 		D0DCD8E5236ACC9E00F2D15A /* ScriptEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptEnum.swift; sourceTree = "<group>"; };
 		D0DCD8E7236ACD5300F2D15A /* QRDisplayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRDisplayer.swift; sourceTree = "<group>"; };
@@ -298,6 +300,7 @@
 				D06FD7BD2505DA3700481185 /* OpenAuth.command */,
 				D0DCD8802508BAF100243916 /* InstallLightning.command */,
 				D042FAB7250B521B00E99D9B /* GetLightningHostname.command */,
+				D0DACF472512023B00846590 /* IsLightningInstalled.command */,
 			);
 			path = Scripts;
 			sourceTree = "<group>";
@@ -564,6 +567,7 @@
 				D07601162480F79200706F70 /* OpenMainnetHiddenService.command in Resources */,
 				D06FD7BE2505DA3700481185 /* OpenAuth.command in Resources */,
 				D0A871CF237E4B9D006033C9 /* yes.png in Resources */,
+				D0DACF482512023B00846590 /* IsLightningInstalled.command in Resources */,
 				D0B927842384DE1B00956651 /* GetTorrc.command in Resources */,
 				D0B927882384E2D400956651 /* GetHostname.command in Resources */,
 			);

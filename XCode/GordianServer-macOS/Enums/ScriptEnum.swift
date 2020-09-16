@@ -58,6 +58,7 @@ public enum SCRIPT: String {
     case openAuth = "OpenAuth"
     case installLightning = "InstallLightning"
     case getLightningHostname = "GetLightningHostname"
+    case isLightningInstalled = "IsLightningInstalled"
 }
 
 public enum BTCCONF: String {

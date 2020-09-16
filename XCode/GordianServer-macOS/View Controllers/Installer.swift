@@ -305,15 +305,20 @@ class Installer: NSViewController {
         let d = Defaults()
         showLog = true
         let env = ["BINARY_NAME":binaryName, "MACOS_URL":macosURL, "SHA_URL":shaURL, "VERSION":version, "PREFIX":prefix, "CONF":standUpConf, "DATADIR":d.dataDir(), "IGNORE_EXISTING_BITCOIN":ignore]
-        run(script: .standUp, env: env) {
-            DispatchQueue.main.async { [unowned vc = self] in
-                let ud = UserDefaults.standard
-                ud.set(prefix, forKey: "binaryPrefix")
-                ud.set(binaryName, forKey: "macosBinary")
-                ud.set(version, forKey: "version")
-                vc.setLog(content: vc.consoleOutput.string)
-                NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
-                vc.goBack()
+        let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
+        taskQueue.async { [weak self] in
+            self?.run(script: .standUp, env: env) {
+                DispatchQueue.main.async { [weak self] in
+                    let ud = UserDefaults.standard
+                    ud.set(prefix, forKey: "binaryPrefix")
+                    ud.set(binaryName, forKey: "macosBinary")
+                    ud.set(version, forKey: "version")
+                    if self != nil {
+                        self?.setLog(content: self!.consoleOutput.string)
+                    }
+                    NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
+                    self?.goBack()
+                }
             }
         }
     }
@@ -322,15 +327,20 @@ class Installer: NSViewController {
         upgrading = false
         let env = ["BINARY_NAME":binaryName, "MACOS_URL":macosURL, "SHA_URL":shaURL, "VERSION":version]
         showLog = true
-        run(script: .upgradeBitcoin, env: env) {
-            DispatchQueue.main.async { [unowned vc = self] in
-                let ud = UserDefaults.standard
-                ud.set(prefix, forKey: "binaryPrefix")
-                ud.set(version, forKey: "version")
-                ud.set(binaryName, forKey: "macosBinary")
-                vc.setLog(content: vc.consoleOutput.string)
-                NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
-                vc.goBack()
+        let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
+        taskQueue.async { [weak self] in
+            self?.run(script: .upgradeBitcoin, env: env) {
+                DispatchQueue.main.async { [weak self] in
+                    let ud = UserDefaults.standard
+                    ud.set(prefix, forKey: "binaryPrefix")
+                    ud.set(version, forKey: "version")
+                    ud.set(binaryName, forKey: "macosBinary")
+                    if self != nil {
+                        self?.setLog(content: self!.consoleOutput.string)
+                    }
+                    NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
+                    self?.goBack()
+                }
             }
         }
     }
@@ -427,18 +437,23 @@ class Installer: NSViewController {
         print("installLightningAction")
         showLog = true
         let d = Defaults()
-        let env = ["RPC_PASSWORD":rpcpassword, "RPC_USER":rpcuser, "LIGHTNING_P2P_ONION":lightningHostname.replacingOccurrences(of: "\n", with: ""), "HTTP_PASS":randomString(length: 32), "PREFIX": d.existingPrefix(), "DATA_DIR": d.dataDir()]
+        let env = ["RPC_PASSWORD":rpcpassword, "RPC_USER":rpcuser, "LIGHTNING_P2P_ONION":lightningHostname.replacingOccurrences(of: "\n", with: ""), "HTTP_PASS":randomString(length: 32), "PREFIX": d.existingPrefix(), "DATA_DIR": d.dataDir(), "USER":NSUserName()]
+        #if DEBUG
         print("env: \(env)")
+        #endif
         
-//        run(script: .installLightning, env: env) {
-//            DispatchQueue.main.async { [weak self] in
-//                if self != nil {
-//                    self?.setLog(content: self!.consoleOutput.string)
-//                }
-//                NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
-//                self?.goBack()
-//            }
-//        }
+        let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
+        taskQueue.async { [weak self] in
+            self?.run(script: .installLightning, env: env) {
+                DispatchQueue.main.async { [weak self] in
+                    if self != nil {
+                        self?.setLog(content: self!.consoleOutput.string)
+                    }
+                    NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
+                    self?.goBack()
+                }
+            }
+        }
         
     }
     
@@ -465,6 +480,8 @@ class Installer: NSViewController {
             guard let output = String(data: data, encoding: .utf8) else {
                 return
             }
+            print("output: \(output)")
+             print("vc.showLog: \(vc.showLog)")
             if vc.showLog {
                 DispatchQueue.main.async { [unowned vc = self] in
                     let prevOutput = vc.consoleOutput.string
