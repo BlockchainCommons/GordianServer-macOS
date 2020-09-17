@@ -59,6 +59,11 @@ public enum SCRIPT: String {
     case installLightning = "InstallLightning"
     case getLightningHostname = "GetLightningHostname"
     case isLightningInstalled = "IsLightningInstalled"
+    case isLightningRunning = "IsLightningRunning"
+    case startLightning = "StartLightning"
+    case stopLightning = "StopLightning"
+    case openLightningLog = "OpenLightningLog"
+    case openLightningConfig = "OpenLightningConfig"
 }
 
 public enum BTCCONF: String {

@@ -76,6 +76,11 @@
 		D0C9439625009D0A00DF7339 /* WalletsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C9439525009D0A00DF7339 /* WalletsViewController.swift */; };
 		D0C9439E2500C5AA00DF7339 /* RPC.command in Resources */ = {isa = PBXBuildFile; fileRef = D0C9439D2500C5AA00DF7339 /* RPC.command */; };
 		D0DACF482512023B00846590 /* IsLightningInstalled.command in Resources */ = {isa = PBXBuildFile; fileRef = D0DACF472512023B00846590 /* IsLightningInstalled.command */; };
+		D0DACF4A2513146E00846590 /* IsLightningRunning.command in Resources */ = {isa = PBXBuildFile; fileRef = D0DACF492513146E00846590 /* IsLightningRunning.command */; };
+		D0DACF4C25131F2F00846590 /* StartLightning.command in Resources */ = {isa = PBXBuildFile; fileRef = D0DACF4B25131F2F00846590 /* StartLightning.command */; };
+		D0DACF4E25132E0C00846590 /* StopLightning.command in Resources */ = {isa = PBXBuildFile; fileRef = D0DACF4D25132E0C00846590 /* StopLightning.command */; };
+		D0DACF502513381200846590 /* OpenLightningLog.command in Resources */ = {isa = PBXBuildFile; fileRef = D0DACF4F2513381200846590 /* OpenLightningLog.command */; };
+		D0DACF522513398500846590 /* OpenLightningConfig.command in Resources */ = {isa = PBXBuildFile; fileRef = D0DACF512513398500846590 /* OpenLightningConfig.command */; };
 		D0DCD8812508BAF100243916 /* InstallLightning.command in Resources */ = {isa = PBXBuildFile; fileRef = D0DCD8802508BAF100243916 /* InstallLightning.command */; };
 		D0DCD8E6236ACC9E00F2D15A /* ScriptEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DCD8E5236ACC9E00F2D15A /* ScriptEnum.swift */; };
 		D0DCD8E9236ACD5300F2D15A /* QRDisplayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DCD8E7236ACD5300F2D15A /* QRDisplayer.swift */; };
@@ -187,6 +192,11 @@
 		D0C9439525009D0A00DF7339 /* WalletsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletsViewController.swift; sourceTree = "<group>"; };
 		D0C9439D2500C5AA00DF7339 /* RPC.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = RPC.command; sourceTree = "<group>"; };
 		D0DACF472512023B00846590 /* IsLightningInstalled.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = IsLightningInstalled.command; sourceTree = "<group>"; };
+		D0DACF492513146E00846590 /* IsLightningRunning.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = IsLightningRunning.command; sourceTree = "<group>"; };
+		D0DACF4B25131F2F00846590 /* StartLightning.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = StartLightning.command; sourceTree = "<group>"; };
+		D0DACF4D25132E0C00846590 /* StopLightning.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = StopLightning.command; sourceTree = "<group>"; };
+		D0DACF4F2513381200846590 /* OpenLightningLog.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = OpenLightningLog.command; sourceTree = "<group>"; };
+		D0DACF512513398500846590 /* OpenLightningConfig.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = OpenLightningConfig.command; sourceTree = "<group>"; };
 		D0DCD8802508BAF100243916 /* InstallLightning.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = InstallLightning.command; sourceTree = "<group>"; };
 		D0DCD8E5236ACC9E00F2D15A /* ScriptEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptEnum.swift; sourceTree = "<group>"; };
 		D0DCD8E7236ACD5300F2D15A /* QRDisplayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRDisplayer.swift; sourceTree = "<group>"; };
@@ -301,6 +311,11 @@
 				D0DCD8802508BAF100243916 /* InstallLightning.command */,
 				D042FAB7250B521B00E99D9B /* GetLightningHostname.command */,
 				D0DACF472512023B00846590 /* IsLightningInstalled.command */,
+				D0DACF492513146E00846590 /* IsLightningRunning.command */,
+				D0DACF4B25131F2F00846590 /* StartLightning.command */,
+				D0DACF4D25132E0C00846590 /* StopLightning.command */,
+				D0DACF4F2513381200846590 /* OpenLightningLog.command */,
+				D0DACF512513398500846590 /* OpenLightningConfig.command */,
 			);
 			path = Scripts;
 			sourceTree = "<group>";
@@ -507,7 +522,9 @@
 				D0A3B6F123739FCF00253635 /* StandUp.command in Resources */,
 				D0B9278A2384E54900956651 /* RemoveBitcoin.command in Resources */,
 				D0EB531A237E4E9F002212F8 /* fullynoded_tap_pubkey.png in Resources */,
+				D0DACF502513381200846590 /* OpenLightningLog.command in Resources */,
 				D0EB5319237E4E9F002212F8 /* fullynoded_generate.png in Resources */,
+				D0DACF4E25132E0C00846590 /* StopLightning.command in Resources */,
 				D01B60E62484BAE1005D3090 /* IsMainOn.command in Resources */,
 				D0B9277A2383F8D400956651 /* CheckForBitcoinCore.command in Resources */,
 				D03063B524FE1FCA003B44BE /* ShowBitcoinConf.command in Resources */,
@@ -518,6 +535,7 @@
 				D0F9352C238CAC48001FF151 /* onion.png in Resources */,
 				D076010C247E074D00706F70 /* CheckHomebrew.command in Resources */,
 				D0BCB337236A6D27000D8FDE /* Assets.xcassets in Resources */,
+				D0DACF4A2513146E00846590 /* IsLightningRunning.command in Resources */,
 				D0760114247F491E00706F70 /* LaunchStrap.command in Resources */,
 				D0534CCA237E4DF00093DE67 /* fullynoded_qr.png in Resources */,
 				D0DCD8EA236ACD5300F2D15A /* QRDisplayer.xib in Resources */,
@@ -530,6 +548,7 @@
 				D0B927782383E59700956651 /* UpgradeBitcoin.command in Resources */,
 				D0B927822384DD7100956651 /* CheckForTor.command in Resources */,
 				D0EBC02F2376834D008302D2 /* Authenticate.command in Resources */,
+				D0DACF4C25131F2F00846590 /* StartLightning.command in Resources */,
 				D0821040238AA76000E21EDC /* tor_logo_redesign copy.png in Resources */,
 				D0211A50250497C100F7517A /* DeleteWallet.command in Resources */,
 				D01B60E82484BC20005D3090 /* IsTestOn.command in Resources */,
@@ -560,6 +579,7 @@
 				D0821049238B702100E21EDC /* ShowTorLog.command in Resources */,
 				D0B927862384E18500956651 /* GetBitcoinConf.command in Resources */,
 				D0AE0DFB237297BE004369E2 /* StartTor.command in Resources */,
+				D0DACF522513398500846590 /* OpenLightningConfig.command in Resources */,
 				D0B9278023840D3C00956651 /* IsBitcoinOn.command in Resources */,
 				D06E3938236BE46E0072924A /* Settings.xib in Resources */,
 				D0760106247DFEF200706F70 /* Strap.command in Resources */,
@@ -775,7 +795,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 0.1.3;
+				CURRENT_PROJECT_VERSION = 0.1.4;
 				DEVELOPMENT_TEAM = YZHG975W3A;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "GordianServer-macOS/Info.plist";
@@ -784,7 +804,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				MARKETING_VERSION = 0.1.3;
+				MARKETING_VERSION = 0.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.blockchaincommons.BitcoinStandUp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -800,7 +820,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 0.1.3;
+				CURRENT_PROJECT_VERSION = 0.1.4;
 				DEVELOPMENT_TEAM = YZHG975W3A;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "GordianServer-macOS/Info.plist";
@@ -809,7 +829,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				MARKETING_VERSION = 0.1.3;
+				MARKETING_VERSION = 0.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.blockchaincommons.BitcoinStandUp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -44,12 +44,22 @@ class Settings: NSViewController, NSTextFieldDelegate {
     }
     
     // MARK: User Actions
+    
+    @IBAction func seeLightningLog(_ sender: Any) {
+        runScript(script: .openLightningLog, env: ["":""], args: []) { _ in }
+    }
+    
+    @IBAction func seeLightningConfig(_ sender: Any) {
+        runScript(script: .openLightningConfig, env: ["":""], args: []) { _ in }
+    }
+    
+    
+    
     @IBAction func deleteWalletsAction(_ sender: Any) {
         DispatchQueue.main.async { [weak self] in
             self?.performSegue(withIdentifier: "segueToDeleteWallets", sender: self)
         }
     }
-    
     
     @IBAction func seeBitcoinConf(_ sender: Any) {
         let d = Defaults()

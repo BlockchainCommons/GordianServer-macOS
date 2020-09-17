@@ -9,7 +9,11 @@
 import Cocoa
 
 class ViewController: NSViewController, NSWindowDelegate {
-
+    
+    
+    @IBOutlet weak var lightningQuickConnectOutlet: NSButton!
+    @IBOutlet weak var lightningVersionLabel: NSTextField!
+    @IBOutlet weak var lightningStatusIcon: NSImageView!
     @IBOutlet weak var installLightningOutlet: NSButton!
     @IBOutlet weak var lightningWindow: NSView!
     @IBOutlet weak var mainnetIncomingImage: NSImageView!
@@ -44,7 +48,6 @@ class ViewController: NSViewController, NSWindowDelegate {
     @IBOutlet var installTorOutlet: NSButton!
     @IBOutlet var seeLogOutlet: NSButton!
     @IBOutlet weak var bitcoinSettingsOutlet: NSButton!
-    @IBOutlet var settingsOutlet: NSButton!
     @IBOutlet var verifyOutlet: NSButton!
     @IBOutlet var updateOutlet: NSButton!
     @IBOutlet var icon: NSImageView!
@@ -79,12 +82,12 @@ class ViewController: NSViewController, NSWindowDelegate {
     var mainHostname = ""
     var testHostname = ""
     var regHostname = ""
+    var lightningHostname = ""
     var network = ""
     var rpcport = ""
     var newestVersion = ""
     var newestBinaryName = ""
     var newestPrefix = ""
-    var lightningHostname = ""
     var strapping = Bool()
     var standingUp = Bool()
     var bitcoinInstalled = Bool()
@@ -99,6 +102,8 @@ class ViewController: NSViewController, NSWindowDelegate {
     var regTestOn = Bool()
     var mainOn = Bool()
     var testOn = Bool()
+    var lightningIsRunning = false
+    var lightningInstalled = false
     var env = [String:String]()
     let d = Defaults()
 
@@ -139,14 +144,40 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     //MARK: User Action
+    
+    @IBAction func showLightningQuickConnect(_ sender: Any) {
+        DispatchQueue.main.async { [unowned vc = self] in
+            vc.rpcport = "1312"
+            vc.network = "lightning"
+            vc.torHostname = vc.lightningHostname
+            vc.performSegue(withIdentifier: "showPairingCode", sender: vc)
+        }
+    }
+    
 
     @IBAction func installLightningAction(_ sender: Any) {
-        installingLightning = true
-        standingUp = false
-        upgrading = false
-        strapping = false
-        runScript(script: .getLightningHostname)
-        
+        if !lightningInstalled {
+            installingLightning = true
+            standingUp = false
+            upgrading = false
+            strapping = false
+            runScript(script: .getLightningHostname)
+            
+        } else {
+            if lightningIsRunning {
+                DispatchQueue.main.async { [weak self] in
+                    self?.startSpinner(description: "stopping lightning...")
+                }
+                self.runScript(script: .stopLightning)
+                
+            } else {
+                DispatchQueue.main.async { [weak self] in
+                    self?.startSpinner(description: "starting lightning...")
+                }
+                self.runScript(script: .startLightning)
+                
+            }
+        }
     }
 
 
@@ -291,7 +322,6 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     @IBAction func torSettingsAction(_ sender: Any) {
         DispatchQueue.main.async { [unowned vc = self] in
-            vc.settingsOutlet.isHighlighted = false
             vc.performSegue(withIdentifier: "goToSettings", sender: vc)
         }
     }
@@ -465,7 +495,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             runScript(script: .stopTor)
         }
     }
-
+    
     // MARK: Script Methods
 
     private func checkForAuth() {
@@ -552,40 +582,52 @@ class ViewController: NSViewController, NSWindowDelegate {
             vc.runScript(script: .torStatus)
         }
     }
+    
+    private func isLightningRunning() {
+        DispatchQueue.main.async { [weak self] in
+            self?.taskDescription.stringValue = "checking if lightning is running..."
+            self?.runScript(script: .isLightningRunning)
+        }
+    }
 
     private func runScript(script: SCRIPT) {
         #if DEBUG
         print("script: \(script.rawValue)")
         #endif
-        let resource = script.rawValue
-        guard let path = Bundle.main.path(forResource: resource, ofType: "command") else {
-            return
+        
+        let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
+        taskQueue.async { [weak self] in
+            let resource = script.rawValue
+            guard let path = Bundle.main.path(forResource: resource, ofType: "command") else { return }
+            let stdOut = Pipe()
+            let stdErr = Pipe()
+            let task = Process()
+            task.launchPath = path
+            task.environment = self?.env
+            task.standardOutput = stdOut
+            task.standardError = stdErr
+            task.launch()
+            task.waitUntilExit()
+            let data = stdOut.fileHandleForReading.readDataToEndOfFile()
+            let errData = stdErr.fileHandleForReading.readDataToEndOfFile()
+            var result = ""
+            
+            if let output = String(data: data, encoding: .utf8) {
+                #if DEBUG
+                print("output: \(output)")
+                #endif
+                result += output
+            }
+            
+            if let errorOutput = String(data: errData, encoding: .utf8) {
+                #if DEBUG
+                print("error: \(errorOutput)")
+                #endif
+                result += errorOutput
+            }
+            
+            self?.parseScriptResult(script: script, result: result)
         }
-        let stdOut = Pipe()
-        let stdErr = Pipe()
-        let task = Process()
-        task.launchPath = path
-        task.environment = env
-        task.standardOutput = stdOut
-        task.standardError = stdErr
-        task.launch()
-        task.waitUntilExit()
-        let data = stdOut.fileHandleForReading.readDataToEndOfFile()
-        let errData = stdErr.fileHandleForReading.readDataToEndOfFile()
-        var result = ""
-        if let output = String(data: data, encoding: .utf8) {
-            #if DEBUG
-            print("output: \(output)")
-            #endif
-            result += output
-        }
-        if let errorOutput = String(data: errData, encoding: .utf8) {
-            #if DEBUG
-            print("error: \(errorOutput)")
-            #endif
-            result += errorOutput
-        }
-        parseScriptResult(script: script, result: result)
     }
 
     //MARK: Script Result Filters
@@ -667,16 +709,74 @@ class ViewController: NSViewController, NSWindowDelegate {
             
         case .isLightningInstalled:
             parseLightningInstalledResponse(result: result)
+            
+        case .isLightningRunning:
+            parseIsLightningRunningResponse(result: result)
+            
+        case .startLightning:
+            startLightningParse(result: result)
+            
+        case .stopLightning:
+            stopLightningParse(result: result)
 
         default: break
         }
     }
     
-    private func parseLightningInstalledResponse(result: String) {
-        print("parseLightningInstalledResponse: \(result)")
-        if result.contains("lightning installed") {
+    private func stopLightningParse(result: String) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [unowned vc = self] in
+            vc.runScript(script: .isLightningRunning)
+            vc.hideSpinner()
+        }
+    }
+    
+    private func startLightningParse(result: String) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [unowned vc = self] in
+            vc.runScript(script: .isLightningRunning)
+            vc.hideSpinner()
+        }
+    }
+    
+    private func parseIsLightningRunningResponse(result: String) {
+        if result.contains("No such file or directory") {
             DispatchQueue.main.async { [weak self] in
-                //self?.installLightningOutlet.labe
+                self?.lightningStatusIcon.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
+                self?.installLightningOutlet.title = "Start"
+                self?.lightningIsRunning = false
+                self?.lightningQuickConnectOutlet.isEnabled = false
+            }
+            
+        } else if let dict = convertStringToDictionary(json: result) {
+            let version = dict["version"] as? String ?? ""
+            DispatchQueue.main.async { [weak self] in
+                self?.lightningVersionLabel.stringValue = version
+                self?.lightningStatusIcon.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
+                self?.installLightningOutlet.title = "Stop"
+                self?.lightningIsRunning = true
+                self?.lightningQuickConnectOutlet.isEnabled = true
+            }
+        } else {
+            DispatchQueue.main.async { [weak self] in
+                self?.lightningStatusIcon.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
+                self?.installLightningOutlet.title = "Start"
+                self?.lightningIsRunning = false
+                self?.lightningQuickConnectOutlet.isEnabled = false
+            }
+        }
+    }
+    
+    private func parseLightningInstalledResponse(result: String) {
+        if result.contains("lightning installed") {
+            lightningInstalled = true
+            isLightningRunning()
+            if bitcoinInstalled && bitcoinRunning {
+                DispatchQueue.main.async { [weak self] in
+                    self?.installLightningOutlet.isEnabled = true
+                }
+            } else {
+                DispatchQueue.main.async { [weak self] in
+                    self?.installLightningOutlet.isEnabled = false
+                }
             }
         } else {
             if bitcoinInstalled {
@@ -712,6 +812,7 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     private func mainnetIsOff() {
         DispatchQueue.main.async { [unowned vc = self] in
+            vc.bitcoinRunning = false
             vc.mainOn = false
             vc.mainnetIsOnImage.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
             vc.startMainnetOutlet.title = "Start"
@@ -864,6 +965,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             }
 
             DispatchQueue.main.async { [unowned vc = self] in
+                vc.bitcoinRunning = true
                 vc.mainOn = true
                 vc.mainnetIsOnImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
                 vc.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
@@ -1193,10 +1295,13 @@ class ViewController: NSViewController, NSWindowDelegate {
     func parseHostname(response: String) {
         if !response.contains("No such file or directory") {
             let hostnames = response.split(separator: "\n")
-            if hostnames.count == 3 {
+            if hostnames.count >= 3 {
                 mainHostname = "\(hostnames[0])"
                 testHostname = "\(hostnames[1])"
                 regHostname = "\(hostnames[2])"
+                if hostnames.count == 4 {
+                    lightningHostname = "\(hostnames[3])"
+                }
                 DispatchQueue.main.async { [unowned vc = self] in
                     vc.connectMainnetOutlet.isEnabled = true
                     vc.connectTestnetOutlet.isEnabled = true
@@ -1289,12 +1394,14 @@ class ViewController: NSViewController, NSWindowDelegate {
         icon.layer?.cornerRadius = icon.frame.width / 2
         icon.layer?.masksToBounds = true
         isLoading = true
+        lightningStatusIcon.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
         bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
-        settingsOutlet.isHighlighted = false
         bitcoinSettingsOutlet.isHighlighted = false
         bitcoinSettingsOutlet.focusRingType = .none
+        lightningQuickConnectOutlet.isEnabled = false
         installLightningOutlet.isEnabled = false
         updateOutlet.isEnabled = false
+        lightningVersionLabel.stringValue = ""
         bitcoinCoreVersionOutlet.stringValue = ""
         installTorOutlet.isEnabled = false
         verifyOutlet.isEnabled = false

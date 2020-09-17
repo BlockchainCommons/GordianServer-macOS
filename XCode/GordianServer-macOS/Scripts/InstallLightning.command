@@ -195,10 +195,10 @@ function configureLightning () {
     
     fi
     
-    if ! test -f ~/.lightning/lightning-log; then
+    if ! test -f ~/.lightning/lightning.log; then
     
-        echo "Create ~/.lightning/lightning-log"
-        touch ~/.lightning/lightning-log
+        echo "Create ~/.lightning/lightning.log"
+        touch ~/.lightning/lightning.log
         
     else
         
