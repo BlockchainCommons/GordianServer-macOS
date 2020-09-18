@@ -17,6 +17,7 @@ class QRDisplayer: NSViewController {
     var torHostname = ""
     var nodeLabel = ""
     var network = ""
+    var httpPass = ""
     
     @IBOutlet var imageView: NSImageView!
     @IBOutlet var spinner: NSProgressIndicator!
@@ -52,7 +53,10 @@ class QRDisplayer: NSViewController {
     }
     
     private func setQR() {
-        let url = "btcstandup://\(rpcuser):\(rpcpassword)@\(torHostname):\(rpcport)/?label=\(nodeLabel)%20-%20\(network)"
+        var url = "btcstandup://\(rpcuser):\(rpcpassword)@\(torHostname):\(rpcport)/?label=\(nodeLabel)%20-%20\(network)"
+        if network == "lightning" {
+            url = "clightning-rpc://lightning:\(httpPass)@\(torHostname):1312/?label=Lightning"
+        }
         imageView.frame = CGRect(x: 30, y: 30, width: 100, height: 100)
         imageView.image = getQRCode(textInput: url)
     }

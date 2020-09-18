@@ -277,7 +277,7 @@ class Installer: NSViewController {
     }
     
     private func whitelistedRpc() -> String {
-        return "abortrescan, listlockunspent, lockunspent, getbestblockhash, getaddressesbylabel, listlabels, decodescript, combinepsbt, utxoupdatepsbt, listaddressgroupings, converttopsbt, getaddressinfo, analyzepsbt, createpsbt, joinpsbts, getmempoolinfo, signrawtransactionwithkey, listwallets, unloadwallet, rescanblockchain, listwalletdir, loadwallet, createwallet, finalizepsbt, walletprocesspsbt, decodepsbt, walletcreatefundedpsbt, fundrawtransaction, uptime, importmulti, getdescriptorinfo, deriveaddresses, getrawtransaction, decoderawtransaction, getnewaddress, gettransaction, signrawtransactionwithwallet, createrawtransaction, getrawchangeaddress, getwalletinfo, getblockchaininfo, getbalance, getunconfirmedbalance, listtransactions, listunspent, bumpfee, importprivkey, abandontransaction, getpeerinfo, getnetworkinfo, getmininginfo, estimatesmartfee, sendrawtransaction, importaddress, signmessagewithprivkey, verifymessage, signmessage, encryptwallet, walletpassphrase, walletlock, walletpassphrasechange, gettxoutsetinfo, help, stop, gettxout, getblockhash, "
+        return "abortrescan, listlockunspent, lockunspent, getbestblockhash, getaddressesbylabel, listlabels, decodescript, combinepsbt, utxoupdatepsbt, listaddressgroupings, converttopsbt, getaddressinfo, analyzepsbt, createpsbt, joinpsbts, getmempoolinfo, signrawtransactionwithkey, listwallets, unloadwallet, rescanblockchain, listwalletdir, loadwallet, createwallet, finalizepsbt, walletprocesspsbt, decodepsbt, walletcreatefundedpsbt, fundrawtransaction, uptime, importmulti, getdescriptorinfo, deriveaddresses, getrawtransaction, decoderawtransaction, getnewaddress, gettransaction, signrawtransactionwithwallet, createrawtransaction, getrawchangeaddress, getwalletinfo, getblockchaininfo, getbalance, getunconfirmedbalance, listtransactions, listunspent, bumpfee, importprivkey, abandontransaction, getpeerinfo, getnetworkinfo, getmininginfo, estimatesmartfee, sendrawtransaction, importaddress, signmessagewithprivkey, verifymessage, signmessage, encryptwallet, walletpassphrase, walletlock, walletpassphrasechange, gettxoutsetinfo, help, stop, gettxout, getblockhash"
     }
     
     private func optimumCache() -> Int {
@@ -286,13 +286,15 @@ class Installer: NSViewController {
     }
     
     func standDown() {
-        showLog = true
-        run(script: .standDown, env: ["":""]) {
-            DispatchQueue.main.async { [unowned vc = self] in
-                vc.hideSpinner()
-                vc.setLog(content: vc.consoleOutput.string)
-                setSimpleAlert(message: "Success", info: "You have StoodDown", buttonLabel: "OK")
-                vc.goBack()
+        let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
+        taskQueue.async { [weak self] in
+            self?.run(script: .standDown, env: ["":""]) { log in
+                DispatchQueue.main.async { [weak self] in
+                    self?.hideSpinner()
+                    self?.deleteLog()
+                    setSimpleAlert(message: "Success", info: "You have stood down", buttonLabel: "OK")
+                    self?.goBack()
+                }
             }
         }
     }
@@ -307,16 +309,17 @@ class Installer: NSViewController {
         let env = ["BINARY_NAME":binaryName, "MACOS_URL":macosURL, "SHA_URL":shaURL, "VERSION":version, "PREFIX":prefix, "CONF":standUpConf, "DATADIR":d.dataDir(), "IGNORE_EXISTING_BITCOIN":ignore]
         let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
         taskQueue.async { [weak self] in
-            self?.run(script: .standUp, env: env) {
+            self?.run(script: .standUp, env: env) { log in
+                
                 DispatchQueue.main.async { [weak self] in
+                    if self != nil {
+                        self?.setLog(content: log)
+                    }
                     let ud = UserDefaults.standard
                     ud.set(prefix, forKey: "binaryPrefix")
                     ud.set(binaryName, forKey: "macosBinary")
                     ud.set(version, forKey: "version")
-                    if self != nil {
-                        self?.setLog(content: self!.consoleOutput.string)
-                    }
-                    NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
+                    //NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
                     self?.goBack()
                 }
             }
@@ -329,16 +332,17 @@ class Installer: NSViewController {
         showLog = true
         let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
         taskQueue.async { [weak self] in
-            self?.run(script: .upgradeBitcoin, env: env) {
+            self?.run(script: .upgradeBitcoin, env: env) { log in
+                
                 DispatchQueue.main.async { [weak self] in
+                    if self != nil {
+                        self?.setLog(content: log)
+                    }
                     let ud = UserDefaults.standard
                     ud.set(prefix, forKey: "binaryPrefix")
                     ud.set(version, forKey: "version")
                     ud.set(binaryName, forKey: "macosBinary")
-                    if self != nil {
-                        self?.setLog(content: self!.consoleOutput.string)
-                    }
-                    NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
+                    //NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
                     self?.goBack()
                 }
             }
@@ -358,6 +362,11 @@ class Installer: NSViewController {
         consoleOutput.isEditable = false
         consoleOutput.isSelectable = true
         spinnerDescription.stringValue = ""
+    }
+    
+    func deleteLog() {
+        let lg = Log()
+        lg.deleteLog()
     }
     
     func setLog(content: String) {
@@ -444,12 +453,13 @@ class Installer: NSViewController {
         
         let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
         taskQueue.async { [weak self] in
-            self?.run(script: .installLightning, env: env) {
+            self?.run(script: .installLightning, env: env) { log in
+                
                 DispatchQueue.main.async { [weak self] in
                     if self != nil {
-                        self?.setLog(content: self!.consoleOutput.string)
+                        self?.setLog(content: log)
                     }
-                    NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
+                    //NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
                     self?.goBack()
                 }
             }
@@ -457,10 +467,11 @@ class Installer: NSViewController {
         
     }
     
-    private func run(script: SCRIPT, env: [String:String], completion: @escaping () -> Void) {
+    private func run(script: SCRIPT, env: [String:String], completion: @escaping ((String)) -> Void) {
         #if DEBUG
         print("script: \(script.rawValue)")
         #endif
+        var logOutput = ""
         let resource = script.rawValue
         guard let path = Bundle.main.path(forResource: resource, ofType: "command") else {
             return
@@ -473,23 +484,22 @@ class Installer: NSViewController {
         task.standardOutput = stdOut
         task.standardError = stdErr
         task.terminationHandler = { _ in
-            completion()
+            completion((logOutput))
         }
         let handler = { [unowned vc = self] (file: FileHandle!) -> Void in
             let data = file.availableData
-            guard let output = String(data: data, encoding: .utf8) else {
-                return
-            }
-            print("output: \(output)")
-             print("vc.showLog: \(vc.showLog)")
+            guard let output = String(data: data, encoding: .utf8) else { return }
+                        
             if vc.showLog {
                 DispatchQueue.main.async { [unowned vc = self] in
                     let prevOutput = vc.consoleOutput.string
                     let nextOutput = prevOutput + output
                     vc.consoleOutput.string = nextOutput
+                    logOutput = nextOutput
                     vc.consoleOutput.scrollToEndOfDocument(vc)
                 }
             }
+            
         }
         stdErr.fileHandleForReading.readabilityHandler = handler
         stdOut.fileHandleForReading.readabilityHandler = handler

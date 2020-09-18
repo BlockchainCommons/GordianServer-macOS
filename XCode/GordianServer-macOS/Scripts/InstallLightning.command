@@ -123,15 +123,25 @@ function installDependencies () {
     
     fi
     
-    if ! [ -d /usr/local/Cellar/pyenv ]; then
-
-        echo "Installing pyenv..."
-        sudo -u $(whoami) /usr/local/bin/brew install pyenv
-
+#    if ! [ -d /usr/local/Cellar/pyenv ]; then
+#
+#        echo "Installing pyenv..."
+#        sudo -u $(whoami) /usr/local/bin/brew install pyenv
+#
+#    else
+#
+#        echo "pyenv already installed"
+#
+#    fi
+    
+    if ! command -v /usr/local/bin/pip3 &> /dev/null; then
+    
+        sudo -u $(whoami) /usr/local/bin/brew install pip3
+        
     else
-
-        echo "pyenv already installed"
-
+    
+        echo "pip3 installed"
+        
     fi
 
 }
@@ -147,11 +157,10 @@ function installLightning () {
     cd ~/.standup
     git clone https://github.com/ElementsProject/lightning.git
     cd lightning
-    git checkout tags/v0.9.0-1
+    git checkout tags/v0.9.1
     
-    sudo -u $(whoami) /usr/local/bin/pip install --upgrade pip
-    sudo -u $(whoami) /usr/local/bin/pyenv local 3.7.4
-    sudo -u $(whoami) /usr/local/bin/pip install mako
+    sudo -u $(whoami) /usr/local/bin/pip3 install --upgrade pip
+    sudo -u $(whoami) /usr/local/bin/pip3 install mako
 
     sudo -u $(whoami) ~/.standup/lightning/configure
     /usr/bin/make

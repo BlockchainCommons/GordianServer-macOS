@@ -13,54 +13,42 @@ class Log {
     var logText = ""
     
     func writeToLog(content: String) {
-        
         getLog {
-            
             let file = "log.txt"
             self.logText += "\(NSDate())\n\n" + content
-            
             if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-                
                 let fileURL = dir.appendingPathComponent(file)
-                
                 do {
-                    
                     try self.logText.write(to: fileURL, atomically: false, encoding: .utf8)
-                    
                 } catch {
-                    
                     print("error setting log")
-                    
                 }
-                
             }
-            
         }
-        
     }
     
     func getLog(completion: @escaping () -> Void) {
-        
         let file = "log.txt"
-        
         if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-            
             let fileURL = dir.appendingPathComponent(file)
-            
             do {
-                
                 self.logText = try String(contentsOf: fileURL, encoding: .utf8)
                 completion()
-                
             } catch {
-                
                 self.logText = "error reading log"
                 completion()
-                
             }
-            
         }
-        
+    }
+    
+    func deleteLog() {
+        let fileManager = FileManager.default
+        let log = (fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!).appendingPathComponent("log.txt")
+        do {
+            try fileManager.removeItem(at: log)
+        } catch {
+            print("Could not clear folder: \(error)")
+        }
     }
     
 }

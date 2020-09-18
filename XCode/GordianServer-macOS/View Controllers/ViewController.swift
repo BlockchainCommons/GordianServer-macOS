@@ -75,6 +75,7 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     var installingLightning = Bool()
     var timer: Timer?
+    var httpPass = ""
     var chain = ""
     var rpcpassword = ""
     var rpcuser = ""
@@ -82,7 +83,8 @@ class ViewController: NSViewController, NSWindowDelegate {
     var mainHostname = ""
     var testHostname = ""
     var regHostname = ""
-    var lightningHostname = ""
+    var lightningP2pHostname = ""
+    var lightningRpcHostname = ""
     var network = ""
     var rpcport = ""
     var newestVersion = ""
@@ -149,7 +151,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         DispatchQueue.main.async { [unowned vc = self] in
             vc.rpcport = "1312"
             vc.network = "lightning"
-            vc.torHostname = vc.lightningHostname
+            vc.torHostname = vc.lightningRpcHostname
             vc.performSegue(withIdentifier: "showPairingCode", sender: vc)
         }
     }
@@ -161,7 +163,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             standingUp = false
             upgrading = false
             strapping = false
-            runScript(script: .getLightningHostname)
+            runScript(script: .getLightningHostnames)
             
         } else {
             if lightningIsRunning {
@@ -322,12 +324,16 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     @IBAction func torSettingsAction(_ sender: Any) {
         DispatchQueue.main.async { [unowned vc = self] in
+            vc.timer?.invalidate()
+            vc.timer = nil
             vc.performSegue(withIdentifier: "goToSettings", sender: vc)
         }
     }
 
     @IBAction func goToSettings(_ sender: Any) {
         DispatchQueue.main.async { [unowned vc = self] in
+            vc.timer?.invalidate()
+            vc.timer = nil
             vc.performSegue(withIdentifier: "goToSettings", sender: vc)
         }
     }
@@ -589,6 +595,18 @@ class ViewController: NSViewController, NSWindowDelegate {
             self?.runScript(script: .isLightningRunning)
         }
     }
+    
+    private func getLightningHttpPass() {
+        DispatchQueue.main.async { [weak self] in
+            self?.runScript(script: .getLightningRpcCreds)
+        }
+    }
+    
+    private func getLightningRpcHost() {
+        DispatchQueue.main.async { [weak self] in
+            self?.runScript(script: .getLightningHostnames)
+        }
+    }
 
     private func runScript(script: SCRIPT) {
         #if DEBUG
@@ -700,12 +718,8 @@ class ViewController: NSViewController, NSWindowDelegate {
         case .checkForOldHost:
             parseOldHostResponse(result: result)
             
-        case .getLightningHostname:
-            DispatchQueue.main.async { [weak self] in
-                self?.lightningHostname = result
-                self?.timer?.invalidate()
-                self?.performSegue(withIdentifier: "goInstall", sender: self)
-            }
+        case .getLightningHostnames:
+            parseLightningHostnames(result: result)
             
         case .isLightningInstalled:
             parseLightningInstalledResponse(result: result)
@@ -718,8 +732,39 @@ class ViewController: NSViewController, NSWindowDelegate {
             
         case .stopLightning:
             stopLightningParse(result: result)
+            
+        case .getLightningRpcCreds:
+            parseLightningConfig(result: result)
 
         default: break
+        }
+    }
+    
+    private func parseLightningConfig(result: String) {
+        let arr = result.split(separator: "\n")
+        for item in arr {
+            if item.contains("http-pass") {
+                let arr1 = item.split(separator: "=")
+                httpPass = "\(arr1[1])"
+                getLightningRpcHost()
+            }
+        }
+    }
+    
+    private func parseLightningHostnames(result: String) {
+        let arr = result.split(separator: "\n")
+        if arr.count > 0 {
+            DispatchQueue.main.async { [weak self] in
+                self?.lightningP2pHostname = "\(arr[0])"
+                self?.lightningRpcHostname = "\(arr[1])"
+                if self!.installingLightning {
+                    self?.performSegue(withIdentifier: "goInstall", sender: self)
+                } else {
+                    DispatchQueue.main.async { [weak self] in
+                        self?.lightningQuickConnectOutlet.isEnabled = true
+                    }
+                }
+            }
         }
     }
     
@@ -753,7 +798,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                 self?.lightningStatusIcon.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
                 self?.installLightningOutlet.title = "Stop"
                 self?.lightningIsRunning = true
-                self?.lightningQuickConnectOutlet.isEnabled = true
+                self?.getLightningHttpPass()
             }
         } else {
             DispatchQueue.main.async { [weak self] in
@@ -919,7 +964,6 @@ class ViewController: NSViewController, NSWindowDelegate {
         } else {
             hideSpinner()
             runScript(script: .checkForOldHost)
-            //checkForAuth()
         }
     }
 
@@ -1300,7 +1344,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                 testHostname = "\(hostnames[1])"
                 regHostname = "\(hostnames[2])"
                 if hostnames.count == 4 {
-                    lightningHostname = "\(hostnames[3])"
+                    lightningP2pHostname = "\(hostnames[3])"
                 }
                 DispatchQueue.main.async { [unowned vc = self] in
                     vc.connectMainnetOutlet.isEnabled = true
@@ -1551,6 +1595,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                 vc.rpcpassword = rpcpassword
                 vc.rpcuser = rpcuser
                 vc.torHostname = torHostname
+                vc.httpPass = httpPass
             }
 
         case "goInstall":
@@ -1560,7 +1605,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                 vc.upgrading = upgrading
                 vc.ignoreExistingBitcoin = ignoreExistingBitcoin
                 vc.strapping = strapping
-                vc.lightningHostname = lightningHostname
+                vc.lightningHostname = lightningP2pHostname
                 timer?.invalidate()
                 timer = nil
             }

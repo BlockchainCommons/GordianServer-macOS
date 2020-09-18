@@ -57,13 +57,14 @@ public enum SCRIPT: String {
     case deleteWallet = "DeleteWallet"
     case openAuth = "OpenAuth"
     case installLightning = "InstallLightning"
-    case getLightningHostname = "GetLightningHostname"
+    case getLightningHostnames = "GetLightningHostname"
     case isLightningInstalled = "IsLightningInstalled"
     case isLightningRunning = "IsLightningRunning"
     case startLightning = "StartLightning"
     case stopLightning = "StopLightning"
     case openLightningLog = "OpenLightningLog"
     case openLightningConfig = "OpenLightningConfig"
+    case getLightningRpcCreds = "GetLightningRpcCreds"
 }
 
 public enum BTCCONF: String {

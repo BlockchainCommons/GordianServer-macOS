@@ -145,7 +145,11 @@ HiddenServiceDir \/usr\/local\/var\/lib\/tor\/standup\/reg\/\
 HiddenServiceVersion 3\
 HiddenServicePort 1311 127.0.0.1:18443\
 \
-HiddenServiceDir \/usr\/local\/var\/lib\/tor\/standup\/lightning\/\
+HiddenServiceDir \/usr\/local\/var\/lib\/tor\/standup\/lightning\/p2p\/\
+HiddenServiceVersion 3\
+HiddenServicePort 9735 127.0.0.1:9735\
+\
+HiddenServiceDir \/usr\/local\/var\/lib\/tor\/standup\/lightning\/rpc\/\
 HiddenServiceVersion 3\
 HiddenServicePort 1312 127.0.0.1:1312/g' /usr/local/etc/tor/torrc
 
@@ -200,10 +204,37 @@ HiddenServicePort 1312 127.0.0.1:1312/g' /usr/local/etc/tor/torrc
         exit 1
     fi
     
+    mkdir /usr/local/var/lib/tor/standup/lightning
+    if [ -d /usr/local/var/lib/tor/standup/lightning ]; then
+        echo "/usr/local/var/lib/tor/standup/lightning created"
+    else
+        echo "There was an error creating /usr/local/var/lib/tor/standup/lightning"
+        exit 1
+    fi
+    
+    mkdir /usr/local/var/lib/tor/standup/lightning/p2p
+    if [ -d /usr/local/var/lib/tor/standup/lightning/p2p ]; then
+        echo "/usr/local/var/lib/tor/standup/lightning/p2p created"
+    else
+        echo "There was an error creating /usr/local/var/lib/tor/standup/lightning/p2p"
+        exit 1
+    fi
+    
+    mkdir /usr/local/var/lib/tor/standup/lightning/rpc
+    if [ -d /usr/local/var/lib/tor/standup/lightning/rpc ]; then
+        echo "/usr/local/var/lib/tor/standup/lightning/rpc created"
+    else
+        echo "There was an error creating /usr/local/var/lib/tor/standup/lightning/rpc"
+        exit 1
+    fi
+    
     echo "Assigning hidden service directories with permissions 700..."
     chmod 700 /usr/local/var/lib/tor/standup/main
     chmod 700 /usr/local/var/lib/tor/standup/test
     chmod 700 /usr/local/var/lib/tor/standup/reg
+    chmod 700 /usr/local/var/lib/tor/standup/lightning
+    chmod 700 /usr/local/var/lib/tor/standup/lightning/rpc
+    chmod 700 /usr/local/var/lib/tor/standup/lightning/p2p
     
 }
 
