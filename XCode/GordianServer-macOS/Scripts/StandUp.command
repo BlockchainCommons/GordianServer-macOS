@@ -6,8 +6,6 @@
 #  Created by Peter on 07/11/19.
 #  Copyright © 2019 Blockchain Commons, LLC
 
-mkdir ~/.standup
-
 function installBitcoin () {
 
   echo "Creating ~/.standup/BitcoinCore..."
@@ -238,33 +236,7 @@ HiddenServicePort 1312 127.0.0.1:1312/g' /usr/local/etc/tor/torrc
     
 }
 
-if ! [ -x "$(command -v bitcoind)" ]; then
-  
-  # Bitcoin is not installed, install it
-  
-  installBitcoin
-  configureBitcoin
-  installTor
-  
-else
-  
-  # Bitcoin is installed already but user may want to do a fresh install
-  
-  if [ "$IGNORE_EXISTING_BITCOIN" == "YES" ]; then
-  
-    # Bitcoin is already installed, install again
-    
-    installBitcoin
-    configureBitcoin
-    installTor
-  
-  else
-  
-    # Bitcoin is already installed, don't install again
-    
-    configureBitcoin
-    installTor
-    
-  fi
-  
-fi
+mkdir ~/.standup
+installBitcoin
+configureBitcoin
+installTor
