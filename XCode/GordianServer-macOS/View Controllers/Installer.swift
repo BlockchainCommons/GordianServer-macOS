@@ -319,7 +319,7 @@ class Installer: NSViewController {
                     ud.set(prefix, forKey: "binaryPrefix")
                     ud.set(binaryName, forKey: "macosBinary")
                     ud.set(version, forKey: "version")
-                    //NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
+                    NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
                     self?.goBack()
                 }
             }
@@ -342,7 +342,7 @@ class Installer: NSViewController {
                     ud.set(prefix, forKey: "binaryPrefix")
                     ud.set(version, forKey: "version")
                     ud.set(binaryName, forKey: "macosBinary")
-                    //NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
+                    NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
                     self?.goBack()
                 }
             }
@@ -446,7 +446,7 @@ class Installer: NSViewController {
         print("installLightningAction")
         showLog = true
         let d = Defaults()
-        let env = ["RPC_PASSWORD":rpcpassword, "RPC_USER":rpcuser, "LIGHTNING_P2P_ONION":lightningHostname.replacingOccurrences(of: "\n", with: ""), "HTTP_PASS":randomString(length: 32), "PREFIX": d.existingPrefix(), "DATA_DIR": d.dataDir(), "USER":NSUserName()]
+        let env = ["RPC_PASSWORD":rpcpassword, "RPC_USER":rpcuser, "HTTP_PASS":randomString(length: 32), "PREFIX": d.existingPrefix(), "DATA_DIR": d.dataDir(), "USER":NSUserName()]
         #if DEBUG
         print("env: \(env)")
         #endif
@@ -459,7 +459,7 @@ class Installer: NSViewController {
                     if self != nil {
                         self?.setLog(content: log)
                     }
-                    //NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
+                    NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
                     self?.goBack()
                 }
             }

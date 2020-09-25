@@ -5,20 +5,66 @@
 #
 #  Created by Peter on 9/9/20.
 #  Copyright © 2020 Peter. All rights reserved.
-CONFIG="alias=Gordian-Server\n\
-bitcoin-rpcpassword="$RPC_PASSWORD"\n\
-bitcoin-rpcuser="$RPC_USER"\n\
-bitcoin-cli=/Users/$USER/.standup/BitcoinCore/"$PREFIX"/bin/bitcoin-cli\n\
-bitcoin-datadir="$DATA_DIR"\n\
-network=bitcoin\n\
-plugin=/Users/$USER/.lightning/plugins/c-lightning-http-plugin/target/release/c-lightning-http-plugin\n\
-proxy=127.0.0.1:9050\n\
-announce-addr="$LIGHTNING_P2P_ONION"\n\
-bind-addr=127.0.0.1:9735\n\
-log-file=/Users/$USER/.lightning/lightning.log\n\
-log-level=debug:plugin\n\
-http-pass="$HTTP_PASS"\n\
-http-port=1312"
+
+function configureHiddenServices () {
+
+    echo "Checking if lightning hidden service's exist..."
+    
+    if [ -d /usr/local/var/lib/tor/standup/lightning ]; then
+    
+        echo "/usr/local/var/lib/tor/standup/lightning exists."
+        
+    else
+    
+        echo "Configuring tor v3 hidden service's..."
+        
+        sed -i -e 's/HiddenServicePort 1311 127.0.0.1:18443/HiddenServicePort 1311 127.0.0.1:18443\
+\
+HiddenServiceDir \/usr\/local\/var\/lib\/tor\/standup\/lightning\/p2p\/\
+HiddenServiceVersion 3\
+HiddenServicePort 9735 127.0.0.1:9735\
+\
+HiddenServiceDir \/usr\/local\/var\/lib\/tor\/standup\/lightning\/rpc\/\
+HiddenServiceVersion 3\
+HiddenServicePort 1312 127.0.0.1:1312/g' /usr/local/etc/tor/torrc
+        
+        mkdir /usr/local/var/lib/tor/standup/lightning
+        
+        if [ -d /usr/local/var/lib/tor/standup/lightning ]; then
+            echo "/usr/local/var/lib/tor/standup/lightning created"
+        else
+            echo "There was an error creating /usr/local/var/lib/tor/standup/lightning"
+            exit 1
+        fi
+        
+        mkdir /usr/local/var/lib/tor/standup/lightning/p2p
+        
+        if [ -d /usr/local/var/lib/tor/standup/lightning/p2p ]; then
+            echo "/usr/local/var/lib/tor/standup/lightning/p2p created"
+        else
+            echo "There was an error creating /usr/local/var/lib/tor/standup/lightning/p2p"
+            exit 1
+        fi
+        
+        mkdir /usr/local/var/lib/tor/standup/lightning/rpc
+        
+        if [ -d /usr/local/var/lib/tor/standup/lightning/rpc ]; then
+            echo "/usr/local/var/lib/tor/standup/lightning/rpc created"
+        else
+            echo "There was an error creating /usr/local/var/lib/tor/standup/lightning/rpc"
+            exit 1
+        fi
+        
+        chmod 700 /usr/local/var/lib/tor/standup/lightning
+        chmod 700 /usr/local/var/lib/tor/standup/lightning/rpc
+        chmod 700 /usr/local/var/lib/tor/standup/lightning/p2p
+        
+        echo "Rebooting Tor..."
+        sudo -u $(whoami) /usr/local/bin/brew services restart tor
+            
+    fi
+
+}
 
 function installDependencies () {
 
@@ -123,17 +169,6 @@ function installDependencies () {
     
     fi
     
-#    if ! [ -d /usr/local/Cellar/pyenv ]; then
-#
-#        echo "Installing pyenv..."
-#        sudo -u $(whoami) /usr/local/bin/brew install pyenv
-#
-#    else
-#
-#        echo "pyenv already installed"
-#
-#    fi
-    
     if ! command -v /usr/local/bin/pip3 &> /dev/null; then
     
         sudo -u $(whoami) /usr/local/bin/brew install pip3
@@ -167,6 +202,21 @@ function installLightning () {
 }
 
 function configureLightning () {
+
+CONFIG="alias=Gordian-Server\n\
+bitcoin-rpcpassword="$RPC_PASSWORD"\n\
+bitcoin-rpcuser="$RPC_USER"\n\
+bitcoin-cli=/Users/$USER/.standup/BitcoinCore/"$PREFIX"/bin/bitcoin-cli\n\
+bitcoin-datadir="$DATA_DIR"\n\
+network=bitcoin\n\
+plugin=/Users/$USER/.lightning/plugins/c-lightning-http-plugin/target/release/c-lightning-http-plugin\n\
+proxy=127.0.0.1:9050\n\
+announce-addr="$(cat /usr/local/var/lib/tor/standup/lightning/p2p/hostname)"\n\
+bind-addr=127.0.0.1:9735\n\
+log-file=/Users/$USER/.lightning/lightning.log\n\
+log-level=debug:plugin\n\
+http-pass="$HTTP_PASS"\n\
+http-port=1312"
     
     if ! [ -d ~/.lightning ]; then
     
@@ -237,9 +287,10 @@ function installHttpPlugin () {
     ~/.cargo/bin/cargo build --release
     chmod a+x ~/.lightning/plugins/c-lightning-http-plugin/target/release/c-lightning-http-plugin
     echo "C-Lightning installation complete!"
-    exit 1
+    exit
 }
 
+configureHiddenServices
 installDependencies
 installLightning
 configureLightning
