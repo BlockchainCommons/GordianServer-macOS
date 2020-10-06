@@ -155,16 +155,19 @@ class ViewController: NSViewController, NSWindowDelegate {
             vc.performSegue(withIdentifier: "showPairingCode", sender: vc)
         }
     }
-    
 
     @IBAction func installLightningAction(_ sender: Any) {
         if !lightningInstalled {
-            installingLightning = true
-            standingUp = false
-            upgrading = false
-            strapping = false
-            runScript(script: .getLightningHostnames)
-            
+            actionAlert(message: "This is reckless!", info: "This will install c-lightning from source, a lot of things can go wrong when installing from source but generally it should work just fine. Click yes to install.") { [weak self]  response in
+                guard let self = self else { return }
+                if response {
+                    self.installingLightning = true
+                    self.standingUp = false
+                    self.upgrading = false
+                    self.strapping = false
+                    self.runScript(script: .getLightningHostnames)
+                }
+            }
         } else {
             if lightningIsRunning {
                 DispatchQueue.main.async { [weak self] in
@@ -1556,8 +1559,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     func setLog(content: String) {
-        let lg = Log()
-        lg.writeToLog(content: content)
+        Log.writeToLog(content: content)
     }
 
     private func getLatestVersion(completion: @escaping ((success: Bool, errorMessage: String?)) -> Void) {

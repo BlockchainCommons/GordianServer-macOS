@@ -6,6 +6,26 @@
 #  Created by Peter on 07/11/19.
 #  Copyright © 2019 Blockchain Commons, LLC
 
+function setUpStandUpDir () {
+
+    if ! [ -d ~/.standup ]; then
+    
+        mkdir ~/.standup
+        
+    fi
+    
+    if test -f ~/.standup/standup.log; then
+    
+        echo "~/.standup/standup.log exists."
+        
+    else
+    
+        touch ~/.standup/standup.log
+        
+    fi
+    
+}
+
 function installBitcoin () {
 
   echo "Creating ~/.standup/BitcoinCore..."
@@ -236,7 +256,7 @@ HiddenServicePort 1312 127.0.0.1:1312/g' /usr/local/etc/tor/torrc
     
 }
 
-mkdir ~/.standup
+setUpStandUpDir
 installBitcoin
 configureBitcoin
 installTor

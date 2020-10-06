@@ -1960,7 +1960,7 @@
                                                             <constraint firstAttribute="height" constant="16" id="XhY-cL-t2Q"/>
                                                             <constraint firstAttribute="width" constant="111" id="e46-bd-nWc"/>
                                                         </constraints>
-                                                        <buttonCell key="cell" type="push" title="Install" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="akD-bf-ytX">
+                                                        <buttonCell key="cell" type="push" title="#Reckless" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="akD-bf-ytX">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
@@ -2784,11 +2784,11 @@
             <objects>
                 <viewController id="ISO-tJ-wFf" customClass="AddAuthentication" customModule="GordianServer_macOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="sXP-gb-pAb">
-                        <rect key="frame" x="0.0" y="0.0" width="484" height="202"/>
+                        <rect key="frame" x="0.0" y="0.0" width="484" height="256"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Loo-NW-via">
-                                <rect key="frame" x="20" y="50" width="444" height="45"/>
+                                <rect key="frame" x="20" y="104" width="444" height="45"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="z2M-DU-Gxm">
                                         <rect key="frame" x="-2" y="29" width="70" height="16"/>
@@ -2821,7 +2821,7 @@
                                 </customSpacing>
                             </stackView>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Nr-9O-49K">
-                                <rect key="frame" x="20" y="175" width="4" height="7"/>
+                                <rect key="frame" x="20" y="229" width="4" height="7"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" id="8TS-YH-uh2">
                                     <font key="font" metaFont="system" size="5"/>
@@ -2830,13 +2830,13 @@
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="oYV-PC-EVN">
-                                <rect key="frame" x="18" y="102" width="437" height="80"/>
+                                <rect key="frame" x="18" y="156" width="437" height="80"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="80" id="bFn-dH-MjF"/>
                                 </constraints>
                                 <textFieldCell key="cell" selectable="YES" id="f8p-Yu-26B">
                                     <font key="font" metaFont="system"/>
-                                    <string key="title">Add your Tor V3 auth public key here. This key will be added to each rpc hidden service's Authentication directory so that all services are authenticated with the same key. This means only the device's/app's you authenticate will have access to these hidden services. You may add up to ~330 authentication keys.</string>
+                                    <string key="title">You can add authentication tokens here to ensure remote connections are authenticated. These can be exported from Gordian Wallet by navigating to "settings" &gt; "export tor v3 authentication key"</string>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -2882,7 +2882,7 @@
                 </viewController>
                 <customObject id="CDI-E7-cI3" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="929" y="1301"/>
+            <point key="canvasLocation" x="929" y="1328"/>
         </scene>
         <!--Displayer-->
         <scene sceneID="1Fz-md-imP">

@@ -9,45 +9,57 @@
 import Foundation
 
 class Log {
-    
-    var logText = ""
-    
-    func writeToLog(content: String) {
-        getLog {
-            let file = "log.txt"
-            self.logText += "\(NSDate())\n\n" + content
-            if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-                let fileURL = dir.appendingPathComponent(file)
-                do {
-                    try self.logText.write(to: fileURL, atomically: false, encoding: .utf8)
-                } catch {
-                    print("error setting log")
-                }
+        
+    class func writeToLog(content: String) {
+        getLog { existingLog in
+            var log = ""
+            
+            if existingLog != nil {
+                log += existingLog!
+            }
+            
+            log += "\n\n\(NSDate())\n\n" + content
+            
+            let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
+            
+            taskQueue.async {                
+                self.runScript(script: .writeLog, env: ["LOG": log], args: []) { _ in }
             }
         }
     }
     
-    func getLog(completion: @escaping () -> Void) {
-        let file = "log.txt"
-        if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-            let fileURL = dir.appendingPathComponent(file)
-            do {
-                self.logText = try String(contentsOf: fileURL, encoding: .utf8)
-                completion()
-            } catch {
-                self.logText = "error reading log"
-                completion()
-            }
+    class func getLog(completion: @escaping (String?) -> Void) {
+        runScript(script: .getLog, env: [:], args: []) { log in
+            completion((log))
         }
     }
     
-    func deleteLog() {
-        let fileManager = FileManager.default
-        let log = (fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!).appendingPathComponent("log.txt")
-        do {
-            try fileManager.removeItem(at: log)
-        } catch {
-            print("Could not clear folder: \(error)")
+    class func runScript(script: SCRIPT, env: [String:String], args: [String], completion: @escaping ((String?)) -> Void) {
+        #if DEBUG
+        print("script: \(script.rawValue)")
+        #endif
+        let resource = script.rawValue
+        guard let path = Bundle.main.path(forResource: resource, ofType: "command") else {
+            return
+        }
+        let stdOut = Pipe()
+        let task = Process()
+        task.launchPath = path
+        task.environment = env
+        task.arguments = args
+        task.standardOutput = stdOut
+        task.launch()
+        task.waitUntilExit()
+        let data = stdOut.fileHandleForReading.readDataToEndOfFile()
+        var result = ""
+        if let output = String(data: data, encoding: .utf8) {
+            #if DEBUG
+            print("result: \(output)")
+            #endif
+            result += output
+            completion(result)
+        } else {
+            completion(nil)
         }
     }
     

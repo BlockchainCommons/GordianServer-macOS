@@ -65,6 +65,9 @@ public enum SCRIPT: String {
     case openLightningLog = "OpenLightningLog"
     case openLightningConfig = "OpenLightningConfig"
     case getLightningRpcCreds = "GetLightningRpcCreds"
+    case writeLog = "WriteLog"
+    case getLog = "GetLog"
+    case openLog = "OpenLog"
 }
 
 public enum BTCCONF: String {

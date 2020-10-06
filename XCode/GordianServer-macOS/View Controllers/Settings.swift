@@ -206,11 +206,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
     }
     
     @IBAction func seeStandUpLog(_ sender: Any) {
-        DispatchQueue.main.async { [unowned vc = self] in
-            vc.seeLog = true
-            vc.standingDown = false
-            vc.performSegue(withIdentifier: "seeLog", sender: vc)
-        }
+         runScript(script: .openLog, env: ["":""], args: []) { _ in }
     }
     
     @IBAction func removeStandUp(_ sender: Any) {
@@ -336,8 +332,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
     // MARK: Action Logic
     
     func setLog(content: String) {
-        let lg = Log()
-        lg.writeToLog(content: content)
+        Log.writeToLog(content: content)
     }
     
     func setBitcoinConf(conf: String, activeOutlet: NSButton, newValue: Int, key: String) {

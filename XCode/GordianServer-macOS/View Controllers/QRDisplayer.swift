@@ -182,8 +182,7 @@ class QRDisplayer: NSViewController {
     }
     
     private func setLog(content: String) {
-        let lg = Log()
-        lg.writeToLog(content: content)
+        Log.writeToLog(content: content)
     }
     
 }

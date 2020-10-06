@@ -91,6 +91,8 @@ class Installer: NSViewController {
             spinner.alphaValue = 0
             seeLog = false
             getLog { (log) in
+                guard let log = log else { return }
+                
                 DispatchQueue.main.async { [unowned vc = self] in
                     vc.consoleOutput.string = log
                 }
@@ -291,7 +293,6 @@ class Installer: NSViewController {
             self?.run(script: .standDown, env: ["":""]) { log in
                 DispatchQueue.main.async { [weak self] in
                     self?.hideSpinner()
-                    self?.deleteLog()
                     setSimpleAlert(message: "Success", info: "You have stood down", buttonLabel: "OK")
                     self?.goBack()
                 }
@@ -364,21 +365,12 @@ class Installer: NSViewController {
         spinnerDescription.stringValue = ""
     }
     
-    func deleteLog() {
-        let lg = Log()
-        lg.deleteLog()
-    }
-    
     func setLog(content: String) {
-        let lg = Log()
-        lg.writeToLog(content: content)
+        Log.writeToLog(content: content)
     }
     
-    func getLog(completion: @escaping (String) -> Void) {
-        let lg = Log()
-        lg.getLog {
-            completion((lg.logText))
-        }
+    func getLog(completion: @escaping (String?) -> Void) {
+        Log.getLog(completion: completion)
     }
     
     func getExisistingRPCCreds(completion: @escaping ((user: String, password: String)) -> Void) {
