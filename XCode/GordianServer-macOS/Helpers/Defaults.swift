@@ -42,8 +42,8 @@ class Defaults {
         }
         
         func setLocals() {
-            if ud.object(forKey: "pruned") == nil {
-                ud.set(halfOfDevicesFreeSpace() ?? 1000, forKey: "pruned")
+            if ud.object(forKey: "prune") == nil {
+                ud.set(halfOfDevicesFreeSpace() ?? 1000, forKey: "prune")
             }
             if ud.object(forKey: "txindex") == nil {
                 ud.set(0, forKey: "txindex")
