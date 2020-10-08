@@ -25,7 +25,6 @@ class Settings: NSViewController, NSTextFieldDelegate {
     @IBOutlet var directoryLabel: NSTextField!
     @IBOutlet var nodeLabelField: NSTextField!
     @IBOutlet var walletDisabled: NSButton!
-    @IBOutlet var pruneOutlet: NSButton!
     @IBOutlet var txIndexOutlet: NSButton!
     @IBOutlet var goPrivateOutlet: NSButton!
     
@@ -258,41 +257,41 @@ class Settings: NSViewController, NSTextFieldDelegate {
         }
     }
     
-    @IBAction func didSetPrune(_ sender: Any) {
-        let value = pruneOutlet.state.rawValue
-        getBitcoinConf { [unowned vc = self] (conf, error) in
-            if !error && conf != nil {
-                if conf!.count > 0 {
-                    DispatchQueue.main.async { [weak self] in
-                        var newValue = value
-                        if self?.pruneValueField.stringValue != "" {
-                            if value == 0 {
-                                //self?.pruneValueField.isEnabled = false
-                                //self?.pruneValueField.stringValue = "0"
-                            } else {
-                                if self != nil {
-                                    if let int = Int(self!.pruneValueField.stringValue) {
-                                        self?.pruneValueField.isEnabled = true
-                                        newValue = int
-                                    }
-                                }
-                            }
-                        }
-                        vc.parseBitcoinConf(conf: conf!, keyToUpdate: .prune, outlet: vc.pruneOutlet, newValue: newValue)
-                    }
-                }
-            } else {
-                vc.ud.set(value, forKey: "prune")
-                if value == 1 {
-                    vc.setState(int: 0, outlet: vc.txIndexOutlet)
-                    vc.ud.set(0, forKey: "txindex")
-                    DispatchQueue.main.async { [weak self] in
-                        self?.pruneValueField.stringValue = "\(value)"
-                    }
-                }
-            }
-        }
-    }
+//    @IBAction func didSetPrune(_ sender: Any) {
+//        let value = pruneOutlet.state.rawValue
+//        getBitcoinConf { [unowned vc = self] (conf, error) in
+//            if !error && conf != nil {
+//                if conf!.count > 0 {
+//                    DispatchQueue.main.async { [weak self] in
+//                        var newValue = value
+//                        if self?.pruneValueField.stringValue != "" {
+//                            if value == 0 {
+//                                //self?.pruneValueField.isEnabled = false
+//                                //self?.pruneValueField.stringValue = "0"
+//                            } else {
+//                                if self != nil {
+//                                    if let int = Int(self!.pruneValueField.stringValue) {
+//                                        self?.pruneValueField.isEnabled = true
+//                                        newValue = int
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        vc.parseBitcoinConf(conf: conf!, keyToUpdate: .prune, outlet: vc.pruneOutlet, newValue: newValue)
+//                    }
+//                }
+//            } else {
+//                vc.ud.set(value, forKey: "prune")
+//                if value == 1 {
+//                    vc.setState(int: 0, outlet: vc.txIndexOutlet)
+//                    vc.ud.set(0, forKey: "txindex")
+//                    DispatchQueue.main.async { [weak self] in
+//                        self?.pruneValueField.stringValue = "\(value)"
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     @IBAction func didSetTxIndex(_ sender: Any) {
         let value = txIndexOutlet.state.rawValue
@@ -304,7 +303,6 @@ class Settings: NSViewController, NSTextFieldDelegate {
             } else {
                 vc.ud.set(value, forKey: "txindex")
                 if value == 1 {
-                    vc.setState(int: 0, outlet: vc.pruneOutlet)
                     vc.ud.set(0, forKey: "prune")
                 }
             }
@@ -335,7 +333,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
         Log.writeToLog(content: content)
     }
     
-    func setBitcoinConf(conf: String, activeOutlet: NSButton, newValue: Int, key: String) {
+    func setBitcoinConf(conf: String, activeOutlet: NSButton?, newValue: Int, key: String) {
         let d = Defaults()
         let env = ["CONF":conf,"DATADIR":d.dataDir()]
         runScript(script: .updateBTCConf, env: env, args: args) { [unowned vc = self] success in
@@ -350,13 +348,13 @@ class Settings: NSViewController, NSTextFieldDelegate {
         }
     }
     
-    func revert(outlet: NSButton) {
+    func revert(outlet: NSButton?) {
         DispatchQueue.main.async {
-            outlet.setNextState()
+            outlet?.setNextState()
         }
     }
     
-    func parseBitcoinConf(conf: [String], keyToUpdate: BTCCONF, outlet: NSButton, newValue: Int) {
+    func parseBitcoinConf(conf: [String], keyToUpdate: BTCCONF, outlet: NSButton?, newValue: Int) {
         
         func alertSettingNotForCurrentNetwork() {
             setSimpleAlert(message: "Error", info: "You are attempting to update a setting that is network specific. You must select the correct network first then update the setting.", buttonLabel: "OK")
@@ -384,7 +382,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
         }
     }
     
-    func updateGlobalConfArray(conf: [String], oldValue: Int, newValue: Int, key: String, outlet: NSButton) {
+    func updateGlobalConfArray(conf: [String], oldValue: Int, newValue: Int, key: String, outlet: NSButton?) {
         for c in conf {
             if c.contains("=") {
                 let arr = c.components(separatedBy: "=")
@@ -397,7 +395,6 @@ class Settings: NSViewController, NSTextFieldDelegate {
                             stringConf = stringConf.replacingOccurrences(of: "\(key + "=" + existingValue)", with: "\(key + "=")\(newValue)")
                             if key == "txindex" && newValue == 1 {
                                 stringConf = stringConf.replacingOccurrences(of: "prune=1", with: "prune=0")
-                                setState(int: 0, outlet: pruneOutlet)
                             }
                             if key == "prune" && newValue > 0 {
                                 stringConf = stringConf.replacingOccurrences(of: "txindex=1", with: "txindex=0")
@@ -466,11 +463,6 @@ class Settings: NSViewController, NSTextFieldDelegate {
     func getSettings() {
         let d = Defaults()
         let pruneValue = d.prune()
-        var isPruned = 0
-        if pruneValue > 0 {
-            isPruned = 1
-        }
-        setState(int: isPruned, outlet: pruneOutlet)
         setState(int: d.txindex(), outlet: txIndexOutlet)
         setState(int: d.walletdisabled(), outlet: walletDisabled)
         setState(int: d.isPrivate(), outlet: goPrivateOutlet)
@@ -547,10 +539,12 @@ class Settings: NSViewController, NSTextFieldDelegate {
     func control(_ control: NSControl, textShouldEndEditing fieldEditor: NSText) -> Bool {
         if fieldEditor.string != "" {
             if let int = Int(fieldEditor.string) {
-                if int > 549 || int == 0 || int == 1 {
+                if int > 549 {
                     updatePruneValue(amount: int)
                 }
             }
+        } else {
+            updatePruneValue(amount: 0)
         }
         return true
     }
@@ -558,7 +552,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
     private func updatePruneValue(amount: Int) {
         getBitcoinConf { [unowned vc = self] (conf, error) in
             if !error && conf != nil {
-                vc.parseBitcoinConf(conf: conf!, keyToUpdate: .prune, outlet: vc.pruneOutlet, newValue: amount)
+                vc.parseBitcoinConf(conf: conf!, keyToUpdate: .prune, outlet: nil, newValue: amount)
             } else {
                 var info = "It looks like you do not have an existing bitcoin.conf. Updating this setting will change the prune setting to \(amount)MiB"
                 if amount <= 1 {

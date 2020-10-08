@@ -161,6 +161,9 @@ class ViewController: NSViewController, NSWindowDelegate {
             actionAlert(message: "This is reckless!", info: "This will install c-lightning from source, a lot of things can go wrong when installing from source but generally it should work just fine. Click yes to install.") { [weak self]  response in
                 guard let self = self else { return }
                 if response {
+                    DispatchQueue.main.async { [weak self] in
+                        self?.installLightningOutlet.isEnabled = false
+                    }
                     self.installingLightning = true
                     self.standingUp = false
                     self.upgrading = false
@@ -177,10 +180,31 @@ class ViewController: NSViewController, NSWindowDelegate {
                 
             } else {
                 DispatchQueue.main.async { [weak self] in
-                    self?.startSpinner(description: "starting lightning...")
+                    self?.startSpinner(description: "checking Bitcoin Core sync status...")
                 }
-                self.runScript(script: .startLightning)
                 
+                MakeRpcCall.shared.command(method: "getblockchaininfo", port: "8332", user: rpcuser, password: rpcpassword) { [weak self] result in
+                    guard let self = self else { return }
+                    
+                    guard let result = result as? NSDictionary, let verificationprogress = result["verificationprogress"] as? Double else {
+                        self.hideSpinner()
+                        self.showAlertMessage(message: "Ooops", info: "We did not get a valid response from Bitcoin Core, ensure mainnet is running and fully synced then try again")
+                        return
+                    }
+                    
+                    guard verificationprogress > 0.9999 else {
+                        self.hideSpinner()
+                        self.showAlertMessage(message: "Bitcoin Core not fully synced", info: "In order to use lightning your node needs to be fully synced")
+                        return
+                    }
+                    
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        
+                        self.taskDescription.stringValue = "starting lightning..."
+                        self.runScript(script: .startLightning)
+                    }
+                }
             }
         }
     }
@@ -395,7 +419,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                     var info = """
                     GordianServer will by default install and configure a pruned Bitcoin Core v\(version) node and Tor v0.4.3.6
 
-                    You can always edit the pruning size in settings. By default we prune the blockchain to half your available disc space which is currently \(rounded)gb.
+                    You can always edit the pruning size in settings. By default we prune the blockchain to \(rounded)gb.
 
                     If you would like to install a different node go to \"Settings\" for pruning, mainnet, data directory and tor related options, you can always adjust the settings and restart your node for the changes to take effect.
 
@@ -803,6 +827,16 @@ class ViewController: NSViewController, NSWindowDelegate {
                 self?.lightningIsRunning = true
                 self?.getLightningHttpPass()
             }
+        } else if result.contains("error") {
+            DispatchQueue.main.async { [weak self] in
+                self?.lightningStatusIcon.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
+                self?.installLightningOutlet.title = "Start"
+                self?.lightningIsRunning = false
+                self?.lightningQuickConnectOutlet.isEnabled = false
+            }
+            
+            showAlertMessage(message: "Error", info: result)
+            
         } else {
             DispatchQueue.main.async { [weak self] in
                 self?.lightningStatusIcon.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
@@ -819,17 +853,30 @@ class ViewController: NSViewController, NSWindowDelegate {
             isLightningRunning()
             if bitcoinInstalled && bitcoinRunning {
                 DispatchQueue.main.async { [weak self] in
-                    self?.installLightningOutlet.isEnabled = true
+                    guard let self = self else { return }
+                    self.installLightningOutlet.isEnabled = true
+                    self.lightningWindow.alphaValue = 1
                 }
             } else {
                 DispatchQueue.main.async { [weak self] in
-                    self?.installLightningOutlet.isEnabled = false
+                    guard let self = self else { return }
+                    self.installLightningOutlet.isEnabled = false
+                    self.lightningWindow.alphaValue = 0.5
                 }
             }
         } else {
             if bitcoinInstalled {
-                DispatchQueue.main.async { [weak self] in
-                    self?.installLightningOutlet.isEnabled = true
+                if bitcoinRunning && torIsOn {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        self.lightningWindow.alphaValue = 1
+                        self.installLightningOutlet.isEnabled = true
+                    }
+                } else {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        self.lightningWindow.alphaValue = 0.5
+                    }
                 }
             }
         }
@@ -852,7 +899,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         if result.contains("Unauthenticated") && torConfigured && bitcoinConfigured {
             let ud = UserDefaults.standard
             if ud.object(forKey: "doNotAskForAuthAgain") == nil {
-               addAuth()
+               //addAuth()
             }
         }
         runScript(script: .isLightningInstalled)
@@ -1434,6 +1481,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     func setScene() {
+        lightningWindow.alphaValue = 0.5
         view.backgroundColor = .controlDarkShadowColor
         taskDescription.stringValue = "checking system..."
         spinner.startAnimation(self)
