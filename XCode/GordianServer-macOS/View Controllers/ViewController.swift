@@ -11,11 +11,6 @@ import Cocoa
 class ViewController: NSViewController, NSWindowDelegate {
     
     
-    @IBOutlet weak var lightningQuickConnectOutlet: NSButton!
-    @IBOutlet weak var lightningVersionLabel: NSTextField!
-    @IBOutlet weak var lightningStatusIcon: NSImageView!
-    @IBOutlet weak var installLightningOutlet: NSButton!
-    @IBOutlet weak var lightningWindow: NSView!
     @IBOutlet weak var mainnetIncomingImage: NSImageView!
     @IBOutlet weak var bitcoinCoreWindow: NSView!
     @IBOutlet weak var torWindow: NSView!
@@ -73,9 +68,9 @@ class ViewController: NSViewController, NSWindowDelegate {
     @IBOutlet weak var regWalletsOutlet: NSButton!
 
 
-    var installingLightning = Bool()
+    //var installingLightning = Bool()
     var timer: Timer?
-    var httpPass = ""
+    //var httpPass = ""
     var chain = ""
     var rpcpassword = ""
     var rpcuser = ""
@@ -83,8 +78,8 @@ class ViewController: NSViewController, NSWindowDelegate {
     var mainHostname = ""
     var testHostname = ""
     var regHostname = ""
-    var lightningP2pHostname = ""
-    var lightningRpcHostname = ""
+    //var lightningP2pHostname = ""
+    //var lightningRpcHostname = ""
     var network = ""
     var rpcport = ""
     var newestVersion = ""
@@ -104,8 +99,8 @@ class ViewController: NSViewController, NSWindowDelegate {
     var regTestOn = Bool()
     var mainOn = Bool()
     var testOn = Bool()
-    var lightningIsRunning = false
-    var lightningInstalled = false
+    //var lightningIsRunning = false
+    //var lightningInstalled = false
     var env = [String:String]()
     let d = Defaults()
 
@@ -117,12 +112,12 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     override func viewWillAppear() {
         self.view.window?.delegate = self
-        self.view.window?.minSize = NSSize(width: 710, height: 658)
+        self.view.window?.minSize = NSSize(width: 544, height: 658)
     }
 
     override func viewDidAppear() {
         var frame = self.view.window!.frame
-        let initialSize = NSSize(width: 710, height: 658)
+        let initialSize = NSSize(width: 544, height: 658)
         frame.size = initialSize
         self.view.window?.setFrame(frame, display: true)
         refresh()
@@ -148,65 +143,65 @@ class ViewController: NSViewController, NSWindowDelegate {
     //MARK: User Action
     
     @IBAction func showLightningQuickConnect(_ sender: Any) {
-        DispatchQueue.main.async { [unowned vc = self] in
-            vc.rpcport = "1312"
-            vc.network = "lightning"
-            vc.torHostname = vc.lightningRpcHostname
-            vc.performSegue(withIdentifier: "showPairingCode", sender: vc)
-        }
+//        DispatchQueue.main.async { [unowned vc = self] in
+//            vc.rpcport = "1312"
+//            vc.network = "lightning"
+//            vc.torHostname = vc.lightningRpcHostname
+//            vc.performSegue(withIdentifier: "showPairingCode", sender: vc)
+//        }
     }
 
     @IBAction func installLightningAction(_ sender: Any) {
-        if !lightningInstalled {
-            actionAlert(message: "This is reckless!", info: "This will install c-lightning from source, a lot of things can go wrong when installing from source but generally it should work just fine. Click yes to install.") { [weak self]  response in
-                guard let self = self else { return }
-                if response {
-                    DispatchQueue.main.async { [weak self] in
-                        self?.installLightningOutlet.isEnabled = false
-                    }
-                    self.installingLightning = true
-                    self.standingUp = false
-                    self.upgrading = false
-                    self.strapping = false
-                    self.runScript(script: .getLightningHostnames)
-                }
-            }
-        } else {
-            if lightningIsRunning {
-                DispatchQueue.main.async { [weak self] in
-                    self?.startSpinner(description: "stopping lightning...")
-                }
-                self.runScript(script: .stopLightning)
-                
-            } else {
-                DispatchQueue.main.async { [weak self] in
-                    self?.startSpinner(description: "checking Bitcoin Core sync status...")
-                }
-                
-                MakeRpcCall.shared.command(method: "getblockchaininfo", port: "8332", user: rpcuser, password: rpcpassword) { [weak self] result in
-                    guard let self = self else { return }
-                    
-                    guard let result = result as? NSDictionary, let verificationprogress = result["verificationprogress"] as? Double else {
-                        self.hideSpinner()
-                        self.showAlertMessage(message: "Ooops", info: "We did not get a valid response from Bitcoin Core, ensure mainnet is running and fully synced then try again")
-                        return
-                    }
-                    
-                    guard verificationprogress > 0.9999 else {
-                        self.hideSpinner()
-                        self.showAlertMessage(message: "Bitcoin Core not fully synced", info: "In order to use lightning your node needs to be fully synced")
-                        return
-                    }
-                    
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
-                        
-                        self.taskDescription.stringValue = "starting lightning..."
-                        self.runScript(script: .startLightning)
-                    }
-                }
-            }
-        }
+//        if !lightningInstalled {
+//            actionAlert(message: "This is reckless!", info: "This will install c-lightning from source, a lot of things can go wrong when installing from source but generally it should work just fine. Click yes to install.") { [weak self]  response in
+//                guard let self = self else { return }
+//                if response {
+//                    DispatchQueue.main.async { [weak self] in
+//                        self?.installLightningOutlet.isEnabled = false
+//                    }
+//                    self.installingLightning = true
+//                    self.standingUp = false
+//                    self.upgrading = false
+//                    self.strapping = false
+//                    self.runScript(script: .getLightningHostnames)
+//                }
+//            }
+//        } else {
+//            if lightningIsRunning {
+//                DispatchQueue.main.async { [weak self] in
+//                    self?.startSpinner(description: "stopping lightning...")
+//                }
+//                self.runScript(script: .stopLightning)
+//
+//            } else {
+//                DispatchQueue.main.async { [weak self] in
+//                    self?.startSpinner(description: "checking Bitcoin Core sync status...")
+//                }
+//
+//                MakeRpcCall.shared.command(method: "getblockchaininfo", port: "8332", user: rpcuser, password: rpcpassword) { [weak self] result in
+//                    guard let self = self else { return }
+//
+//                    guard let result = result as? NSDictionary, let verificationprogress = result["verificationprogress"] as? Double else {
+//                        self.hideSpinner()
+//                        self.showAlertMessage(message: "Ooops", info: "We did not get a valid response from Bitcoin Core, ensure mainnet is running and fully synced then try again")
+//                        return
+//                    }
+//
+//                    guard verificationprogress > 0.9999 else {
+//                        self.hideSpinner()
+//                        self.showAlertMessage(message: "Bitcoin Core not fully synced", info: "In order to use lightning your node needs to be fully synced")
+//                        return
+//                    }
+//
+//                    DispatchQueue.main.async { [weak self] in
+//                        guard let self = self else { return }
+//
+//                        self.taskDescription.stringValue = "starting lightning..."
+//                        self.runScript(script: .startLightning)
+//                    }
+//                }
+//            }
+//        }
     }
 
 
@@ -484,7 +479,7 @@ class ViewController: NSViewController, NSWindowDelegate {
 
                         Your existing bitcoin.conf file will be checked for rpc username and password, if none exist GordianServer will create them for you, all other bitcoin.conf settings will remain in place.
 
-                        We do this so that we may verify the singatures of the binaries ourself and only use the binary we verified.
+                        We do this so that we may verify the signatures of the binaries ourself and only use the binary we verified.
 
                         Looks like you also already have Tor installed, GordianServer will always check to see if Tor has already been configured properly, if you have not already created Hidden Services for your nodes rpcport it will create them for you.
                         """
@@ -745,142 +740,142 @@ class ViewController: NSViewController, NSWindowDelegate {
         case .checkForOldHost:
             parseOldHostResponse(result: result)
             
-        case .getLightningHostnames:
-            parseLightningHostnames(result: result)
-            
-        case .isLightningInstalled:
-            parseLightningInstalledResponse(result: result)
-            
-        case .isLightningRunning:
-            parseIsLightningRunningResponse(result: result)
-            
-        case .startLightning:
-            startLightningParse(result: result)
-            
-        case .stopLightning:
-            stopLightningParse(result: result)
-            
-        case .getLightningRpcCreds:
-            parseLightningConfig(result: result)
+//        case .getLightningHostnames:
+//            parseLightningHostnames(result: result)
+//
+//        case .isLightningInstalled:
+//            parseLightningInstalledResponse(result: result)
+//
+//        case .isLightningRunning:
+//            parseIsLightningRunningResponse(result: result)
+//
+//        case .startLightning:
+//            startLightningParse(result: result)
+//
+//        case .stopLightning:
+//            stopLightningParse(result: result)
+//
+//        case .getLightningRpcCreds:
+//            parseLightningConfig(result: result)
 
         default: break
         }
     }
     
-    private func parseLightningConfig(result: String) {
-        let arr = result.split(separator: "\n")
-        for item in arr {
-            if item.contains("http-pass") {
-                let arr1 = item.split(separator: "=")
-                httpPass = "\(arr1[1])"
-                getLightningRpcHost()
-            }
-        }
-    }
+//    private func parseLightningConfig(result: String) {
+//        let arr = result.split(separator: "\n")
+//        for item in arr {
+//            if item.contains("http-pass") {
+//                let arr1 = item.split(separator: "=")
+//                httpPass = "\(arr1[1])"
+//                getLightningRpcHost()
+//            }
+//        }
+//    }
+//
+//    private func parseLightningHostnames(result: String) {
+//        let arr = result.split(separator: "\n")
+//        if arr.count > 0 {
+//            DispatchQueue.main.async { [weak self] in
+//                self?.lightningP2pHostname = "\(arr[0])"
+//                self?.lightningRpcHostname = "\(arr[1])"
+//                if self!.installingLightning {
+//                    self?.performSegue(withIdentifier: "goInstall", sender: self)
+//                } else {
+//                    DispatchQueue.main.async { [weak self] in
+//                        self?.lightningQuickConnectOutlet.isEnabled = true
+//                    }
+//                }
+//            }
+//        }
+//    }
     
-    private func parseLightningHostnames(result: String) {
-        let arr = result.split(separator: "\n")
-        if arr.count > 0 {
-            DispatchQueue.main.async { [weak self] in
-                self?.lightningP2pHostname = "\(arr[0])"
-                self?.lightningRpcHostname = "\(arr[1])"
-                if self!.installingLightning {
-                    self?.performSegue(withIdentifier: "goInstall", sender: self)
-                } else {
-                    DispatchQueue.main.async { [weak self] in
-                        self?.lightningQuickConnectOutlet.isEnabled = true
-                    }
-                }
-            }
-        }
-    }
+//    private func stopLightningParse(result: String) {
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [unowned vc = self] in
+//            vc.runScript(script: .isLightningRunning)
+//            vc.hideSpinner()
+//        }
+//    }
+//
+//    private func startLightningParse(result: String) {
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [unowned vc = self] in
+//            vc.runScript(script: .isLightningRunning)
+//            vc.hideSpinner()
+//        }
+//    }
     
-    private func stopLightningParse(result: String) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [unowned vc = self] in
-            vc.runScript(script: .isLightningRunning)
-            vc.hideSpinner()
-        }
-    }
+//    private func parseIsLightningRunningResponse(result: String) {
+//        if result.contains("No such file or directory") {
+//            DispatchQueue.main.async { [weak self] in
+//                self?.lightningStatusIcon.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
+//                self?.installLightningOutlet.title = "Start"
+//                self?.lightningIsRunning = false
+//                self?.lightningQuickConnectOutlet.isEnabled = false
+//            }
+//
+//        } else if let dict = convertStringToDictionary(json: result) {
+//            let version = dict["version"] as? String ?? ""
+//            DispatchQueue.main.async { [weak self] in
+//                self?.lightningVersionLabel.stringValue = version
+//                self?.lightningStatusIcon.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
+//                self?.installLightningOutlet.title = "Stop"
+//                self?.lightningIsRunning = true
+//                self?.getLightningHttpPass()
+//            }
+//        } else if result.contains("error") {
+//            DispatchQueue.main.async { [weak self] in
+//                self?.lightningStatusIcon.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
+//                self?.installLightningOutlet.title = "Start"
+//                self?.lightningIsRunning = false
+//                self?.lightningQuickConnectOutlet.isEnabled = false
+//            }
+//
+//            showAlertMessage(message: "Error", info: result)
+//
+//        } else {
+//            DispatchQueue.main.async { [weak self] in
+//                self?.lightningStatusIcon.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
+//                self?.installLightningOutlet.title = "Start"
+//                self?.lightningIsRunning = false
+//                self?.lightningQuickConnectOutlet.isEnabled = false
+//            }
+//        }
+//    }
     
-    private func startLightningParse(result: String) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [unowned vc = self] in
-            vc.runScript(script: .isLightningRunning)
-            vc.hideSpinner()
-        }
-    }
-    
-    private func parseIsLightningRunningResponse(result: String) {
-        if result.contains("No such file or directory") {
-            DispatchQueue.main.async { [weak self] in
-                self?.lightningStatusIcon.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
-                self?.installLightningOutlet.title = "Start"
-                self?.lightningIsRunning = false
-                self?.lightningQuickConnectOutlet.isEnabled = false
-            }
-            
-        } else if let dict = convertStringToDictionary(json: result) {
-            let version = dict["version"] as? String ?? ""
-            DispatchQueue.main.async { [weak self] in
-                self?.lightningVersionLabel.stringValue = version
-                self?.lightningStatusIcon.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
-                self?.installLightningOutlet.title = "Stop"
-                self?.lightningIsRunning = true
-                self?.getLightningHttpPass()
-            }
-        } else if result.contains("error") {
-            DispatchQueue.main.async { [weak self] in
-                self?.lightningStatusIcon.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
-                self?.installLightningOutlet.title = "Start"
-                self?.lightningIsRunning = false
-                self?.lightningQuickConnectOutlet.isEnabled = false
-            }
-            
-            showAlertMessage(message: "Error", info: result)
-            
-        } else {
-            DispatchQueue.main.async { [weak self] in
-                self?.lightningStatusIcon.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
-                self?.installLightningOutlet.title = "Start"
-                self?.lightningIsRunning = false
-                self?.lightningQuickConnectOutlet.isEnabled = false
-            }
-        }
-    }
-    
-    private func parseLightningInstalledResponse(result: String) {
-        if result.contains("lightning installed") {
-            lightningInstalled = true
-            isLightningRunning()
-            if bitcoinInstalled && bitcoinRunning {
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.installLightningOutlet.isEnabled = true
-                    self.lightningWindow.alphaValue = 1
-                }
-            } else {
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.installLightningOutlet.isEnabled = false
-                    self.lightningWindow.alphaValue = 0.5
-                }
-            }
-        } else {
-            if bitcoinInstalled {
-                if bitcoinRunning && torIsOn {
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
-                        self.lightningWindow.alphaValue = 1
-                        self.installLightningOutlet.isEnabled = true
-                    }
-                } else {
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
-                        self.lightningWindow.alphaValue = 0.5
-                    }
-                }
-            }
-        }
-    }
+//    private func parseLightningInstalledResponse(result: String) {
+//        if result.contains("lightning installed") {
+//            lightningInstalled = true
+//            isLightningRunning()
+//            if bitcoinInstalled && bitcoinRunning {
+//                DispatchQueue.main.async { [weak self] in
+//                    guard let self = self else { return }
+//                    self.installLightningOutlet.isEnabled = true
+//                    self.lightningWindow.alphaValue = 1
+//                }
+//            } else {
+//                DispatchQueue.main.async { [weak self] in
+//                    guard let self = self else { return }
+//                    self.installLightningOutlet.isEnabled = false
+//                    self.lightningWindow.alphaValue = 0.5
+//                }
+//            }
+//        } else {
+//            if bitcoinInstalled {
+//                if bitcoinRunning && torIsOn {
+//                    DispatchQueue.main.async { [weak self] in
+//                        guard let self = self else { return }
+//                        self.lightningWindow.alphaValue = 1
+//                        self.installLightningOutlet.isEnabled = true
+//                    }
+//                } else {
+//                    DispatchQueue.main.async { [weak self] in
+//                        guard let self = self else { return }
+//                        self.lightningWindow.alphaValue = 0.5
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     private func parseOldHostResponse(result: String) {
         if result.contains("Exists") {
@@ -1393,9 +1388,9 @@ class ViewController: NSViewController, NSWindowDelegate {
                 mainHostname = "\(hostnames[0])"
                 testHostname = "\(hostnames[1])"
                 regHostname = "\(hostnames[2])"
-                if hostnames.count == 4 {
-                    lightningP2pHostname = "\(hostnames[3])"
-                }
+//                if hostnames.count == 4 {
+//                    lightningP2pHostname = "\(hostnames[3])"
+//                }
                 DispatchQueue.main.async { [unowned vc = self] in
                     vc.connectMainnetOutlet.isEnabled = true
                     vc.connectTestnetOutlet.isEnabled = true
@@ -1481,7 +1476,6 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     func setScene() {
-        lightningWindow.alphaValue = 0.5
         view.backgroundColor = .controlDarkShadowColor
         taskDescription.stringValue = "checking system..."
         spinner.startAnimation(self)
@@ -1489,14 +1483,10 @@ class ViewController: NSViewController, NSWindowDelegate {
         icon.layer?.cornerRadius = icon.frame.width / 2
         icon.layer?.masksToBounds = true
         isLoading = true
-        lightningStatusIcon.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
         bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
         bitcoinSettingsOutlet.isHighlighted = false
         bitcoinSettingsOutlet.focusRingType = .none
-        lightningQuickConnectOutlet.isEnabled = false
-        installLightningOutlet.isEnabled = false
         updateOutlet.isEnabled = false
-        lightningVersionLabel.stringValue = ""
         bitcoinCoreVersionOutlet.stringValue = ""
         installTorOutlet.isEnabled = false
         verifyOutlet.isEnabled = false
@@ -1506,7 +1496,6 @@ class ViewController: NSViewController, NSWindowDelegate {
         torRunningImage.alphaValue = 0
         bitcoinCoreWindow.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)
         torWindow.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)
-        lightningWindow.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)
         bitcoinMainnetWindow.backgroundColor = #colorLiteral(red: 0.2548701465, green: 0.2549202442, blue: 0.2548669279, alpha: 1)
         bitcoinTestnetWindow.backgroundColor = #colorLiteral(red: 0.2548701465, green: 0.2549202442, blue: 0.2548669279, alpha: 1)
         bitcoinRegtestWindow.backgroundColor = #colorLiteral(red: 0.2548701465, green: 0.2549202442, blue: 0.2548669279, alpha: 1)
@@ -1516,7 +1505,6 @@ class ViewController: NSViewController, NSWindowDelegate {
         torAuthWindow.backgroundColor = #colorLiteral(red: 0.2548701465, green: 0.2549202442, blue: 0.2548669279, alpha: 1)
         bitcoinCoreWindow.wantsLayer = true
         torWindow.wantsLayer = true
-        lightningWindow.wantsLayer = true
         bitcoinMainnetWindow.wantsLayer = true
         bitcoinTestnetWindow.wantsLayer = true
         bitcoinRegtestWindow.wantsLayer = true
@@ -1530,8 +1518,6 @@ class ViewController: NSViewController, NSWindowDelegate {
         testnetPeersView.wantsLayer = true
         regtestSyncedView.wantsLayer = true
         regtestPeersView.wantsLayer = true
-        lightningWindow.layer?.borderWidth = 0.75
-        lightningWindow.layer?.cornerRadius = 8
         mainnetSyncedView.layer?.borderWidth = 0.75
         mainnetSyncedView.layer?.cornerRadius = 5
         testnetSyncedView.layer?.borderWidth = 0.75
@@ -1562,7 +1548,6 @@ class ViewController: NSViewController, NSWindowDelegate {
         torRegtestWindow.layer?.cornerRadius = 8
         torAuthWindow.layer?.borderWidth = 0.75
         torAuthWindow.layer?.cornerRadius = 8
-        lightningWindow.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
         mainnetSyncedView.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
         mainnetPeersView.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
         testnetSyncedView.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
@@ -1645,17 +1630,17 @@ class ViewController: NSViewController, NSWindowDelegate {
                 vc.rpcpassword = rpcpassword
                 vc.rpcuser = rpcuser
                 vc.torHostname = torHostname
-                vc.httpPass = httpPass
+                //vc.httpPass = httpPass
             }
 
         case "goInstall":
             if let vc = segue.destinationController as? Installer {
-                vc.installLightning = installingLightning
+                //vc.installLightning = installingLightning
                 vc.standingUp = standingUp
                 vc.upgrading = upgrading
                 vc.ignoreExistingBitcoin = ignoreExistingBitcoin
                 vc.strapping = strapping
-                vc.lightningHostname = lightningP2pHostname
+                //vc.lightningHostname = lightningP2pHostname
                 timer?.invalidate()
                 timer = nil
             }

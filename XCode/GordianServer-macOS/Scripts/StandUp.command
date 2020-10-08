@@ -131,9 +131,7 @@ function installTor () {
         else
             configureTor
         fi
-        
-        sudo -u $(whoami) /usr/local/bin/brew services start tor
-        
+                
         echo "Installation complete, you can now close this window if it does not automatically dismiss."
         exit 1
         

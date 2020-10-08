@@ -313,7 +313,6 @@ class Installer: NSViewController {
             self?.run(script: .standUp, env: env) { log in
                 
                 DispatchQueue.main.async { [weak self] in
-                    setSimpleAlert(message: "Installation complete", info: "If the consolse does not dismiss or you get a spinner you can force quit the app and reopen it", buttonLabel: "OK")
                     if self != nil {
                         self?.setLog(content: log)
                     }
