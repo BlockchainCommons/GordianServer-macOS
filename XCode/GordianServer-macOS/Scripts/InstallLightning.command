@@ -287,6 +287,7 @@ function installHttpPlugin () {
     ~/.cargo/bin/cargo build --release
     chmod a+x ~/.lightning/plugins/c-lightning-http-plugin/target/release/c-lightning-http-plugin
     echo "C-Lightning installation complete!"
+    echo "If this console does not dismiss or you get a spinner just force quit the app and reopen it"
     exit
 }
 
