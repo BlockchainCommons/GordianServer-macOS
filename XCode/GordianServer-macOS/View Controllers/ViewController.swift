@@ -897,7 +897,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                //addAuth()
             }
         }
-        runScript(script: .isLightningInstalled)
+        //runScript(script: .isLightningInstalled)
     }
 
     private func mainnetIsOff() {
