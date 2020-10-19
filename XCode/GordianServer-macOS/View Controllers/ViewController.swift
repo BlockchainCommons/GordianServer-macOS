@@ -183,7 +183,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                     self?.startSpinner(description: "checking Bitcoin Core sync status...")
                 }
                 
-                MakeRpcCall.shared.command(method: "getblockchaininfo", port: "8332", user: rpcuser, password: rpcpassword) { [weak self] result in
+                MakeRpcCall.shared.command(method: "getblockchaininfo", param: "", port: "8332", user: rpcuser, password: rpcpassword) { [weak self] result in
                     guard let self = self else { return }
                     
                     guard let result = result as? NSDictionary, let verificationprogress = result["verificationprogress"] as? Double else {
@@ -198,11 +198,23 @@ class ViewController: NSViewController, NSWindowDelegate {
                         return
                     }
                     
-                    DispatchQueue.main.async { [weak self] in
+                    MakeRpcCall.shared.command(method: "estimatesmartfee", param: "6", port: "8332", user: self.rpcuser, password: self.rpcpassword) { [weak self] result in
                         guard let self = self else { return }
                         
-                        self.taskDescription.stringValue = "starting lightning..."
-                        self.runScript(script: .startLightning)
+                        print("result: \(result)")
+                        
+                        guard let result = result as? NSDictionary, let _ = result["feerate"] as? Double else {
+                            self.hideSpinner()
+                            self.showAlertMessage(message: "Unable to estimate fee rates...", info: "You need to wait a little while while your nodes view of the mempool and the fee market get caught up. In order to use Lightning we need to be able to use the bitcoin-cli estimatesmartfee command which seems to be giving us an error right now. Please try again in a few hours.")
+                            return
+                        }
+                        
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
+                            
+                            self.taskDescription.stringValue = "starting lightning..."
+                            self.runScript(script: .startLightning)
+                        }
                     }
                 }
             }
@@ -1171,7 +1183,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         default:
             break
         }
-        rpc.command(method: command, port: port, user: rpcuser, password: rpcpassword) { response in
+        rpc.command(method: command, param: "", port: port, user: rpcuser, password: rpcpassword) { response in
             completion((response))
         }
     }
