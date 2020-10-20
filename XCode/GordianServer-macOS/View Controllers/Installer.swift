@@ -22,21 +22,23 @@ class Installer: NSViewController {
     var standingDown = Bool()
     var upgrading = Bool()
     var showLog = Bool()
+    var installLightning = Bool()
     var standUpConf = ""
     var refreshing = Bool()
     var ignoreExistingBitcoin = Bool()
     var rpcuser = ""
     var rpcpassword = ""
+    var lightningHostname = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setScene()
-        filterAction()
     }
     
     override func viewDidAppear() {
         window = self.view.window!
         self.view.window?.title = "Console"
+        filterAction()
     }
     
     func showSpinner(description: String) {
@@ -89,6 +91,8 @@ class Installer: NSViewController {
             spinner.alphaValue = 0
             seeLog = false
             getLog { (log) in
+                guard let log = log else { return }
+                
                 DispatchQueue.main.async { [unowned vc = self] in
                     vc.consoleOutput.string = log
                 }
@@ -108,6 +112,14 @@ class Installer: NSViewController {
 
         } else if upgrading {
             getURLs()
+            
+        } else if installLightning {
+            DispatchQueue.main.async { [unowned vc = self] in
+                vc.spinner.startAnimation(vc)
+            }
+            desc = "Installing Lightning..."
+            //installLightningAction()
+            checkExistingConf()
         }
         
         DispatchQueue.main.async { [unowned vc = self] in
@@ -212,13 +224,21 @@ class Installer: NSViewController {
                         vc.standUpConf = "#bindaddress=127.0.0.1\n" + vc.standUpConf
                     }
                     
-                    vc.getURLs()
-                    
+                    if !vc.installLightning {
+                        vc.getURLs()
+                    } else {
+                        vc.installLightningAction()
+                    }
+                                        
                 } else {
-                    vc.setDefaultBitcoinConf()
+                    if !vc.installLightning {
+                        vc.setDefaultBitcoinConf()
+                    }
                 }
             } else {
-                vc.setDefaultBitcoinConf()
+                if !vc.installLightning {
+                    vc.setDefaultBitcoinConf()
+                }
             }
         }
     }
@@ -259,7 +279,7 @@ class Installer: NSViewController {
     }
     
     private func whitelistedRpc() -> String {
-        return "abortrescan, listlockunspent, lockunspent, getbestblockhash, getaddressesbylabel, listlabels, decodescript, combinepsbt, utxoupdatepsbt, listaddressgroupings, converttopsbt, getaddressinfo, analyzepsbt, createpsbt, joinpsbts, getmempoolinfo, signrawtransactionwithkey, listwallets, unloadwallet, rescanblockchain, listwalletdir, loadwallet, createwallet, finalizepsbt, walletprocesspsbt, decodepsbt, walletcreatefundedpsbt, fundrawtransaction, uptime, importmulti, getdescriptorinfo, deriveaddresses, getrawtransaction, decoderawtransaction, getnewaddress, gettransaction, signrawtransactionwithwallet, createrawtransaction, getrawchangeaddress, getwalletinfo, getblockchaininfo, getbalance, getunconfirmedbalance, listtransactions, listunspent, bumpfee, importprivkey, abandontransaction, getpeerinfo, getnetworkinfo, getmininginfo, estimatesmartfee, sendrawtransaction, importaddress, signmessagewithprivkey, verifymessage, signmessage, encryptwallet, walletpassphrase, walletlock, walletpassphrasechange, gettxoutsetinfo, help, stop"
+        return "abortrescan, listlockunspent, lockunspent, getbestblockhash, getaddressesbylabel, listlabels, decodescript, combinepsbt, utxoupdatepsbt, listaddressgroupings, converttopsbt, getaddressinfo, analyzepsbt, createpsbt, joinpsbts, getmempoolinfo, signrawtransactionwithkey, listwallets, unloadwallet, rescanblockchain, listwalletdir, loadwallet, createwallet, finalizepsbt, walletprocesspsbt, decodepsbt, walletcreatefundedpsbt, fundrawtransaction, uptime, importmulti, getdescriptorinfo, deriveaddresses, getrawtransaction, decoderawtransaction, getnewaddress, gettransaction, signrawtransactionwithwallet, createrawtransaction, getrawchangeaddress, getwalletinfo, getblockchaininfo, getbalance, getunconfirmedbalance, listtransactions, listunspent, bumpfee, importprivkey, abandontransaction, getpeerinfo, getnetworkinfo, getmininginfo, estimatesmartfee, sendrawtransaction, importaddress, signmessagewithprivkey, verifymessage, signmessage, encryptwallet, walletpassphrase, walletlock, walletpassphrasechange, gettxoutsetinfo, help, stop, gettxout, getblockhash"
     }
     
     private func optimumCache() -> Int {
@@ -268,13 +288,14 @@ class Installer: NSViewController {
     }
     
     func standDown() {
-        showLog = true
-        run(script: .standDown, env: ["":""]) {
-            DispatchQueue.main.async { [unowned vc = self] in
-                vc.hideSpinner()
-                vc.setLog(content: vc.consoleOutput.string)
-                setSimpleAlert(message: "Success", info: "You have StoodDown", buttonLabel: "OK")
-                vc.goBack()
+        let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
+        taskQueue.async { [weak self] in
+            self?.run(script: .standDown, env: ["":""]) { log in
+                DispatchQueue.main.async { [weak self] in
+                    self?.hideSpinner()
+                    setSimpleAlert(message: "Success", info: "You have stood down", buttonLabel: "OK")
+                    self?.goBack()
+                }
             }
         }
     }
@@ -287,15 +308,21 @@ class Installer: NSViewController {
         let d = Defaults()
         showLog = true
         let env = ["BINARY_NAME":binaryName, "MACOS_URL":macosURL, "SHA_URL":shaURL, "VERSION":version, "PREFIX":prefix, "CONF":standUpConf, "DATADIR":d.dataDir(), "IGNORE_EXISTING_BITCOIN":ignore]
-        run(script: .standUp, env: env) {
-            DispatchQueue.main.async { [unowned vc = self] in
-                let ud = UserDefaults.standard
-                ud.set(prefix, forKey: "binaryPrefix")
-                ud.set(binaryName, forKey: "macosBinary")
-                ud.set(version, forKey: "version")
-                vc.setLog(content: vc.consoleOutput.string)
-                NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
-                vc.goBack()
+        let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
+        taskQueue.async { [weak self] in
+            self?.run(script: .standUp, env: env) { log in
+                
+                DispatchQueue.main.async { [weak self] in
+                    if self != nil {
+                        self?.setLog(content: log)
+                    }
+                    let ud = UserDefaults.standard
+                    ud.set(prefix, forKey: "binaryPrefix")
+                    ud.set(binaryName, forKey: "macosBinary")
+                    ud.set(version, forKey: "version")
+                    NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
+                    self?.goBack()
+                }
             }
         }
     }
@@ -304,15 +331,21 @@ class Installer: NSViewController {
         upgrading = false
         let env = ["BINARY_NAME":binaryName, "MACOS_URL":macosURL, "SHA_URL":shaURL, "VERSION":version]
         showLog = true
-        run(script: .upgradeBitcoin, env: env) {
-            DispatchQueue.main.async { [unowned vc = self] in
-                let ud = UserDefaults.standard
-                ud.set(prefix, forKey: "binaryPrefix")
-                ud.set(version, forKey: "version")
-                ud.set(binaryName, forKey: "macosBinary")
-                vc.setLog(content: vc.consoleOutput.string)
-                NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
-                vc.goBack()
+        let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
+        taskQueue.async { [weak self] in
+            self?.run(script: .upgradeBitcoin, env: env) { log in
+                
+                DispatchQueue.main.async { [weak self] in
+                    if self != nil {
+                        self?.setLog(content: log)
+                    }
+                    let ud = UserDefaults.standard
+                    ud.set(prefix, forKey: "binaryPrefix")
+                    ud.set(version, forKey: "version")
+                    ud.set(binaryName, forKey: "macosBinary")
+                    NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
+                    self?.goBack()
+                }
             }
         }
     }
@@ -333,15 +366,11 @@ class Installer: NSViewController {
     }
     
     func setLog(content: String) {
-        let lg = Log()
-        lg.writeToLog(content: content)
+        Log.writeToLog(content: content)
     }
     
-    func getLog(completion: @escaping (String) -> Void) {
-        let lg = Log()
-        lg.getLog {
-            completion((lg.logText))
-        }
+    func getLog(completion: @escaping (String?) -> Void) {
+        Log.getLog(completion: completion)
     }
     
     func getExisistingRPCCreds(completion: @escaping ((user: String, password: String)) -> Void) {
@@ -405,10 +434,36 @@ class Installer: NSViewController {
         }
     }
     
-    private func run(script: SCRIPT, env: [String:String], completion: @escaping () -> Void) {
+    private func installLightningAction() {
+        print("installLightningAction")
+        showLog = true
+        let d = Defaults()
+        let env = ["RPC_PASSWORD":rpcpassword, "RPC_USER":rpcuser, "HTTP_PASS":randomString(length: 32), "PREFIX": d.existingPrefix(), "DATA_DIR": d.dataDir(), "USER":NSUserName()]
+        #if DEBUG
+        print("env: \(env)")
+        #endif
+        
+        let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
+        taskQueue.async { [weak self] in
+            self?.run(script: .installLightning, env: env) { log in
+                
+                DispatchQueue.main.async { [weak self] in
+                    if self != nil {
+                        self?.setLog(content: log)
+                    }
+                    NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
+                    self?.goBack()
+                }
+            }
+        }
+        
+    }
+    
+    private func run(script: SCRIPT, env: [String:String], completion: @escaping ((String)) -> Void) {
         #if DEBUG
         print("script: \(script.rawValue)")
         #endif
+        var logOutput = ""
         let resource = script.rawValue
         guard let path = Bundle.main.path(forResource: resource, ofType: "command") else {
             return
@@ -421,21 +476,22 @@ class Installer: NSViewController {
         task.standardOutput = stdOut
         task.standardError = stdErr
         task.terminationHandler = { _ in
-            completion()
+            completion((logOutput))
         }
         let handler = { [unowned vc = self] (file: FileHandle!) -> Void in
             let data = file.availableData
-            guard let output = String(data: data, encoding: .utf8) else {
-                return
-            }
+            guard let output = String(data: data, encoding: .utf8) else { return }
+                        
             if vc.showLog {
                 DispatchQueue.main.async { [unowned vc = self] in
                     let prevOutput = vc.consoleOutput.string
                     let nextOutput = prevOutput + output
                     vc.consoleOutput.string = nextOutput
+                    logOutput = nextOutput
                     vc.consoleOutput.scrollToEndOfDocument(vc)
                 }
             }
+            
         }
         stdErr.fileHandleForReading.readabilityHandler = handler
         stdOut.fileHandleForReading.readabilityHandler = handler

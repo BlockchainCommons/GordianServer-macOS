@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class AddAuthentication: NSViewController {
+class AddAuthentication: NSViewController, NSWindowDelegate {
     
     var window: NSWindow?
     @IBOutlet weak var textInput: NSTextField!
@@ -18,8 +18,17 @@ class AddAuthentication: NSViewController {
         // Do view setup here.
     }
     
+    override func viewWillAppear() {
+        self.view.window?.delegate = self
+        self.view.window?.minSize = NSSize(width: 484, height: 256)
+    }
+    
     override func viewDidAppear() {
         window = self.view.window!
+        var frame = self.view.window!.frame
+        let initialSize = NSSize(width: 484, height: 256)
+        frame.size = initialSize
+        self.view.window?.setFrame(frame, display: true)
         self.view.window?.title = "Tor V3 Authentication"
     }
     

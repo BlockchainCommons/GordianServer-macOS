@@ -6,7 +6,25 @@
 #  Created by Peter on 07/11/19.
 #  Copyright © 2019 Blockchain Commons, LLC
 
-mkdir ~/.standup
+function setUpStandUpDir () {
+
+    if ! [ -d ~/.standup ]; then
+    
+        mkdir ~/.standup
+        
+    fi
+    
+    if test -f ~/.standup/standup.log; then
+    
+        echo "~/.standup/standup.log exists."
+        
+    else
+    
+        touch ~/.standup/standup.log
+        
+    fi
+    
+}
 
 function installBitcoin () {
 
@@ -88,6 +106,8 @@ function installTor () {
             configureTor
         fi
         
+        sudo -u $(whoami) /usr/local/bin/brew services start tor
+        
         echo "Installation complete, you can now close this window if it does not automatically dismiss."
         exit 1
         
@@ -111,7 +131,7 @@ function installTor () {
         else
             configureTor
         fi
-        
+                
         echo "Installation complete, you can now close this window if it does not automatically dismiss."
         exit 1
         
@@ -143,7 +163,15 @@ HiddenServicePort 1310 127.0.0.1:18332\
 \
 HiddenServiceDir \/usr\/local\/var\/lib\/tor\/standup\/reg\/\
 HiddenServiceVersion 3\
-HiddenServicePort 1311 127.0.0.1:18443/g' /usr/local/etc/tor/torrc
+HiddenServicePort 1311 127.0.0.1:18443\
+\
+HiddenServiceDir \/usr\/local\/var\/lib\/tor\/standup\/lightning\/p2p\/\
+HiddenServiceVersion 3\
+HiddenServicePort 9735 127.0.0.1:9735\
+\
+HiddenServiceDir \/usr\/local\/var\/lib\/tor\/standup\/lightning\/rpc\/\
+HiddenServiceVersion 3\
+HiddenServicePort 1312 127.0.0.1:1312/g' /usr/local/etc/tor/torrc
 
     echo "Creating hidden service directories at /usr/local/var/lib/tor/standup"
     
@@ -196,40 +224,41 @@ HiddenServicePort 1311 127.0.0.1:18443/g' /usr/local/etc/tor/torrc
         exit 1
     fi
     
+    mkdir /usr/local/var/lib/tor/standup/lightning
+    if [ -d /usr/local/var/lib/tor/standup/lightning ]; then
+        echo "/usr/local/var/lib/tor/standup/lightning created"
+    else
+        echo "There was an error creating /usr/local/var/lib/tor/standup/lightning"
+        exit 1
+    fi
+    
+    mkdir /usr/local/var/lib/tor/standup/lightning/p2p
+    if [ -d /usr/local/var/lib/tor/standup/lightning/p2p ]; then
+        echo "/usr/local/var/lib/tor/standup/lightning/p2p created"
+    else
+        echo "There was an error creating /usr/local/var/lib/tor/standup/lightning/p2p"
+        exit 1
+    fi
+    
+    mkdir /usr/local/var/lib/tor/standup/lightning/rpc
+    if [ -d /usr/local/var/lib/tor/standup/lightning/rpc ]; then
+        echo "/usr/local/var/lib/tor/standup/lightning/rpc created"
+    else
+        echo "There was an error creating /usr/local/var/lib/tor/standup/lightning/rpc"
+        exit 1
+    fi
+    
     echo "Assigning hidden service directories with permissions 700..."
     chmod 700 /usr/local/var/lib/tor/standup/main
     chmod 700 /usr/local/var/lib/tor/standup/test
     chmod 700 /usr/local/var/lib/tor/standup/reg
+    chmod 700 /usr/local/var/lib/tor/standup/lightning
+    chmod 700 /usr/local/var/lib/tor/standup/lightning/rpc
+    chmod 700 /usr/local/var/lib/tor/standup/lightning/p2p
     
 }
 
-if ! [ -x "$(command -v bitcoind)" ]; then
-  
-  # Bitcoin is not installed, install it
-  
-  installBitcoin
-  configureBitcoin
-  installTor
-  
-else
-  
-  # Bitcoin is installed already but user may want to do a fresh install
-  
-  if [ "$IGNORE_EXISTING_BITCOIN" == "YES" ]; then
-  
-    # Bitcoin is already installed, install again
-    
-    installBitcoin
-    configureBitcoin
-    installTor
-  
-  else
-  
-    # Bitcoin is already installed, don't install again
-    
-    configureBitcoin
-    installTor
-    
-  fi
-  
-fi
+setUpStandUpDir
+installBitcoin
+configureBitcoin
+installTor
