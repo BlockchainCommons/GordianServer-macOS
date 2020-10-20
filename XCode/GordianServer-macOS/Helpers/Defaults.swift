@@ -42,8 +42,8 @@ class Defaults {
         }
         
         func setLocals() {
-            if ud.object(forKey: "pruned") == nil {
-                ud.set(halfOfDevicesFreeSpace() ?? 1000, forKey: "pruned")
+            if ud.object(forKey: "prune") == nil {
+                ud.set(1000, forKey: "prune")
             }
             if ud.object(forKey: "txindex") == nil {
                 ud.set(0, forKey: "txindex")
@@ -135,7 +135,7 @@ class Defaults {
     }
     
     func prune() -> Int {
-        return ud.object(forKey:"prune") as? Int ?? 0
+        return ud.object(forKey:"prune") as? Int ?? 1000
     }
     
     func txindex() -> Int {
@@ -160,21 +160,6 @@ class Defaults {
     
     func existingPrefix() -> String {
         return ud.object(forKey: "binaryPrefix") as? String ?? "bitcoin-\(existingVersion())"
-    }
-    
-    private func halfOfDevicesFreeSpace() -> Int? {
-        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        do {
-            let dictionary = try FileManager.default.attributesOfFileSystem(forPath: paths.last!)
-            if let int64 = dictionary[FileAttributeKey.systemFreeSize] as? Int64 {
-                let dbl = Double(int64)
-                return Int((dbl / 1049000.0) / 2)
-            } else {
-                return nil
-            }
-        } catch {
-            return nil
-        }
     }
 
 }

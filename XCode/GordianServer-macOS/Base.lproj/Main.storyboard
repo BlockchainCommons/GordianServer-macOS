@@ -685,7 +685,7 @@
         <scene sceneID="R2V-B0-nI4">
             <objects>
                 <windowController id="B8D-0N-5wS" sceneMemberID="viewController">
-                    <window key="window" title="GordianServer-macOS v0.1.3" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
+                    <window key="window" title="GordianServer-macOS v0.1.4" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES"/>
                         <windowPositionMask key="initialPositionMask" topStrut="YES"/>
                         <rect key="contentRect" x="226" y="275" width="436" height="480"/>
@@ -789,18 +789,11 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="GordianServer_macOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" appearanceType="darkAqua" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="484" height="658"/>
+                        <rect key="frame" x="0.0" y="0.0" width="710" height="658"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <progressIndicator wantsLayer="YES" maxValue="100" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="kdQ-HU-D0l">
-                                <rect key="frame" x="453" y="631" width="16" height="16"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="16" id="41v-hW-XZq"/>
-                                    <constraint firstAttribute="height" constant="16" id="y8w-JU-irk"/>
-                                </constraints>
-                            </progressIndicator>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="K4o-Sf-dSl">
-                                <rect key="frame" x="228" y="640" width="29" height="12"/>
+                                <rect key="frame" x="341" y="640" width="29" height="12"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="em4-Ia-ulc">
                                     <font key="font" size="10" name="HelveticaNeue"/>
                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
@@ -808,7 +801,7 @@
                                 </textFieldCell>
                             </textField>
                             <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nxx-XH-rol">
-                                <rect key="frame" x="42" y="30" width="400" height="598"/>
+                                <rect key="frame" x="53" y="30" width="604" height="598"/>
                                 <subviews>
                                     <customView appearanceType="darkAqua" translatesAutoresizingMaskIntoConstraints="NO" id="i70-xH-6Bd">
                                         <rect key="frame" x="0.0" y="0.0" width="196" height="598"/>
@@ -821,19 +814,6 @@
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
-                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="62Q-e6-4W2">
-                                                <rect key="frame" x="16" y="572" width="25" height="18"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="24" id="hgC-Vu-kWS"/>
-                                                </constraints>
-                                                <buttonCell key="cell" type="recessed" bezelStyle="recessed" image="NSActionTemplate" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9fy-vn-lk9">
-                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                    <font key="font" metaFont="systemBold" size="12"/>
-                                                </buttonCell>
-                                                <connections>
-                                                    <action selector="goToSettings:" target="XfG-lQ-9wD" id="aLE-S4-hHS"/>
-                                                </connections>
-                                            </button>
                                             <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="q6e-1y-IAn">
                                                 <rect key="frame" x="153" y="567" width="25" height="25"/>
                                                 <constraints>
@@ -841,7 +821,7 @@
                                                 </constraints>
                                                 <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7Zq-wt-ncZ">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                    <font key="font" metaFont="message"/>
+                                                    <font key="font" metaFont="system"/>
                                                 </buttonCell>
                                                 <connections>
                                                     <action selector="bitcoinWindowHelp:" target="XfG-lQ-9wD" id="YQC-LW-mFH"/>
@@ -906,7 +886,7 @@
                                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Vdd-w0-AhZ">
                                                                                 <rect key="frame" x="31" y="3" width="85" height="14"/>
                                                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="80% synced" id="ozm-OW-79F">
-                                                                                    <font key="font" metaFont="message" size="11"/>
+                                                                                    <font key="font" metaFont="controlContent" size="11"/>
                                                                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                 </textFieldCell>
@@ -947,7 +927,7 @@
                                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PMt-yp-b2E">
                                                                                         <rect key="frame" x="48" y="4" width="17" height="14"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="10" id="bLz-2O-SuY">
-                                                                                            <font key="font" metaFont="message" size="11"/>
+                                                                                            <font key="font" metaFont="controlContent" size="11"/>
                                                                                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                         </textFieldCell>
@@ -962,7 +942,7 @@
                                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="E12-C7-dPa">
                                                                                         <rect key="frame" x="91" y="4" width="12" height="14"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="8" id="UiY-sO-Qsr">
-                                                                                            <font key="font" metaFont="message" size="11"/>
+                                                                                            <font key="font" metaFont="controlContent" size="11"/>
                                                                                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                         </textFieldCell>
@@ -1000,7 +980,7 @@
                                                                         <rect key="frame" x="-6" y="43" width="126" height="32"/>
                                                                         <buttonCell key="cell" type="push" title="Start" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="24Q-a3-uu8">
                                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                            <font key="font" metaFont="message"/>
+                                                                            <font key="font" metaFont="system"/>
                                                                         </buttonCell>
                                                                         <color key="contentTintColor" red="0.2313431799" green="0.23138946290000001" blue="0.2313401997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <connections>
@@ -1011,7 +991,7 @@
                                                                         <rect key="frame" x="-6" y="18" width="126" height="32"/>
                                                                         <buttonCell key="cell" type="push" title="QuickConnect" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="i49-a4-Vse">
                                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                            <font key="font" metaFont="message"/>
+                                                                            <font key="font" metaFont="system"/>
                                                                         </buttonCell>
                                                                         <connections>
                                                                             <action selector="showMainConnect:" target="XfG-lQ-9wD" id="ER2-o8-iLj"/>
@@ -1021,7 +1001,7 @@
                                                                         <rect key="frame" x="-6" y="-7" width="126" height="32"/>
                                                                         <buttonCell key="cell" type="push" title="Wallets" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fln-tm-L1T">
                                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                            <font key="font" metaFont="message"/>
+                                                                            <font key="font" metaFont="system"/>
                                                                         </buttonCell>
                                                                         <connections>
                                                                             <action selector="showMainWallets:" target="XfG-lQ-9wD" id="hiv-Vd-RrT"/>
@@ -1120,7 +1100,7 @@
                                                                                     <constraint firstAttribute="height" constant="14" id="Xux-VQ-lg0"/>
                                                                                 </constraints>
                                                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="80% synced" id="wyy-cu-Wf8">
-                                                                                    <font key="font" metaFont="message" size="11"/>
+                                                                                    <font key="font" metaFont="controlContent" size="11"/>
                                                                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                 </textFieldCell>
@@ -1159,7 +1139,7 @@
                                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ect-43-g9J">
                                                                                         <rect key="frame" x="46" y="4" width="17" height="14"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="10" id="iJu-BP-GJE">
-                                                                                            <font key="font" metaFont="message" size="11"/>
+                                                                                            <font key="font" metaFont="controlContent" size="11"/>
                                                                                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                         </textFieldCell>
@@ -1171,7 +1151,7 @@
                                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dmc-4L-u8J">
                                                                                         <rect key="frame" x="87" y="4" width="16" height="14"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" alignment="center" title="8" id="XjG-AO-eDo">
-                                                                                            <font key="font" metaFont="message" size="11"/>
+                                                                                            <font key="font" metaFont="controlContent" size="11"/>
                                                                                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                         </textFieldCell>
@@ -1210,7 +1190,7 @@
                                                                         <rect key="frame" x="-6" y="43" width="127" height="32"/>
                                                                         <buttonCell key="cell" type="push" title="Start" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jeS-mb-zYT">
                                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                            <font key="font" metaFont="message"/>
+                                                                            <font key="font" metaFont="system"/>
                                                                         </buttonCell>
                                                                         <connections>
                                                                             <action selector="startTestnetAction:" target="XfG-lQ-9wD" id="TDx-0b-UPk"/>
@@ -1220,7 +1200,7 @@
                                                                         <rect key="frame" x="-6" y="18" width="127" height="32"/>
                                                                         <buttonCell key="cell" type="push" title="QuickConnect" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="0aa-he-91O">
                                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                            <font key="font" metaFont="message"/>
+                                                                            <font key="font" metaFont="system"/>
                                                                         </buttonCell>
                                                                         <connections>
                                                                             <action selector="showTestConnect:" target="XfG-lQ-9wD" id="Q6s-hD-woj"/>
@@ -1230,7 +1210,7 @@
                                                                         <rect key="frame" x="-6" y="-7" width="127" height="32"/>
                                                                         <buttonCell key="cell" type="push" title="Wallets" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="B20-Qo-jdC">
                                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                            <font key="font" metaFont="message"/>
+                                                                            <font key="font" metaFont="system"/>
                                                                         </buttonCell>
                                                                         <connections>
                                                                             <action selector="showTestWallets:" target="XfG-lQ-9wD" id="T3d-PB-9BI"/>
@@ -1328,7 +1308,7 @@
                                                                                     <constraint firstAttribute="height" constant="14" id="2SS-xN-4Qz"/>
                                                                                 </constraints>
                                                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="80% synced" id="ilY-0r-bCs">
-                                                                                    <font key="font" metaFont="message" size="11"/>
+                                                                                    <font key="font" metaFont="controlContent" size="11"/>
                                                                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                 </textFieldCell>
@@ -1366,7 +1346,7 @@
                                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="W5v-QO-qKh">
                                                                                         <rect key="frame" x="48" y="4" width="17" height="14"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="10" id="U9M-PE-Oq6">
-                                                                                            <font key="font" metaFont="message" size="11"/>
+                                                                                            <font key="font" metaFont="controlContent" size="11"/>
                                                                                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                         </textFieldCell>
@@ -1378,7 +1358,7 @@
                                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4Ex-S4-ZNF">
                                                                                         <rect key="frame" x="91" y="4" width="12" height="14"/>
                                                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="8" id="6yo-v6-NaN">
-                                                                                            <font key="font" metaFont="message" size="11"/>
+                                                                                            <font key="font" metaFont="controlContent" size="11"/>
                                                                                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                         </textFieldCell>
@@ -1417,7 +1397,7 @@
                                                                         <rect key="frame" x="-6" y="43" width="126" height="32"/>
                                                                         <buttonCell key="cell" type="push" title="Start" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="SD6-Br-S43">
                                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                            <font key="font" metaFont="message"/>
+                                                                            <font key="font" metaFont="system"/>
                                                                         </buttonCell>
                                                                         <connections>
                                                                             <action selector="startRegtestAction:" target="XfG-lQ-9wD" id="lIb-iZ-l8V"/>
@@ -1427,7 +1407,7 @@
                                                                         <rect key="frame" x="-6" y="18" width="126" height="32"/>
                                                                         <buttonCell key="cell" type="push" title="QuickConnect" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="M6u-7p-HeS">
                                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                            <font key="font" metaFont="message"/>
+                                                                            <font key="font" metaFont="system"/>
                                                                         </buttonCell>
                                                                         <connections>
                                                                             <action selector="showRegConnect:" target="XfG-lQ-9wD" id="zVp-JJ-rfl"/>
@@ -1437,7 +1417,7 @@
                                                                         <rect key="frame" x="-6" y="-7" width="126" height="32"/>
                                                                         <buttonCell key="cell" type="push" title="Wallets" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="h70-1O-urX">
                                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                            <font key="font" metaFont="message"/>
+                                                                            <font key="font" metaFont="system"/>
                                                                         </buttonCell>
                                                                         <connections>
                                                                             <action selector="showRegWallets:" target="XfG-lQ-9wD" id="ZMD-zE-KH2"/>
@@ -1553,10 +1533,7 @@
                                             <constraint firstItem="OfC-XQ-ENN" firstAttribute="top" secondItem="IBs-yd-qdH" secondAttribute="bottom" constant="3" id="6RA-c9-uu2"/>
                                             <constraint firstAttribute="trailing" secondItem="q6e-1y-IAn" secondAttribute="trailing" constant="20" symbolic="YES" id="8J2-Qr-Pbw"/>
                                             <constraint firstItem="IBs-yd-qdH" firstAttribute="centerX" secondItem="OfC-XQ-ENN" secondAttribute="centerX" id="9Oh-zc-brZ"/>
-                                            <constraint firstItem="62Q-e6-4W2" firstAttribute="firstBaseline" secondItem="IBs-yd-qdH" secondAttribute="firstBaseline" id="ErL-jE-m17"/>
-                                            <constraint firstItem="62Q-e6-4W2" firstAttribute="bottom" secondItem="IBs-yd-qdH" secondAttribute="bottom" id="J0c-gG-IfM"/>
                                             <constraint firstItem="IBs-yd-qdH" firstAttribute="top" secondItem="i70-xH-6Bd" secondAttribute="top" constant="8" id="J54-Oo-D7v"/>
-                                            <constraint firstItem="IBs-yd-qdH" firstAttribute="leading" secondItem="62Q-e6-4W2" secondAttribute="trailing" constant="20" id="LOb-C7-owS"/>
                                             <constraint firstAttribute="width" constant="196" id="Mfq-ia-bZ2"/>
                                             <constraint firstItem="q6e-1y-IAn" firstAttribute="top" secondItem="i70-xH-6Bd" secondAttribute="top" constant="6" id="Rqk-cc-hRq"/>
                                             <constraint firstItem="q6e-1y-IAn" firstAttribute="centerY" secondItem="IBs-yd-qdH" secondAttribute="centerY" id="SFo-4o-Rni"/>
@@ -1564,7 +1541,6 @@
                                             <constraint firstItem="OfC-XQ-ENN" firstAttribute="centerX" secondItem="i70-xH-6Bd" secondAttribute="centerX" id="VFS-dZ-TVk"/>
                                             <constraint firstItem="IBs-yd-qdH" firstAttribute="leading" secondItem="IZe-rf-ugH" secondAttribute="trailing" constant="2" id="WL0-Zy-Dn5"/>
                                             <constraint firstItem="ODq-LX-eX9" firstAttribute="top" secondItem="OfC-XQ-ENN" secondAttribute="bottom" constant="2" id="g1k-xV-CJE"/>
-                                            <constraint firstItem="62Q-e6-4W2" firstAttribute="leading" relation="lessThanOrEqual" secondItem="i70-xH-6Bd" secondAttribute="leading" constant="16" id="iHh-Ly-qqp"/>
                                             <constraint firstItem="q6e-1y-IAn" firstAttribute="leading" relation="lessThanOrEqual" secondItem="IBs-yd-qdH" secondAttribute="trailing" constant="20" id="iPu-Sb-rcL"/>
                                             <constraint firstItem="IBs-yd-qdH" firstAttribute="centerY" secondItem="IZe-rf-ugH" secondAttribute="centerY" id="iaC-3W-Mlu"/>
                                             <constraint firstAttribute="height" constant="598" id="oli-5a-LNr"/>
@@ -1573,14 +1549,108 @@
                                             <constraint firstAttribute="bottom" secondItem="NSv-eV-cW5" secondAttribute="bottom" constant="20" id="ypz-qb-aeu"/>
                                         </constraints>
                                     </customView>
-                                    <customView appearanceType="darkAqua" translatesAutoresizingMaskIntoConstraints="NO" id="hmk-BW-J2q">
+                                    <customView appearanceType="darkAqua" translatesAutoresizingMaskIntoConstraints="NO" id="fWo-K4-6bE">
                                         <rect key="frame" x="204" y="0.0" width="196" height="598"/>
+                                        <subviews>
+                                            <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" ambiguous="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Qs-dg-vWz">
+                                                <rect key="frame" x="17" y="531" width="163" height="0.0"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="163" id="T8Z-JX-x11"/>
+                                                </constraints>
+                                            </stackView>
+                                            <stackView distribution="fill" orientation="vertical" alignment="centerX" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="INK-Dy-8Rm">
+                                                <rect key="frame" x="43" y="503" width="111" height="88"/>
+                                                <subviews>
+                                                    <stackView distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Vi-QF-ULG">
+                                                        <rect key="frame" x="7" y="72" width="96" height="16"/>
+                                                        <subviews>
+                                                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="5hn-FP-iyE">
+                                                                <rect key="frame" x="0.0" y="0.0" width="16" height="16"/>
+                                                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSStatusAvailable" id="jqB-bj-rok"/>
+                                                            </imageView>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="EGb-JT-BxQ">
+                                                                <rect key="frame" x="22" y="0.0" width="76" height="16"/>
+                                                                <textFieldCell key="cell" lineBreakMode="clipping" title="C-Lightning" id="6MT-Mq-pnK">
+                                                                    <font key="font" usesAppearanceFont="YES"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                        </subviews>
+                                                        <visibilityPriorities>
+                                                            <integer value="1000"/>
+                                                            <integer value="1000"/>
+                                                        </visibilityPriorities>
+                                                        <customSpacing>
+                                                            <real value="3.4028234663852886e+38"/>
+                                                            <real value="3.4028234663852886e+38"/>
+                                                        </customSpacing>
+                                                    </stackView>
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iWx-7q-STi">
+                                                        <rect key="frame" x="35" y="53" width="40" height="11"/>
+                                                        <textFieldCell key="cell" lineBreakMode="clipping" title="v0.4.3.5" id="mF6-gg-Did">
+                                                            <font key="font" metaFont="label" size="9"/>
+                                                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
+                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bP4-ed-3HE">
+                                                        <rect key="frame" x="-6" y="22" width="123" height="27"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="16" id="XhY-cL-t2Q"/>
+                                                            <constraint firstAttribute="width" constant="111" id="e46-bd-nWc"/>
+                                                        </constraints>
+                                                        <buttonCell key="cell" type="push" title="#Reckless" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="akD-bf-ytX">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="system"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <action selector="installLightningAction:" target="XfG-lQ-9wD" id="xbl-6v-kS0"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IZq-Rj-6iF">
+                                                        <rect key="frame" x="-6" y="-7" width="123" height="32"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="111" id="qzy-L3-Meh"/>
+                                                        </constraints>
+                                                        <buttonCell key="cell" type="push" title="QuickConnect" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="8oz-nR-ta2">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="system"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <action selector="showLightningQuickConnect:" target="XfG-lQ-9wD" id="N2G-Ja-h2e"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <visibilityPriorities>
+                                                    <integer value="1000"/>
+                                                    <integer value="1000"/>
+                                                    <integer value="1000"/>
+                                                    <integer value="1000"/>
+                                                </visibilityPriorities>
+                                                <customSpacing>
+                                                    <real value="3.4028234663852886e+38"/>
+                                                    <real value="3.4028234663852886e+38"/>
+                                                    <real value="3.4028234663852886e+38"/>
+                                                    <real value="3.4028234663852886e+38"/>
+                                                </customSpacing>
+                                            </stackView>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="196" id="0Ag-Bo-yOa"/>
+                                            <constraint firstItem="INK-Dy-8Rm" firstAttribute="centerX" secondItem="fWo-K4-6bE" secondAttribute="centerX" id="TJ9-we-KLS"/>
+                                            <constraint firstAttribute="height" constant="598" id="bXj-yW-vRN"/>
+                                            <constraint firstItem="INK-Dy-8Rm" firstAttribute="top" secondItem="fWo-K4-6bE" secondAttribute="top" constant="7" id="uFK-Gn-FfG"/>
+                                        </constraints>
+                                    </customView>
+                                    <customView appearanceType="darkAqua" translatesAutoresizingMaskIntoConstraints="NO" id="hmk-BW-J2q">
+                                        <rect key="frame" x="408" y="0.0" width="196" height="598"/>
                                         <subviews>
                                             <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="e3P-9R-XcT">
                                                 <rect key="frame" x="160" y="567" width="25" height="25"/>
                                                 <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xme-Tt-1Fb">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                    <font key="font" metaFont="message"/>
+                                                    <font key="font" metaFont="system"/>
                                                 </buttonCell>
                                                 <connections>
                                                     <action selector="torWindowHelp:" target="XfG-lQ-9wD" id="Qmk-j2-l4Q"/>
@@ -1602,18 +1672,8 @@
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
-                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1Mv-9m-mvv">
-                                                <rect key="frame" x="17" y="571" width="24" height="19"/>
-                                                <buttonCell key="cell" type="recessed" bezelStyle="recessed" image="NSActionTemplate" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="QEr-uB-mrq">
-                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                    <font key="font" metaFont="systemBold" size="12"/>
-                                                </buttonCell>
-                                                <connections>
-                                                    <action selector="torSettingsAction:" target="XfG-lQ-9wD" id="LS8-Hn-uM8"/>
-                                                </connections>
-                                            </button>
                                             <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dK7-Zi-xyI">
-                                                <rect key="frame" x="17" y="242" width="163" height="289"/>
+                                                <rect key="frame" x="17" y="119" width="163" height="289"/>
                                                 <subviews>
                                                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="JdA-zQ-PGE">
                                                         <rect key="frame" x="0.0" y="198" width="163" height="91"/>
@@ -1626,7 +1686,7 @@
                                                                 </constraints>
                                                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSFollowLinkFreestandingTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="2Uh-aR-Y6a">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="message"/>
+                                                                    <font key="font" metaFont="system"/>
                                                                 </buttonCell>
                                                                 <connections>
                                                                     <action selector="showMainnetHiddenService:" target="XfG-lQ-9wD" id="STs-z2-EMW"/>
@@ -1654,7 +1714,7 @@
                                                                 <rect key="frame" x="18" y="1" width="128" height="32"/>
                                                                 <buttonCell key="cell" type="push" title="Authentication" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="5Be-eI-CIq">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="message"/>
+                                                                    <font key="font" metaFont="system"/>
                                                                 </buttonCell>
                                                                 <connections>
                                                                     <action selector="openMainnetAuthAction:" target="XfG-lQ-9wD" id="Dck-Ka-g9d"/>
@@ -1686,7 +1746,7 @@
                                                                 </constraints>
                                                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSFollowLinkFreestandingTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="lIv-lb-TjI">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="message"/>
+                                                                    <font key="font" metaFont="system"/>
                                                                 </buttonCell>
                                                                 <connections>
                                                                     <action selector="showTestnetHiddenService:" target="XfG-lQ-9wD" id="YkP-RL-a9C"/>
@@ -1711,7 +1771,7 @@
                                                                 <rect key="frame" x="18" y="1" width="128" height="32"/>
                                                                 <buttonCell key="cell" type="push" title="Authentication" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="584-ff-YwE">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="message"/>
+                                                                    <font key="font" metaFont="system"/>
                                                                 </buttonCell>
                                                                 <connections>
                                                                     <action selector="openTestnetAuthAction:" target="XfG-lQ-9wD" id="cbC-5h-0Q9"/>
@@ -1743,7 +1803,7 @@
                                                                 </constraints>
                                                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSFollowLinkFreestandingTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="oQU-OK-XO8">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="message"/>
+                                                                    <font key="font" metaFont="system"/>
                                                                 </buttonCell>
                                                                 <connections>
                                                                     <action selector="showRegtestHiddenService:" target="XfG-lQ-9wD" id="b3j-JZ-5K2"/>
@@ -1771,7 +1831,7 @@
                                                                 <rect key="frame" x="18" y="1" width="128" height="32"/>
                                                                 <buttonCell key="cell" type="push" title="Authentication" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="TLO-YZ-X9L">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="message"/>
+                                                                    <font key="font" metaFont="system"/>
                                                                 </buttonCell>
                                                                 <connections>
                                                                     <action selector="openRegAuthAction:" target="XfG-lQ-9wD" id="V1N-fI-252"/>
@@ -1807,39 +1867,10 @@
                                                     <real value="3.4028234663852886e+38"/>
                                                 </customSpacing>
                                             </stackView>
-                                            <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eeM-IX-v6E">
-                                                <rect key="frame" x="43" y="20" width="111" height="16"/>
-                                                <subviews>
-                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="w4M-Pe-mtd">
-                                                        <rect key="frame" x="0.0" y="-1" width="111" height="17"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="16" id="C5s-se-Gfv"/>
-                                                        </constraints>
-                                                        <buttonCell key="cell" type="inline" title="Start" bezelStyle="inline" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="rUQ-SD-ePL">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="smallSystemBold"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="installTorAction:" target="XfG-lQ-9wD" id="lIe-xa-DRA"/>
-                                                        </connections>
-                                                    </button>
-                                                </subviews>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="111" id="PnS-Fd-ZsB"/>
-                                                    <constraint firstItem="w4M-Pe-mtd" firstAttribute="leading" secondItem="eeM-IX-v6E" secondAttribute="leading" id="dBN-zx-bVq"/>
-                                                    <constraint firstAttribute="trailing" secondItem="w4M-Pe-mtd" secondAttribute="trailing" id="fiA-Cn-aww"/>
-                                                </constraints>
-                                                <visibilityPriorities>
-                                                    <integer value="1000"/>
-                                                </visibilityPriorities>
-                                                <customSpacing>
-                                                    <real value="3.4028234663852886e+38"/>
-                                                </customSpacing>
-                                            </stackView>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Km0-EQ-Y42">
-                                                <rect key="frame" x="15" y="539" width="167" height="14"/>
+                                                <rect key="frame" x="15" y="416" width="167" height="14"/>
                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="RPC hidden services:" id="v9t-98-a0c">
-                                                    <font key="font" metaFont="message" size="11"/>
+                                                    <font key="font" metaFont="controlContent" size="11"/>
                                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
@@ -1853,7 +1884,7 @@
                                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSStatusAvailable" id="Amy-lY-9Zx"/>
                                             </imageView>
                                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="WGD-XP-1oR">
-                                                <rect key="frame" x="17" y="143" width="163" height="91"/>
+                                                <rect key="frame" x="17" y="20" width="163" height="91"/>
                                                 <subviews>
                                                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Nzy-A1-ER9">
                                                         <rect key="frame" x="6" y="30" width="25" height="25"/>
@@ -1870,7 +1901,7 @@
                                                         </constraints>
                                                         <buttonCell key="cell" type="push" title="Add" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="VVQ-5P-801">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="message"/>
+                                                            <font key="font" metaFont="system"/>
                                                         </buttonCell>
                                                         <color key="contentTintColor" red="0.16057610510000001" green="0.16426306960000001" blue="0.18914902210000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <connections>
@@ -1884,7 +1915,7 @@
                                                         </constraints>
                                                         <buttonCell key="cell" type="push" title="Remove" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="HQY-Hn-mpD">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="message"/>
+                                                            <font key="font" metaFont="system"/>
                                                         </buttonCell>
                                                         <connections>
                                                             <action selector="removeAuthAction:" target="XfG-lQ-9wD" id="KN1-Ab-pau"/>
@@ -1893,7 +1924,7 @@
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Cdx-EL-v29">
                                                         <rect key="frame" x="5" y="69" width="79" height="16"/>
                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Auth Tokens" id="yZY-LD-yLx">
-                                                            <font key="font" metaFont="message"/>
+                                                            <font key="font" metaFont="system"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -1913,16 +1944,45 @@
                                                     <constraint firstItem="YDF-ZK-BZU" firstAttribute="top" secondItem="Cdx-EL-v29" secondAttribute="bottom" constant="16" id="zN1-ko-oAC"/>
                                                 </constraints>
                                             </customView>
+                                            <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eeM-IX-v6E">
+                                                <rect key="frame" x="43" y="537" width="111" height="16"/>
+                                                <subviews>
+                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="w4M-Pe-mtd">
+                                                        <rect key="frame" x="-6" y="-7" width="123" height="27"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="16" id="C5s-se-Gfv"/>
+                                                        </constraints>
+                                                        <buttonCell key="cell" type="push" title="Start" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="rUQ-SD-ePL">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="system"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <action selector="installTorAction:" target="XfG-lQ-9wD" id="lIe-xa-DRA"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="111" id="PnS-Fd-ZsB"/>
+                                                    <constraint firstItem="w4M-Pe-mtd" firstAttribute="leading" secondItem="eeM-IX-v6E" secondAttribute="leading" id="dBN-zx-bVq"/>
+                                                    <constraint firstAttribute="trailing" secondItem="w4M-Pe-mtd" secondAttribute="trailing" id="fiA-Cn-aww"/>
+                                                </constraints>
+                                                <visibilityPriorities>
+                                                    <integer value="1000"/>
+                                                </visibilityPriorities>
+                                                <customSpacing>
+                                                    <real value="3.4028234663852886e+38"/>
+                                                </customSpacing>
+                                            </stackView>
                                         </subviews>
                                         <constraints>
+                                            <constraint firstItem="dK7-Zi-xyI" firstAttribute="top" secondItem="Km0-EQ-Y42" secondAttribute="bottom" constant="8" id="103-eX-0EV"/>
                                             <constraint firstItem="eeM-IX-v6E" firstAttribute="centerX" secondItem="hmk-BW-J2q" secondAttribute="centerX" id="4NH-Us-5Zi"/>
-                                            <constraint firstAttribute="bottom" secondItem="eeM-IX-v6E" secondAttribute="bottom" constant="20" id="67D-pJ-g2e"/>
+                                            <constraint firstItem="eeM-IX-v6E" firstAttribute="top" secondItem="2fT-tq-aCO" secondAttribute="bottom" constant="8" id="4kt-H2-lBx"/>
                                             <constraint firstItem="dK7-Zi-xyI" firstAttribute="leading" secondItem="Km0-EQ-Y42" secondAttribute="leading" id="Acx-eh-D8d"/>
-                                            <constraint firstItem="WGD-XP-1oR" firstAttribute="top" secondItem="dK7-Zi-xyI" secondAttribute="bottom" constant="8" id="Bcz-JN-1yB"/>
-                                            <constraint firstItem="mwn-Hz-Tc2" firstAttribute="leading" secondItem="1Mv-9m-mvv" secondAttribute="trailing" constant="23" id="EiF-m4-FXs"/>
                                             <constraint firstAttribute="trailing" secondItem="e3P-9R-XcT" secondAttribute="trailing" constant="13" id="JBj-64-eAs"/>
                                             <constraint firstItem="WGD-XP-1oR" firstAttribute="centerX" secondItem="hmk-BW-J2q" secondAttribute="centerX" id="Moq-uy-Wfg"/>
                                             <constraint firstAttribute="width" constant="196" id="OLo-7a-wIA"/>
+                                            <constraint firstAttribute="bottom" secondItem="WGD-XP-1oR" secondAttribute="bottom" constant="20" id="OPf-gQ-o8A"/>
                                             <constraint firstItem="dK7-Zi-xyI" firstAttribute="width" secondItem="Km0-EQ-Y42" secondAttribute="width" id="WIk-OZ-tG1"/>
                                             <constraint firstItem="2fT-tq-aCO" firstAttribute="centerX" secondItem="hmk-BW-J2q" secondAttribute="centerX" id="Wjt-Sc-W2C"/>
                                             <constraint firstAttribute="trailing" secondItem="Km0-EQ-Y42" secondAttribute="trailing" constant="16" id="Wn9-tt-yoX"/>
@@ -1930,27 +1990,20 @@
                                             <constraint firstItem="e3P-9R-XcT" firstAttribute="leading" secondItem="Oi9-qs-ufU" secondAttribute="trailing" constant="54" id="cQ7-qA-iV8"/>
                                             <constraint firstAttribute="height" constant="598" id="d2F-Hd-22d"/>
                                             <constraint firstItem="Oi9-qs-ufU" firstAttribute="centerY" secondItem="mwn-Hz-Tc2" secondAttribute="centerY" id="g2Y-4U-4G3"/>
-                                            <constraint firstItem="1Mv-9m-mvv" firstAttribute="top" secondItem="hmk-BW-J2q" secondAttribute="top" constant="8" id="j3y-1R-Nz8"/>
-                                            <constraint firstItem="dK7-Zi-xyI" firstAttribute="top" secondItem="Km0-EQ-Y42" secondAttribute="bottom" constant="8" id="lSk-l6-fzy"/>
                                             <constraint firstItem="Oi9-qs-ufU" firstAttribute="leading" secondItem="mwn-Hz-Tc2" secondAttribute="trailing" constant="8" id="mLK-bd-qGO"/>
+                                            <constraint firstItem="WGD-XP-1oR" firstAttribute="top" secondItem="dK7-Zi-xyI" secondAttribute="bottom" constant="8" id="nRL-S5-mpm"/>
                                             <constraint firstItem="2fT-tq-aCO" firstAttribute="top" secondItem="Oi9-qs-ufU" secondAttribute="bottom" constant="2" id="oXo-bb-v3R"/>
-                                            <constraint firstItem="1Mv-9m-mvv" firstAttribute="leading" secondItem="hmk-BW-J2q" secondAttribute="leading" constant="17" id="qMV-OG-okz"/>
                                             <constraint firstItem="Oi9-qs-ufU" firstAttribute="top" secondItem="hmk-BW-J2q" secondAttribute="top" constant="8" id="r85-dX-kAW"/>
-                                            <constraint firstItem="Km0-EQ-Y42" firstAttribute="top" secondItem="2fT-tq-aCO" secondAttribute="bottom" constant="8" id="xmo-Pp-Raa"/>
                                         </constraints>
                                     </customView>
                                 </subviews>
-                                <constraints>
-                                    <constraint firstItem="hmk-BW-J2q" firstAttribute="top" secondItem="nxx-XH-rol" secondAttribute="top" id="6hd-pR-SzJ"/>
-                                    <constraint firstAttribute="bottom" secondItem="hmk-BW-J2q" secondAttribute="bottom" id="FIk-5H-DBe"/>
-                                    <constraint firstItem="i70-xH-6Bd" firstAttribute="top" secondItem="nxx-XH-rol" secondAttribute="top" id="Lxg-vI-IW9"/>
-                                    <constraint firstAttribute="trailing" secondItem="hmk-BW-J2q" secondAttribute="trailing" id="h1v-0k-xQK"/>
-                                </constraints>
                                 <visibilityPriorities>
+                                    <integer value="1000"/>
                                     <integer value="1000"/>
                                     <integer value="1000"/>
                                 </visibilityPriorities>
                                 <customSpacing>
+                                    <real value="3.4028234663852886e+38"/>
                                     <real value="3.4028234663852886e+38"/>
                                     <real value="3.4028234663852886e+38"/>
                                 </customSpacing>
@@ -1971,7 +2024,7 @@
                                 </constraints>
                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSRefreshFreestandingTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="M3B-RM-EKu">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="message"/>
+                                    <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="refreshAction:" target="XfG-lQ-9wD" id="lAe-FJ-8wJ"/>
@@ -1985,19 +2038,37 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <button verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="62Q-e6-4W2">
+                                <rect key="frame" x="10" y="548" width="24" height="19"/>
+                                <buttonCell key="cell" type="recessed" bezelStyle="recessed" image="NSActionTemplate" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9fy-vn-lk9">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="systemBold" size="12"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="goToSettings:" target="XfG-lQ-9wD" id="aLE-S4-hHS"/>
+                                </connections>
+                            </button>
+                            <progressIndicator wantsLayer="YES" maxValue="100" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="kdQ-HU-D0l">
+                                <rect key="frame" x="674" y="631" width="16" height="16"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="16" id="41v-hW-XZq"/>
+                                    <constraint firstAttribute="height" constant="16" id="y8w-JU-irk"/>
+                                </constraints>
+                            </progressIndicator>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="nxx-XH-rol" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="2lj-Bt-ruI"/>
+                            <constraint firstItem="nxx-XH-rol" firstAttribute="centerY" secondItem="m2S-Jp-Qdl" secondAttribute="centerY" id="9iF-dC-I79"/>
                             <constraint firstItem="cIX-w1-69c" firstAttribute="top" secondItem="zZj-w8-TgT" secondAttribute="bottom" constant="8" id="ASf-sG-lcp"/>
-                            <constraint firstItem="nxx-XH-rol" firstAttribute="centerY" secondItem="m2S-Jp-Qdl" secondAttribute="centerY" id="E5V-WX-7PK"/>
+                            <constraint firstAttribute="trailing" secondItem="kdQ-HU-D0l" secondAttribute="trailing" constant="20" id="BO7-20-JBr"/>
+                            <constraint firstItem="zZj-w8-TgT" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="10" id="JMI-56-47X"/>
                             <constraint firstItem="dZv-tm-cPq" firstAttribute="centerX" secondItem="cIX-w1-69c" secondAttribute="centerX" id="Nbf-gv-aPE"/>
                             <constraint firstItem="K4o-Sf-dSl" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="SJ9-vB-W8w"/>
                             <constraint firstItem="zZj-w8-TgT" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="11" id="TLO-qG-jFZ"/>
+                            <constraint firstItem="nxx-XH-rol" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="Ui2-5V-DnG"/>
                             <constraint firstItem="kdQ-HU-D0l" firstAttribute="centerY" secondItem="K4o-Sf-dSl" secondAttribute="centerY" constant="7" id="XFI-fT-sJC"/>
                             <constraint firstItem="kdQ-HU-D0l" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="11" id="Y2a-UT-bqy"/>
-                            <constraint firstItem="zZj-w8-TgT" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="10" id="h7Q-Rb-I03"/>
                             <constraint firstItem="dZv-tm-cPq" firstAttribute="top" secondItem="cIX-w1-69c" secondAttribute="bottom" constant="3" id="nDQ-hx-d8d"/>
-                            <constraint firstAttribute="trailing" secondItem="kdQ-HU-D0l" secondAttribute="trailing" constant="15" id="pJz-bB-wZB"/>
+                            <constraint firstItem="62Q-e6-4W2" firstAttribute="top" secondItem="dZv-tm-cPq" secondAttribute="bottom" constant="8" id="tX0-il-VgT"/>
                             <constraint firstItem="cIX-w1-69c" firstAttribute="centerX" secondItem="zZj-w8-TgT" secondAttribute="centerX" id="xfq-zd-lWZ"/>
                         </constraints>
                     </view>
@@ -2014,7 +2085,12 @@
                         <outlet property="connectRegtestOutlet" destination="xZ9-Lf-Ed0" id="7Y2-mU-4Ay"/>
                         <outlet property="connectTestnetOutlet" destination="XoJ-R6-Wcu" id="H7D-Iw-6xO"/>
                         <outlet property="icon" destination="zZj-w8-TgT" id="mC2-fU-qbF"/>
+                        <outlet property="installLightningOutlet" destination="bP4-ed-3HE" id="LYy-NR-4CD"/>
                         <outlet property="installTorOutlet" destination="w4M-Pe-mtd" id="Pnf-UR-CsW"/>
+                        <outlet property="lightningQuickConnectOutlet" destination="IZq-Rj-6iF" id="lE8-ub-WbT"/>
+                        <outlet property="lightningStatusIcon" destination="5hn-FP-iyE" id="WAa-sY-xKa"/>
+                        <outlet property="lightningVersionLabel" destination="iWx-7q-STi" id="IGg-eW-e10"/>
+                        <outlet property="lightningWindow" destination="fWo-K4-6bE" id="YOE-lM-gQR"/>
                         <outlet property="mainWalletOutlet" destination="J32-Mo-yat" id="kIL-Nq-9U7"/>
                         <outlet property="mainnetIncomingImage" destination="JPv-7r-MC8" id="q5g-9e-aUv"/>
                         <outlet property="mainnetIncomingPeersLabel" destination="PMt-yp-b2E" id="qSk-0Q-URx"/>
@@ -2030,7 +2106,6 @@
                         <outlet property="regtestPeersView" destination="Jh7-gs-ynG" id="I2a-qP-umB"/>
                         <outlet property="regtestSyncedLabel" destination="9vB-Do-oZg" id="O6j-ZX-WaW"/>
                         <outlet property="regtestSyncedView" destination="dKF-7Z-E7g" id="WiP-sW-ImZ"/>
-                        <outlet property="settingsOutlet" destination="1Mv-9m-mvv" id="obO-VE-w6t"/>
                         <outlet property="spinner" destination="kdQ-HU-D0l" id="t8O-5u-PXb"/>
                         <outlet property="startMainnetOutlet" destination="twO-63-MCl" id="WEZ-Qq-VGp"/>
                         <outlet property="startRegtestOutlet" destination="QJ8-dR-m56" id="lkW-QK-rRi"/>
@@ -2066,7 +2141,7 @@
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="15" y="965"/>
+            <point key="canvasLocation" x="107" y="965"/>
         </scene>
         <!--Wallets-->
         <scene sceneID="Fsb-gt-wXE">
@@ -2095,7 +2170,7 @@
                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                     </tableHeaderCell>
                                                     <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" identifier="WalletNameCellID" title="Text Cell" id="wYT-rk-65P">
-                                                        <font key="font" metaFont="message"/>
+                                                        <font key="font" metaFont="system"/>
                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         <accessibility identifier="WalletNameCellID"/>
@@ -2115,7 +2190,7 @@
                                                                     <rect key="frame" x="25" y="0.0" width="569" height="17"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="DiV-mQ-cVu">
-                                                                        <font key="font" metaFont="message"/>
+                                                                        <font key="font" metaFont="system"/>
                                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                     </textFieldCell>
@@ -2192,7 +2267,7 @@
                                         </constraints>
                                         <buttonCell key="cell" type="push" title="Load wallet" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="OHR-c1-44t">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="message"/>
+                                            <font key="font" metaFont="system"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="loadAction:" target="1vm-Tg-hAU" id="Gxs-yr-ecI"/>
@@ -2205,7 +2280,7 @@
                                         </constraints>
                                         <buttonCell key="cell" type="push" title="Unload wallet" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tHP-Fp-E4v">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="message"/>
+                                            <font key="font" metaFont="system"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="unloadAction:" target="1vm-Tg-hAU" id="bLH-mU-xOB"/>
@@ -2215,7 +2290,7 @@
                                         <rect key="frame" x="-6" y="22" width="125" height="32"/>
                                         <buttonCell key="cell" type="push" title="Show balance" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="uV4-mK-yRk">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="message"/>
+                                            <font key="font" metaFont="system"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="showBalanceAction:" target="1vm-Tg-hAU" id="L7J-Mz-6m9"/>
@@ -2228,7 +2303,7 @@
                                         </constraints>
                                         <buttonCell key="cell" type="push" title="Delete wallet" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="FP6-uH-pXj">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="message"/>
+                                            <font key="font" metaFont="system"/>
                                         </buttonCell>
                                         <color key="contentTintColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
                                         <connections>
@@ -2252,7 +2327,7 @@
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lJV-PH-2wC">
                                 <rect key="frame" x="18" y="161" width="37" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="M1J-ct-Wsb">
-                                    <font key="font" metaFont="message"/>
+                                    <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -2289,12 +2364,12 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="6" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="N3g-Ce-yiB">
-                                <rect key="frame" x="20" y="155" width="70" height="36"/>
+                                <rect key="frame" x="20" y="179" width="70" height="36"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dKz-RC-bLI">
                                         <rect key="frame" x="-2" y="20" width="42" height="16"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Wallet" id="dbv-c4-n3z">
-                                            <font key="font" metaFont="message"/>
+                                            <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
@@ -2303,7 +2378,7 @@
                                         <rect key="frame" x="-2" y="-2" width="74" height="18"/>
                                         <buttonCell key="cell" type="check" title="disabled" bezelStyle="regularSquare" imagePosition="left" inset="2" id="fm4-Sp-NJA">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                            <font key="font" metaFont="message"/>
+                                            <font key="font" metaFont="system"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="didSetWalletDisabled:" target="mY6-pf-cJ7" id="j7A-CS-crP"/>
@@ -2320,30 +2395,20 @@
                                 </customSpacing>
                             </stackView>
                             <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="10" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ipZ-DW-tbb">
-                                <rect key="frame" x="20" y="199" width="96" height="171"/>
+                                <rect key="frame" x="20" y="223" width="105" height="147"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ykr-KC-RUG">
-                                        <rect key="frame" x="-2" y="155" width="70" height="16"/>
+                                        <rect key="frame" x="-2" y="131" width="70" height="16"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Blockchain" id="d7T-4T-2xw">
                                             <font key="font" usesAppearanceFont="YES"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4ej-es-0TD">
-                                        <rect key="frame" x="-2" y="129" width="58" height="18"/>
-                                        <buttonCell key="cell" type="check" title="prune" bezelStyle="regularSquare" imagePosition="left" inset="2" id="GNm-Ca-tHc">
-                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                            <font key="font" metaFont="message"/>
-                                        </buttonCell>
-                                        <connections>
-                                            <action selector="didSetPrune:" target="mY6-pf-cJ7" id="bwl-AQ-E74"/>
-                                        </connections>
-                                    </button>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="U4W-f9-hMb">
-                                        <rect key="frame" x="-2" y="105" width="77" height="16"/>
-                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Prune Value" id="YKA-zt-TP3">
-                                            <font key="font" metaFont="message"/>
+                                        <rect key="frame" x="-2" y="105" width="109" height="16"/>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Prune Value (mb)" id="YKA-zt-TP3">
+                                            <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
@@ -2360,7 +2425,7 @@
                                         <rect key="frame" x="-2" y="48" width="66" height="18"/>
                                         <buttonCell key="cell" type="check" title="txindex" bezelStyle="regularSquare" imagePosition="left" inset="2" id="yWX-Mi-W1P">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                            <font key="font" metaFont="message"/>
+                                            <font key="font" metaFont="system"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="didSetTxIndex:" target="mY6-pf-cJ7" id="XyZ-bk-DAt"/>
@@ -2369,7 +2434,7 @@
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6fs-4z-8dD">
                                         <rect key="frame" x="-2" y="24" width="24" height="16"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Tor" id="bQn-A0-iyL">
-                                            <font key="font" metaFont="message"/>
+                                            <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
@@ -2378,7 +2443,7 @@
                                         <rect key="frame" x="-2" y="-2" width="83" height="18"/>
                                         <buttonCell key="cell" type="check" title="go private" bezelStyle="regularSquare" imagePosition="left" inset="2" id="L3J-mZ-hBc">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                            <font key="font" metaFont="message"/>
+                                            <font key="font" metaFont="system"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="goPrivate:" target="mY6-pf-cJ7" id="1Nl-jw-Ilz"/>
@@ -2392,10 +2457,8 @@
                                     <integer value="1000"/>
                                     <integer value="1000"/>
                                     <integer value="1000"/>
-                                    <integer value="1000"/>
                                 </visibilityPriorities>
                                 <customSpacing>
-                                    <real value="3.4028234663852886e+38"/>
                                     <real value="3.4028234663852886e+38"/>
                                     <real value="3.4028234663852886e+38"/>
                                     <real value="3.4028234663852886e+38"/>
@@ -2418,7 +2481,7 @@
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0cQ-HR-WIM">
                                         <rect key="frame" x="-2" y="49" width="286" height="16"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="/Users/You/Library/Application Support/Bitcoin" id="Kmd-GB-DqL">
-                                            <font key="font" metaFont="message"/>
+                                            <font key="font" metaFont="system"/>
                                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" red="0.2352643311" green="0.2353112996" blue="0.2352613509" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </textFieldCell>
@@ -2426,7 +2489,7 @@
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="h6f-Im-wzq">
                                         <rect key="frame" x="-2" y="27" width="73" height="16"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Node Label" id="TqF-ZJ-zFR">
-                                            <font key="font" metaFont="message"/>
+                                            <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
@@ -2434,7 +2497,7 @@
                                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aZz-07-CTN">
                                         <rect key="frame" x="0.0" y="0.0" width="301" height="21"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="StandUp Node" drawsBackground="YES" id="Rqw-ZJ-9az">
-                                            <font key="font" metaFont="message"/>
+                                            <font key="font" metaFont="system"/>
                                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
@@ -2490,21 +2553,21 @@
                                 </customSpacing>
                             </stackView>
                             <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" ambiguous="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iWM-Px-J16">
-                                <rect key="frame" x="231" y="228" width="167" height="142"/>
+                                <rect key="frame" x="231" y="186" width="167" height="184"/>
                                 <subviews>
                                     <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="5" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pw9-rh-K5o">
-                                        <rect key="frame" x="0.0" y="0.0" width="79" height="142"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="79" height="184"/>
                                         <subviews>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7PR-dG-uXr">
-                                                <rect key="frame" x="-2" y="126" width="34" height="16"/>
+                                                <rect key="frame" x="-2" y="168" width="34" height="16"/>
                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Logs" id="4cz-Xg-JqJ">
-                                                    <font key="font" metaFont="message"/>
+                                                    <font key="font" metaFont="system"/>
                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bgO-o8-nYb">
-                                                <rect key="frame" x="0.0" y="104" width="79" height="17"/>
+                                                <rect key="frame" x="0.0" y="146" width="79" height="17"/>
                                                 <buttonCell key="cell" type="inline" title="tor" bezelStyle="inline" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ssf-CK-nod">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="smallSystemBold"/>
@@ -2514,7 +2577,7 @@
                                                 </connections>
                                             </button>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rEe-go-cNW">
-                                                <rect key="frame" x="0.0" y="83" width="79" height="17"/>
+                                                <rect key="frame" x="0.0" y="125" width="79" height="17"/>
                                                 <buttonCell key="cell" type="inline" title="standup" bezelStyle="inline" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="0hr-54-bAl">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="smallSystemBold"/>
@@ -2524,7 +2587,7 @@
                                                 </connections>
                                             </button>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="VPh-Jl-Vug">
-                                                <rect key="frame" x="0.0" y="62" width="79" height="17"/>
+                                                <rect key="frame" x="0.0" y="104" width="79" height="17"/>
                                                 <buttonCell key="cell" type="inline" title="bitcoin core" bezelStyle="inline" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="yJs-6v-eey">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="smallSystemBold"/>
@@ -2533,16 +2596,29 @@
                                                     <action selector="seeBtcLog:" target="mY6-pf-cJ7" id="Ve8-TE-4fO"/>
                                                 </connections>
                                             </button>
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9j9-9q-nhW">
+                                                <rect key="frame" x="0.0" y="83" width="79" height="17"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="79" id="UXO-dH-rf8"/>
+                                                </constraints>
+                                                <buttonCell key="cell" type="inline" title="lightning" bezelStyle="inline" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="NBK-O6-OM6">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="smallSystemBold"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <action selector="seeLightningLog:" target="mY6-pf-cJ7" id="Wsp-dK-Qv4"/>
+                                                </connections>
+                                            </button>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iXf-UZ-nsO">
-                                                <rect key="frame" x="-2" y="42" width="51" height="16"/>
+                                                <rect key="frame" x="-2" y="63" width="51" height="16"/>
                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Configs" id="pEI-1M-ds9">
-                                                    <font key="font" metaFont="message"/>
+                                                    <font key="font" metaFont="system"/>
                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eXB-k2-U8z">
-                                                <rect key="frame" x="0.0" y="20" width="79" height="17"/>
+                                                <rect key="frame" x="0.0" y="41" width="79" height="17"/>
                                                 <buttonCell key="cell" type="inline" title="bitcoin core" bezelStyle="inline" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mXi-6n-dho">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="smallSystemBold"/>
@@ -2552,7 +2628,7 @@
                                                 </connections>
                                             </button>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="W4S-PC-06d">
-                                                <rect key="frame" x="0.0" y="-1" width="79" height="17"/>
+                                                <rect key="frame" x="0.0" y="20" width="79" height="17"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="79" id="zhp-rP-8Ww"/>
                                                 </constraints>
@@ -2564,12 +2640,27 @@
                                                     <action selector="seeTorrc:" target="mY6-pf-cJ7" id="eNk-GS-FaI"/>
                                                 </connections>
                                             </button>
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Pq0-Ie-qkI">
+                                                <rect key="frame" x="0.0" y="-1" width="79" height="17"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="79" id="9N7-rk-Rni"/>
+                                                </constraints>
+                                                <buttonCell key="cell" type="inline" title="lightning" bezelStyle="inline" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="em2-9Q-Fur">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="smallSystemBold"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <action selector="seeLightningConfig:" target="mY6-pf-cJ7" id="GDT-bx-fxv"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <constraints>
                                             <constraint firstItem="VPh-Jl-Vug" firstAttribute="width" secondItem="bgO-o8-nYb" secondAttribute="width" id="eDx-rF-r0I"/>
                                             <constraint firstItem="rEe-go-cNW" firstAttribute="width" secondItem="bgO-o8-nYb" secondAttribute="width" id="tDE-Vg-Oa9"/>
                                         </constraints>
                                         <visibilityPriorities>
+                                            <integer value="1000"/>
+                                            <integer value="1000"/>
                                             <integer value="1000"/>
                                             <integer value="1000"/>
                                             <integer value="1000"/>
@@ -2586,15 +2677,17 @@
                                             <real value="3.4028234663852886e+38"/>
                                             <real value="3.4028234663852886e+38"/>
                                             <real value="3.4028234663852886e+38"/>
+                                            <real value="3.4028234663852886e+38"/>
+                                            <real value="3.4028234663852886e+38"/>
                                         </customSpacing>
                                     </stackView>
                                     <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="5" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o4N-yv-dtg">
-                                        <rect key="frame" x="87" y="84" width="80" height="58"/>
+                                        <rect key="frame" x="87" y="126" width="80" height="58"/>
                                         <subviews>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1fo-RR-AkI">
                                                 <rect key="frame" x="-2" y="42" width="84" height="16"/>
                                                 <textFieldCell key="cell" lineBreakMode="clipping" title=" Kill Switches" id="uMU-mL-MYt">
-                                                    <font key="font" metaFont="message"/>
+                                                    <font key="font" metaFont="system"/>
                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
@@ -2661,7 +2754,6 @@
                         <outlet property="directoryLabel" destination="0cQ-HR-WIM" id="QAr-Tz-hyK"/>
                         <outlet property="goPrivateOutlet" destination="e28-lY-Luw" id="10A-GQ-gto"/>
                         <outlet property="nodeLabelField" destination="aZz-07-CTN" id="I1h-by-Uey"/>
-                        <outlet property="pruneOutlet" destination="4ej-es-0TD" id="Lde-7s-3ey"/>
                         <outlet property="pruneValueField" destination="m7e-xa-P8l" id="GzF-Mg-QB0"/>
                         <outlet property="textInput" destination="BZ9-GZ-pgd" id="HZ1-pJ-Xsi"/>
                         <outlet property="txIndexOutlet" destination="uMK-KT-7YU" id="8Ou-eA-AgL"/>
@@ -2678,11 +2770,11 @@
             <objects>
                 <viewController id="ISO-tJ-wFf" customClass="AddAuthentication" customModule="GordianServer_macOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="sXP-gb-pAb">
-                        <rect key="frame" x="0.0" y="0.0" width="484" height="202"/>
+                        <rect key="frame" x="0.0" y="0.0" width="484" height="256"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Loo-NW-via">
-                                <rect key="frame" x="20" y="50" width="444" height="45"/>
+                                <rect key="frame" x="20" y="104" width="444" height="45"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="z2M-DU-Gxm">
                                         <rect key="frame" x="-2" y="29" width="70" height="16"/>
@@ -2695,7 +2787,7 @@
                                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BZ9-GZ-pgd">
                                         <rect key="frame" x="0.0" y="0.0" width="444" height="21"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="descriptor:x25519:UDHFHF8383..." drawsBackground="YES" id="bLn-WF-OOM">
-                                            <font key="font" metaFont="message"/>
+                                            <font key="font" metaFont="system"/>
                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
@@ -2715,7 +2807,7 @@
                                 </customSpacing>
                             </stackView>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Nr-9O-49K">
-                                <rect key="frame" x="20" y="175" width="4" height="7"/>
+                                <rect key="frame" x="20" y="229" width="4" height="7"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" id="8TS-YH-uh2">
                                     <font key="font" metaFont="system" size="5"/>
@@ -2724,13 +2816,13 @@
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="oYV-PC-EVN">
-                                <rect key="frame" x="18" y="102" width="437" height="80"/>
+                                <rect key="frame" x="18" y="156" width="437" height="80"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="80" id="bFn-dH-MjF"/>
                                 </constraints>
                                 <textFieldCell key="cell" selectable="YES" id="f8p-Yu-26B">
-                                    <font key="font" metaFont="message"/>
-                                    <string key="title">Add your Tor V3 auth public key here. This key will be added to each rpc hidden service's Authentication directory so that all services are authenticated with the same key. This means only the device's/app's you authenticate will have access to these hidden services. You may add up to ~330 authentication keys.</string>
+                                    <font key="font" metaFont="system"/>
+                                    <string key="title">You can add authentication tokens here to ensure remote connections are authenticated. These can be exported from Gordian Wallet by navigating to "settings" &gt; "export tor v3 authentication key"</string>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -2776,7 +2868,7 @@
                 </viewController>
                 <customObject id="CDI-E7-cI3" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="508" y="1314"/>
+            <point key="canvasLocation" x="929" y="1328"/>
         </scene>
         <!--Displayer-->
         <scene sceneID="1Fz-md-imP">
@@ -2818,7 +2910,7 @@
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JzY-eJ-FZH">
                                 <rect key="frame" x="134" y="331" width="112" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="QuickConnect QR" id="1fJ-Sk-KbP">
-                                    <font key="font" metaFont="message"/>
+                                    <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -2832,7 +2924,7 @@
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pH6-kX-TGp">
                                         <rect key="frame" x="22" y="2" width="239" height="14"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="refreshing your hidden service, please wait..." id="RTS-8e-RwL">
-                                            <font key="font" metaFont="message" size="11"/>
+                                            <font key="font" metaFont="controlContent" size="11"/>
                                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
@@ -2873,7 +2965,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="cqP-Ve-rOY"/>
+        <segue reference="Yel-Hw-wBk"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="NSActionTemplate" width="14" height="14"/>

@@ -56,6 +56,18 @@ public enum SCRIPT: String {
     case rpc = "RPC"
     case deleteWallet = "DeleteWallet"
     case openAuth = "OpenAuth"
+    case installLightning = "InstallLightning"
+    case getLightningHostnames = "GetLightningHostname"
+    case isLightningInstalled = "IsLightningInstalled"
+    case isLightningRunning = "IsLightningRunning"
+    case startLightning = "StartLightning"
+    case stopLightning = "StopLightning"
+    case openLightningLog = "OpenLightningLog"
+    case openLightningConfig = "OpenLightningConfig"
+    case getLightningRpcCreds = "GetLightningRpcCreds"
+    case writeLog = "WriteLog"
+    case getLog = "GetLog"
+    case openLog = "OpenLog"
 }
 
 public enum BTCCONF: String {

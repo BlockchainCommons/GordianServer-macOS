@@ -9,13 +9,13 @@ This tool will also harden and secure your OS to current best practices and will
 
 This repo includes the *GordianServer-macOS*, which allows you to run a full node and Tor on your Mac computer.
 
-<img src="./Images/1_standup.png" alt="" width="800"/> 
+<img src="./Images/1_standup.png" alt="" width="800"/>
 
 <img src="./Images/2_standup.png" alt="" width="800"/>
 
 <img src="./Images/3_standup.png" alt="" width="800"/>
 
-<img src="./Images/4_standup.png" alt="" width="800"/> 
+<img src="./Images/4_standup.png" alt="" width="800"/>
 
 <img src="./Images/6_standup.png" alt="" width="800"/>
 
@@ -38,11 +38,11 @@ For more information on *GordianServer-macOS*:
 You must meet minimum OS and space requirements to install *GordianServer-macOS* on your Mac, as described below.     
 
 - minimum macOS 10.10 Yosemite (not yet tested on versions older then Mojave but it should work)
-- Navigate to [GordianServer-macOS-v0.1.2.dmg](./GordianServer-macOS-v0.1.2.dmg)
+- Navigate to [GordianServer-macOS-v0.1.4.dmg](./GordianServer-macOS-v0.1.4.dmg)
 - Click `download`
-- Double click the downloaded `GordianServer-macOS-v0.1.2.dmg` file. That's it.
+- Double click the downloaded `GordianServer-macOS-v0.1.4.dmg` file. That's it.
 
-`GordianServer-macOS-v0.1.2.dmg` has been pgp signed, the pgp signature can be viewed [here](./GordianServer-macOS-v0.1.2.dmg.fonta1n3.3B3797FA0AE84BE5B4406591856401D7121C32FC.asc), the format of the signed filename is `<the_signed_filename>.<signing_git_username>.<signing_pgp_key>.asc`.
+`GordianServer-macOS-v0.1.4.dmg` has been pgp signed, the pgp signature can be viewed [here](./GordianServer-macOS-v0.1.4.dmg.fonta1n3.1C7227763647A2216E02E539025E9AD2D3AC0FCA.asc), the format of the signed filename is `<the_signed_filename>.<signing_git_username>.<signing_pgp_key>.asc`.
 
 ### Build Mac App from source using Xcode
 
@@ -69,7 +69,7 @@ Instead of downloading binaries through our Github repo, you can build *GordianS
 
 ### After Installation
 
-Once the app has completely installed (by either method) and once it has launched *Bitcoin Core*, it will present a *Quick Connect QR code* that can be used to securely link your full node remotely over Tor to other devices, such as the iOS application [GordianWallet](https://github.com/BlockchainCommons/GordianWallet-iOS). *Standup* allows you to run all three Bitcoin networks (`mainnet`, `testnet` and `regtest`) simultaneously via its user interface. *GordianServer-macOS* will present an independent *Quick Connect QR code* for each network so that you may remotely connect to and utilize each. 
+Once the app has completely installed (by either method) and once it has launched *Bitcoin Core*, it will present a *Quick Connect QR code* that can be used to securely link your full node remotely over Tor to other devices, such as the iOS application [GordianWallet](https://github.com/BlockchainCommons/GordianWallet-iOS). *Standup* allows you to run all three Bitcoin networks (`mainnet`, `testnet` and `regtest`) simultaneously via its user interface. *GordianServer-macOS* will present an independent *Quick Connect QR code* for each network so that you may remotely connect to and utilize each.
 
 ## Financial Support
 
@@ -102,7 +102,7 @@ The following people directly contributed to this repository. You can add your n
 | Name              | Role                | Github                                            | Email                                                       | GPG Fingerprint                                    |
 | ----------------- | ------------------- | ------------------------------------------------- | ----------------------------------------------------------- | -------------------------------------------------- |
 | Christopher Allen | Principal Architect | [@ChristopherA](https://github.com/ChristopherA) | \<ChristopherA@LifeWithAlacrity.com\>                       | FDFE 14A5 4ECB 30FC 5D22  74EF F8D3 6C91 3574 05ED |
-| Peter Denton      | Project Lead        | [@Fonta1n3](https://github.com/Fonta1n3)          | <[fonta1n3@protonmail.com](mailto:fonta1n3@protonmail.com)> | 3B37 97FA 0AE8 4BE5 B440 6591 8564 01D7 121C 32FC  |
+| Peter Denton      | Project Lead        | [@Fonta1n3](https://github.com/Fonta1n3)          | <[fontainedenton@gmail.com](mailto:fontainedenton@gmail.com)> | 1C72 2776 3647 A221 6E02  E539 025E 9AD2 D3AC 0FCA  |
 
 ## Responsible Disclosure
 
