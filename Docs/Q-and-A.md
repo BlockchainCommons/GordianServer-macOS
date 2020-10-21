@@ -20,7 +20,7 @@ We've done our best to protect the privacy of the Github, Telegram group members
 
 ### List of questions and definitions
 
-- [Definitions](#definitions)
+- [Definitions](#definitions)<br/>
         * [Apple id](#apple-id)
         * [bech32  bitcoin address(p2wpkh)](#bech32--bitcoin-address-p2wpkh-)
         * [BIP84 keys](#bip84-keys)
