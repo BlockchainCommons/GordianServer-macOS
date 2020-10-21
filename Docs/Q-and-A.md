@@ -1,6 +1,12 @@
 
 
 # Q&A about Gordian Server
+- [Q&A about Gordian Server](#q-a-about-gordian-server)
+    + [Disclaimer](#disclaimer)
+    + [List of questions and definitions](#list-of-questions-and-definitions)
+  * [Knowledge you should be confidently applying](#knowledge-you-should-be-confidently-applying)
+  * [Actions you should be comfortable with](#actions-you-should-be-comfortable-with)
+- [Jump table to categories](#jump-table-to-categories)
 
 Inspired by questions asked on the [Discussions-repo](https://github.com/BlockchainCommons/Gordian/discussions) (Turn on 'Watch' if you want to be notified of conversations), but also the open Telegram *Fully Noded* group [here](https://t.me/FullyNoded) and [Twitter @GordianWallet](https://twitter.com/GordianWallet).
 
@@ -13,20 +19,71 @@ None of the respondents in the **open** Discussions-repo, **open** Telegram grou
 We've done our best to protect the privacy of the Github, Telegram group members and Twitter accounts by investigating the images we used. We haven't come across personal identifiable information (pii). However, should we have made a mistake after all, please let us know and we'll correct this immediately.
 
 ### List of questions and definitions
-- [Jump table to categories](#jump-table-to-categories)
+
 - [Definitions](#definitions)
         * [Apple id](#apple-id)
+        * [bech32  bitcoin address(p2wpkh)](#bech32--bitcoin-address-p2wpkh-)
+        * [BIP84 keys](#bip84-keys)
+        * [bitcoin.conf](#bitcoinconf)
+        * [Bitcoin-cli](#bitcoin-cli)
+        * [Bitcoin Core (Wallet) App, also known as `Bitcoin-qt`](#bitcoin-core--wallet--app--also-known-as--bitcoin-qt-)
+        * [Bitcoin-qt](#bitcoin-qt)
+        * [bitcoind](#bitcoind)
+        * [bitcoind](#bitcoind-1)
+        * [coldcard](#coldcard)
+        * [Datadir](#datadir)
+        * [Esplora](#esplora)
+        * [FN](#fn)
+        * [FN2](#fn2)
+        * [Fully Noded wallets](#fully-noded-wallets)
+        * [GW](#gw)
+        * [gap limit](#gap-limit)
+        * [Initial block download (IBD)](#initial-block-download--ibd-)
+        * [Keepkey](#keepkey)
+        * [keypool](#keypool)
+        * [legacy bitcoin address (p2pkh)](#legacy-bitcoin-address--p2pkh-)
+        * [Libwally](#libwally)
+        * [ledger Nano S/X](#ledger-nano-s-x)
+        * [Nano](#nano)
+        * [Node](#node)
+        * [Nodl](#nodl)
+        * [Output descriptors](#output-descriptors)
+        * [psbt](#psbt)
+        * [pure bitcoin core wallets](#pure-bitcoin-core-wallets)
+        * [rbf](#rbf)
+        * [RPC](#rpc)
+        * [segwit wrapped  bitcoin address (p2sh-p2wpkh)](#segwit-wrapped--bitcoin-address--p2sh-p2wpkh-)
+        * [Segwit addresses](#segwit-addresses)
+        * [SSH](#ssh)
+        * [Standup app](#standup-app)
+        * [satoshi](#satoshi)
+        * [signed raw transaction](#signed-raw-transaction)
+        * [Trezor](#trezor)
+        * [Tor](#tor)
+        * [UTXO's](#utxo-s)
 - [Q&A section General](#q-a-section-general)
   * [What is the Gordian System?](#what-is-the-gordian-system-)
   * [Why use the Gordian System?](#why-use-the-gordian-system-)
   * [What OSes can the Gordian System run on?](#what-oses-can-the-gordian-system-run-on-)
 - [Q&A section Userinterface](#q-a-section-userinterface)
+- [Q&A section Gordian Server](#q-a-section-gordian-server)
+  * [Where can I download Gordian Server?](#where-can-i-download-gordian-server-)
+  * [What kind of compromises would Gordian have to make in order to be distributed via the mac app store?](#what-kind-of-compromises-would-gordian-have-to-make-in-order-to-be-distributed-via-the-mac-app-store-)
+  * [If I allready have a full node running on my Mac. Can I use the Gordian Server app with it?](#if-i-allready-have-a-full-node-running-on-my-mac-can-i-use-the-gordian-server-app-with-it-)
+  * [I am about to start a full node on Mac. Can I change the directory to an External SSD with the Gordian Server StandUp App?](#i-am-about-to-start-a-full-node-on-mac-can-i-change-the-directory-to-an-external-ssd-with-the-gordian-server-standup-app-)
+  * [Why does the `tor` service persist in the background even after I've shut down Gordian Server? Why doesn't Gordian Server shut down its service that it initiated?](#why-does-the--tor--service-persist-in-the-background-even-after-i-ve-shut-down-gordian-server--why-doesn-t-gordian-server-shut-down-its-service-that-it-initiated-)
+        * [Further question: Most people would expect it to stop itself when pressing `cmd+q`? Most people think of apps in macOS as a self contained monolith.](#further-question--most-people-would-expect-it-to-stop-itself-when-pressing--cmd-q---most-people-think-of-apps-in-macos-as-a-self-contained-monolith)
+        * [Further answer:](#further-answer-)
 - [Q&A section Backup and Restore](#q-a-section-backup-and-restore)
   * [How does one restore QR vault if you've lost your iPhone?](#how-does-one-restore-qr-vault-if-you-ve-lost-your-iphone-)
 - [Q&A section Gordian Wallet](#q-a-section-gordian-wallet)
+  * [What’s the difference between Gordian Wallet (GW) and Fully Noded (FN)?](#what-s-the-difference-between-gordian-wallet--gw--and-fully-noded--fn--)
+  * [There is no “add manually” like in FullyNoded?](#there-is-no--add-manually--like-in-fullynoded-)
 - [Q&A section Fully Noded](#q-a-section-fully-noded)
 - [Q&A section Connection](#q-a-section-connection)
 - [Q&A section Node](#q-a-section-node)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
 ## Knowledge you should be confidently applying
 - The definitions above
