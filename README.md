@@ -38,11 +38,11 @@ For more information on *GordianServer-macOS*:
 You must meet minimum OS and space requirements to install *GordianServer-macOS* on your Mac, as described below.     
 
 - minimum macOS 10.10 Yosemite (not yet tested on versions older then Mojave but it should work)
-- Navigate to [GordianServer-macOS-v0.1.4.dmg](./GordianServer-macOS-v0.1.4.dmg)
+- Navigate to [GordianServer-macOS-v0.1.4.dmg](./releases/download/v0.1.4/GordianServer-macOS-v0.1.4.dmg)
 - Click `download`
 - Double click the downloaded `GordianServer-macOS-v0.1.4.dmg` file. That's it.
 
-`GordianServer-macOS-v0.1.4.dmg` has been pgp signed, the pgp signature can be viewed [here](./GordianServer-macOS-v0.1.4.dmg.fonta1n3.1C7227763647A2216E02E539025E9AD2D3AC0FCA.asc), the format of the signed filename is `<the_signed_filename>.<signing_git_username>.<signing_pgp_key>.asc`.
+`GordianServer-macOS-v0.1.4.dmg` has been pgp signed, the pgp signature can be viewed [here](./releases/download/v0.1.4/GordianServer-macOS-v0.1.4.dmg.asc), the format of the signed filename is `<the_signed_filename>.<signing_git_username>.<signing_pgp_key>.asc`.
 
 ### Build Mac App from source using Xcode
 
