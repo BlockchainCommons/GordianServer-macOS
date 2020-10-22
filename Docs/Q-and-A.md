@@ -259,10 +259,31 @@ QR Vault is backed up to ICloud, so just login with your Apple id (@Fonta1n3)
 # Q&A section Gordian Wallet
 
 ## What’s the difference between Gordian Wallet (GW) and Fully Noded (FN)?
-[Answer in FullyNoded Q&A](https://github.com/Fonta1n3/FullyNoded/blob/master/Docs/Q-and-A.md#question--whats-the-difference-between-gordian-wallet-gw-and-fully-noded-fn) (@Fonta1n3)
+
+1. GW is more focused on easy to use wallets, it will automatically create a 2/3 multisig wallet for you where your node is a signer as well as your device. Then you can keep one seed in offline backup to restore either your nodes signer or devices signer. So GW will give you your nodes seed words to back up and the purely offline seed words and of course you can access the devices words to back them up as well. 
+Much redundancy and flexibility
+2. FN never adds a private key to your node unless you manually import an wif or xprv
+3. GW does not give you access to every wallet on the node, FN does
+4. GW does not have all the pure node functionality, again its a focused wallet
+5. GW is account based it only signs with account xprv, FN keeps your master seed to sign with
+6. GW has iCloud sync and sign in with apple, FN does not
+7. FN has lightning, GW does not
+8. Also GW is not released on mainnet or on the app store
+
+##### Teamplayers Gordian Wallet and Fully Noded
+The general idea is `multisig` is by far the most secure way to use bitcoin, both GW and FN are excellent multsig wallets, it’s generally a good idea to use many wallets for your multisig setup, with that in mind the two together make an excellent team.
+
+##### Addition to point 1: example
+So for example if your node dies or you lose your device you are well covered to recover the 2/3. What I do is add one set of words to other apps on other devices (as this diagram points out), so no one device can fully sign and spend.
+<img src="./Images/FinalSolution.png" alt="Final FN multisig solution" border="0" width="600">
+<br/> (@Fonta1n3)
+
+<small><i>[Answer provided in FullyNoded Q&A too](https://github.com/Fonta1n3/FullyNoded/blob/master/Docs/Q-and-A.md#question--whats-the-difference-between-gordian-wallet-gw-and-fully-noded-fn)</i></small>
 
 ## There is no “add manually” like in FullyNoded?
-[Answer in FullyNoded Q&A](https://github.com/Fonta1n3/FullyNoded/blob/master/Docs/Q-and-A.md#question--gordian-wallet-there-is-no-add-manually-like-in-fullynoded) (@Fonta1n3)
+You can view node details in FN, there is an export button, it gives you a QR that you can scan or upload with Gordian Wallet. (@Fonta1n3)
+
+<small><i>[Answer provided in FullyNoded Q&A too](https://github.com/Fonta1n3/FullyNoded/blob/master/Docs/Q-and-A.md#question--gordian-wallet-there-is-no-add-manually-like-in-fullynoded) </i></small>
 
 # Q&A section Fully Noded
 # Q&A section Connection
