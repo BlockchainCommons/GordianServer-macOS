@@ -10,8 +10,6 @@ This tool will also harden and secure your OS to current best practices and will
 
 This repo includes the *GordianServer-macOS*, which allows you to run a full node and Tor on your Mac computer.
 
-<img src="./Images/1_standup.png" alt="" width="800"/>
-
 <img src="./Images/2_standup.png" alt="" width="800"/>
 
 <img src="./Images/3_standup.png" alt="" width="800"/>
