@@ -1,5 +1,7 @@
 # 🛠 GordianServer-macOS
 
+### _by Peter Denton and Christopher Allen_
+
 *(Previously known as Bitcoin-Standup-macOS.)*
 
 ![](Images/logos/gordian-server-screen.jpg)
@@ -32,6 +34,12 @@ For more information on *GordianServer-macOS*:
 
 *GordianServer-macOS* is an early **Work-In-Progress**, so that we can prototype, discover additional requirements, and get feedback from the broader Bitcoin-Core Developer Community. ***It has not yet been peer-reviewed or audited. It is not yet ready for production uses. Use at your own risk.***
 
+## Prerequisites
+
+- macOS 10.10 Yosemite (not yet tested on versions older then Mojave but it should work)
+- ~320 GB of free space for a full mainnet node with txindex; or ~30 GB for a full testnet3 node; or substantially less if the full node is pruned.
+- In order to install *Bitcoin Core* and *Tor* on your behalf, *GordianServer-macOS* uses *Brew* and *XCode Command Line Tools*, these will be automatically downloaded and installed for you within the app using a popular well reviewed open sourced script called *Strap*, you can read more about *Strap* [here](https://github.com/MikeMcQuaid/strap/blob/master/README.md). In addition to installing *Brew* and *XCode Command Line Tools*, *Strap* also sets up your Macbook for best security practices; including full disc encryption with *FileVault*, enables *macOS Firewall* and disables *Java* for better security among others.
+
 ## Installation Instructions
 
 You must meet minimum OS and space requirements to install *GordianServer-macOS* on your Mac, as described below.     
@@ -59,12 +67,6 @@ Instead of downloading binaries through our Github repo, you can build *GordianS
    - If that doesn't work, you can instead download a clone via "Source Control > Clone" within XCode.
 5. When *Xcode* launches, press the "play" button in the top left.
    - If you had to download the clone by hand from within XCode, you'll likely need to navigate to the `xcodeproj` file in the `Xcode` directory.
-
-### Dependencies
-
-- macOS 10.10 Yosemite (not yet tested on versions older then Mojave but it should work)
-- ~320 GB of free space for a full mainnet node with txindex; or ~30 GB for a full testnet3 node; or substantially less if the full node is pruned.
-- In order to install *Bitcoin Core* and *Tor* on your behalf, *GordianServer-macOS* uses *Brew* and *XCode Command Line Tools*, these will be automatically downloaded and installed for you within the app using a popular well reviewed open sourced script called *Strap*, you can read more about *Strap* [here](https://github.com/MikeMcQuaid/strap/blob/master/README.md). In addition to installing *Brew* and *XCode Command Line Tools*, *Strap* also sets up your Macbook for best security practices; including full disc encryption with *FileVault*, enables *macOS Firewall* and disables *Java* for better security among others.
 
 ### After Installation
 
