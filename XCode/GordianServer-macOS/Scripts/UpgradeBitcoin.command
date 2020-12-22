@@ -12,12 +12,12 @@ mkdir ~/.standup
 mkdir ~/.standup/BitcoinCore
 
 echo "Downloading $SHA_URL"
-curl $SHA_URL -o ~/StandUp/BitcoinCore/SHA256SUMS.asc -s
-echo "Saved to ~/StandUp/BitcoinCore/SHA256SUMS.asc"
+curl $SHA_URL -o ~/.standup/BitcoinCore/SHA256SUMS.asc -s
+echo "Saved to ~/.standup/BitcoinCore/SHA256SUMS.asc"
 
 echo "Downloading Laanwj PGP signature from https://bitcoin.org/laanwj-releases.asc..."
-curl https://bitcoin.org/laanwj-releases.asc -o ~/StandUp/BitcoinCore/laanwj-releases.asc -s
-echo "Saved to ~/StandUp/BitcoinCore/laanwj-releases.asc"
+curl https://bitcoin.org/laanwj-releases.asc -o ~/.standup/BitcoinCore/laanwj-releases.asc -s
+echo "Saved to ~/.standup/BitcoinCore/laanwj-releases.asc"
 
 echo "Downloading Bitcoin Core $VERSION from $MACOS_URL"
 cd ~/.standup/BitcoinCore

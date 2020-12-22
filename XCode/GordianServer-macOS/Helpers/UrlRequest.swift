@@ -11,7 +11,7 @@ import Foundation
 class FetchLatestRelease {
         
     class func get(completion: @escaping ((dict:NSDictionary?, error:String?)) -> Void) {
-        let url = "https://api.github.com/repos/bitcoin/bitcoin/tags"
+        let url = "https://api.github.com/repos/bitcoin/bitcoin/releases"
         guard let destination = URL(string: url) else { return }
         let request = URLRequest(url: destination)
         let session = URLSession.shared
@@ -22,7 +22,7 @@ class FetchLatestRelease {
                         if let jsonArray = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as? NSArray {
                             if jsonArray.count > 0 {
                                 if let latestTag = jsonArray[0] as? NSDictionary {
-                                    if let version = latestTag["name"] as? String {
+                                    if let version = latestTag["tag_name"] as? String {
                                         let processedVersion = version.replacingOccurrences(of: "v", with: "")
                                         let dict = [
                                             "version":"\(processedVersion)",
