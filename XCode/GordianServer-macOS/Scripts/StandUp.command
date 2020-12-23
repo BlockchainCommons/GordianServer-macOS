@@ -57,9 +57,9 @@ function installBitcoin () {
 
     echo "Signatures do not match! Terminating..."
     exit 1
-    
+
   fi
-  
+
 }
 
 function configureBitcoin () {
