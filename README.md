@@ -26,7 +26,7 @@ This repo includes the *GordianServer-macOS*, which allows you to run a full nod
 
 For more information on *GordianServer-macOS*:
 
-1. [Using *GordianServer-macOS*](Docs/Using-Standup.md) provides basic description of functions and some FAQs.
+1. [Using *GordianServer-macOS*](Docs/Using-GordianServer-macOS.md) provides basic description of functions and some FAQs.
 2. [How *GordianServer-macOS* macOS Works](Docs/How-it-works.md) describes the specifics of what *GordianServer-macOS* does.
 3. The [Main *Gordian* Repo](https://github.com/BlockchainCommons/GordianSystem) contains general information on the project.
 
