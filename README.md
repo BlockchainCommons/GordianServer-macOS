@@ -1,7 +1,7 @@
 # 🛠 GordianServer-macOS
 
-### _by Peter Denton and Christopher Allen_
-
+### _by [Peter Denton](https://github.com/Fonta1n3) and [Christopher Allen](https://github.com/ChristopherA)_
+* <img src="https://github.com/BlockchainCommons/Gordian/blob/master/Images/logos/gordian-icon.png" width=16 valign="bottom"> ***uses [gordian](https://github.com/BlockchainCommons/gordian/blob/master/README.md) technology***
 *(Previously known as Bitcoin-Standup-macOS.)*
 
 ![](Images/logos/gordian-server-screen.jpg)
