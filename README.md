@@ -31,6 +31,17 @@ For more information on *GordianServer-macOS*:
 2. [How *GordianServer-macOS* macOS Works](Docs/How-it-works.md) describes the specifics of what *GordianServer-macOS* does.
 3. The [Main *Gordian* Repo](https://github.com/BlockchainCommons/GordianSystem) contains general information on the project.
 
+## Gordian Principles
+
+GordianServer is primarily a wrapper to make it easy to stand up an existing server: the Bitcoin Core server. Doing so displays the [Gordian Principles](https://github.com/BlockchainCommons/Gordian#gordian-principles) and also links to reference apps such as [GordianWallet](https://github.com/BlockchainCommons/GordianWallet-iOS) to demonstrate the functionality of the entire Gordian reference architure. Our document ["Why Run a Full Node"](https://github.com/BlockchainCommons/Gordian/blob/master/Docs/Why-Full.md) describes how it does so. In short:
+
+* **Independence.** A full node allows you to validate Bitcoin transactions.
+* **Privacy.** A full node means you're not handing a full record of your transactions to someone else (and it's further protected by a Torgap).
+* **Resilience.** Well-tested Bitcoin Core software, a Torgap, and a 2-of-3 multisig shared with GordianWallet all protect your funds.
+* **Openness.** Bitcoin Core and Tor are both open code and they both allow interactions using open standards, such as RPC (and of course, Tor itself).
+
+Blockchain Commons apps do not phone home and do not run ads. Some are available through various app stores; all are available in our code repositories for your usage.
+
 ## Status — Work-in-Progress
 
 *GordianServer-macOS* is an early **Work-In-Progress**, so that we can prototype, discover additional requirements, and get feedback from the broader Bitcoin-Core Developer Community. ***It has not yet been peer-reviewed or audited. It is not yet ready for production uses. Use at your own risk.***
