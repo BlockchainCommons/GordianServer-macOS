@@ -22,12 +22,75 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         vc.showWindow(self)
     }
     
+    @IBAction func torHostClicked(_ sender: Any) {
+        runScript(script: .openMainnetHiddenService, env: ["":""], args: []) { _ in }
+    }
+    
+    @IBAction func torAuthenticationClicked(_ sender: Any) {
+        runScript(script: .openAuth, env: ["AUTH_DIR":"/usr/local/var/lib/tor/standup/main/authorized_clients/"], args: []) { _ in }
+    }
+    
+    @IBAction func hiddenServiceDirClicked(_ sender: Any) {
+        runScript(script: .openAuth, env: ["AUTH_DIR":"/usr/local/var/lib/tor/standup/"], args: []) { _ in }
+    }
+    
+    @IBAction func torCnfigClicked(_ sender: Any) {
+        runScript(script: .openTorrc, env: ["":""], args: []) { _ in }
+    }
+    
+    @IBAction func torLogClicked(_ sender: Any) {
+        runScript(script: .showTorLog, env: ["":""], args: []) { _ in }
+    }
+    
+    @IBAction func bitcoinCoreConfClicked(_ sender: Any) {
+        let d = Defaults()
+        let path = d.dataDir()
+        let env = ["DATADIR":path]
+        runScript(script: .showBitcoinConf, env: env, args: []) { _ in }
+    }
+    
+    @IBAction func bitcoinCoreLogClicked(_ sender: Any) {
+        let d = Defaults()
+        let path = d.dataDir()
+        let env = ["DATADIR":path]
+        runScript(script: .showBitcoinLog, env: env, args: []) { _ in }
+    }
+    
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
+    }
+    
+    private func runScript(script: SCRIPT, env: [String:String], args: [String], completion: @escaping ((Bool)) -> Void) {
+        #if DEBUG
+        print("script: \(script.rawValue)")
+        #endif
+        let resource = script.rawValue
+        guard let path = Bundle.main.path(forResource: resource, ofType: "command") else {
+            return
+        }
+        let stdOut = Pipe()
+        let task = Process()
+        task.launchPath = path
+        task.environment = env
+        task.arguments = args
+        task.standardOutput = stdOut
+        task.launch()
+        task.waitUntilExit()
+        let data = stdOut.fileHandleForReading.readDataToEndOfFile()
+        var result = ""
+        if let output = String(data: data, encoding: .utf8) {
+            #if DEBUG
+            print("result: \(output)")
+            #endif
+            result += output
+            completion(true)
+        } else {
+            completion(false)
+        }
     }
 
 }
