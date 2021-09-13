@@ -10,7 +10,6 @@ import Cocoa
 
 class ViewController: NSViewController, NSWindowDelegate {
     
-    
     @IBOutlet weak var mainnetIncomingImage: NSImageView!
     @IBOutlet weak var bitcoinCoreWindow: NSView!
     @IBOutlet weak var torWindow: NSView!
@@ -42,7 +41,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     @IBOutlet var spinner: NSProgressIndicator!
     @IBOutlet var installTorOutlet: NSButton!
     @IBOutlet var seeLogOutlet: NSButton!
-    @IBOutlet weak var bitcoinSettingsOutlet: NSButton!
+    //@IBOutlet weak var bitcoinSettingsOutlet: NSButton!
     @IBOutlet var verifyOutlet: NSButton!
     @IBOutlet var updateOutlet: NSButton!
     @IBOutlet var icon: NSImageView!
@@ -1482,8 +1481,8 @@ class ViewController: NSViewController, NSWindowDelegate {
         icon.layer?.masksToBounds = true
         isLoading = true
         bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
-        bitcoinSettingsOutlet.isHighlighted = false
-        bitcoinSettingsOutlet.focusRingType = .none
+        //bitcoinSettingsOutlet.isHighlighted = false
+        //bitcoinSettingsOutlet.focusRingType = .none
         updateOutlet.isEnabled = false
         bitcoinCoreVersionOutlet.stringValue = ""
         torVersionOutlet.stringValue = ""
