@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0AD5BAA026EF2FA50091A075 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD5BA9F26EF2FA50091A075 /* Extensions.swift */; };
 		D01471A12371354700F64329 /* LaunchBitcoin.command in Resources */ = {isa = PBXBuildFile; fileRef = D01471A02371354700F64329 /* LaunchBitcoin.command */; };
 		D01B60E62484BAE1005D3090 /* IsMainOn.command in Resources */ = {isa = PBXBuildFile; fileRef = D01B60E52484BAE1005D3090 /* IsMainOn.command */; };
 		D01B60E82484BC20005D3090 /* IsTestOn.command in Resources */ = {isa = PBXBuildFile; fileRef = D01B60E72484BC20005D3090 /* IsTestOn.command */; };
@@ -120,6 +121,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0AD5BA9F26EF2FA50091A075 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		D01471A02371354700F64329 /* LaunchBitcoin.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = LaunchBitcoin.command; sourceTree = "<group>"; };
 		D01B60E52484BAE1005D3090 /* IsMainOn.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = IsMainOn.command; sourceTree = "<group>"; };
 		D01B60E72484BC20005D3090 /* IsTestOn.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = IsTestOn.command; sourceTree = "<group>"; };
@@ -383,6 +385,7 @@
 				D0EBC03223791DEA008302D2 /* Enums */,
 				D099F3362375914300AC0EF6 /* Scripts */,
 				D0EBC03323791DFF008302D2 /* Helpers */,
+				0AD5BA9F26EF2FA50091A075 /* Extensions.swift */,
 			);
 			path = "GordianServer-macOS";
 			sourceTree = "<group>";
@@ -640,6 +643,7 @@
 				D0EBC0312377EE65008302D2 /* Utilities.swift in Sources */,
 				D0DCD8ED236ACD6300F2D15A /* Installer.swift in Sources */,
 				D0BCB335236A6D22000D8FDE /* ViewController.swift in Sources */,
+				0AD5BAA026EF2FA50091A075 /* Extensions.swift in Sources */,
 				D0DCD8E6236ACC9E00F2D15A /* ScriptEnum.swift in Sources */,
 				D0BCB333236A6D22000D8FDE /* AppDelegate.swift in Sources */,
 				D0B9277123837AB400956651 /* UrlRequest.swift in Sources */,

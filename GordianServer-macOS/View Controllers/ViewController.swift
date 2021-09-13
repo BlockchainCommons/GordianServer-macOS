@@ -1234,15 +1234,13 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     func parseTorResult(result: String) {
-        if result.contains("Tor version") {
-            torInstalled = true
-            var version = (result.replacingOccurrences(of: "Tor version ", with: ""))
-            if version.count == 8 {
-                version = String(version.dropLast())
-            }
-            DispatchQueue.main.async { [unowned vc = self] in
-                vc.torVersionOutlet.stringValue = "v\(version)"
-                vc.installTorOutlet.title = "Start"
+        torInstalled = result.contains("Tor version")
+        if torInstalled {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                
+                self.torVersionOutlet.stringValue = result.torVersion
+                self.installTorOutlet.title = "Start"
             }
         }
         checkBitcoinConfForRPCCredentials()
@@ -1488,6 +1486,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         bitcoinSettingsOutlet.focusRingType = .none
         updateOutlet.isEnabled = false
         bitcoinCoreVersionOutlet.stringValue = ""
+        torVersionOutlet.stringValue = ""
         installTorOutlet.isEnabled = false
         verifyOutlet.isEnabled = false
         mainWalletOutlet.isEnabled = false
