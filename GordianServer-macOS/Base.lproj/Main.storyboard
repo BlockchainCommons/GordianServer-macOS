@@ -106,7 +106,7 @@
                                         <menuItem title="Bitcoin Core Wallets" id="IlJ-W6-tgW">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
-                                                <action selector="bitcoinCoreLogClicked:" target="Voe-Tx-rLC" id="gMe-wa-bZY"/>
+                                                <action selector="walletsClicked:" target="Voe-Tx-rLC" id="HQq-Vt-ute"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="Xr2-qq-NuG"/>
@@ -345,7 +345,7 @@
                                                 </connections>
                                             </button>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Vdd-w0-AhZ">
-                                                <rect key="frame" x="91" y="164" width="80" height="16"/>
+                                                <rect key="frame" x="89" y="164" width="80" height="16"/>
                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="80% synced" id="ozm-OW-79F">
                                                     <font key="font" metaFont="system"/>
                                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
@@ -360,14 +360,6 @@
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
-                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QWo-Nq-b5d">
-                                                <rect key="frame" x="91" y="188" width="53" height="16"/>
-                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Mainnet" id="aCP-ql-VBW">
-                                                    <font key="font" usesAppearanceFont="YES"/>
-                                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
-                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                </textFieldCell>
-                                            </textField>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iiJ-vd-PHR">
                                                 <rect key="frame" x="20" y="188" width="59" height="16"/>
                                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Network:" id="OqT-mh-uUq">
@@ -377,8 +369,8 @@
                                                 </textFieldCell>
                                             </textField>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7yr-ry-ECs">
-                                                <rect key="frame" x="20" y="164" width="55" height="16"/>
-                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Verified:" id="kQK-AV-5oY">
+                                                <rect key="frame" x="20" y="164" width="53" height="16"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Synced:" id="kQK-AV-5oY">
                                                     <font key="font" metaFont="system"/>
                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -437,6 +429,37 @@
                                                     <action selector="updateBitcoin:" target="XfG-lQ-9wD" id="7JK-CP-GIh"/>
                                                 </connections>
                                             </button>
+                                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="L8k-j2-T7d">
+                                                <rect key="frame" x="90" y="182" width="88" height="25"/>
+                                                <popUpButtonCell key="cell" type="push" title="Mainnet" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="wkb-hO-60f" id="ApD-fG-uWt">
+                                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="menu"/>
+                                                    <menu key="menu" id="vYv-yT-A2x">
+                                                        <items>
+                                                            <menuItem title="Mainnet" state="on" id="wkb-hO-60f">
+                                                                <connections>
+                                                                    <action selector="userSelectedMainnet:" target="XfG-lQ-9wD" id="7W5-kE-Ef1"/>
+                                                                </connections>
+                                                            </menuItem>
+                                                            <menuItem title="Testnet" id="z7i-uX-2uK">
+                                                                <connections>
+                                                                    <action selector="userSelectedTestnet:" target="XfG-lQ-9wD" id="Hkf-lB-Bgp"/>
+                                                                </connections>
+                                                            </menuItem>
+                                                            <menuItem title="Regtest" id="Tty-gf-zRq">
+                                                                <connections>
+                                                                    <action selector="userSelectedRegtest:" target="XfG-lQ-9wD" id="Sx7-1E-44T"/>
+                                                                </connections>
+                                                            </menuItem>
+                                                            <menuItem title="Signet" id="0eH-JY-oGw">
+                                                                <connections>
+                                                                    <action selector="userSelectedSignet:" target="XfG-lQ-9wD" id="bhU-bJ-5Zu"/>
+                                                                </connections>
+                                                            </menuItem>
+                                                        </items>
+                                                    </menu>
+                                                </popUpButtonCell>
+                                            </popUpButton>
                                         </subviews>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="251" id="2Le-eX-Lt7"/>
@@ -457,20 +480,20 @@
                                             <constraint firstAttribute="width" constant="196" id="Mfq-ia-bZ2"/>
                                             <constraint firstItem="y6q-T1-byM" firstAttribute="top" secondItem="twO-63-MCl" secondAttribute="bottom" constant="12" symbolic="YES" id="OcR-Cx-QrJ"/>
                                             <constraint firstItem="twO-63-MCl" firstAttribute="top" secondItem="E12-C7-dPa" secondAttribute="bottom" constant="12" id="QKV-Xa-pBp"/>
+                                            <constraint firstItem="L8k-j2-T7d" firstAttribute="centerY" secondItem="iiJ-vd-PHR" secondAttribute="centerY" id="RfJ-nq-tFk"/>
                                             <constraint firstItem="q6e-1y-IAn" firstAttribute="top" secondItem="i70-xH-6Bd" secondAttribute="top" constant="6" id="Rqk-cc-hRq"/>
                                             <constraint firstItem="q6e-1y-IAn" firstAttribute="centerY" secondItem="IBs-yd-qdH" secondAttribute="centerY" id="SFo-4o-Rni"/>
-                                            <constraint firstItem="QWo-Nq-b5d" firstAttribute="leading" secondItem="iiJ-vd-PHR" secondAttribute="trailing" constant="16" id="Sag-d4-tO2"/>
                                             <constraint firstItem="E12-C7-dPa" firstAttribute="centerY" secondItem="Yw2-0Q-Vew" secondAttribute="centerY" id="T7S-FR-NtO"/>
                                             <constraint firstItem="OfC-XQ-ENN" firstAttribute="centerX" secondItem="i70-xH-6Bd" secondAttribute="centerX" id="VFS-dZ-TVk"/>
                                             <constraint firstItem="7yr-ry-ECs" firstAttribute="leading" secondItem="i70-xH-6Bd" secondAttribute="leading" constant="22" id="Vwa-e8-kPv"/>
                                             <constraint firstItem="IBs-yd-qdH" firstAttribute="leading" secondItem="IZe-rf-ugH" secondAttribute="trailing" constant="2" id="WL0-Zy-Dn5"/>
                                             <constraint firstItem="q6e-1y-IAn" firstAttribute="leading" relation="lessThanOrEqual" secondItem="IBs-yd-qdH" secondAttribute="trailing" constant="20" id="iPu-Sb-rcL"/>
                                             <constraint firstItem="IBs-yd-qdH" firstAttribute="centerY" secondItem="IZe-rf-ugH" secondAttribute="centerY" id="iaC-3W-Mlu"/>
+                                            <constraint firstItem="L8k-j2-T7d" firstAttribute="leading" secondItem="iiJ-vd-PHR" secondAttribute="trailing" constant="16" id="l7R-mb-3bq"/>
                                             <constraint firstItem="Vdd-w0-AhZ" firstAttribute="leading" secondItem="7yr-ry-ECs" secondAttribute="trailing" constant="20" id="mQy-MO-4Ga"/>
                                             <constraint firstItem="iiJ-vd-PHR" firstAttribute="leading" secondItem="i70-xH-6Bd" secondAttribute="leading" constant="22" id="nz3-cY-K1D"/>
                                             <constraint firstItem="WRY-AI-4ba" firstAttribute="leading" secondItem="i70-xH-6Bd" secondAttribute="leading" constant="22" id="p2z-u2-dvP"/>
                                             <constraint firstItem="WRY-AI-4ba" firstAttribute="top" secondItem="7yr-ry-ECs" secondAttribute="bottom" constant="8" symbolic="YES" id="r1g-HM-RaR"/>
-                                            <constraint firstItem="QWo-Nq-b5d" firstAttribute="centerY" secondItem="iiJ-vd-PHR" secondAttribute="centerY" id="rm6-7f-nIq"/>
                                             <constraint firstItem="OfC-XQ-ENN" firstAttribute="top" secondItem="IBs-yd-qdH" secondAttribute="bottom" constant="3" id="sot-IV-8rF"/>
                                             <constraint firstItem="Yw2-0Q-Vew" firstAttribute="top" secondItem="WRY-AI-4ba" secondAttribute="bottom" constant="8" symbolic="YES" id="vvh-rc-157"/>
                                             <constraint firstItem="twO-63-MCl" firstAttribute="centerX" secondItem="i70-xH-6Bd" secondAttribute="centerX" id="xaq-Fi-9sn"/>
@@ -694,7 +717,7 @@
                         <outlet property="mainnetIncomingPeersLabel" destination="PMt-yp-b2E" id="qSk-0Q-URx"/>
                         <outlet property="mainnetOutgoingPeersLabel" destination="E12-C7-dPa" id="CFc-ZP-Y1C"/>
                         <outlet property="mainnetSyncedLabel" destination="Vdd-w0-AhZ" id="57y-nK-1TV"/>
-                        <outlet property="networkLabel" destination="QWo-Nq-b5d" id="oye-KQ-DdZ"/>
+                        <outlet property="networkButton" destination="L8k-j2-T7d" id="Jba-Po-tFG"/>
                         <outlet property="spinner" destination="kdQ-HU-D0l" id="t8O-5u-PXb"/>
                         <outlet property="startMainnetOutlet" destination="twO-63-MCl" id="WEZ-Qq-VGp"/>
                         <outlet property="taskDescription" destination="K4o-Sf-dSl" id="Xb9-TC-9s2"/>
@@ -709,7 +732,6 @@
                         <segue destination="eC6-Cf-Cnx" kind="show" identifier="showPairingCode" id="Yl0-9Y-9DR"/>
                         <segue destination="lGs-ue-8Wa" kind="show" identifier="goInstall" id="cqP-Ve-rOY"/>
                         <segue destination="ISO-tJ-wFf" kind="show" identifier="addAuth" id="Emg-xH-9n3"/>
-                        <segue destination="3JJ-BX-irG" kind="show" identifier="segueToWallets" id="pI7-aB-As7"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -719,7 +741,7 @@
         <!--Wallets-->
         <scene sceneID="Fsb-gt-wXE">
             <objects>
-                <viewController title="Wallets" id="3JJ-BX-irG" customClass="WalletsViewController" customModule="GordianServer_macOS" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Wallets" storyboardIdentifier="Wallets" id="3JJ-BX-irG" customClass="WalletsViewController" customModule="GordianServer_macOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="XLi-fx-wAW">
                         <rect key="frame" x="0.0" y="0.0" width="639" height="353"/>
                         <autoresizingMask key="autoresizingMask"/>

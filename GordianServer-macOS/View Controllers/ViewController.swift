@@ -32,12 +32,12 @@ class ViewController: NSViewController, NSWindowDelegate {
     @IBOutlet weak var mainnetIncomingPeersLabel: NSTextField!
     @IBOutlet weak var mainnetOutgoingPeersLabel: NSTextField!
     @IBOutlet weak var bitcoinIsOnHeaderImage: NSImageView!
-
-
+    @IBOutlet weak var networkButton: NSPopUpButton!
+    
     //var installingLightning = Bool()
     var timer: Timer?
     //var httpPass = ""
-    var chain = ""
+    var chain = UserDefaults.standard.object(forKey: "chain") as? String ?? "main"
     var rpcpassword = ""
     var rpcuser = ""
     var torHostname = ""
@@ -62,9 +62,10 @@ class ViewController: NSViewController, NSWindowDelegate {
     var torConfigured = Bool()
     var bitcoinConfigured = Bool()
     var ignoreExistingBitcoin = Bool()
-    var regTestOn = Bool()
-    var mainOn = Bool()
-    var testOn = Bool()
+    var regTestOn = false
+    var mainOn = false
+    var testOn = false
+    var isSignetOn = false
     //var lightningIsRunning = false
     //var lightningInstalled = false
     var env = [String:String]()
@@ -78,12 +79,12 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     override func viewWillAppear() {
         self.view.window?.delegate = self
-        self.view.window?.minSize = NSSize(width: 544, height: 658)
+        self.view.window?.minSize = NSSize(width: 544, height: 377)
     }
 
     override func viewDidAppear() {
         var frame = self.view.window!.frame
-        let initialSize = NSSize(width: 544, height: 658)
+        let initialSize = NSSize(width: 544, height: 377)
         frame.size = initialSize
         self.view.window?.setFrame(frame, display: true)
         refresh()
@@ -94,6 +95,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     private func refresh() {
+        setScene()
         d.setDefaults { [unowned vc = self] in
             vc.getLatestVersion { [unowned vc = self] (success, errorMessage) in
                 if success {
@@ -107,6 +109,30 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     //MARK: User Action
+    
+    @IBAction func userSelectedMainnet(_ sender: Any) {
+        UserDefaults.standard.setValue("main", forKey: "chain")
+        chain = "main"
+        refreshAction()
+    }
+    
+    @IBAction func userSelectedTestnet(_ sender: Any) {
+        UserDefaults.standard.setValue("test", forKey: "chain")
+        chain = "test"
+        refreshAction()
+    }
+    
+    @IBAction func userSelectedRegtest(_ sender: Any) {
+        UserDefaults.standard.setValue("regtest", forKey: "chain")
+        chain = "regtest"
+        refreshAction()
+    }
+    
+    @IBAction func userSelectedSignet(_ sender: Any) {
+        UserDefaults.standard.setValue("signet", forKey: "chain")
+        chain = "signet"
+        refreshAction()
+    }
     
     @IBAction func showLightningQuickConnect(_ sender: Any) {
 //        DispatchQueue.main.async { [unowned vc = self] in
@@ -170,46 +196,11 @@ class ViewController: NSViewController, NSWindowDelegate {
 //        }
     }
 
-
-    @IBAction func openMainnetAuthAction(_ sender: Any) {
-        env = ["BINARY_NAME":d.existingBinary(),"VERSION":d.existingPrefix(),"PREFIX":d.existingPrefix(),"DATADIR":d.dataDir(), "AUTH_DIR":"/usr/local/var/lib/tor/standup/main/authorized_clients/"]
-        runScript(script: .openAuth)
-    }
-
-    @IBAction func openTestnetAuthAction(_ sender: Any) {
-        env = ["BINARY_NAME":d.existingBinary(),"VERSION":d.existingPrefix(),"PREFIX":d.existingPrefix(),"DATADIR":d.dataDir(), "AUTH_DIR":"/usr/local/var/lib/tor/standup/test/authorized_clients/"]
-        runScript(script: .openAuth)
-    }
-
-    @IBAction func openRegAuthAction(_ sender: Any) {
-        env = ["BINARY_NAME":d.existingBinary(),"VERSION":d.existingPrefix(),"PREFIX":d.existingPrefix(),"DATADIR":d.dataDir(), "AUTH_DIR":"/usr/local/var/lib/tor/standup/reg/authorized_clients/"]
-        runScript(script: .openAuth)
-    }
-
-
-    @IBAction func showMainWallets(_ sender: Any) {
-        DispatchQueue.main.async { [weak self] in
-            self?.chain = "main"
-            self?.performSegue(withIdentifier: "segueToWallets", sender: self)
-        }
-    }
-
-    @IBAction func showTestWallets(_ sender: Any) {
-        DispatchQueue.main.async { [weak self] in
-            self?.chain = "test"
-            self?.performSegue(withIdentifier: "segueToWallets", sender: self)
-        }
-    }
-
-    @IBAction func showRegWallets(_ sender: Any) {
-        DispatchQueue.main.async { [weak self] in
-            self?.chain = "regtest"
-            self?.performSegue(withIdentifier: "segueToWallets", sender: self)
-        }
-    }
-
-
     @IBAction func refreshAction(_ sender: Any) {
+        refreshAction()
+    }
+    
+    private func refreshAction() {
         taskDescription.stringValue = "checking system..."
         spinner.startAnimation(self)
         spinner.alphaValue = 1
@@ -265,39 +256,35 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     @IBAction func startMainnetAction(_ sender: Any) {
         startMainnetOutlet.isEnabled = false
-        if !mainOn {
-            runScript(script: .startMain)
-        } else {
-            runScript(script: .stopMain)
+        switch chain {
+        case "main":
+            if !mainOn {
+                runScript(script: .startMain)
+            } else {
+                runScript(script: .stopMain)
+            }
+        case "test":
+            if !testOn {
+                runScript(script: .startTestd)
+            } else {
+                runScript(script: .stopTest)
+            }
+        case "regtest":
+            if !regTestOn {
+                runScript(script: .startRegtest)
+            } else {
+                runScript(script: .stopReg)
+            }
+        case "signet":
+            if !isSignetOn {
+                runScript(script: .startSignet)
+            } else {
+                runScript(script: .stopSignet)
+            }
+        default:
+            break
         }
-    }
-
-    @IBAction func startTestnetAction(_ sender: Any) {
-        if !testOn {
-            runScript(script: .startTestd)
-        } else {
-            runScript(script: .stopTest)
-        }
-    }
-
-    @IBAction func startRegtestAction(_ sender: Any) {
-        if !regTestOn {
-            runScript(script: .startRegtest)
-        } else {
-            runScript(script: .stopReg)
-        }
-    }
-
-    @IBAction func showMainnetHiddenService(_ sender: Any) {
-        runScript(script: .openMainnetHiddenService)
-    }
-
-    @IBAction func showTestnetHiddenService(_ sender: Any) {
-        runScript(script: .openTestnetHiddenService)
-    }
-
-    @IBAction func showRegtestHiddenService(_ sender: Any) {
-        runScript(script: .openRegtestHiddenService)
+        
     }
 
     @IBAction func bitcoinWindowHelp(_ sender: Any) {
@@ -306,22 +293,6 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     @IBAction func torWindowHelp(_ sender: Any) {
         showAlertMessage(message: "Tor Help", info: "This window gives you direct access to the three hidden service directories by tapping the forward button for each network. This is useful if you want to use your node's onion addresses for other apps. It is also useful if you want to refresh your hidden service which can be accomplished by deleting the hidden service directory altogether.  You may add and remove Tor v3 authenticaction keys from the \"add\" and \"remove\" button. You may add up to 330 auth keys to each hidden service. GordianServer by default adds the auth key to all three hidden services, if you tap \"remove\" it will remove auth from all three hidden services so use it with caution. The start/stop button allows you to start and stop tor. If Tor is stopped your node will not be reachable remotely. You may use the install/update button to install GordianServer or to update Tor.")
-    }
-
-    @IBAction func torSettingsAction(_ sender: Any) {
-        DispatchQueue.main.async { [unowned vc = self] in
-            vc.timer?.invalidate()
-            vc.timer = nil
-            vc.performSegue(withIdentifier: "goToSettings", sender: vc)
-        }
-    }
-
-    @IBAction func goToSettings(_ sender: Any) {
-        DispatchQueue.main.async { [unowned vc = self] in
-            vc.timer?.invalidate()
-            vc.timer = nil
-            vc.performSegue(withIdentifier: "goToSettings", sender: vc)
-        }
     }
 
     @IBAction func updateBitcoin(_ sender: Any) {
@@ -512,9 +483,23 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     func isBitcoinOn() {
-        DispatchQueue.main.async { [unowned vc = self] in
-            vc.taskDescription.stringValue = "checking if bitcoin core is running..."
-            vc.runScript(script: .isMainOn)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.taskDescription.stringValue = "checking if bitcoin core is running..."
+        }
+        
+        switch chain {
+        case "main":
+            runScript(script: .isMainOn)
+        case "test":
+            runScript(script: .isTestOn)
+        case "regtest":
+            runScript(script: .isRegOn)
+        case "signet":
+            runScript(script: .isSignetOn)
+        default:
+            break
         }
     }
 
@@ -659,8 +644,8 @@ class ViewController: NSViewController, NSWindowDelegate {
         case .checkStandUp:
             checkStandUpParser(result: result)
 
-        case .isMainOn:
-            parseIsMainOn(result: result)
+        case .isMainOn, .isTestOn, .isRegOn, .isSignetOn:
+            parseIsBitcoinOn(result: result)
 
         case .checkForBitcoin:
             parseBitcoindResponse(result: result)
@@ -974,8 +959,8 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     private func progress(dict: [String:AnyObject]) -> String {
         if let verificationprogress = dict["verificationprogress"] as? Double {
-            if verificationprogress >= 0.99 {
-                return "fully synced"
+            if verificationprogress >= 0.9999 {
+                return "100%"
             } else {
                 return "\(Int(verificationprogress*100))% synced"
             }
@@ -984,17 +969,34 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
     }
 
-    private func parseIsMainOn(result: String) {
+    private func parseIsBitcoinOn(result: String) {
         if result.contains("Could not connect to the server 127.0.0.1") {
             mainnetIsOff()
         } else if result.contains("chain") || result.contains("Loading block index...") {
 
             if result.contains("chain") {
                 if let dict = convertStringToDictionary(json: result) {
-                    DispatchQueue.main.async { [unowned vc = self] in
-                        vc.mainnetSyncedLabel.stringValue = vc.progress(dict: dict)
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        
+                        self.mainnetSyncedLabel.stringValue = self.progress(dict: dict)
+                        if let activeChain = dict["chain"] as? String {
+                            switch activeChain {
+                            case "main":
+                                self.mainOn = true
+                            case "test":
+                                self.testOn = true
+                            case "regtest":
+                                self.regTestOn = true
+                            case "signet":
+                                self.isSignetOn = true
+                            default:
+                                break
+                            }
+                        }
                     }
                 }
+            // MARK: TODO - EXPAND THIS
             } else if result.contains("Loading block index...") {
                 DispatchQueue.main.async { [unowned vc = self] in
                     vc.mainnetSyncedLabel.stringValue = "Loading blocks..."
@@ -1003,17 +1005,41 @@ class ViewController: NSViewController, NSWindowDelegate {
 
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.bitcoinRunning = true
-                vc.mainOn = true
+                switch self.chain {
+                case "main":
+                    self.mainOn = true
+                case "test":
+                    self.testOn = true
+                case "regtest":
+                    self.regTestOn = true
+                case "signet":
+                    self.isSignetOn = true
+                default:
+                    break
+                }
                 vc.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
                 vc.startMainnetOutlet.title = "Stop"
                 vc.startMainnetOutlet.isEnabled = true
                 vc.setTimer()
             }
         } else {
-            DispatchQueue.main.async { [unowned vc = self] in
-                vc.mainOn = false
-                vc.startMainnetOutlet.title = "Start"
-                vc.startMainnetOutlet.isEnabled = false
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                
+                switch self.chain {
+                case "main":
+                    self.mainOn = false
+                case "test":
+                    self.testOn = false
+                case "regtest":
+                    self.regTestOn = false
+                case "signet":
+                    self.isSignetOn = false
+                default:
+                    break
+                }
+                self.startMainnetOutlet.title = "Start"
+                self.startMainnetOutlet.isEnabled = false
             }
         }
         if isLoading {
@@ -1021,7 +1047,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
     }
 
-    private func command(chain: String, command: String, completion: @escaping ((Any?)) -> Void) {
+    private func command(command: String, completion: @escaping ((Any?)) -> Void) {
         let rpc = MakeRpcCall.shared
         var port:String!
         switch chain {
@@ -1031,6 +1057,8 @@ class ViewController: NSViewController, NSWindowDelegate {
             port = "18332"
         case "regtest":
             port = "18443"
+        case "signet":
+            port = "38332"
         default:
             break
         }
@@ -1143,7 +1171,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     private func getPeerInfo() {
-        command(chain: "main", command: "getpeerinfo") { response in
+        command(command: "getpeerinfo") { response in
             if let peerInfoArray = response as? NSArray {
                 DispatchQueue.main.async { [unowned vc = self] in
                     vc.mainnetIncomingPeersLabel.stringValue = vc.peerInfo(peerInfoArray).in
@@ -1265,7 +1293,8 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     @objc func automaticRefresh() {
-        refresh()
+        //refresh()
+        refreshAction()
     }
 
     func setEnv() {
@@ -1300,6 +1329,19 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     func setScene() {
         view.backgroundColor = .controlDarkShadowColor
+        let chain = UserDefaults.standard.object(forKey: "chain") as? String ?? "main"
+        switch chain {
+        case "main":
+            networkButton.selectItem(at: 0)
+        case "test":
+            networkButton.selectItem(at: 1)
+        case "regtest":
+            networkButton.selectItem(at: 2)
+        case "signet":
+            networkButton.selectItem(at: 3)
+        default:
+            break
+        }
         taskDescription.stringValue = "checking system..."
         spinner.startAnimation(self)
         icon.wantsLayer = true
@@ -1332,7 +1374,6 @@ class ViewController: NSViewController, NSWindowDelegate {
         mainnetSyncedLabel.stringValue = ""
         mainnetIncomingPeersLabel.stringValue = ""
         mainnetOutgoingPeersLabel.stringValue = ""
-        networkLabel.stringValue = ""
     }
 
     func showstandUpAlert(message: String, info: String) {

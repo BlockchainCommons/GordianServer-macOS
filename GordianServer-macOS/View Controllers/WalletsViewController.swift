@@ -15,7 +15,7 @@ class WalletsViewController: NSViewController, NSTableViewDelegate, NSTableViewD
     var selectedWallet = ""
     var env = [String:String]()
     var index = 0
-    var chain = ""
+    var chain = UserDefaults.standard.object(forKey: "chain") as? String ?? "main"
     let d = Defaults()
     @IBOutlet weak var tableView: NSTableView!
     @IBOutlet weak var spinner: NSProgressIndicator!

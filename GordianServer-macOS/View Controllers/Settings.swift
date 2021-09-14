@@ -23,7 +23,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
     
     @IBOutlet weak var pruneValueField: NSTextField!
     @IBOutlet var directoryLabel: NSTextField!
-    @IBOutlet var nodeLabelField: NSTextField!
+    //@IBOutlet var nodeLabelField: NSTextField!
     @IBOutlet var walletDisabled: NSButton!
     @IBOutlet var txIndexOutlet: NSButton!
     @IBOutlet var goPrivateOutlet: NSButton!
@@ -241,12 +241,12 @@ class Settings: NSViewController, NSTextFieldDelegate {
         }
     }
     
-    @IBAction func saveNodeLabel(_ sender: Any) {
-        if nodeLabelField.stringValue != "" {
-            ud.set(nodeLabelField.stringValue, forKey: "nodeLabel")
-            setSimpleAlert(message: "Success", info: "Node label updated to: \(nodeLabelField.stringValue)", buttonLabel: "OK")
-        }
-    }
+//    @IBAction func saveNodeLabel(_ sender: Any) {
+//        if nodeLabelField.stringValue != "" {
+//            ud.set(nodeLabelField.stringValue, forKey: "nodeLabel")
+//            setSimpleAlert(message: "Success", info: "Node label updated to: \(nodeLabelField.stringValue)", buttonLabel: "OK")
+//        }
+//    }
     
     @IBAction func didSetWalletDisabled(_ sender: Any) {
         let value = walletDisabled.state.rawValue
@@ -471,11 +471,11 @@ class Settings: NSViewController, NSTextFieldDelegate {
                 vc.directoryLabel.stringValue = d.dataDir()
             }
         }
-        if ud.object(forKey: "nodeLabel") != nil {
-            DispatchQueue.main.async { [unowned vc = self] in
-                vc.nodeLabelField.stringValue = vc.ud.object(forKey: "nodeLabel") as! String
-            }
-        }
+//        if ud.object(forKey: "nodeLabel") != nil {
+//            DispatchQueue.main.async { [unowned vc = self] in
+//                vc.nodeLabelField.stringValue = vc.ud.object(forKey: "nodeLabel") as! String
+//            }
+//        }
         DispatchQueue.main.async { [weak self] in
             self?.pruneValueField.stringValue = "\(pruneValue)"
         }

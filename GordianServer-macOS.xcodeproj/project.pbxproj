@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		0AD5BAA026EF2FA50091A075 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD5BA9F26EF2FA50091A075 /* Extensions.swift */; };
+		0AD5BAA226F054390091A075 /* IsSignetOn.command in Resources */ = {isa = PBXBuildFile; fileRef = 0AD5BAA126F054390091A075 /* IsSignetOn.command */; };
+		0AD5BAA426F05AB50091A075 /* StartSignet.command in Resources */ = {isa = PBXBuildFile; fileRef = 0AD5BAA326F05AB50091A075 /* StartSignet.command */; };
+		0AD5BAA626F05D8E0091A075 /* TurnOffSignet.command in Resources */ = {isa = PBXBuildFile; fileRef = 0AD5BAA526F05D8E0091A075 /* TurnOffSignet.command */; };
 		D01471A12371354700F64329 /* LaunchBitcoin.command in Resources */ = {isa = PBXBuildFile; fileRef = D01471A02371354700F64329 /* LaunchBitcoin.command */; };
 		D01B60E62484BAE1005D3090 /* IsMainOn.command in Resources */ = {isa = PBXBuildFile; fileRef = D01B60E52484BAE1005D3090 /* IsMainOn.command */; };
 		D01B60E82484BC20005D3090 /* IsTestOn.command in Resources */ = {isa = PBXBuildFile; fileRef = D01B60E72484BC20005D3090 /* IsTestOn.command */; };
@@ -122,6 +125,9 @@
 
 /* Begin PBXFileReference section */
 		0AD5BA9F26EF2FA50091A075 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		0AD5BAA126F054390091A075 /* IsSignetOn.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = IsSignetOn.command; sourceTree = "<group>"; };
+		0AD5BAA326F05AB50091A075 /* StartSignet.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = StartSignet.command; sourceTree = "<group>"; };
+		0AD5BAA526F05D8E0091A075 /* TurnOffSignet.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = TurnOffSignet.command; sourceTree = "<group>"; };
 		D01471A02371354700F64329 /* LaunchBitcoin.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = LaunchBitcoin.command; sourceTree = "<group>"; };
 		D01B60E52484BAE1005D3090 /* IsMainOn.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = IsMainOn.command; sourceTree = "<group>"; };
 		D01B60E72484BC20005D3090 /* IsTestOn.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = IsTestOn.command; sourceTree = "<group>"; };
@@ -330,6 +336,9 @@
 				D04D4987252C668500D7383E /* WriteLog.command */,
 				D04D4989252C676200D7383E /* GetLog.command */,
 				D04D498B252C6CC500D7383E /* OpenLog.command */,
+				0AD5BAA126F054390091A075 /* IsSignetOn.command */,
+				0AD5BAA326F05AB50091A075 /* StartSignet.command */,
+				0AD5BAA526F05D8E0091A075 /* TurnOffSignet.command */,
 			);
 			path = Scripts;
 			sourceTree = "<group>";
@@ -548,6 +557,7 @@
 				D0DCD8EE236ACD6300F2D15A /* Installer.xib in Resources */,
 				D01B60EA2484BC3E005D3090 /* IsRegtestOn.command in Resources */,
 				D07601182480F8F600706F70 /* OpenTestnetHiddenService.command in Resources */,
+				0AD5BAA626F05D8E0091A075 /* TurnOffSignet.command in Resources */,
 				D0F9352C238CAC48001FF151 /* onion.png in Resources */,
 				D076010C247E074D00706F70 /* CheckHomebrew.command in Resources */,
 				D0BCB337236A6D27000D8FDE /* Assets.xcassets in Resources */,
@@ -586,12 +596,14 @@
 				D049E89E237BD09200294E70 /* StandDown.command in Resources */,
 				D0B9277E2383FCD000956651 /* StopBitcoin.command in Resources */,
 				D0C9439E2500C5AA00DF7339 /* RPC.command in Resources */,
+				0AD5BAA426F05AB50091A075 /* StartSignet.command in Resources */,
 				D0DACF5425145EB300846590 /* GetLightningRpcCreds.command in Resources */,
 				D0534CC8237E4CE70093DE67 /* paste.png in Resources */,
 				D0EB5318237E4E9F002212F8 /* fullynoded_share.png in Resources */,
 				D0BCB33A236A6D27000D8FDE /* Main.storyboard in Resources */,
 				D03063B924FE2375003B44BE /* OpenTorrc.command in Resources */,
 				D0821043238AA78900E21EDC /* blockchaincommons.png in Resources */,
+				0AD5BAA226F054390091A075 /* IsSignetOn.command in Resources */,
 				D01471A12371354700F64329 /* LaunchBitcoin.command in Resources */,
 				D0F613EE24892B680057CC93 /* RemoveOldHost.command in Resources */,
 				D01B60F62484CC83005D3090 /* StartTestd.command in Resources */,

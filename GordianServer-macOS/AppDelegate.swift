@@ -22,6 +22,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         vc.showWindow(self)
     }
     
+    @IBAction func walletsClicked(_ sender: Any) {
+        var myWindow: NSWindow? = nil
+        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+        let wallets = storyboard.instantiateController(withIdentifier: "Wallets") as! WalletsViewController
+        myWindow = NSWindow(contentViewController: wallets)
+        NSApp.activate(ignoringOtherApps: true)
+        myWindow?.makeKeyAndOrderFront(self)
+        let vc = NSWindowController(window: myWindow)
+        vc.showWindow(self)
+    }
+    
     @IBAction func torHostClicked(_ sender: Any) {
         runScript(script: .openMainnetHiddenService, env: ["":""], args: []) { _ in }
     }
