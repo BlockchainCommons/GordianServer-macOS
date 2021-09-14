@@ -959,11 +959,7 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     private func progress(dict: [String:AnyObject]) -> String {
         if let verificationprogress = dict["verificationprogress"] as? Double {
-            if verificationprogress >= 0.9999 {
-                return "100%"
-            } else {
-                return "\(Int(verificationprogress*100))% synced"
-            }
+            return verificationprogress.bitcoinCoreSyncStatus
         } else {
             return ""
         }
@@ -1000,6 +996,10 @@ class ViewController: NSViewController, NSWindowDelegate {
             } else if result.contains("Loading block index...") {
                 DispatchQueue.main.async { [unowned vc = self] in
                     vc.mainnetSyncedLabel.stringValue = "Loading blocks..."
+                }
+            } else {
+                DispatchQueue.main.async { [unowned vc = self] in
+                    vc.mainnetSyncedLabel.stringValue = result
                 }
             }
 
@@ -1148,10 +1148,12 @@ class ViewController: NSViewController, NSWindowDelegate {
             if item.contains("rpcuser") {
                 let arr = item.components(separatedBy: "rpcuser=")
                 rpcuser = arr[1]
+                UserDefaults.standard.setValue("rpcuser", forKey: rpcuser)
             }
             if item.contains("rpcpassword") {
                 let arr = item.components(separatedBy: "rpcpassword=")
                 rpcpassword = arr[1]
+                UserDefaults.standard.setValue("rpcpassword", forKey: rpcpassword)
             }
             if item.contains("testnet=1") || item.contains("testnet=0") || item.contains("regtest=1") || item.contains("regtest=0") {
                 setSimpleAlert(message: "Incompatible bitcoin.conf setting! Standup will not function properly.", info: "GordianServer allows you to run multiple networks simultaneously, we do this by specifying which chain we want to launch as a command line argument. Specifying a network in your bitcoin.conf is incompatible with this approach, please remove the line in your conf file which specifies a network to use GordianServer.", buttonLabel: "OK")
@@ -1263,9 +1265,11 @@ class ViewController: NSViewController, NSWindowDelegate {
         if !response.contains("No such file or directory") {
             let hostnames = response.split(separator: "\n")
             if hostnames.count >= 3 {
-                mainHostname = "\(hostnames[0])"
-                testHostname = "\(hostnames[1])"
-                regHostname = "\(hostnames[2])"
+                UserDefaults.standard.setValue("\(hostnames[0])", forKey: "mainHostname")
+                UserDefaults.standard.setValue("\(hostnames[1])", forKey: "testHostname")
+                UserDefaults.standard.setValue("\(hostnames[2])", forKey: "regHostname")
+                //UserDefaults.standard.setValue("signetHostname", forKey: "\(hostnames[3])")
+                
 //                if hostnames.count == 4 {
 //                    lightningP2pHostname = "\(hostnames[3])"
 //                }

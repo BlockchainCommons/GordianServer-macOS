@@ -27,7 +27,6 @@ class QRDisplayer: NSViewController {
         super.viewDidLoad()
         spinner.alphaValue = 0
         spinnerDescription.alphaValue = 0
-        getValues()
         setQR()
     }
     
@@ -53,20 +52,38 @@ class QRDisplayer: NSViewController {
     }
     
     private func setQR() {
+        let chain = UserDefaults.standard.object(forKey: "chain") as? String ?? "main"
+        
+        switch chain {
+        case "main":
+            rpcport = "8332"
+            torHostname = UserDefaults.standard.object(forKey: "mainHostname") as? String ?? ""
+        case "test":
+            rpcport = "18332"
+            torHostname = UserDefaults.standard.object(forKey: "testHostname") as? String ?? ""
+        case "regtest":
+            rpcport = "18334"
+            torHostname = UserDefaults.standard.object(forKey: "regHostname") as? String ?? ""
+        case "signet":
+            rpcport = "38332"
+            torHostname = UserDefaults.standard.object(forKey: "signetHostname") as? String ?? ""
+        default:
+            break
+        }
+        
+        rpcuser = UserDefaults.standard.object(forKey: "rpcuser") as? String ?? "user"
+        rpcpassword = UserDefaults.standard.object(forKey: "rpcpassword") as? String ?? "password"
+        
+        nodeLabel = Host.current().localizedName?.replacingOccurrences(of: " ", with: "%20") ?? "Gordian%20Server"
+        nodeLabel = nodeLabel.replacingOccurrences(of: "’", with: "")
+        
         var url = "btcstandup://\(rpcuser):\(rpcpassword)@\(torHostname):\(rpcport)/?label=\(nodeLabel)%20-%20\(network)"
         if network == "lightning" {
-            url = "clightning-rpc://lightning:\(httpPass)@\(torHostname):1312/?label=Lightning"
+            url = "clightning-rpc://lightning:\(httpPass)@\(torHostname):8080/?label=Lightning"
         }
         imageView.frame = CGRect(x: 30, y: 30, width: 100, height: 100)
+        print("textInput: \(url)")
         imageView.image = getQRCode(textInput: url)
-    }
-    
-    private func getValues() {
-        let ud = UserDefaults.standard
-        nodeLabel = ud.object(forKey: "nodeLabel") as? String ?? "StandUp%20Node"
-        if nodeLabel.contains(" ") {
-            nodeLabel = nodeLabel.replacingOccurrences(of: " ", with: "%20")
-        }
     }
     
     private func getQRCode(textInput: String) -> NSImage {
@@ -102,12 +119,14 @@ class QRDisplayer: NSViewController {
         DispatchQueue.main.async { [unowned vc = self] in
             var script:SCRIPT!
             switch vc.rpcport {
-            case "1309":
+            case "8332":
                 script = .refreshMainHS
-            case "1310":
+            case "18332":
                 script = .refreshTestHS
-            case "1311":
+            case "18334":
                 script = .refreshRegHS
+            //case "38332":
+            //  script = .refreshSignetHS
             default:
                 break
             }
@@ -152,12 +171,14 @@ class QRDisplayer: NSViewController {
                 let hostnames = output.split(separator: "\n")
                 if hostnames.count == 3 {
                     switch vc.rpcport {
-                    case "1309":
-                        vc.torHostname = "\(hostnames[0])"
-                    case "1310":
-                        vc.torHostname = "\(hostnames[1])"
-                    case "1311":
-                        vc.torHostname = "\(hostnames[2])"
+                    case "8332":
+                        UserDefaults.standard.setValue("mainHostname", forKey: "\(hostnames[0])")
+                    case "18332":
+                        UserDefaults.standard.setValue("testHostname", forKey: "\(hostnames[1])")
+                    case "18334":
+                        UserDefaults.standard.setValue("regHostname", forKey: "\(hostnames[2])")
+                    case "38332":
+                        UserDefaults.standard.setValue("signetHostname", forKey: "\(hostnames[3])")
                     default:
                         break
                     }

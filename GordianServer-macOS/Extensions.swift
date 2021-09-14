@@ -28,3 +28,13 @@ extension String {
         }
     }
 }
+
+extension Double {
+    var bitcoinCoreSyncStatus: String {
+        if self >= 0.9999 {
+            return "100%"
+        } else {
+            return "\(Int(self*100))% synced"
+        }
+    }
+}

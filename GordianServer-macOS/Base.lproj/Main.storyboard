@@ -113,7 +113,7 @@
                                         <menuItem title="Quick Connect" id="HLq-tq-s05">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
-                                                <action selector="bitcoinCoreLogClicked:" target="Voe-Tx-rLC" id="ATA-sz-grI"/>
+                                                <action selector="quickConnectClicked:" target="Voe-Tx-rLC" id="zDn-Lx-D5C"/>
                                             </connections>
                                         </menuItem>
                                     </items>
@@ -1304,7 +1304,7 @@
         <!--Displayer-->
         <scene sceneID="1Fz-md-imP">
             <objects>
-                <viewController id="eC6-Cf-Cnx" customClass="QRDisplayer" customModule="GordianServer_macOS" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="QuickConnect" id="eC6-Cf-Cnx" customClass="QRDisplayer" customModule="GordianServer_macOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="TXs-2Y-7lq">
                         <rect key="frame" x="0.0" y="0.0" width="380" height="369"/>
                         <autoresizingMask key="autoresizingMask"/>

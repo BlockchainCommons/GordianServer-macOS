@@ -67,6 +67,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         runScript(script: .showBitcoinLog, env: env, args: []) { _ in }
     }
     
+    @IBAction func quickConnectClicked(_ sender: Any) {
+        var myWindow: NSWindow? = nil
+        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+        let quickconnect = storyboard.instantiateController(withIdentifier: "QuickConnect") as! QRDisplayer
+        myWindow = NSWindow(contentViewController: quickconnect)
+        NSApp.activate(ignoringOtherApps: true)
+        myWindow?.makeKeyAndOrderFront(self)
+        let vc = NSWindowController(window: myWindow)
+        vc.showWindow(self)
+    }
+    
+    
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
     }
