@@ -10,12 +10,11 @@ import Cocoa
 
 class ViewController: NSViewController, NSWindowDelegate {
     
+    @IBOutlet weak var networkLabel: NSTextField!
     @IBOutlet weak var mainnetIncomingImage: NSImageView!
     @IBOutlet weak var bitcoinCoreWindow: NSView!
     @IBOutlet weak var torWindow: NSView!
-    @IBOutlet weak var bitcoinMainnetWindow: NSView!
     @IBOutlet weak var torAuthWindow: NSView!
-    @IBOutlet weak var mainnetIsOnImage: NSImageView!
     @IBOutlet weak var startMainnetOutlet: NSButton!
     @IBOutlet weak var bitcoinCoreHeaderOutlet: NSTextField!
     @IBOutlet weak var bitcoinCoreVersionOutlet: NSTextField!
@@ -29,9 +28,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     @IBOutlet var updateOutlet: NSButton!
     @IBOutlet var icon: NSImageView!
     @IBOutlet var torRunningImage: NSImageView!
-    @IBOutlet weak var mainnetSyncedView: NSView!
     @IBOutlet weak var mainnetSyncedLabel: NSTextField!
-    @IBOutlet weak var mainnetPeersView: NSView!
     @IBOutlet weak var mainnetIncomingPeersLabel: NSTextField!
     @IBOutlet weak var mainnetOutgoingPeersLabel: NSTextField!
     @IBOutlet weak var bitcoinIsOnHeaderImage: NSImageView!
@@ -665,12 +662,6 @@ class ViewController: NSViewController, NSWindowDelegate {
         case .isMainOn:
             parseIsMainOn(result: result)
 
-//        case .isTestOn:
-//            parseIsTestOn(result: result)
-//
-//        case .isRegOn:
-//            parseIsRegtestOn(result: result)
-
         case .checkForBitcoin:
             parseBitcoindResponse(result: result)
 
@@ -871,7 +862,6 @@ class ViewController: NSViewController, NSWindowDelegate {
         DispatchQueue.main.async { [unowned vc = self] in
             vc.bitcoinRunning = false
             vc.mainOn = false
-            vc.mainnetIsOnImage.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
             vc.startMainnetOutlet.title = "Start"
             vc.startMainnetOutlet.isEnabled = true
         }
@@ -1014,7 +1004,6 @@ class ViewController: NSViewController, NSWindowDelegate {
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.bitcoinRunning = true
                 vc.mainOn = true
-                vc.mainnetIsOnImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
                 vc.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
                 vc.startMainnetOutlet.title = "Stop"
                 vc.startMainnetOutlet.isEnabled = true
@@ -1023,89 +1012,14 @@ class ViewController: NSViewController, NSWindowDelegate {
         } else {
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.mainOn = false
-                vc.mainnetIsOnImage.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
                 vc.startMainnetOutlet.title = "Start"
                 vc.startMainnetOutlet.isEnabled = false
             }
         }
-        runScript(script: .isTestOn)
+        if isLoading {
+            checkBitcoindVersion()
+        }
     }
-
-//    private func parseIsTestOn(result: String) {
-//        if result.contains("Could not connect to the server 127.0.0.1") {
-//            testnetIsOff()
-//        } else if result.contains("chain") || result.contains("Loading block index...") {
-//
-//            if result.contains("chain") {
-//                if let dict = convertStringToDictionary(json: result) {
-//                    DispatchQueue.main.async { [unowned vc = self] in
-//                    }
-//                }
-//            } else if result.contains("Loading block index...") {
-//                DispatchQueue.main.async { [unowned vc = self] in
-//                }
-//            }
-//
-//            DispatchQueue.main.async { [unowned vc = self] in
-//                vc.testOn = true
-//                vc.testnetIsOnImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
-//                vc.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
-//                vc.startTestnetOutlet.title = "Stop"
-//                vc.startTestnetOutlet.isEnabled = true
-//                vc.testWalletsOutlet.isEnabled = true
-//                vc.setTimer()
-//            }
-//        } else {
-//            DispatchQueue.main.async { [unowned vc = self] in
-//                vc.testOn = false
-//                vc.testnetIsOnImage.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
-//                vc.startTestnetOutlet.title = "Start"
-//                vc.testWalletsOutlet.isEnabled = false
-//                vc.startTestnetOutlet.isEnabled = false
-//            }
-//        }
-//        runScript(script: .isRegOn)
-//    }
-
-//    private func parseIsRegtestOn(result: String) {
-//        if result.contains("Could not connect to the server 127.0.0.1") {
-//            regtestIsOff()
-//        } else if result.contains("chain") || result.contains("Loading block index...") {
-//
-//            if result.contains("chain") {
-//                if let dict = convertStringToDictionary(json: result) {
-//                    DispatchQueue.main.async { [unowned vc = self] in
-//                        vc.regtestSyncedLabel.stringValue = vc.progress(dict: dict)
-//                    }
-//                }
-//            } else if result.contains("Loading block index...") {
-//                DispatchQueue.main.async { [unowned vc = self] in
-//                    vc.regtestSyncedLabel.stringValue = "Loading blocks..."
-//                }
-//            }
-//
-//            DispatchQueue.main.async { [unowned vc = self] in
-//                vc.regTestOn = true
-//                vc.regtestIsOnImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
-//                vc.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
-//                vc.startRegtestOutlet.title = "Stop"
-//                vc.startRegtestOutlet.isEnabled = true
-//                vc.regWalletsOutlet.isEnabled = true
-//                vc.setTimer()
-//            }
-//        } else {
-//            DispatchQueue.main.async { [unowned vc = self] in
-//                vc.regTestOn = false
-//                vc.regtestIsOnImage.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
-//                vc.startRegtestOutlet.title = "Start"
-//                vc.startRegtestOutlet.isEnabled = false
-//                vc.regWalletsOutlet.isEnabled = false
-//            }
-//        }
-//        if isLoading {
-//            checkBitcoindVersion()
-//        }
-//    }
 
     private func command(chain: String, command: String, completion: @escaping ((Any?)) -> Void) {
         let rpc = MakeRpcCall.shared
@@ -1327,34 +1241,7 @@ class ViewController: NSViewController, NSWindowDelegate {
 //                if hostnames.count == 4 {
 //                    lightningP2pHostname = "\(hostnames[3])"
 //                }
-//                DispatchQueue.main.async { [unowned vc = self] in
-//                    vc.connectMainnetOutlet.isEnabled = true
-//                    vc.connectTestnetOutlet.isEnabled = true
-//                    vc.connectRegtestOutlet.isEnabled = true
-//                    vc.torMainnetPathOutlet.isEnabled = true
-//                    vc.torTestnetPathOutlet.isEnabled = true
-//                    vc.torRegtestPathOutlet.isEnabled = true
-//                }
-            } else {
-//                DispatchQueue.main.async { [unowned vc = self] in
-//                    vc.connectMainnetOutlet.isEnabled = false
-//                    vc.connectTestnetOutlet.isEnabled = false
-//                    vc.connectRegtestOutlet.isEnabled = false
-//                    vc.torMainnetPathOutlet.isEnabled = false
-//                    vc.torTestnetPathOutlet.isEnabled = false
-//                    vc.torRegtestPathOutlet.isEnabled = false
-//                }
             }
-
-        } else {
-//            DispatchQueue.main.async { [unowned vc = self] in
-//                vc.connectMainnetOutlet.isEnabled = false
-//                vc.connectTestnetOutlet.isEnabled = false
-//                vc.connectRegtestOutlet.isEnabled = false
-//                vc.torMainnetPathOutlet.isEnabled = false
-//                vc.torTestnetPathOutlet.isEnabled = false
-//                vc.torRegtestPathOutlet.isEnabled = false
-//            }
         }
         isTorOn()
     }
@@ -1428,35 +1315,24 @@ class ViewController: NSViewController, NSWindowDelegate {
         torRunningImage.alphaValue = 0
         bitcoinCoreWindow.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)
         torWindow.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)
-        bitcoinMainnetWindow.backgroundColor = #colorLiteral(red: 0.2548701465, green: 0.2549202442, blue: 0.2548669279, alpha: 1)
         torAuthWindow.backgroundColor = #colorLiteral(red: 0.2548701465, green: 0.2549202442, blue: 0.2548669279, alpha: 1)
         bitcoinCoreWindow.wantsLayer = true
         torWindow.wantsLayer = true
-        bitcoinMainnetWindow.wantsLayer = true
         torAuthWindow.wantsLayer = true
-        mainnetSyncedView.wantsLayer = true
-        mainnetPeersView.wantsLayer = true
-        mainnetSyncedView.layer?.borderWidth = 0.75
-        mainnetSyncedView.layer?.cornerRadius = 5
-        mainnetPeersView.layer?.borderWidth = 0.75
-        mainnetPeersView.layer?.cornerRadius = 5
         bitcoinCoreWindow.layer?.borderWidth = 0.75
         bitcoinCoreWindow.layer?.cornerRadius = 8
-        bitcoinMainnetWindow.layer?.borderWidth = 0.75
-        bitcoinMainnetWindow.layer?.cornerRadius = 8
+       
         torWindow.layer?.borderWidth = 0.75
         torWindow.layer?.cornerRadius = 8
         torAuthWindow.layer?.borderWidth = 0.75
         torAuthWindow.layer?.cornerRadius = 8
-        mainnetSyncedView.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
-        mainnetPeersView.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
         bitcoinCoreWindow.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
-        bitcoinMainnetWindow.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
         torWindow.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
         torAuthWindow.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
-        mainnetSyncedLabel.stringValue = "synced ?"
-        mainnetIncomingPeersLabel.stringValue = "?"
-        mainnetOutgoingPeersLabel.stringValue = "?"
+        mainnetSyncedLabel.stringValue = ""
+        mainnetIncomingPeersLabel.stringValue = ""
+        mainnetOutgoingPeersLabel.stringValue = ""
+        networkLabel.stringValue = ""
     }
 
     func showstandUpAlert(message: String, info: String) {
@@ -1478,7 +1354,6 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     private func getLatestVersion(completion: @escaping ((success: Bool, errorMessage: String?)) -> Void) {
-        print("getLatestVersion")
         FetchLatestRelease.get { [unowned vc = self] (dict, error) in
             if dict != nil {
                 if let version = dict!["version"] as? String,
