@@ -72,8 +72,11 @@ class WalletsViewController: NSViewController, NSTableViewDelegate, NSTableViewD
             return
         }
         
-        rpc.command(method: "listwalletdir", port: port, user: rpcuser, password: rpcpassword) { response in
-            guard let wallets = response as? [[String:Any]] else { return }
+        rpc.command(method: "listwalletdir", port: port, user: rpcuser, password: rpcpassword) { (response, error) in
+            guard let response = response as? [String:Any], let wallets = response["wallets"] as? [[String:Any]] else {
+                simpleAlert(message: "There was an issue.", info: error ?? "Unknown error.", buttonLabel: "OK")
+                return
+            }            
             
             for (i, wallet) in wallets.enumerated() {
                 var name = wallet["name"] as? String ?? ""

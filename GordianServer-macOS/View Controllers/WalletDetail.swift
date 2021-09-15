@@ -70,7 +70,7 @@ class WalletDetail: NSViewController {
         setEnv()
         runScript(script: .deleteWallet, env: env, args: []) { (result) in
             if result {
-                simpleAlert(message: "Wallet deleted ✅", info: "", buttonLabel: "OK")
+                simpleAlert(message: "Wallet deleted ✓", info: "", buttonLabel: "OK")
                 DispatchQueue.main.async {
                     NotificationCenter.default.post(name: .reloadWallets, object: nil, userInfo: nil)
                 }

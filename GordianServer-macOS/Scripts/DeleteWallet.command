@@ -8,6 +8,7 @@
 MAINNET_DEFAULT="$DATADIR"/wallets/"$WALLET"
 TESTNET_DEFAULT="$DATADIR"/testnet3/"$WALLET"
 TESTNET_POSSIBLE="$DATADIR"/testnet3/wallets/"$WALLET"
+SIGNET_POSSIBLE="$DATADIR"/signet/wallets/"$WALLET"
 
 function deleteDefault () {
 
@@ -22,6 +23,18 @@ function deleteDefault () {
     
 }
 
+function deleteSignetPossible () {
+
+    if [ -d "$SIGNET_POSSIBLE" ]; then
+        sudo -u $(whoami) /bin/rm -R "$SIGNET_POSSIBLE"
+        echo ""$SIGNET_POSSIBLE" deleted"
+        exit 1
+    else
+        deleteDefault
+    fi
+    
+}
+
 function deleteTestnetDefault () {
 
     if [ -d "$TESTNET_DEFAULT" ]; then
@@ -29,7 +42,7 @@ function deleteTestnetDefault () {
         echo ""$TESTNET_DEFAULT" deleted"
         exit 1
     else
-        deleteDefault
+        deleteSignetPossible
     fi
     
 }

@@ -1062,8 +1062,12 @@ class ViewController: NSViewController, NSWindowDelegate {
         default:
             break
         }
-        rpc.command(method: command, port: port, user: UserDefaults.standard.string(forKey: "rpcuser")!, password: UserDefaults.standard.string(forKey: "rpcpassword")!) { response in
-            completion((response))
+        rpc.command(method: command, port: port, user: UserDefaults.standard.string(forKey: "rpcuser")!, password: UserDefaults.standard.string(forKey: "rpcpassword")!) { (response, error) in
+            if error == nil {
+                completion((response))
+            } else {
+                simpleAlert(message: "There was an issue.", info: error!, buttonLabel: "OK")
+            }
         }
     }
 
