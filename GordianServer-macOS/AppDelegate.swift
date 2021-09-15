@@ -34,15 +34,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @IBAction func torHostClicked(_ sender: Any) {
-        runScript(script: .openMainnetHiddenService, env: ["":""], args: []) { _ in }
+        runScript(script: .openMainnetHiddenService, env: ["CHAIN":UserDefaults.standard.string(forKey: "chain")!], args: []) { _ in }
     }
     
     @IBAction func torAuthenticationClicked(_ sender: Any) {
-        runScript(script: .openAuth, env: ["AUTH_DIR":"/usr/local/var/lib/tor/standup/main/authorized_clients/"], args: []) { _ in }
+        runScript(script: .openAuth, env: ["AUTH_DIR":"/usr/local/var/lib/tor/gordian/\(UserDefaults.standard.string(forKey: "chain")!)/authorized_clients/"], args: []) { _ in }
     }
     
     @IBAction func hiddenServiceDirClicked(_ sender: Any) {
-        runScript(script: .openAuth, env: ["AUTH_DIR":"/usr/local/var/lib/tor/standup/"], args: []) { _ in }
+        runScript(script: .openAuth, env: ["AUTH_DIR":"/usr/local/var/lib/tor/gordian/"], args: []) { _ in }
     }
     
     @IBAction func torCnfigClicked(_ sender: Any) {

@@ -187,7 +187,7 @@ HiddenServicePort 9735 127.0.0.1:9735\
 \
 HiddenServiceDir \/usr\/local\/var\/lib\/tor\/gordian\/lightning\/rpc\/\
 HiddenServiceVersion 3\
-HiddenServicePort 1312 127.0.0.1:1312/g' /usr/local/etc/tor/torrc
+HiddenServicePort 8080 127.0.0.1:8080/g' /usr/local/etc/tor/torrc
 
     echo "Creating hidden service directories at /usr/local/var/lib/tor/gordian"
     
@@ -232,11 +232,20 @@ HiddenServicePort 1312 127.0.0.1:1312/g' /usr/local/etc/tor/torrc
         exit 1
     fi
     
-    mkdir /usr/local/var/lib/tor/gordian/reg
-    if [ -d /usr/local/var/lib/tor/gordian/reg ]; then
-        echo "/usr/local/var/lib/tor/gordian/reg created"
+    mkdir /usr/local/var/lib/tor/gordian/regtest
+    if [ -d /usr/local/var/lib/tor/gordian/regtest ]; then
+        echo "/usr/local/var/lib/tor/gordian/regtest created"
     else
-        echo "There was an error creating /usr/local/var/lib/tor/gordian/reg"
+        echo "There was an error creating /usr/local/var/lib/tor/gordian/regtest"
+        exit 1
+    fi
+    
+    
+    mkdir /usr/local/var/lib/tor/gordian/signet
+    if [ -d /usr/local/var/lib/tor/gordian/signet ]; then
+        echo "/usr/local/var/lib/tor/gordian/signet created"
+    else
+        echo "There was an error creating /usr/local/var/lib/tor/gordian/signet"
         exit 1
     fi
     
@@ -267,7 +276,8 @@ HiddenServicePort 1312 127.0.0.1:1312/g' /usr/local/etc/tor/torrc
     echo "Assigning hidden service directories with permissions 700..."
     chmod 700 /usr/local/var/lib/tor/gordian/main
     chmod 700 /usr/local/var/lib/tor/gordian/test
-    chmod 700 /usr/local/var/lib/tor/gordian/reg
+    chmod 700 /usr/local/var/lib/tor/gordian/regtest
+    chmod 700 /usr/local/var/lib/tor/gordian/signet
     chmod 700 /usr/local/var/lib/tor/gordian/lightning
     chmod 700 /usr/local/var/lib/tor/gordian/lightning/rpc
     chmod 700 /usr/local/var/lib/tor/gordian/lightning/p2p

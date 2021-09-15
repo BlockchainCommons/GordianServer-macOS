@@ -49,8 +49,6 @@
 		D0760110247E084200706F70 /* CheckXCodeSelect.command in Resources */ = {isa = PBXBuildFile; fileRef = D076010F247E084200706F70 /* CheckXCodeSelect.command */; };
 		D0760114247F491E00706F70 /* LaunchStrap.command in Resources */ = {isa = PBXBuildFile; fileRef = D0760113247F491E00706F70 /* LaunchStrap.command */; };
 		D07601162480F79200706F70 /* OpenMainnetHiddenService.command in Resources */ = {isa = PBXBuildFile; fileRef = D07601152480F79200706F70 /* OpenMainnetHiddenService.command */; };
-		D07601182480F8F600706F70 /* OpenTestnetHiddenService.command in Resources */ = {isa = PBXBuildFile; fileRef = D07601172480F8F600706F70 /* OpenTestnetHiddenService.command */; };
-		D076011A2480F95E00706F70 /* OpenRegtestHiddenService.command in Resources */ = {isa = PBXBuildFile; fileRef = D07601192480F95E00706F70 /* OpenRegtestHiddenService.command */; };
 		D08210372389058B00E21EDC /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08210362389058B00E21EDC /* Defaults.swift */; };
 		D0821040238AA76000E21EDC /* tor_logo_redesign copy.png in Resources */ = {isa = PBXBuildFile; fileRef = D082103E238AA76000E21EDC /* tor_logo_redesign copy.png */; };
 		D0821041238AA76000E21EDC /* btccore-copy.png in Resources */ = {isa = PBXBuildFile; fileRef = D082103F238AA76000E21EDC /* btccore-copy.png */; };
@@ -166,8 +164,6 @@
 		D076010F247E084200706F70 /* CheckXCodeSelect.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = CheckXCodeSelect.command; sourceTree = "<group>"; };
 		D0760113247F491E00706F70 /* LaunchStrap.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = LaunchStrap.command; sourceTree = "<group>"; };
 		D07601152480F79200706F70 /* OpenMainnetHiddenService.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = OpenMainnetHiddenService.command; sourceTree = "<group>"; };
-		D07601172480F8F600706F70 /* OpenTestnetHiddenService.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = OpenTestnetHiddenService.command; sourceTree = "<group>"; };
-		D07601192480F95E00706F70 /* OpenRegtestHiddenService.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = OpenRegtestHiddenService.command; sourceTree = "<group>"; };
 		D08210362389058B00E21EDC /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		D082103E238AA76000E21EDC /* tor_logo_redesign copy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tor_logo_redesign copy.png"; sourceTree = "<group>"; };
 		D082103F238AA76000E21EDC /* btccore-copy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btccore-copy.png"; sourceTree = "<group>"; };
@@ -301,8 +297,6 @@
 				D076010F247E084200706F70 /* CheckXCodeSelect.command */,
 				D0760113247F491E00706F70 /* LaunchStrap.command */,
 				D07601152480F79200706F70 /* OpenMainnetHiddenService.command */,
-				D07601172480F8F600706F70 /* OpenTestnetHiddenService.command */,
-				D07601192480F95E00706F70 /* OpenRegtestHiddenService.command */,
 				D01B60E52484BAE1005D3090 /* IsMainOn.command */,
 				D01B60E72484BC20005D3090 /* IsTestOn.command */,
 				D01B60E92484BC3E005D3090 /* IsRegtestOn.command */,
@@ -556,7 +550,6 @@
 				D01B60FA2484CD9A005D3090 /* StopTest.command in Resources */,
 				D0DCD8EE236ACD6300F2D15A /* Installer.xib in Resources */,
 				D01B60EA2484BC3E005D3090 /* IsRegtestOn.command in Resources */,
-				D07601182480F8F600706F70 /* OpenTestnetHiddenService.command in Resources */,
 				0AD5BAA626F05D8E0091A075 /* TurnOffSignet.command in Resources */,
 				D0F9352C238CAC48001FF151 /* onion.png in Resources */,
 				D076010C247E074D00706F70 /* CheckHomebrew.command in Resources */,
@@ -567,7 +560,6 @@
 				D0534CCA237E4DF00093DE67 /* fullynoded_qr.png in Resources */,
 				D0DCD8EA236ACD5300F2D15A /* QRDisplayer.xib in Resources */,
 				D01B6100248616F7005D3090 /* RefreshMainHS.command in Resources */,
-				D076011A2480F95E00706F70 /* OpenRegtestHiddenService.command in Resources */,
 				D0534CC6237E4CC20093DE67 /* ok.png in Resources */,
 				D01B610C248789D1005D3090 /* RemoveAuth.command in Resources */,
 				D01B610224861756005D3090 /* RefreshTestHS.command in Resources */,
