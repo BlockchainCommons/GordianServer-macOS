@@ -91,6 +91,28 @@ class ViewController: NSViewController, NSWindowDelegate {
         self.view.window?.setFrame(frame, display: true)
         refresh()
     }
+    
+    @IBAction func showSettingsAction(_ sender: Any) {
+        var myWindow: NSWindow? = nil
+        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+        let settings = storyboard.instantiateController(withIdentifier: "Settings") as! Settings
+        myWindow = NSWindow(contentViewController: settings)
+        NSApp.activate(ignoringOtherApps: true)
+        myWindow?.makeKeyAndOrderFront(self)
+        let vc = NSWindowController(window: myWindow)
+        vc.showWindow(self)
+    }
+    
+    @IBAction func showQuickConnectAction(_ sender: Any) {
+        var myWindow: NSWindow? = nil
+        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+        let quickconnect = storyboard.instantiateController(withIdentifier: "QuickConnect") as! QRDisplayer
+        myWindow = NSWindow(contentViewController: quickconnect)
+        NSApp.activate(ignoringOtherApps: true)
+        myWindow?.makeKeyAndOrderFront(self)
+        let vc = NSWindowController(window: myWindow)
+        vc.showWindow(self)
+    }    
 
     @objc func refreshNow() {
         refresh()
