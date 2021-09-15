@@ -12,6 +12,7 @@
 		0AD5BAA426F05AB50091A075 /* StartSignet.command in Resources */ = {isa = PBXBuildFile; fileRef = 0AD5BAA326F05AB50091A075 /* StartSignet.command */; };
 		0AD5BAA626F05D8E0091A075 /* TurnOffSignet.command in Resources */ = {isa = PBXBuildFile; fileRef = 0AD5BAA526F05D8E0091A075 /* TurnOffSignet.command */; };
 		0AD5BAA826F1C9F80091A075 /* RefreshSignetHS.command in Resources */ = {isa = PBXBuildFile; fileRef = 0AD5BAA726F1C9F80091A075 /* RefreshSignetHS.command */; };
+		0AD5BAAC26F1D0AC0091A075 /* InstallerPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD5BAAB26F1D0AC0091A075 /* InstallerPrompt.swift */; };
 		D01471A12371354700F64329 /* LaunchBitcoin.command in Resources */ = {isa = PBXBuildFile; fileRef = D01471A02371354700F64329 /* LaunchBitcoin.command */; };
 		D01B60E62484BAE1005D3090 /* IsMainOn.command in Resources */ = {isa = PBXBuildFile; fileRef = D01B60E52484BAE1005D3090 /* IsMainOn.command */; };
 		D01B60E82484BC20005D3090 /* IsTestOn.command in Resources */ = {isa = PBXBuildFile; fileRef = D01B60E72484BC20005D3090 /* IsTestOn.command */; };
@@ -128,6 +129,7 @@
 		0AD5BAA326F05AB50091A075 /* StartSignet.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = StartSignet.command; sourceTree = "<group>"; };
 		0AD5BAA526F05D8E0091A075 /* TurnOffSignet.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = TurnOffSignet.command; sourceTree = "<group>"; };
 		0AD5BAA726F1C9F80091A075 /* RefreshSignetHS.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = RefreshSignetHS.command; sourceTree = "<group>"; };
+		0AD5BAAB26F1D0AC0091A075 /* InstallerPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallerPrompt.swift; sourceTree = "<group>"; };
 		D01471A02371354700F64329 /* LaunchBitcoin.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = LaunchBitcoin.command; sourceTree = "<group>"; };
 		D01B60E52484BAE1005D3090 /* IsMainOn.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = IsMainOn.command; sourceTree = "<group>"; };
 		D01B60E72484BC20005D3090 /* IsTestOn.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = IsTestOn.command; sourceTree = "<group>"; };
@@ -266,6 +268,7 @@
 				D01B61092487873F005D3090 /* AddAuthentication.swift */,
 				D0C9439525009D0A00DF7339 /* WalletsViewController.swift */,
 				D0211A4D250493CB00F7517A /* WalletDetail.swift */,
+				0AD5BAAB26F1D0AC0091A075 /* InstallerPrompt.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -641,6 +644,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0AD5BAAC26F1D0AC0091A075 /* InstallerPrompt.swift in Sources */,
 				D08210372389058B00E21EDC /* Defaults.swift in Sources */,
 				D06E3937236BE46E0072924A /* Settings.swift in Sources */,
 				D01B610824877301005D3090 /* MakeRPCCall.swift in Sources */,

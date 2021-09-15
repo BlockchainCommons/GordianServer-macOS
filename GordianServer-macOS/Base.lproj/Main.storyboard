@@ -60,10 +60,17 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Go To" id="HyV-fh-RgO">
                                     <items>
-                                        <menuItem title="Tor Host" id="snW-S8-Cw5">
+                                        <menuItem title="Gordian Server Log" id="snW-S8-Cw5">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
-                                                <action selector="torHostClicked:" target="Voe-Tx-rLC" id="HUp-FF-oik"/>
+                                                <action selector="gordianLogClicked:" target="Voe-Tx-rLC" id="sSN-X3-bVc"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="rQS-f7-wUP"/>
+                                        <menuItem title="Tor Host" id="WNo-zO-KSp">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="torHostClicked:" target="Voe-Tx-rLC" id="db5-4S-hIb"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Tor Authentication" id="PKB-1Y-3l7">
@@ -732,6 +739,7 @@
                         <segue destination="eC6-Cf-Cnx" kind="show" identifier="showPairingCode" id="Yl0-9Y-9DR"/>
                         <segue destination="lGs-ue-8Wa" kind="show" identifier="goInstall" id="cqP-Ve-rOY"/>
                         <segue destination="ISO-tJ-wFf" kind="show" identifier="addAuth" id="Emg-xH-9n3"/>
+                        <segue destination="4YR-eD-8jP" kind="show" identifier="segueToInstallPrompt" id="eOO-Cx-yzE"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -949,6 +957,64 @@
                 <customObject id="x9B-Yz-jYb" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1247" y="196"/>
+        </scene>
+        <!--Installer Prompt-->
+        <scene sceneID="glJ-BV-lSP">
+            <objects>
+                <viewController storyboardIdentifier="InstallerPrompt" id="4YR-eD-8jP" customClass="InstallerPrompt" customModule="GordianServer_macOS" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="hpn-y2-owJ">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="283"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="4dS-mf-dlr">
+                                <rect key="frame" x="18" y="65" width="414" height="170"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="170" id="icT-eb-hdM"/>
+                                </constraints>
+                                <textFieldCell key="cell" selectable="YES" title="Multiline Label" id="suu-1w-E7i">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="955-94-4Ru">
+                                <rect key="frame" x="190" y="13" width="70" height="32"/>
+                                <buttonCell key="cell" type="push" title="Install" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="zsh-NV-pP2">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="installAction:" target="4YR-eD-8jP" id="WNA-N6-0kc"/>
+                                </connections>
+                            </button>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FhE-sA-Djn">
+                                <rect key="frame" x="20" y="246" width="44" height="19"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="HJA-j1-Fwe">
+                                    <font key="font" metaFont="system" size="16"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="955-94-4Ru" secondAttribute="bottom" constant="20" symbolic="YES" id="D5y-fu-0qM"/>
+                            <constraint firstItem="FhE-sA-Djn" firstAttribute="top" secondItem="hpn-y2-owJ" secondAttribute="top" constant="18" id="E6a-El-R8g"/>
+                            <constraint firstItem="955-94-4Ru" firstAttribute="top" secondItem="4dS-mf-dlr" secondAttribute="bottom" constant="25" id="FRe-Gy-06a"/>
+                            <constraint firstItem="4dS-mf-dlr" firstAttribute="leading" secondItem="hpn-y2-owJ" secondAttribute="leading" constant="20" symbolic="YES" id="Hp0-bH-5hh"/>
+                            <constraint firstItem="FhE-sA-Djn" firstAttribute="leading" secondItem="hpn-y2-owJ" secondAttribute="leading" constant="22" id="QXq-1s-hpq"/>
+                            <constraint firstItem="4dS-mf-dlr" firstAttribute="top" secondItem="FhE-sA-Djn" secondAttribute="bottom" constant="11" id="SpT-n1-phM"/>
+                            <constraint firstAttribute="trailing" secondItem="4dS-mf-dlr" secondAttribute="trailing" constant="20" symbolic="YES" id="iy6-EL-Ctd"/>
+                            <constraint firstItem="955-94-4Ru" firstAttribute="centerX" secondItem="hpn-y2-owJ" secondAttribute="centerX" id="tJf-xw-Y4s"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="header" destination="FhE-sA-Djn" id="e8S-dU-vqe"/>
+                        <outlet property="label" destination="4dS-mf-dlr" id="pPV-TY-Jyz"/>
+                    </connections>
+                </viewController>
+                <customObject id="X73-tY-iC4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1268" y="532.5"/>
         </scene>
         <!--segueToWallets-->
         <scene sceneID="TTy-Zr-KGm">
@@ -1396,7 +1462,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Yel-Hw-wBk"/>
+        <segue reference="cqP-Ve-rOY"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="NSActionTemplate" width="15" height="15"/>

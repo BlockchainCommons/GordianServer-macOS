@@ -53,6 +53,7 @@ class QRDisplayer: NSViewController {
     
     private func setQR() {
         let chain = UserDefaults.standard.object(forKey: "chain") as? String ?? "main"
+        network = chain
         
         switch chain {
         case "main":

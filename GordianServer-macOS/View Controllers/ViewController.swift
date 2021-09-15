@@ -70,6 +70,8 @@ class ViewController: NSViewController, NSWindowDelegate {
     //var lightningInstalled = false
     var env = [String:String]()
     let d = Defaults()
+    var infoMessage = ""
+    var headerText = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -346,7 +348,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                     let pruneInGb = Double(pruned) / 954.0
                     let rounded = Double(round(100 * pruneInGb) / 100)
 
-                    var info = """
+                    self.infoMessage = """
                     By default Gordian Server will install and configure a pruned (\(rounded)gb) Bitcoin Core v\(version) node and Tor v0.4.6.7
 
                     You can always edit settings via File > Settings.
@@ -359,7 +361,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                     """
 
                     if pruned == 0 || pruned == 1 {
-                        info = """
+                        self.infoMessage = """
                         GordianServer will install and configure Bitcoin Core v\(version) node and Tor v0.4.6.7
 
                         You have set pruning to \(pruned), you can always edit the pruning amount in settings.
@@ -373,7 +375,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                     }
 
                     if txindex == 1 {
-                        info = """
+                        self.infoMessage = """
                         Gordian Server will install and configure a fully indexed Bitcoin Core v\(version) node and Tor v0.4.6.7
 
                         You can always edit the pruning size in settings.
@@ -385,16 +387,22 @@ class ViewController: NSViewController, NSWindowDelegate {
                         It will create or add missing rpc credentials to the bitcoin.conf in \(directory).
                         """
                     }
-
-                    vc.showstandUpAlert(message: "Install Bitcoin Core and Tor?", info: info)
+                    
+                    self.headerText = "Install Bitcoin Core and Tor?"
+                    self.ignoreExistingBitcoin = false
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        
+                        self.performSegue(withIdentifier: "segueToInstallPrompt", sender: self)
+                    }
                 }
 
                 // Bitcoind and possibly tor are already installed
                 if vc.bitcoinInstalled {
 
-                    var message = "Install Bitcoin Core v\(version) and Tor with GordianServer?"
+                    self.headerText = "Install Bitcoin Core v\(version) and Tor with GordianServer?"
 
-                    var infoMessage = """
+                    self.infoMessage = """
                     You have an existing version of Bitcoin Core installed.
 
                     Selecting yes will tell Gordian Server to download, verify and install a fresh Bitcoin Core v\(version) installation in ~/.gordian/BitcoinCore, Gordian Server will not overwrite your existing node.
@@ -405,9 +413,9 @@ class ViewController: NSViewController, NSWindowDelegate {
                     """
 
                     if vc.torInstalled {
-                        message = "Verify and install Bitcoin Core v\(version) with Gordian Server?"
+                        self.headerText = "Verify and install Bitcoin Core v\(version) with Gordian Server?"
 
-                        infoMessage = """
+                        self.infoMessage = """
                         You have an existing version of Bitcoin Core and Tor installed.
 
                         Selecting yes will tell Gordian Server to download, verify and install a fresh Bitcoin Core v\(version) installation in ~/.gordian/BitcoinCore. This will **not** overwrite your existing node.
@@ -419,17 +427,12 @@ class ViewController: NSViewController, NSWindowDelegate {
                         Looks like you also already have Tor installed, Gordian Server will always check to see if Tor has already been configured properly, if you have not already created Hidden Services for your nodes rpcport it will create them for you.
                         """
                     }
-
-                    actionAlert(message: message, info: infoMessage) { response in
-
-                        if response {
-                            DispatchQueue.main.async { [unowned vc = self] in
-                                vc.standingUp = true
-                                vc.ignoreExistingBitcoin = true
-                                vc.timer?.invalidate()
-                                vc.performSegue(withIdentifier: "goInstall", sender: vc)
-                            }
-                        }
+                    
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        
+                        self.ignoreExistingBitcoin = true
+                        self.performSegue(withIdentifier: "segueToInstallPrompt", sender: self)
                     }
                 } else {
                     standup()
@@ -1453,6 +1456,22 @@ class ViewController: NSViewController, NSWindowDelegate {
         case "segueToWallets":
             if let vc = segue.destinationController as? WalletsViewController {
                 vc.chain = chain
+            }
+            
+        case "segueToInstallPrompt":
+            if let vc = segue.destinationController as? InstallerPrompt {
+                vc.text = infoMessage
+                vc.headerText = headerText
+                
+                vc.doneBlock = { response in
+                    if response {
+                        DispatchQueue.main.async { [unowned vc = self] in
+                            vc.standingUp = true
+                            vc.timer?.invalidate()
+                            vc.performSegue(withIdentifier: "goInstall", sender: vc)
+                        }
+                    }
+                }
             }
 
         default:

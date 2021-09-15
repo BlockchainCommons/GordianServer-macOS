@@ -10,6 +10,11 @@ import Cocoa
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
+    
+    @IBAction func gordianLogClicked(_ sender: Any) {
+        runScript(script: .openLog, env: ["":""], args: []) { _ in }
+    }
+    
 
     @IBAction func settingsClicked(_ sender: Any) {
         var myWindow: NSWindow? = nil
