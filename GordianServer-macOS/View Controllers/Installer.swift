@@ -298,7 +298,7 @@ class Installer: NSViewController {
             self?.run(script: .standDown, env: ["":""]) { log in
                 DispatchQueue.main.async { [weak self] in
                     self?.hideSpinner()
-                    simpleAlert(message: "Success", info: "You have stood down", buttonLabel: "OK")
+                    simpleAlert(message: "Success", info: "You have uninstalled Tor, removed Bitcoin Core and ~/.gordian.", buttonLabel: "OK")
                     self?.goBack()
                 }
             }

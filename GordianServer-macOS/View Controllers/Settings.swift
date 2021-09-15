@@ -208,7 +208,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
     
     @IBAction func removeStandUp(_ sender: Any) {
         DispatchQueue.main.async {
-            actionAlert(message: "Danger!", info: "This will remove the ~/.standup directory including *All* its contents!\n\nIt will remove your Bitcoin Core binaries and the lightning folder.\n\nThis will remove tor config, tor hidden services and uninstall tor.\n\nAre you aure you want to do this?") { [unowned vc = self] response in
+            actionAlert(message: "Danger!", info: "This will remove the ~/.gordian directory including *All* its contents!\n\nIt will remove your Bitcoin Core binaries.\n\nThis will remove the tor config, tor hidden services and uninstall tor.\n\nAre you aure you want to do this?") { [unowned vc = self] response in
                 if response {
                     let domain = Bundle.main.bundleIdentifier!
                     UserDefaults.standard.removePersistentDomain(forName: domain)

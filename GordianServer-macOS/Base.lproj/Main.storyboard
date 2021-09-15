@@ -1170,7 +1170,7 @@
                                             </textField>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qXk-Df-K34">
                                                 <rect key="frame" x="-7" y="18" width="106" height="32"/>
-                                                <buttonCell key="cell" type="push" title="stand down" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="VEE-iH-7JG">
+                                                <buttonCell key="cell" type="push" title="kill all ☠️" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="VEE-iH-7JG">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
