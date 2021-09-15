@@ -364,6 +364,8 @@ class Installer: NSViewController {
     }
     
     func setScene() {
+        window?.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)
+        consoleOutput.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)
         consoleOutput.textColor = NSColor.green
         consoleOutput.isEditable = false
         consoleOutput.isSelectable = true

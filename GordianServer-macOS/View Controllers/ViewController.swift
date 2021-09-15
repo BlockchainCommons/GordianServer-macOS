@@ -251,35 +251,9 @@ class ViewController: NSViewController, NSWindowDelegate {
         addAuth()
     }
 
-    @IBAction func showMainConnect(_ sender: Any) {
-        DispatchQueue.main.async { [unowned vc = self] in
-            vc.rpcport = "1309"
-            vc.network = "main"
-            vc.torHostname = vc.mainHostname
-            vc.performSegue(withIdentifier: "showPairingCode", sender: vc)
-        }
-    }
-
-    @IBAction func showTestConnect(_ sender: Any) {
-        DispatchQueue.main.async { [unowned vc = self] in
-            vc.rpcport = "1310"
-            vc.network = "test"
-            vc.torHostname = vc.testHostname
-            vc.performSegue(withIdentifier: "showPairingCode", sender: vc)
-        }
-    }
-
-    @IBAction func showRegConnect(_ sender: Any) {
-        DispatchQueue.main.async { [unowned vc = self] in
-            vc.rpcport = "1311"
-            vc.network = "regtest"
-            vc.torHostname = vc.regHostname
-            vc.performSegue(withIdentifier: "showPairingCode", sender: vc)
-        }
-    }
-
     @IBAction func startMainnetAction(_ sender: Any) {
         startMainnetOutlet.isEnabled = false
+        
         switch chain {
         case "main":
             if !mainOn {

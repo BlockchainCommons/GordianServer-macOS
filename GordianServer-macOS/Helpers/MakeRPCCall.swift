@@ -36,6 +36,8 @@ class MakeRpcCall {
                     switch httpResponse.statusCode {
                     case 401:
                         completion((nil, "Looks like your rpc credentials are incorrect, please double check them. If you changed your rpc creds in your bitcoin.conf you need to restart your node for the changes to take effect."))
+                    case 503:
+                        completion(("", nil))
                     default:
                         completion((nil, "Unable to decode the response from your node, http status code: \(httpResponse.statusCode)"))
                     }
