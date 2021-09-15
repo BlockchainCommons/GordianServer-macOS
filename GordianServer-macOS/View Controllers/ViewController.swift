@@ -1091,7 +1091,9 @@ class ViewController: NSViewController, NSWindowDelegate {
             if error == nil {
                 completion((response))
             } else {
-                simpleAlert(message: "There was an issue.", info: error!, buttonLabel: "OK")
+                if !error!.contains("Could not connect to the server") {
+                    simpleAlert(message: "There was an issue.", info: error!, buttonLabel: "OK")
+                }
             }
         }
     }
