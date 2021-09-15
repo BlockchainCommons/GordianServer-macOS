@@ -5,5 +5,5 @@
 #
 #  Created by Peter on 10/6/20.
 #  Copyright © 2020 Peter. All rights reserved.
-echo "$LOG" > ~/.standup/standup.log
+echo "$LOG" > ~/.gordian/gordian.log
 exit

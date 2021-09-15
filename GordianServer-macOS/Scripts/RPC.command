@@ -5,5 +5,5 @@
 #
 #  Created by Peter on 9/3/20.
 #  Copyright © 2020 Peter. All rights reserved.
-sudo -u $(whoami) ~/.standup/BitcoinCore/$PREFIX/bin/bitcoin-cli -chain=$CHAIN $COMMAND
+sudo -u $(whoami) ~/.gordian/BitcoinCore/$PREFIX/bin/bitcoin-cli -datadir=$DATADIR -chain=$CHAIN $COMMAND
 exit 1

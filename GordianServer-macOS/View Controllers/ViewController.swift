@@ -302,7 +302,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             DispatchQueue.main.async {
                 FetchLatestRelease.get { (dict, err) in
                     if err != nil {
-                        setSimpleAlert(message: "Error", info: "Error fetching latest release: \(err ?? "unknown error")", buttonLabel: "OK")
+                        simpleAlert(message: "Error", info: "Error fetching latest release: \(err ?? "unknown error")", buttonLabel: "OK")
                     } else {
                         let version = dict!["version"] as! String
                         actionAlert(message: "Upgrade to Bitcoin Core \(version)?", info: "") { (response) in
@@ -332,7 +332,7 @@ class ViewController: NSViewController, NSWindowDelegate {
 
             if error != nil {
                 vc.hideSpinner()
-                setSimpleAlert(message: "Error", info: error ?? "We had an error fetching the latest version of Bitcoin Core, please check your internet connection and try again", buttonLabel: "OK")
+                simpleAlert(message: "Error", info: error ?? "We had an error fetching the latest version of Bitcoin Core, please check your internet connection and try again", buttonLabel: "OK")
 
             } else {
                 vc.hideSpinner()
@@ -347,46 +347,46 @@ class ViewController: NSViewController, NSWindowDelegate {
                     let rounded = Double(round(100 * pruneInGb) / 100)
 
                     var info = """
-                    GordianServer will by default install and configure a pruned Bitcoin Core v\(version) node and Tor v0.4.3.6
+                    By default Gordian Server will install and configure a pruned (\(rounded)gb) Bitcoin Core v\(version) node and Tor v0.4.6.7
 
-                    You can always edit the pruning size in settings. By default we prune the blockchain to \(rounded)gb.
+                    You can always edit settings via File > Settings.
 
-                    If you would like to install a different node go to \"Settings\" for pruning, mainnet, data directory and tor related options, you can always adjust the settings and restart your node for the changes to take effect.
+                    If your node is already running you will need to restart it for the new settings to take effect.
 
-                    GordianServer will create the following directory: /Users/\(NSUserName())/.standup
+                    Gordian Server will create the following directory: /Users/\(NSUserName())/.gordian
 
-                    By default it will create or add missing rpc credentials to the bitcoin.conf in \(directory).
+                    It will create or add missing rpc credentials to the bitcoin.conf in \(directory).
                     """
 
                     if pruned == 0 || pruned == 1 {
                         info = """
-                        GordianServer will install and configure Bitcoin Core v\(version) node and Tor v0.4.3.6
+                        GordianServer will install and configure Bitcoin Core v\(version) node and Tor v0.4.6.7
 
                         You have set pruning to \(pruned), you can always edit the pruning amount in settings.
 
-                        If you would like to install a different node go to \"Settings\" for pruning, mainnet, data directory and tor related options, you can always adjust the settings and restart your node for the changes to take effect.
+                        You can always edit settings via File > Settings.
 
-                        GordianServer will create the following directory: /Users/\(NSUserName())/.standup
+                        GordianServer will create the following directory: /Users/\(NSUserName())/.gordian
 
-                        By default it will create or add missing rpc credentials to the bitcoin.conf in \(directory).
+                        It will create or add missing rpc credentials to the bitcoin.conf in \(directory).
                         """
                     }
 
                     if txindex == 1 {
                         info = """
-                        GordianServer will install and configure a fully indexed Bitcoin Core v\(version) node and Tor v0.4.3.6
+                        Gordian Server will install and configure a fully indexed Bitcoin Core v\(version) node and Tor v0.4.6.7
 
                         You can always edit the pruning size in settings.
 
-                        If you would like to install a different node go to \"Settings\" for pruning, mainnet, data directory and tor related options, you can always adjust the settings and restart your node for the changes to take effect.
+                        You can always edit settings via File > Settings.
 
-                        GordianServer will create the following directory: /Users/\(NSUserName())/.standup
+                        Gordian Server will create the following directory: /Users/\(NSUserName())/.gordian
 
-                        By default it will create or add missing rpc credentials to the bitcoin.conf in \(directory).
+                        It will create or add missing rpc credentials to the bitcoin.conf in \(directory).
                         """
                     }
 
-                    vc.showstandUpAlert(message: "Ready to Standup?", info: info)
+                    vc.showstandUpAlert(message: "Install Bitcoin Core and Tor?", info: info)
                 }
 
                 // Bitcoind and possibly tor are already installed
@@ -397,26 +397,26 @@ class ViewController: NSViewController, NSWindowDelegate {
                     var infoMessage = """
                     You have an existing version of Bitcoin Core installed.
 
-                    Selecting yes will tell GordianServer to download, verify and install a fresh Bitcoin Core v\(version) installation in ~/.standup/BitcoinCore, GordianServer will not overwrite your existing node.
+                    Selecting yes will tell Gordian Server to download, verify and install a fresh Bitcoin Core v\(version) installation in ~/.gordian/BitcoinCore, Gordian Server will not overwrite your existing node.
 
-                    Your existing bitcoin.conf file will be checked for rpc username and password, if none exist GordianServer will create them for you, all other bitcoin.conf settings will remain in place.
+                    Your existing bitcoin.conf file will be checked for rpc username and password, if none exist Gordian Server will create them for you, all other bitcoin.conf settings will remain in place.
 
-                    GordianServer will also install Tor v0.4.3.6 and configure hidden services for your nodes rpcport so that you may easily and securely connect to your node remotely.
+                    Gordian Server will also install Tor v0.4.6.7 and configure hidden services for your nodes rpcport so that you may easily and securely connect to your node remotely.
                     """
 
                     if vc.torInstalled {
-                        message = "Verify and install Bitcoin Core v\(version) with GordianServer?"
+                        message = "Verify and install Bitcoin Core v\(version) with Gordian Server?"
 
                         infoMessage = """
                         You have an existing version of Bitcoin Core and Tor installed.
 
-                        Selecting yes will tell GordianServer to download, verify and install a fresh Bitcoin Core v\(version) installation in ~/.standup/BitcoinCore. This will **not** overwrite your existing node.
+                        Selecting yes will tell Gordian Server to download, verify and install a fresh Bitcoin Core v\(version) installation in ~/.gordian/BitcoinCore. This will **not** overwrite your existing node.
 
-                        Your existing bitcoin.conf file will be checked for rpc username and password, if none exist GordianServer will create them for you, all other bitcoin.conf settings will remain in place.
+                        Your existing bitcoin.conf file will be checked for rpc username and password, if none exist Gordian Server will create them for you, all other bitcoin.conf settings will remain in place.
 
-                        We do this so that we may verify the signatures of the binaries ourself and only use the binary we verified.
+                        We do this so that we may verify the hashes of the binaries ourself and only use the binary we verified.
 
-                        Looks like you also already have Tor installed, GordianServer will always check to see if Tor has already been configured properly, if you have not already created Hidden Services for your nodes rpcport it will create them for you.
+                        Looks like you also already have Tor installed, Gordian Server will always check to see if Tor has already been configured properly, if you have not already created Hidden Services for your nodes rpcport it will create them for you.
                         """
                     }
 
@@ -503,13 +503,13 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
     }
 
-    func checkSigs() {
-        DispatchQueue.main.async { [unowned vc = self] in
-            vc.taskDescription.stringValue = "verifying pgp signatures..."
-            vc.runScript(script: .verifyBitcoin)
-            vc.hideSpinner()
-        }
-    }
+//    func checkSigs() {
+//        DispatchQueue.main.async { [unowned vc = self] in
+//            vc.taskDescription.stringValue = "verifying pgp signatures..."
+//            vc.runScript(script: .verifyBitcoin)
+//            vc.hideSpinner()
+//        }
+//    }
 
     func checkBitcoindVersion() {
         DispatchQueue.main.async { [unowned vc = self] in
@@ -541,7 +541,7 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     func checkForStandUp() {
         DispatchQueue.main.async { [unowned vc = self] in
-            vc.taskDescription.stringValue = "checking for ~/.standup directory..."
+            vc.taskDescription.stringValue = "checking for ~/.gordian directory..."
             vc.runScript(script: .checkStandUp)
         }
     }
@@ -603,14 +603,14 @@ class ViewController: NSViewController, NSWindowDelegate {
             
             if let output = String(data: data, encoding: .utf8) {
                 #if DEBUG
-                print("output: \(output)")
+                //print("output: \(output)")
                 #endif
                 result += output
             }
             
             if let errorOutput = String(data: errData, encoding: .utf8) {
                 #if DEBUG
-                print("error: \(errorOutput)")
+                //print("error: \(errorOutput)")
                 #endif
                 result += errorOutput
             }
@@ -1062,7 +1062,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         default:
             break
         }
-        rpc.command(method: command, port: port, user: rpcuser, password: rpcpassword) { response in
+        rpc.command(method: command, port: port, user: UserDefaults.standard.string(forKey: "rpcuser")!, password: UserDefaults.standard.string(forKey: "rpcpassword")!) { response in
             completion((response))
         }
     }
@@ -1148,15 +1148,15 @@ class ViewController: NSViewController, NSWindowDelegate {
             if item.contains("rpcuser") {
                 let arr = item.components(separatedBy: "rpcuser=")
                 rpcuser = arr[1]
-                UserDefaults.standard.setValue("rpcuser", forKey: rpcuser)
+                UserDefaults.standard.setValue(rpcuser, forKey: "rpcuser")
             }
             if item.contains("rpcpassword") {
                 let arr = item.components(separatedBy: "rpcpassword=")
                 rpcpassword = arr[1]
-                UserDefaults.standard.setValue("rpcpassword", forKey: rpcpassword)
+                UserDefaults.standard.setValue(rpcpassword, forKey: "rpcpassword")
             }
             if item.contains("testnet=1") || item.contains("testnet=0") || item.contains("regtest=1") || item.contains("regtest=0") {
-                setSimpleAlert(message: "Incompatible bitcoin.conf setting! Standup will not function properly.", info: "GordianServer allows you to run multiple networks simultaneously, we do this by specifying which chain we want to launch as a command line argument. Specifying a network in your bitcoin.conf is incompatible with this approach, please remove the line in your conf file which specifies a network to use GordianServer.", buttonLabel: "OK")
+                simpleAlert(message: "Incompatible bitcoin.conf setting! Standup will not function properly.", info: "GordianServer allows you to run multiple networks simultaneously, we do this by specifying which chain we want to launch as a command line argument. Specifying a network in your bitcoin.conf is incompatible with this approach, please remove the line in your conf file which specifies a network to use GordianServer.", buttonLabel: "OK")
             }
         }
         if rpcpassword != "" && rpcuser != "" {
@@ -1201,7 +1201,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     func checkIfTorIsConfigured(response: String) {
-        if response.contains("HiddenServiceDir /usr/local/var/lib/tor/standup/") {
+        if response.contains("HiddenServiceDir /usr/local/var/lib/tor/gordian/") {
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.torConfigured = true
             }
@@ -1281,11 +1281,11 @@ class ViewController: NSViewController, NSWindowDelegate {
     func parseVerifyResult(result: String) {
         let binaryName = env["BINARY_NAME"] ?? ""
         if result.contains("\(binaryName): OK") {
-            showAlertMessage(message: "Success", info: "Wladimir J. van der Laan signatures for \(binaryName) and SHA256SUMS.asc match")
-        } else if result.contains("No ~/.standup/BitcoinCore directory") {
+            showAlertMessage(message: "Verified ✓", info: "The sha256 hashes for \(binaryName) and the SHA256SUMS file match.")
+        } else if result.contains("No ~/.gordian/BitcoinCore directory") {
             showAlertMessage(message: "Error", info: "You are using a version of Bitcoin Core which was not installed by GordianServer, we are not yet able to verify Bitcoin Core instances not installed by GordianServer.")
         } else {
-            showAlertMessage(message: "DANGER!!! Invalid signatures...", info: "Please delete the ~/.standup folder and app and report an issue on the github, PGP signatures are not valid")
+            showAlertMessage(message: "DANGER!!! Invalid signatures...", info: "Please delete the ~/.gordian folder and app and report an issue on the github, hashes do not match.")
         }
     }
 
@@ -1297,7 +1297,6 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     @objc func automaticRefresh() {
-        //refresh()
         refreshAction()
     }
 
@@ -1310,7 +1309,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     func showAlertMessage(message: String, info: String) {
-        setSimpleAlert(message: message, info: info, buttonLabel: "OK")
+        simpleAlert(message: message, info: info, buttonLabel: "OK")
     }
 
     func startSpinner(description: String) {

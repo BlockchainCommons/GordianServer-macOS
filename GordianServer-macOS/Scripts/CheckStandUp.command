@@ -5,7 +5,7 @@
 #
 #  Created by Peter on 27/12/19.
 #  Copyright © 2019 Blockchain Commons, LLC
-if [ -d ~/.standup/BitcoinCore ]; then
+if [ -d ~/.gordian/BitcoinCore ]; then
   echo "True"
 
 else

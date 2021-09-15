@@ -44,10 +44,10 @@ class AddAuthentication: NSViewController, NSWindowDelegate {
                     }
                 }
             } else {
-                setSimpleAlert(message: "Error", info: "Incorrect format, the correct format is:\n\ndescriptor:x25519:<public key here>", buttonLabel: "OK")
+                simpleAlert(message: "Error", info: "Incorrect format, the correct format is:\n\ndescriptor:x25519:<public key here>", buttonLabel: "OK")
             }
         } else {
-            setSimpleAlert(message: "Fill out a public key first", info: "", buttonLabel: "OK")
+            simpleAlert(message: "Fill out a public key first", info: "", buttonLabel: "OK")
         }
     }
     
@@ -65,12 +65,12 @@ class AddAuthentication: NSViewController, NSWindowDelegate {
         runScript(script: .authenticate, env: ["":""], args: [pubkey,filename]) { success in
             if success {
                 DispatchQueue.main.async { [unowned vc = self] in
-                    setSimpleAlert(message: "Successfully added auth key", info: "Tor is now restarting.", buttonLabel: "OK")
+                    simpleAlert(message: "Successfully added auth key", info: "Tor is now restarting.", buttonLabel: "OK")
                     vc.textInput.stringValue = ""
                     vc.textInput.resignFirstResponder()
                 }
             } else {
-                setSimpleAlert(message: "Error", info: "error authenticating", buttonLabel: "OK")
+                simpleAlert(message: "Error", info: "error authenticating", buttonLabel: "OK")
             }
         }
     }

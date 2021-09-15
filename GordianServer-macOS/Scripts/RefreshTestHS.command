@@ -8,9 +8,9 @@
 echo "Refreshing testnet hidden services..."
 echo "Stopping Tor..."
 sudo -u $(whoami) /usr/local/bin/brew services stop tor
-rm -f /usr/local/var/lib/tor/standup/test/hostname
-rm -f /usr/local/var/lib/tor/standup/test/hs_ed25519_public_key
-rm -f /usr/local/var/lib/tor/standup/test/hs_ed25519_secret_key
+rm -f /usr/local/var/lib/tor/gordian/test/hostname
+rm -f /usr/local/var/lib/tor/gordian/test/hs_ed25519_public_key
+rm -f /usr/local/var/lib/tor/gordian/test/hs_ed25519_secret_key
 echo "Starting Tor..."
 sudo -u $(whoami) /usr/local/bin/brew services start tor
 exit 1

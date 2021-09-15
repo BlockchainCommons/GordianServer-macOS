@@ -20,7 +20,7 @@ public func randomString(length: Int) -> String {
     return String((0...length-1).map{ _ in letters.randomElement()! })
 }
 
-public func setSimpleAlert(message: String, info: String, buttonLabel: String) {
+public func simpleAlert(message: String, info: String, buttonLabel: String) {
     
     DispatchQueue.main.async {
         

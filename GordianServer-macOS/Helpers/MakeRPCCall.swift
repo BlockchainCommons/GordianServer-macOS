@@ -34,7 +34,6 @@ class MakeRpcCall {
                         if (json["error"] as? NSDictionary) != nil {
                             completion((nil))
                         } else {
-                            print("jsonResult: \(json["result"] as Any)")
                             completion(((json["result"] as Any)))
                         }
                     } catch {

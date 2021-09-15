@@ -42,7 +42,6 @@ class WalletsViewController: NSViewController, NSTableViewDelegate, NSTableViewD
     private func loadTable() {
         wallets.removeAll()
         index = 0
-        setEnv()
         getWallets()
     }
     
@@ -51,32 +50,48 @@ class WalletsViewController: NSViewController, NSTableViewDelegate, NSTableViewD
         static let WalletLoadedCell = "WalletLoadedCellID"
     }
     
-    func setEnv() {
-        env = ["BINARY_NAME":d.existingBinary(),"VERSION":d.existingPrefix(),"PREFIX":d.existingPrefix(),"DATADIR":d.dataDir(), "CHAIN":chain, "COMMAND":"listwalletdir"]
-        #if DEBUG
-        print("env = \(env)")
-        #endif
-    }
-    
     private func getWallets() {
-        runScript(script: .rpc, env: env, args: [""]) { [weak self] (ws) in
-            if ws != nil {
-                for (i, wallet) in ws!.enumerated() {
-                    let dict = wallet as? NSDictionary ?? [:]
-                    var name = dict["name"] as? String ?? ""
-                    if name == "" {
-                        name = "Default wallet"
-                    }
-                    self?.wallets.append(name)
-                    if i + 1 == ws!.count {
-                        DispatchQueue.main.async { [weak self] in
-                            self?.tableView.reloadData()
-                        }
+        let rpc = MakeRpcCall.shared
+        var port:String!
+        switch chain {
+        case "main":
+            port = "8332"
+        case "test":
+            port = "18332"
+        case "regtest":
+            port = "18443"
+        case "signet":
+            port = "38332"
+        default:
+            break
+        }
+        
+        guard let rpcuser = UserDefaults.standard.object(forKey: "rpcuser") as? String,
+              let rpcpassword = UserDefaults.standard.object(forKey: "rpcpassword") as? String else {
+            simpleAlert(message: "Missing rpc credentials.", info: "Please refresh the home screen to refresh your rpc credentials first. You can add new credentials by clicking \"Go To\" > \"Bitcoin Config\" and adding a rpcuser and rpcpassword to the file.", buttonLabel: "OK")
+            return
+        }
+        
+        rpc.command(method: "listwalletdir", port: port, user: rpcuser, password: rpcpassword) { response in
+            guard let wallets = response as? [[String:Any]] else { return }
+            
+            for (i, wallet) in wallets.enumerated() {
+                var name = wallet["name"] as? String ?? ""
+                if name == "" {
+                    name = "Default wallet"
+                }
+                self.wallets.append(name)
+                if i + 1 == wallets.count {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        
+                        self.tableView.reloadData()
                     }
                 }
             }
         }
     }
+    
 
     func numberOfRows(in tableView: NSTableView) -> Int {
         return wallets.count
@@ -139,7 +154,7 @@ class WalletsViewController: NSViewController, NSTableViewDelegate, NSTableViewD
         if let errorOutput = String(data: errorData, encoding: .utf8) {
             if errorOutput != "" {
                 errorMessage += errorOutput
-                setSimpleAlert(message: "Error", info: errorMessage, buttonLabel: "OK")
+                simpleAlert(message: "Error", info: errorMessage, buttonLabel: "OK")
                 completion((nil))
             }
         }

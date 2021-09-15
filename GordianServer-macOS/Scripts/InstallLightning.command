@@ -10,9 +10,9 @@ function configureHiddenServices () {
 
     echo "Checking if lightning hidden service's exist..."
     
-    if [ -d /usr/local/var/lib/tor/standup/lightning ]; then
+    if [ -d /usr/local/var/lib/tor/gordian/lightning ]; then
     
-        echo "/usr/local/var/lib/tor/standup/lightning exists."
+        echo "/usr/local/var/lib/tor/gordian/lightning exists."
         
     else
     
@@ -20,44 +20,44 @@ function configureHiddenServices () {
         
         sed -i -e 's/HiddenServicePort 1311 127.0.0.1:18443/HiddenServicePort 1311 127.0.0.1:18443\
 \
-HiddenServiceDir \/usr\/local\/var\/lib\/tor\/standup\/lightning\/p2p\/\
+HiddenServiceDir \/usr\/local\/var\/lib\/tor\/gordian\/lightning\/p2p\/\
 HiddenServiceVersion 3\
 HiddenServicePort 9735 127.0.0.1:9735\
 \
-HiddenServiceDir \/usr\/local\/var\/lib\/tor\/standup\/lightning\/rpc\/\
+HiddenServiceDir \/usr\/local\/var\/lib\/tor\/gordian\/lightning\/rpc\/\
 HiddenServiceVersion 3\
 HiddenServicePort 1312 127.0.0.1:1312/g' /usr/local/etc/tor/torrc
         
-        mkdir /usr/local/var/lib/tor/standup/lightning
+        mkdir /usr/local/var/lib/tor/gordian/lightning
         
-        if [ -d /usr/local/var/lib/tor/standup/lightning ]; then
-            echo "/usr/local/var/lib/tor/standup/lightning created"
+        if [ -d /usr/local/var/lib/tor/gordian/lightning ]; then
+            echo "/usr/local/var/lib/tor/gordian/lightning created"
         else
-            echo "There was an error creating /usr/local/var/lib/tor/standup/lightning"
+            echo "There was an error creating /usr/local/var/lib/tor/gordian/lightning"
             exit 1
         fi
         
-        mkdir /usr/local/var/lib/tor/standup/lightning/p2p
+        mkdir /usr/local/var/lib/tor/gordian/lightning/p2p
         
-        if [ -d /usr/local/var/lib/tor/standup/lightning/p2p ]; then
-            echo "/usr/local/var/lib/tor/standup/lightning/p2p created"
+        if [ -d /usr/local/var/lib/tor/gordian/lightning/p2p ]; then
+            echo "/usr/local/var/lib/tor/gordian/lightning/p2p created"
         else
-            echo "There was an error creating /usr/local/var/lib/tor/standup/lightning/p2p"
+            echo "There was an error creating /usr/local/var/lib/tor/gordian/lightning/p2p"
             exit 1
         fi
         
-        mkdir /usr/local/var/lib/tor/standup/lightning/rpc
+        mkdir /usr/local/var/lib/tor/gordian/lightning/rpc
         
-        if [ -d /usr/local/var/lib/tor/standup/lightning/rpc ]; then
-            echo "/usr/local/var/lib/tor/standup/lightning/rpc created"
+        if [ -d /usr/local/var/lib/tor/gordian/lightning/rpc ]; then
+            echo "/usr/local/var/lib/tor/gordian/lightning/rpc created"
         else
-            echo "There was an error creating /usr/local/var/lib/tor/standup/lightning/rpc"
+            echo "There was an error creating /usr/local/var/lib/tor/gordian/lightning/rpc"
             exit 1
         fi
         
-        chmod 700 /usr/local/var/lib/tor/standup/lightning
-        chmod 700 /usr/local/var/lib/tor/standup/lightning/rpc
-        chmod 700 /usr/local/var/lib/tor/standup/lightning/p2p
+        chmod 700 /usr/local/var/lib/tor/gordian/lightning
+        chmod 700 /usr/local/var/lib/tor/gordian/lightning/rpc
+        chmod 700 /usr/local/var/lib/tor/gordian/lightning/p2p
         
         echo "Rebooting Tor..."
         sudo -u $(whoami) /usr/local/bin/brew services restart tor
@@ -189,7 +189,7 @@ function installLightning () {
     export LDFLAGS="-L/usr/local/opt/sqlite/lib"
     export CPPFLAGS="-I/usr/local/opt/sqlite/include"
     
-    cd ~/.standup
+    cd ~/.gordian
     git clone https://github.com/ElementsProject/lightning.git
     cd lightning
     git checkout tags/v0.9.1
@@ -197,7 +197,7 @@ function installLightning () {
     sudo -u $(whoami) /usr/local/bin/pip3 install --upgrade pip
     sudo -u $(whoami) /usr/local/bin/pip3 install mako
 
-    sudo -u $(whoami) ~/.standup/lightning/configure
+    sudo -u $(whoami) ~/.gordian/lightning/configure
     /usr/bin/make
 }
 
@@ -206,12 +206,12 @@ function configureLightning () {
 CONFIG="alias=Gordian-Server\n\
 bitcoin-rpcpassword="$RPC_PASSWORD"\n\
 bitcoin-rpcuser="$RPC_USER"\n\
-bitcoin-cli=/Users/$USER/.standup/BitcoinCore/"$PREFIX"/bin/bitcoin-cli\n\
+bitcoin-cli=/Users/$USER/.gordian/BitcoinCore/"$PREFIX"/bin/bitcoin-cli\n\
 bitcoin-datadir="$DATA_DIR"\n\
 network=bitcoin\n\
 plugin=/Users/$USER/.lightning/plugins/c-lightning-http-plugin/target/release/c-lightning-http-plugin\n\
 proxy=127.0.0.1:9050\n\
-announce-addr="$(cat /usr/local/var/lib/tor/standup/lightning/p2p/hostname)"\n\
+announce-addr="$(cat /usr/local/var/lib/tor/gordian/lightning/p2p/hostname)"\n\
 bind-addr=127.0.0.1:9735\n\
 log-file=/Users/$USER/.lightning/lightning.log\n\
 log-level=debug:plugin\n\

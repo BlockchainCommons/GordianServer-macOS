@@ -5,9 +5,9 @@
 #
 #  Created by Peter on 19/11/19.
 #  Copyright © 2019 Blockchain Commons, LLC
-if [ -d ~/.standup/BitcoinCore ]; then
+if [ -d ~/.gordian/BitcoinCore ]; then
 
-  ~/.standup/BitcoinCore/$PREFIX/bin/bitcoin-cli -datadir="$DATADIR" stop
+  ~/.gordian/BitcoinCore/$PREFIX/bin/bitcoin-cli -datadir="$DATADIR" stop
 
 else
 

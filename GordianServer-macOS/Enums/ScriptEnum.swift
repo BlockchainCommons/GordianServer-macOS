@@ -82,5 +82,6 @@ public enum BTCCONF: String {
     case regtest = "regtest"
     case disablewallet = "disablewallet"
     case datadir = "datadir"
+    case blocksdir = "blocksdir"
     
 }

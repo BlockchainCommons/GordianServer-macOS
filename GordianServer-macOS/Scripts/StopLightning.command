@@ -5,5 +5,5 @@
 #
 #  Created by Peter on 9/17/20.
 #  Copyright © 2020 Peter. All rights reserved.
-sudo -u $(whoami) ~/.standup/lightning/cli/lightning-cli stop
+sudo -u $(whoami) ~/.gordian/lightning/cli/lightning-cli stop
 exit 1

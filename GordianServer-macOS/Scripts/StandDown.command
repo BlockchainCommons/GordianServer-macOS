@@ -5,8 +5,8 @@
 #
 #  Created by Peter on 13/11/19.
 #  Copyright © 2019 Blockchain Commons, LLC
-echo "Removing ~/.standup"
-rm -rf ~/.standup
+echo "Removing ~/.gordian"
+rm -rf ~/.gordian
 echo "Removing /usr/local/etc/tor"
 rm -rf /usr/local/etc/tor
 echo "Removing /usr/local/var/lib/tor"

@@ -37,9 +37,9 @@ class Defaults {
     let ud = UserDefaults.standard
     
     func setDefaults(completion: @escaping () -> Void) {
-        if ud.object(forKey: "dataDir") == nil {
-            ud.set("/Users/\(NSUserName())/Library/Application Support/Bitcoin", forKey: "dataDir")
-        }
+//        if ud.object(forKey: "dataDir") == nil {
+//            ud.set("/Users/\(NSUserName())/Library/Application\\ Support/Bitcoin", forKey: "dataDir")
+//        }
         
         func setLocals() {
             if ud.object(forKey: "prune") == nil {
@@ -127,7 +127,11 @@ class Defaults {
     }
     
     func dataDir() -> String {
-        return ud.object(forKey:"dataDir") as? String ?? "/Users/\(NSUserName())/Application Support/Bitcoin"
+        return "/Users/\(NSUserName())/Library/Application Support/Bitcoin"
+    }
+    
+    func blocksDir() -> String {
+        return ud.object(forKey: "blocksDir") as? String ?? "/Users/\(NSUserName())/Library/Application Support/Bitcoin"
     }
     
     func isPrivate() -> Int {

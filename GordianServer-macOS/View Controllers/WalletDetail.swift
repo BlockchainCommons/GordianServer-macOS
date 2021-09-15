@@ -61,7 +61,7 @@ class WalletDetail: NSViewController {
                 }
             }
         } else {
-            setSimpleAlert(message: "Action not permitted", info: "Sorry, you can not delete the default wallet, you need to do that manually", buttonLabel: "OK")
+            simpleAlert(message: "Action not permitted", info: "Sorry, you can not delete the default wallet, you need to do that manually", buttonLabel: "OK")
         }
         
     }
@@ -70,7 +70,7 @@ class WalletDetail: NSViewController {
         setEnv()
         runScript(script: .deleteWallet, env: env, args: []) { (result) in
             if result {
-                setSimpleAlert(message: "Wallet deleted ✅", info: "", buttonLabel: "OK")
+                simpleAlert(message: "Wallet deleted ✅", info: "", buttonLabel: "OK")
                 DispatchQueue.main.async {
                     NotificationCenter.default.post(name: .reloadWallets, object: nil, userInfo: nil)
                 }
@@ -102,7 +102,7 @@ class WalletDetail: NSViewController {
         if let errorOutput = String(data: errorData, encoding: .utf8) {
             if errorOutput != "" {
                 errorMessage += errorOutput
-                setSimpleAlert(message: "Error", info: errorMessage, buttonLabel: "OK")
+                simpleAlert(message: "Error", info: errorMessage, buttonLabel: "OK")
                 completion((false))
             }
         }

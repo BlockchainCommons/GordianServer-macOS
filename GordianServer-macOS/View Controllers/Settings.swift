@@ -52,8 +52,6 @@ class Settings: NSViewController, NSTextFieldDelegate {
         runScript(script: .openLightningConfig, env: ["":""], args: []) { _ in }
     }
     
-    
-    
     @IBAction func deleteWalletsAction(_ sender: Any) {
         DispatchQueue.main.async { [weak self] in
             self?.performSegue(withIdentifier: "segueToDeleteWallets", sender: self)
@@ -163,7 +161,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
                 }
                 vc.setBitcoinConf(conf: stringConf, activeOutlet: vc.goPrivateOutlet, newValue: 3, key: "")
             } else {
-                setSimpleAlert(message: "Error", info: "We had a problem getting your bitcoin.conf, please try again", buttonLabel: "OK")
+                simpleAlert(message: "Error", info: "We had a problem getting your bitcoin.conf, please try again", buttonLabel: "OK")
             }
         }
     }
@@ -199,7 +197,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
                 }
                 vc.setBitcoinConf(conf: stringConf, activeOutlet: vc.goPrivateOutlet, newValue: 3, key: "")
             } else {
-                setSimpleAlert(message: "Error", info: "We had a problem getting your bitcoin.conf, please try again", buttonLabel: "OK")
+                simpleAlert(message: "Error", info: "We had a problem getting your bitcoin.conf, please try again", buttonLabel: "OK")
             }
         }
     }
@@ -231,9 +229,9 @@ class Settings: NSViewController, NSTextFieldDelegate {
                     let env = ["DATADIR":d.dataDir()]
                     vc.runScript(script: .removeBitcoin, env: env, args: []) { success in
                         if success {
-                            setSimpleAlert(message: "Bitcoin directory and its contents were deleted", info: "", buttonLabel: "OK")
+                            simpleAlert(message: "Bitcoin directory and its contents were deleted", info: "", buttonLabel: "OK")
                         } else {
-                           setSimpleAlert(message: "Error", info: "There was an issue deleting the directory", buttonLabel: "OK")
+                           simpleAlert(message: "Error", info: "There was an issue deleting the directory", buttonLabel: "OK")
                         }
                     }
                 }
@@ -244,7 +242,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
 //    @IBAction func saveNodeLabel(_ sender: Any) {
 //        if nodeLabelField.stringValue != "" {
 //            ud.set(nodeLabelField.stringValue, forKey: "nodeLabel")
-//            setSimpleAlert(message: "Success", info: "Node label updated to: \(nodeLabelField.stringValue)", buttonLabel: "OK")
+//            simpleAlert(message: "Success", info: "Node label updated to: \(nodeLabelField.stringValue)", buttonLabel: "OK")
 //        }
 //    }
     
@@ -319,9 +317,32 @@ class Settings: NSViewController, NSTextFieldDelegate {
             if result.rawValue == NSApplication.ModalResponse.OK.rawValue {
                 vc.selectedFolder = panel.urls[0]
                 DispatchQueue.main.async { [unowned vc = self] in
-                    vc.directoryLabel.stringValue = self.selectedFolder?.path ?? Defaults().dataDir()
-                    vc.ud.set(vc.directoryLabel.stringValue, forKey: "dataDir")
-                    vc.getSettings()
+                    vc.directoryLabel.stringValue = self.selectedFolder?.path ?? Defaults().blocksDir()
+                    
+                    self.getBitcoinConf { [unowned vc = self] (conf, error) in
+                        if !error && conf != nil {
+                            var stringConf = conf!.joined(separator: "\n")
+                            if stringConf.contains("blocksdir=") {
+                                for item in conf! {
+                                    if item.hasPrefix("blocksdir=") {
+                                        let existingValue = item.replacingOccurrences(of: "blocksdir=", with: "")
+                                        stringConf = stringConf.replacingOccurrences(of: "blocksdir=\(existingValue)", with: "blocksdir=\(vc.directoryLabel.stringValue)")
+                                        /// Remove appended newline before saving.
+                                        stringConf.removeLast()
+                                        self.setBlocksDir(conf: stringConf, newValue: vc.directoryLabel.stringValue)
+                                        break
+                                    }
+                                }
+                            } else {
+                                stringConf = "blocksdir=\(vc.directoryLabel.stringValue)\n\(stringConf)"
+                                stringConf.removeLast()
+                                self.setBlocksDir(conf: stringConf, newValue: vc.directoryLabel.stringValue)
+                            }
+                        } else {
+                            vc.ud.set(vc.directoryLabel.stringValue, forKey: "blocksDir")
+                            vc.getSettings()
+                        }
+                    }
                 }
             }
         }
@@ -341,10 +362,26 @@ class Settings: NSViewController, NSTextFieldDelegate {
                 if newValue < 2 || key == "prune" {
                     vc.ud.set(newValue, forKey: key)
                 }
-                setSimpleAlert(message: "Success", info: "bitcoin.conf updated", buttonLabel: "OK")
+                simpleAlert(message: "Success", info: "bitcoin.conf updated", buttonLabel: "OK")
             } else {
-                setSimpleAlert(message: "Error Updating bitcoin.conf", info: "", buttonLabel: "OK")
+                simpleAlert(message: "Error Updating bitcoin.conf", info: "", buttonLabel: "OK")
             }
+        }
+    }
+    
+    func setBlocksDir(conf: String, newValue: String) {
+        let d = Defaults()
+        let env = ["CONF":conf,"DATADIR":d.dataDir()]
+        runScript(script: .updateBTCConf, env: env, args: args) { [weak self] success in
+            guard let self = self else { return }
+            
+            if success {
+                self.ud.set(newValue, forKey: "blocksDir")
+                simpleAlert(message: "Success", info: "bitcoin.conf updated", buttonLabel: "OK")
+            } else {
+                simpleAlert(message: "Error Updating bitcoin.conf", info: "", buttonLabel: "OK")
+            }
+            self.getSettings()
         }
     }
     
@@ -357,7 +394,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
     func parseBitcoinConf(conf: [String], keyToUpdate: BTCCONF, outlet: NSButton?, newValue: Int) {
         
         func alertSettingNotForCurrentNetwork() {
-            setSimpleAlert(message: "Error", info: "You are attempting to update a setting that is network specific. You must select the correct network first then update the setting.", buttonLabel: "OK")
+            simpleAlert(message: "Error", info: "You are attempting to update a setting that is network specific. You must select the correct network first then update the setting.", buttonLabel: "OK")
         }
         
         for setting in conf {
@@ -371,7 +408,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
                             if let i = Int(value) {
                                 vc.updateGlobalConfArray(conf: conf, oldValue: i, newValue: newValue, key: key, outlet: outlet)
                             } else {
-                                setSimpleAlert(message: "Error", info: "We had an error updating your bitcoin.conf file", buttonLabel: "OK")
+                                simpleAlert(message: "Error", info: "We had an error updating your bitcoin.conf file", buttonLabel: "OK")
                             }
                         } else {
                             vc.revert(outlet: outlet)
@@ -468,7 +505,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
         setState(int: d.isPrivate(), outlet: goPrivateOutlet)
         if ud.object(forKey: "dataDir") != nil {
             DispatchQueue.main.async { [unowned vc = self] in
-                vc.directoryLabel.stringValue = d.dataDir()
+                vc.directoryLabel.stringValue = d.blocksDir()
             }
         }
 //        if ud.object(forKey: "nodeLabel") != nil {
@@ -561,7 +598,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
                 actionAlert(message: "Update prune setting?", info: info) { (response) in
                     if response {
                         self.ud.set(amount, forKey: "prune")
-                        setSimpleAlert(message: "Success ✅", info: "Prune setting updated", buttonLabel: "OK")
+                        simpleAlert(message: "Success ✅", info: "Prune setting updated", buttonLabel: "OK")
                     }
                 }
             }

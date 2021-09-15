@@ -58,7 +58,7 @@ class Installer: NSViewController {
             if error != nil {
                 
                 self.hideSpinner()
-                setSimpleAlert(message: "Error", info: "There was an error fetching the latest Bitcoin Core version number and related URL's, please check your internet connection and try again", buttonLabel: "OK")
+                simpleAlert(message: "Error", info: "There was an error fetching the latest Bitcoin Core version number and related URL's, please check your internet connection and try again", buttonLabel: "OK")
                 
             } else {
                 
@@ -67,15 +67,16 @@ class Installer: NSViewController {
                 let shaURL = dict!["shaURL"] as! String
                 let version = dict!["version"] as! String
                 let prefix = dict!["binaryPrefix"] as! String
+                let signatures = dict!["shasumsSignedUrl"] as! String
                 self.showSpinner(description: "Setting Up...")
                 
                 if self.upgrading {
 
-                    self.upgradeBitcoinCore(binaryName: binaryName, macosURL: macosURL, shaURL: shaURL, version: version, prefix: prefix)
+                    self.upgradeBitcoinCore(binaryName: binaryName, macosURL: macosURL, shaURL: shaURL, version: version, prefix: prefix, sigsUrl: signatures)
 
                 } else {
 
-                    self.standUp(binaryName: binaryName, macosURL: macosURL, shaURL: shaURL, version: version, prefix: prefix)
+                    self.standUp(binaryName: binaryName, macosURL: macosURL, shaURL: shaURL, version: version, prefix: prefix, sigsUrl: signatures)
 
                 }
                 
@@ -158,6 +159,9 @@ class Installer: NSViewController {
                             let existingValue = arr[1]
                             
                             switch k {
+                            case "blocksdir":
+                                UserDefaults.standard.setValue(existingValue, forKey: "blockDir")
+                                
                             case "rpcuser":
                                 if existingValue != "" {
                                     userExists = true
@@ -172,7 +176,7 @@ class Installer: NSViewController {
                                 
                             case "testnet", "regtest":
                                 if existingValue != "" {
-                                    setSimpleAlert(message: "Incompatible bitcoin.conf setting!", info: "GordianServer allows you to run multiple networks simultaneously, we do this by specifying which chain we want to launch as a command line argument. Specifying a network in your bitcoin.conf is not compatible with this approach, please remove the line in your conf file which specifies a network.", buttonLabel: "OK")
+                                    simpleAlert(message: "Incompatible bitcoin.conf setting!", info: "GordianServer allows you to run multiple networks simultaneously, we do this by specifying which chain we want to launch as a command line argument. Specifying a network in your bitcoin.conf is not compatible with this approach, please remove the line in your conf file which specifies a network.", buttonLabel: "OK")
                                 }
                                 
                             case "proxy", "#proxy":
@@ -263,6 +267,7 @@ class Installer: NSViewController {
         maxconnections=20
         maxuploadtarget=500
         fallbackfee=0.00009
+        blocksdir=\(d.blocksDir())
         #bindaddress=127.0.0.1
         #proxy=127.0.0.1:9050
         #listen=1
@@ -293,21 +298,21 @@ class Installer: NSViewController {
             self?.run(script: .standDown, env: ["":""]) { log in
                 DispatchQueue.main.async { [weak self] in
                     self?.hideSpinner()
-                    setSimpleAlert(message: "Success", info: "You have stood down", buttonLabel: "OK")
+                    simpleAlert(message: "Success", info: "You have stood down", buttonLabel: "OK")
                     self?.goBack()
                 }
             }
         }
     }
     
-    func standUp(binaryName: String, macosURL: String, shaURL: String, version: String, prefix: String) {
+    func standUp(binaryName: String, macosURL: String, shaURL: String, version: String, prefix: String, sigsUrl: String) {
         var ignore = "NO"
         if ignoreExistingBitcoin {
             ignore = "YES"
         }
         let d = Defaults()
         showLog = true
-        let env = ["BINARY_NAME":binaryName, "MACOS_URL":macosURL, "SHA_URL":shaURL, "VERSION":version, "PREFIX":prefix, "CONF":standUpConf, "DATADIR":d.dataDir(), "IGNORE_EXISTING_BITCOIN":ignore]
+        let env = ["BINARY_NAME":binaryName, "MACOS_URL":macosURL, "SHA_URL":shaURL, "VERSION":version, "PREFIX":prefix, "CONF":standUpConf, "DATADIR":d.dataDir(), "IGNORE_EXISTING_BITCOIN":ignore, "SIGS_URL": sigsUrl]
         let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
         taskQueue.async { [weak self] in
             self?.run(script: .standUp, env: env) { log in
@@ -327,9 +332,9 @@ class Installer: NSViewController {
         }
     }
     
-    func upgradeBitcoinCore(binaryName: String, macosURL: String, shaURL: String, version: String, prefix: String) {
+    func upgradeBitcoinCore(binaryName: String, macosURL: String, shaURL: String, version: String, prefix: String, sigsUrl: String) {
         upgrading = false
-        let env = ["BINARY_NAME":binaryName, "MACOS_URL":macosURL, "SHA_URL":shaURL, "VERSION":version]
+        let env = ["BINARY_NAME":binaryName, "MACOS_URL":macosURL, "SHA_URL":shaURL, "VERSION":version, "SIGS_URL": sigsUrl]
         showLog = true
         let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
         taskQueue.async { [weak self] in
