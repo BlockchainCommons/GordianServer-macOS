@@ -5,5 +5,5 @@
 #
 #  Created by Peter on 10/6/20.
 #  Copyright © 2020 Peter. All rights reserved.
-open ~/.gordian/standup.log
+open ~/.gordian/gordian.log
 exit

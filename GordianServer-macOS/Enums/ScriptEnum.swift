@@ -50,6 +50,7 @@ public enum SCRIPT: String {
     case refreshMainHS = "RefreshMainHS"
     case refreshTestHS = "RefreshTestHS"
     case refreshRegHS = "RefreshRegHS"
+    case refreshSignetHS = "RefreshSignetHS"
     case removeAuth = "RemoveAuth"
     case checkForAuth = "CheckForAuth"
     case checkForOldHost = "CheckForOldHost"

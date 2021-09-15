@@ -125,8 +125,8 @@ class QRDisplayer: NSViewController {
                 script = .refreshTestHS
             case "18334":
                 script = .refreshRegHS
-            //case "38332":
-            //  script = .refreshSignetHS
+            case "38332":
+                script = .refreshSignetHS
             default:
                 break
             }
@@ -169,21 +169,37 @@ class QRDisplayer: NSViewController {
                 print("output: \(output)")
                 #endif
                 let hostnames = output.split(separator: "\n")
-                if hostnames.count == 3 {
+                if hostnames.count == 4 {
                     switch vc.rpcport {
                     case "8332":
                         UserDefaults.standard.setValue("mainHostname", forKey: "\(hostnames[0])")
+                        vc.torHostname = "\(hostnames[3])"
+                        DispatchQueue.main.async {
+                            vc.updateImage()
+                        }
                     case "18332":
                         UserDefaults.standard.setValue("testHostname", forKey: "\(hostnames[1])")
+                        vc.torHostname = "\(hostnames[3])"
+                        DispatchQueue.main.async {
+                            vc.updateImage()
+                        }
                     case "18334":
                         UserDefaults.standard.setValue("regHostname", forKey: "\(hostnames[2])")
+                        vc.torHostname = "\(hostnames[3])"
+                        DispatchQueue.main.async {
+                            vc.updateImage()
+                        }
                     case "38332":
                         UserDefaults.standard.setValue("signetHostname", forKey: "\(hostnames[3])")
+                        vc.torHostname = "\(hostnames[3])"
+                        DispatchQueue.main.async {
+                            vc.updateImage()
+                        }
                     default:
                         break
                     }
+                    
                 }
-                vc.updateImage()
             }
         }
     }

@@ -1272,7 +1272,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                 UserDefaults.standard.setValue("\(hostnames[0])", forKey: "mainHostname")
                 UserDefaults.standard.setValue("\(hostnames[1])", forKey: "testHostname")
                 UserDefaults.standard.setValue("\(hostnames[2])", forKey: "regHostname")
-                //UserDefaults.standard.setValue("signetHostname", forKey: "\(hostnames[3])")
+                UserDefaults.standard.setValue("\(hostnames[3])", forKey: "signetHostname")
                 
 //                if hostnames.count == 4 {
 //                    lightningP2pHostname = "\(hostnames[3])"

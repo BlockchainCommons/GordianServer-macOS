@@ -11,6 +11,7 @@
 		0AD5BAA226F054390091A075 /* IsSignetOn.command in Resources */ = {isa = PBXBuildFile; fileRef = 0AD5BAA126F054390091A075 /* IsSignetOn.command */; };
 		0AD5BAA426F05AB50091A075 /* StartSignet.command in Resources */ = {isa = PBXBuildFile; fileRef = 0AD5BAA326F05AB50091A075 /* StartSignet.command */; };
 		0AD5BAA626F05D8E0091A075 /* TurnOffSignet.command in Resources */ = {isa = PBXBuildFile; fileRef = 0AD5BAA526F05D8E0091A075 /* TurnOffSignet.command */; };
+		0AD5BAA826F1C9F80091A075 /* RefreshSignetHS.command in Resources */ = {isa = PBXBuildFile; fileRef = 0AD5BAA726F1C9F80091A075 /* RefreshSignetHS.command */; };
 		D01471A12371354700F64329 /* LaunchBitcoin.command in Resources */ = {isa = PBXBuildFile; fileRef = D01471A02371354700F64329 /* LaunchBitcoin.command */; };
 		D01B60E62484BAE1005D3090 /* IsMainOn.command in Resources */ = {isa = PBXBuildFile; fileRef = D01B60E52484BAE1005D3090 /* IsMainOn.command */; };
 		D01B60E82484BC20005D3090 /* IsTestOn.command in Resources */ = {isa = PBXBuildFile; fileRef = D01B60E72484BC20005D3090 /* IsTestOn.command */; };
@@ -126,6 +127,7 @@
 		0AD5BAA126F054390091A075 /* IsSignetOn.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = IsSignetOn.command; sourceTree = "<group>"; };
 		0AD5BAA326F05AB50091A075 /* StartSignet.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = StartSignet.command; sourceTree = "<group>"; };
 		0AD5BAA526F05D8E0091A075 /* TurnOffSignet.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = TurnOffSignet.command; sourceTree = "<group>"; };
+		0AD5BAA726F1C9F80091A075 /* RefreshSignetHS.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = RefreshSignetHS.command; sourceTree = "<group>"; };
 		D01471A02371354700F64329 /* LaunchBitcoin.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = LaunchBitcoin.command; sourceTree = "<group>"; };
 		D01B60E52484BAE1005D3090 /* IsMainOn.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = IsMainOn.command; sourceTree = "<group>"; };
 		D01B60E72484BC20005D3090 /* IsTestOn.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = IsTestOn.command; sourceTree = "<group>"; };
@@ -333,6 +335,7 @@
 				0AD5BAA126F054390091A075 /* IsSignetOn.command */,
 				0AD5BAA326F05AB50091A075 /* StartSignet.command */,
 				0AD5BAA526F05D8E0091A075 /* TurnOffSignet.command */,
+				0AD5BAA726F1C9F80091A075 /* RefreshSignetHS.command */,
 			);
 			path = Scripts;
 			sourceTree = "<group>";
@@ -605,6 +608,7 @@
 				D0DACF522513398500846590 /* OpenLightningConfig.command in Resources */,
 				D0B9278023840D3C00956651 /* IsBitcoinOn.command in Resources */,
 				D06E3938236BE46E0072924A /* Settings.xib in Resources */,
+				0AD5BAA826F1C9F80091A075 /* RefreshSignetHS.command in Resources */,
 				D0760106247DFEF200706F70 /* Strap.command in Resources */,
 				D01B60F82484CD65005D3090 /* StopMain.command in Resources */,
 				D07601162480F79200706F70 /* OpenMainnetHiddenService.command in Resources */,
