@@ -12,5 +12,5 @@ echo $PUBKEY > /usr/local/var/lib/tor/gordian/main/authorized_clients/"$FILENAME
 echo $PUBKEY > /usr/local/var/lib/tor/gordian/test/authorized_clients/"$FILENAME".auth
 echo $PUBKEY > /usr/local/var/lib/tor/gordian/reg/authorized_clients/"$FILENAME".auth
 echo "Restarting Tor..."
-sudo -u $(whoami) /usr/local/bin/brew services restart tor
+sudo -u $(whoami) $(command -v brew) services restart tor
 exit

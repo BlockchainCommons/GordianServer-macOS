@@ -1,12 +1,10 @@
 #!/bin/sh
 
-#  StandDown.command
-#  StandUp
+#  UninstallTor.command
+#  GordianServer-macOS
 #
-#  Created by Peter on 13/11/19.
-#  Copyright © 2019 Blockchain Commons, LLC
-echo "Removing ~/.gordian"
-rm -rf ~/.gordian
+#  Created by Peter Denton on 9/16/21.
+#  Copyright © 2021 Peter. All rights reserved.
 echo "Removing /usr/local/etc/tor"
 rm -rf /usr/local/etc/tor
 echo "Removing /usr/local/var/lib/tor"

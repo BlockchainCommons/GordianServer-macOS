@@ -6,12 +6,11 @@
 #  Created by Peter Denton on 9/16/21.
 #  Copyright © 2021 Peter. All rights reserved.
 function installTor () {
-    
     if ! command -v /usr/local/bin/tor &> /dev/null
     then
     
         echo "Installing tor..."
-        sudo -u $(whoami) /usr/local/bin/brew install tor
+        sudo -u $(whoami) $(command -v brew) install tor
         
         echo "Checking if torrc exists..."
         TORRC=/usr/local/etc/tor/torrc
@@ -29,7 +28,7 @@ function installTor () {
             configureTor
         fi
         
-        sudo -u $(whoami) /usr/local/bin/brew services start tor
+        sudo -u $(whoami) $(command -v brew) services start tor
         
         echo "Installation complete, you can now close this window if it does not automatically dismiss."
         exit 1
@@ -37,7 +36,7 @@ function installTor () {
     else
         # We now update Tor if it already exists
         echo "Updating tor..."
-        sudo -u $(whoami) /usr/local/bin/brew upgrade tor
+        sudo -u $(whoami) $(command -v brew) upgrade tor
         
         # We now check if the torrc exists before creating one
         echo "Checking if torrc exists..."
@@ -59,18 +58,14 @@ function installTor () {
         exit 1
         
     fi
-  
 }
 
 function createTorrc () {
-
     echo "Creating torrc file..."
     cp /usr/local/etc/tor/torrc.sample.default /usr/local/etc/tor/torrc
-    
 }
 
 function configureTor () {
-
     echo "Configuring tor v3 hidden service's..."
     sed -i -e 's/#ControlPort 9051/ControlPort 9051/g' /usr/local/etc/tor/torrc
     sed -i -e 's/#CookieAuthentication 1/CookieAuthentication 1/g' /usr/local/etc/tor/torrc

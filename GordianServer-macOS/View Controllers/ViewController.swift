@@ -10,6 +10,9 @@ import Cocoa
 
 class ViewController: NSViewController, NSWindowDelegate {
     
+    @IBOutlet weak var updateTorOutlet: NSButton!
+    @IBOutlet weak var installTorOutlet: NSButton!
+    @IBOutlet weak var startTorOutlet: NSButton!
     @IBOutlet weak var networkLabel: NSTextField!
     @IBOutlet weak var mainnetIncomingImage: NSImageView!
     @IBOutlet weak var bitcoinCoreWindow: NSView!
@@ -23,7 +26,6 @@ class ViewController: NSViewController, NSWindowDelegate {
     @IBOutlet weak var torAuthRemoveOutlet: NSButton!
     @IBOutlet var taskDescription: NSTextField!
     @IBOutlet var spinner: NSProgressIndicator!
-    @IBOutlet var installTorOutlet: NSButton!
     @IBOutlet var verifyOutlet: NSButton!
     @IBOutlet var updateOutlet: NSButton!
     @IBOutlet var icon: NSImageView!
@@ -90,6 +92,33 @@ class ViewController: NSViewController, NSWindowDelegate {
         frame.size = initialSize
         self.view.window?.setFrame(frame, display: true)
         refresh()
+    }
+    
+    @IBAction func installTorAction(_ sender: Any) {
+        if torInstalled {
+            // uninstall it
+            actionAlert(message: "Uninstall Tor?", info: "This will delete your Tor config, hidden services and uninstall Tor.") { [weak self] confirm in
+                guard let self = self else { return }
+                
+                if confirm {
+                    self.addSpinnerDesc("Uninstalling Tor...")
+                    self.runScript(script: .uninstallTor)
+                }
+            }
+        } else {
+            // install it
+            actionAlert(message: "Install Tor?", info: "This will run a series of checks to see if Tor needs to be installed from scratch, updated or configured to set up remote connection to your node and will take action accordingly.") { [weak self] confirm in
+                guard let self = self else { return }
+                
+                if confirm {
+                    self.addSpinnerDesc("Installing Tor...")
+                    self.runScript(script: .installTor)
+                }
+            }
+        }
+    }
+    
+    @IBAction func updateTorAction(_ sender: Any) {
     }
     
     @IBAction func showSettingsAction(_ sender: Any) {
@@ -365,7 +394,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                     let rounded = Double(round(100 * pruneInGb) / 100)
 
                     self.infoMessage = """
-                    By default Gordian Server will install and configure a pruned (\(rounded)gb) Bitcoin Core v\(version) node and Tor v0.4.6.7
+                    Gordian Server will install and configure a pruned (\(rounded)gb) Bitcoin Core node v\(version).
 
                     You can always edit settings via File > Settings.
 
@@ -378,7 +407,7 @@ class ViewController: NSViewController, NSWindowDelegate {
 
                     if pruned == 0 || pruned == 1 {
                         self.infoMessage = """
-                        GordianServer will install and configure Bitcoin Core v\(version) node and Tor v0.4.6.7
+                        GordianServer will install and configure Bitcoin Core v\(version) node.
 
                         You have set pruning to \(pruned), you can always edit the pruning amount in settings.
 
@@ -392,9 +421,7 @@ class ViewController: NSViewController, NSWindowDelegate {
 
                     if txindex == 1 {
                         self.infoMessage = """
-                        Gordian Server will install and configure a fully indexed Bitcoin Core v\(version) node and Tor v0.4.6.7
-
-                        You can always edit the pruning size in settings.
+                        Gordian Server will install and configure a fully indexed Bitcoin Core v\(version) node.
 
                         You can always edit settings via File > Settings.
 
@@ -416,7 +443,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                 // Bitcoind and possibly tor are already installed
                 if vc.bitcoinInstalled {
 
-                    self.headerText = "Install Bitcoin Core v\(version) and Tor with GordianServer?"
+                    self.headerText = "Install Bitcoin Core v\(version)?"
 
                     self.infoMessage = """
                     You have an existing version of Bitcoin Core installed.
@@ -424,25 +451,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                     Selecting yes will tell Gordian Server to download, verify and install a fresh Bitcoin Core v\(version) installation in ~/.gordian/BitcoinCore, Gordian Server will not overwrite your existing node.
 
                     Your existing bitcoin.conf file will be checked for rpc username and password, if none exist Gordian Server will create them for you, all other bitcoin.conf settings will remain in place.
-
-                    Gordian Server will also install Tor v0.4.6.7 and configure hidden services for your nodes rpcport so that you may easily and securely connect to your node remotely.
                     """
-
-                    if vc.torInstalled {
-                        self.headerText = "Verify and install Bitcoin Core v\(version) with Gordian Server?"
-
-                        self.infoMessage = """
-                        You have an existing version of Bitcoin Core and Tor installed.
-
-                        Selecting yes will tell Gordian Server to download, verify and install a fresh Bitcoin Core v\(version) installation in ~/.gordian/BitcoinCore. This will **not** overwrite your existing node.
-
-                        Your existing bitcoin.conf file will be checked for rpc username and password, if none exist Gordian Server will create them for you, all other bitcoin.conf settings will remain in place.
-
-                        We do this so that we may verify the hashes of the binaries ourself and only use the binary we verified.
-
-                        Looks like you also already have Tor installed, Gordian Server will always check to see if Tor has already been configured properly, if you have not already created Hidden Services for your nodes rpcport it will create them for you.
-                        """
-                    }
                     
                     DispatchQueue.main.async { [weak self] in
                         guard let self = self else { return }
@@ -460,19 +469,19 @@ class ViewController: NSViewController, NSWindowDelegate {
     @IBAction func standUp(_ sender: Any) {
         installNow()
     }
-
-    @IBAction func installTorAction(_ sender: Any) {
+    
+    @IBAction func startTorAction(_ sender: Any) {
         if !torIsOn {
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.startSpinner(description: "starting tor...")
-                vc.installTorOutlet.isEnabled = false
+                vc.startTorOutlet.isEnabled = false
             }
             runScript(script: .startTor)
         } else {
 
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.startSpinner(description: "stopping tor...")
-                vc.installTorOutlet.isEnabled = false
+                vc.startTorOutlet.isEnabled = false
             }
             runScript(script: .stopTor)
         }
@@ -521,14 +530,6 @@ class ViewController: NSViewController, NSWindowDelegate {
             break
         }
     }
-
-//    func checkSigs() {
-//        DispatchQueue.main.async { [unowned vc = self] in
-//            vc.taskDescription.stringValue = "verifying pgp signatures..."
-//            vc.runScript(script: .verifyBitcoin)
-//            vc.hideSpinner()
-//        }
-//    }
 
     func checkBitcoindVersion() {
         DispatchQueue.main.async { [unowned vc = self] in
@@ -642,6 +643,9 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     func parseScriptResult(script: SCRIPT, result: String) {
         switch script {
+        case .uninstallTor:
+            refreshNow()
+            
         case .stopMain:
             stopMainParse(result: result)
 
@@ -1100,22 +1104,22 @@ class ViewController: NSViewController, NSWindowDelegate {
         if result.contains("started") {
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.torIsOn = true
-                vc.installTorOutlet.title = "Stop"
-                vc.installTorOutlet.isEnabled = true
+                vc.startTorOutlet.title = "Stop"
+                vc.startTorOutlet.isEnabled = true
                 vc.updateTorStatus(isOn: true)
             }
         } else if result.contains("stopped") {
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.torIsOn = false
-                vc.installTorOutlet.title = "Start"
-                vc.installTorOutlet.isEnabled = true
+                vc.startTorOutlet.title = "Start"
+                vc.startTorOutlet.isEnabled = true
                 vc.updateTorStatus(isOn: false)
             }
         } else {
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.torIsOn = false
-                vc.installTorOutlet.title = "Start Tor"
-                vc.installTorOutlet.isEnabled = false
+                vc.startTorOutlet.title = "Start Tor"
+                vc.startTorOutlet.isEnabled = false
                 vc.updateTorStatus(isOn: false)
             }
         }
@@ -1139,8 +1143,8 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
         DispatchQueue.main.async { [unowned vc = self] in
             vc.hideSpinner()
-            vc.installTorOutlet.title = title
-            vc.installTorOutlet.isEnabled = true
+            vc.startTorOutlet.title = title
+            vc.startTorOutlet.isEnabled = true
         }
     }
 
@@ -1165,8 +1169,14 @@ class ViewController: NSViewController, NSWindowDelegate {
                 guard let self = self else { return }
                 
                 self.torVersionOutlet.stringValue = result.torVersion
-                self.installTorOutlet.title = "Start"
+                self.startTorOutlet.title = "Start"
+                self.installTorOutlet.title = "Uninstall"
+                self.installTorOutlet.isEnabled = true
+                self.updateTorOutlet.isEnabled = true
             }
+        } else {
+            self.installTorOutlet.stringValue = "Install"
+            self.installTorOutlet.isEnabled = true
         }
         checkBitcoinConfForRPCCredentials()
     }
@@ -1384,7 +1394,9 @@ class ViewController: NSViewController, NSWindowDelegate {
         updateOutlet.isEnabled = false
         bitcoinCoreVersionOutlet.stringValue = ""
         torVersionOutlet.stringValue = ""
+        startTorOutlet.isEnabled = false
         installTorOutlet.isEnabled = false
+        updateTorOutlet.isEnabled = false
         verifyOutlet.isEnabled = false
         torRunningImage.alphaValue = 0
         bitcoinCoreWindow.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)

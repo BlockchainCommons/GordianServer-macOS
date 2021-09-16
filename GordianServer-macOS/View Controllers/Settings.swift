@@ -23,7 +23,6 @@ class Settings: NSViewController, NSTextFieldDelegate {
     
     @IBOutlet weak var pruneValueField: NSTextField!
     @IBOutlet var directoryLabel: NSTextField!
-    //@IBOutlet var nodeLabelField: NSTextField!
     @IBOutlet var walletDisabled: NSButton!
     @IBOutlet var txIndexOutlet: NSButton!
     @IBOutlet var goPrivateOutlet: NSButton!

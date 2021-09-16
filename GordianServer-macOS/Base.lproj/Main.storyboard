@@ -569,41 +569,64 @@
                                                 </constraints>
                                             </customView>
                                             <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eeM-IX-v6E">
-                                                <rect key="frame" x="43" y="91" width="111" height="16"/>
-                                                <subviews>
-                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="w4M-Pe-mtd">
-                                                        <rect key="frame" x="-7" y="-7" width="125" height="28"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="16" id="C5s-se-Gfv"/>
-                                                        </constraints>
-                                                        <buttonCell key="cell" type="push" title="Start" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="rUQ-SD-ePL">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="system"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="installTorAction:" target="XfG-lQ-9wD" id="lIe-xa-DRA"/>
-                                                        </connections>
-                                                    </button>
-                                                </subviews>
+                                                <rect key="frame" x="43" y="107" width="111" height="0.0"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="111" id="PnS-Fd-ZsB"/>
-                                                    <constraint firstItem="w4M-Pe-mtd" firstAttribute="leading" secondItem="eeM-IX-v6E" secondAttribute="leading" id="dBN-zx-bVq"/>
-                                                    <constraint firstAttribute="trailing" secondItem="w4M-Pe-mtd" secondAttribute="trailing" id="fiA-Cn-aww"/>
                                                 </constraints>
-                                                <visibilityPriorities>
-                                                    <integer value="1000"/>
-                                                </visibilityPriorities>
-                                                <customSpacing>
-                                                    <real value="3.4028234663852886e+38"/>
-                                                </customSpacing>
                                             </stackView>
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="w4M-Pe-mtd">
+                                                <rect key="frame" x="36" y="76" width="125" height="28"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="16" id="C5s-se-Gfv"/>
+                                                    <constraint firstAttribute="width" constant="111" id="YOi-AH-mhC"/>
+                                                </constraints>
+                                                <buttonCell key="cell" type="push" title="Start" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="rUQ-SD-ePL">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <action selector="startTorAction:" target="XfG-lQ-9wD" id="ZB5-uL-sa1"/>
+                                                </connections>
+                                            </button>
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6By-3K-hw9">
+                                                <rect key="frame" x="36" y="48" width="125" height="28"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="111" id="b7p-ng-pDK"/>
+                                                    <constraint firstAttribute="height" constant="16" id="sAp-XL-knG"/>
+                                                </constraints>
+                                                <buttonCell key="cell" type="push" title="Install" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="aRS-nz-BHv">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <action selector="installTorAction:" target="XfG-lQ-9wD" id="fWG-ee-YiD"/>
+                                                </connections>
+                                            </button>
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DyC-1k-dHu">
+                                                <rect key="frame" x="36" y="20" width="125" height="28"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="111" id="gBd-V6-saB"/>
+                                                    <constraint firstAttribute="height" constant="16" id="xwg-5g-4vc"/>
+                                                </constraints>
+                                                <buttonCell key="cell" type="push" title="Update" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="haN-lW-AEr">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <action selector="updateTorAction:" target="XfG-lQ-9wD" id="aCY-1U-mEm"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <constraints>
+                                            <constraint firstItem="w4M-Pe-mtd" firstAttribute="top" secondItem="eeM-IX-v6E" secondAttribute="bottom" constant="8" id="3nb-Ch-uhi"/>
                                             <constraint firstItem="eeM-IX-v6E" firstAttribute="centerX" secondItem="hmk-BW-J2q" secondAttribute="centerX" id="4NH-Us-5Zi"/>
                                             <constraint firstAttribute="height" constant="251" id="9r8-Hx-ueJ"/>
                                             <constraint firstItem="eeM-IX-v6E" firstAttribute="top" secondItem="WGD-XP-1oR" secondAttribute="bottom" constant="8" symbolic="YES" id="Fc6-wU-qfo"/>
+                                            <constraint firstItem="DyC-1k-dHu" firstAttribute="top" secondItem="6By-3K-hw9" secondAttribute="bottom" constant="12" symbolic="YES" id="FsI-gx-fh0"/>
+                                            <constraint firstItem="w4M-Pe-mtd" firstAttribute="centerX" secondItem="hmk-BW-J2q" secondAttribute="centerX" id="IPb-qx-hZs"/>
                                             <constraint firstItem="WGD-XP-1oR" firstAttribute="top" secondItem="2fT-tq-aCO" secondAttribute="bottom" constant="8" symbolic="YES" id="IUf-cV-jQs"/>
                                             <constraint firstAttribute="trailing" secondItem="e3P-9R-XcT" secondAttribute="trailing" constant="13" id="JBj-64-eAs"/>
+                                            <constraint firstItem="DyC-1k-dHu" firstAttribute="centerX" secondItem="hmk-BW-J2q" secondAttribute="centerX" id="Jd9-yf-ixl"/>
                                             <constraint firstItem="WGD-XP-1oR" firstAttribute="centerX" secondItem="hmk-BW-J2q" secondAttribute="centerX" id="Moq-uy-Wfg"/>
                                             <constraint firstAttribute="width" constant="196" id="OLo-7a-wIA"/>
                                             <constraint firstItem="2fT-tq-aCO" firstAttribute="centerX" secondItem="hmk-BW-J2q" secondAttribute="centerX" id="Wjt-Sc-W2C"/>
@@ -613,6 +636,8 @@
                                             <constraint firstItem="Oi9-qs-ufU" firstAttribute="leading" secondItem="mwn-Hz-Tc2" secondAttribute="trailing" constant="8" id="mLK-bd-qGO"/>
                                             <constraint firstItem="2fT-tq-aCO" firstAttribute="top" secondItem="Oi9-qs-ufU" secondAttribute="bottom" constant="2" id="oXo-bb-v3R"/>
                                             <constraint firstItem="Oi9-qs-ufU" firstAttribute="top" secondItem="hmk-BW-J2q" secondAttribute="top" constant="8" id="r85-dX-kAW"/>
+                                            <constraint firstItem="6By-3K-hw9" firstAttribute="top" secondItem="w4M-Pe-mtd" secondAttribute="bottom" constant="12" id="reg-Z4-shr"/>
+                                            <constraint firstItem="6By-3K-hw9" firstAttribute="centerX" secondItem="hmk-BW-J2q" secondAttribute="centerX" id="yDb-aJ-lSo"/>
                                         </constraints>
                                     </customView>
                                 </subviews>
@@ -707,13 +732,14 @@
                         <outlet property="bitcoinCoreWindow" destination="i70-xH-6Bd" id="Q0s-D6-kKh"/>
                         <outlet property="bitcoinIsOnHeaderImage" destination="IZe-rf-ugH" id="Ncd-MN-zJ5"/>
                         <outlet property="icon" destination="zZj-w8-TgT" id="mC2-fU-qbF"/>
-                        <outlet property="installTorOutlet" destination="w4M-Pe-mtd" id="Pnf-UR-CsW"/>
+                        <outlet property="installTorOutlet" destination="6By-3K-hw9" id="kOM-89-0gb"/>
                         <outlet property="mainnetIncomingPeersLabel" destination="PMt-yp-b2E" id="qSk-0Q-URx"/>
                         <outlet property="mainnetOutgoingPeersLabel" destination="E12-C7-dPa" id="CFc-ZP-Y1C"/>
                         <outlet property="mainnetSyncedLabel" destination="Vdd-w0-AhZ" id="57y-nK-1TV"/>
                         <outlet property="networkButton" destination="L8k-j2-T7d" id="Jba-Po-tFG"/>
                         <outlet property="spinner" destination="kdQ-HU-D0l" id="t8O-5u-PXb"/>
                         <outlet property="startMainnetOutlet" destination="twO-63-MCl" id="WEZ-Qq-VGp"/>
+                        <outlet property="startTorOutlet" destination="w4M-Pe-mtd" id="cwJ-5u-NXL"/>
                         <outlet property="taskDescription" destination="K4o-Sf-dSl" id="Xb9-TC-9s2"/>
                         <outlet property="torAuthLockImage" destination="Nzy-A1-ER9" id="tCB-Cd-SHR"/>
                         <outlet property="torAuthRemoveOutlet" destination="whm-EA-eFM" id="pCm-49-bcC"/>
@@ -722,6 +748,7 @@
                         <outlet property="torVersionOutlet" destination="2fT-tq-aCO" id="zpe-Z0-ULJ"/>
                         <outlet property="torWindow" destination="hmk-BW-J2q" id="xSN-4I-RFX"/>
                         <outlet property="updateOutlet" destination="tMm-82-jtg" id="b1B-LH-TKx"/>
+                        <outlet property="updateTorOutlet" destination="DyC-1k-dHu" id="00w-En-na9"/>
                         <outlet property="verifyOutlet" destination="y6q-T1-byM" id="I3N-1T-qsP"/>
                         <segue destination="eC6-Cf-Cnx" kind="show" identifier="showPairingCode" id="Yl0-9Y-9DR"/>
                         <segue destination="lGs-ue-8Wa" kind="show" identifier="goInstall" id="cqP-Ve-rOY"/>
@@ -754,7 +781,7 @@
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                             <tableColumns>
-                                                <tableColumn identifier="nameColumn" width="585" minWidth="40" maxWidth="1000" id="C2I-IG-C10">
+                                                <tableColumn identifier="nameColumn" width="556" minWidth="40" maxWidth="1000" id="C2I-IG-C10">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Wallet name">
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -768,7 +795,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView identifier="WalletNameCellID" id="BSt-3t-igI">
-                                                            <rect key="frame" x="1" y="1" width="594" height="17"/>
+                                                            <rect key="frame" x="11" y="1" width="565" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="W3g-V0-fUf">
@@ -777,7 +804,7 @@
                                                                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSActionTemplate" id="vpw-DK-NR7"/>
                                                                 </imageView>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KUk-4q-cCq">
-                                                                    <rect key="frame" x="25" y="0.0" width="569" height="17"/>
+                                                                    <rect key="frame" x="25" y="0.0" width="540" height="17"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="DiV-mQ-cVu">
                                                                         <font key="font" metaFont="message"/>
@@ -1414,7 +1441,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Yel-Hw-wBk"/>
+        <segue reference="cqP-Ve-rOY"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="NSActionTemplate" width="15" height="15"/>
