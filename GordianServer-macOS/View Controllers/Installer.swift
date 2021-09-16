@@ -29,6 +29,7 @@ class Installer: NSViewController {
     var rpcuser = ""
     var rpcpassword = ""
     var lightningHostname = ""
+    var installingTor = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -98,6 +99,9 @@ class Installer: NSViewController {
                     vc.consoleOutput.string = log
                 }
             }
+            
+        } else if installingTor {
+            installTor()
 
         } else if standingUp {
             standingUp = false
@@ -299,6 +303,24 @@ class Installer: NSViewController {
                 DispatchQueue.main.async { [weak self] in
                     self?.hideSpinner()
                     simpleAlert(message: "Success", info: "You have uninstalled Tor, removed Bitcoin Core and ~/.gordian.", buttonLabel: "OK")
+                    self?.goBack()
+                }
+            }
+        }
+    }
+    
+    func installTor() {
+        showLog = true
+        showSpinner(description: "Installing Tor..")
+        let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
+        taskQueue.async { [weak self] in
+            self?.run(script: .installTor, env: ["":""]) { log in
+                
+                DispatchQueue.main.async { [weak self] in
+                    if self != nil {
+                        self?.setLog(content: log)
+                    }
+                    NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
                     self?.goBack()
                 }
             }

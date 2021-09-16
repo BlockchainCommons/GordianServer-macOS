@@ -74,6 +74,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     let d = Defaults()
     var infoMessage = ""
     var headerText = ""
+    var installingTor = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -108,11 +109,17 @@ class ViewController: NSViewController, NSWindowDelegate {
         } else {
             // install it
             actionAlert(message: "Install Tor?", info: "This will run a series of checks to see if Tor needs to be installed from scratch, updated or configured to set up remote connection to your node and will take action accordingly.") { [weak self] confirm in
-                guard let self = self else { return }
                 
                 if confirm {
-                    self.addSpinnerDesc("Installing Tor...")
-                    self.runScript(script: .installTor)
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        
+                        self.installingTor = true
+                        self.performSegue(withIdentifier: "goInstall", sender: self)
+                    }
+                    //segue to installer
+//                    self.addSpinnerDesc("Installing Tor...")
+//                    self.runScript(script: .installTor)
                 }
             }
         }
@@ -133,14 +140,18 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
     
     @IBAction func showQuickConnectAction(_ sender: Any) {
-        var myWindow: NSWindow? = nil
-        let storyboard = NSStoryboard(name: "Main", bundle: nil)
-        let quickconnect = storyboard.instantiateController(withIdentifier: "QuickConnect") as! QRDisplayer
-        myWindow = NSWindow(contentViewController: quickconnect)
-        NSApp.activate(ignoringOtherApps: true)
-        myWindow?.makeKeyAndOrderFront(self)
-        let vc = NSWindowController(window: myWindow)
-        vc.showWindow(self)
+        if torInstalled {
+            var myWindow: NSWindow? = nil
+            let storyboard = NSStoryboard(name: "Main", bundle: nil)
+            let quickconnect = storyboard.instantiateController(withIdentifier: "QuickConnect") as! QRDisplayer
+            myWindow = NSWindow(contentViewController: quickconnect)
+            NSApp.activate(ignoringOtherApps: true)
+            myWindow?.makeKeyAndOrderFront(self)
+            let vc = NSWindowController(window: myWindow)
+            vc.showWindow(self)
+        } else {
+            simpleAlert(message: "Tor not installed...", info: "In order to connect to your node remotely you need to install Tor first.", buttonLabel: "OK")
+        }
     }    
 
     @objc func refreshNow() {
@@ -1175,8 +1186,12 @@ class ViewController: NSViewController, NSWindowDelegate {
                 self.updateTorOutlet.isEnabled = true
             }
         } else {
-            self.installTorOutlet.stringValue = "Install"
-            self.installTorOutlet.isEnabled = true
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                
+                self.installTorOutlet.stringValue = "Install"
+                self.installTorOutlet.isEnabled = true
+            }
         }
         checkBitcoinConfForRPCCredentials()
     }
@@ -1370,54 +1385,58 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     func setScene() {
-        view.backgroundColor = .controlDarkShadowColor
-        let chain = UserDefaults.standard.object(forKey: "chain") as? String ?? "main"
-        switch chain {
-        case "main":
-            networkButton.selectItem(at: 0)
-        case "test":
-            networkButton.selectItem(at: 1)
-        case "regtest":
-            networkButton.selectItem(at: 2)
-        case "signet":
-            networkButton.selectItem(at: 3)
-        default:
-            break
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.view.backgroundColor = .controlDarkShadowColor
+            let chain = UserDefaults.standard.object(forKey: "chain") as? String ?? "main"
+            switch chain {
+            case "main":
+                self.networkButton.selectItem(at: 0)
+            case "test":
+                self.networkButton.selectItem(at: 1)
+            case "regtest":
+                self.networkButton.selectItem(at: 2)
+            case "signet":
+                self.networkButton.selectItem(at: 3)
+            default:
+                break
+            }
+            self.taskDescription.stringValue = "checking system..."
+            self.spinner.startAnimation(self)
+            self.icon.wantsLayer = true
+            self.icon.layer?.cornerRadius = self.icon.frame.width / 2
+            self.icon.layer?.masksToBounds = true
+            self.isLoading = true
+            self.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
+            self.updateOutlet.isEnabled = false
+            self.bitcoinCoreVersionOutlet.stringValue = ""
+            self.torVersionOutlet.stringValue = ""
+            self.startTorOutlet.isEnabled = false
+            self.installTorOutlet.isEnabled = false
+            self.updateTorOutlet.isEnabled = false
+            self.verifyOutlet.isEnabled = false
+            self.torRunningImage.alphaValue = 0
+            self.bitcoinCoreWindow.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)
+            self.torWindow.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)
+            self.torAuthWindow.backgroundColor = #colorLiteral(red: 0.2548701465, green: 0.2549202442, blue: 0.2548669279, alpha: 1)
+            self.bitcoinCoreWindow.wantsLayer = true
+            self.torWindow.wantsLayer = true
+            self.torAuthWindow.wantsLayer = true
+            self.bitcoinCoreWindow.layer?.borderWidth = 0.75
+            self.bitcoinCoreWindow.layer?.cornerRadius = 8
+           
+            self.torWindow.layer?.borderWidth = 0.75
+            self.torWindow.layer?.cornerRadius = 8
+            self.torAuthWindow.layer?.borderWidth = 0.75
+            self.torAuthWindow.layer?.cornerRadius = 8
+            self.bitcoinCoreWindow.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+            self.torWindow.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+            self.torAuthWindow.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+            self.mainnetSyncedLabel.stringValue = ""
+            self.mainnetIncomingPeersLabel.stringValue = ""
+            self.mainnetOutgoingPeersLabel.stringValue = ""
         }
-        taskDescription.stringValue = "checking system..."
-        spinner.startAnimation(self)
-        icon.wantsLayer = true
-        icon.layer?.cornerRadius = icon.frame.width / 2
-        icon.layer?.masksToBounds = true
-        isLoading = true
-        bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
-        updateOutlet.isEnabled = false
-        bitcoinCoreVersionOutlet.stringValue = ""
-        torVersionOutlet.stringValue = ""
-        startTorOutlet.isEnabled = false
-        installTorOutlet.isEnabled = false
-        updateTorOutlet.isEnabled = false
-        verifyOutlet.isEnabled = false
-        torRunningImage.alphaValue = 0
-        bitcoinCoreWindow.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)
-        torWindow.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)
-        torAuthWindow.backgroundColor = #colorLiteral(red: 0.2548701465, green: 0.2549202442, blue: 0.2548669279, alpha: 1)
-        bitcoinCoreWindow.wantsLayer = true
-        torWindow.wantsLayer = true
-        torAuthWindow.wantsLayer = true
-        bitcoinCoreWindow.layer?.borderWidth = 0.75
-        bitcoinCoreWindow.layer?.cornerRadius = 8
-       
-        torWindow.layer?.borderWidth = 0.75
-        torWindow.layer?.cornerRadius = 8
-        torAuthWindow.layer?.borderWidth = 0.75
-        torAuthWindow.layer?.cornerRadius = 8
-        bitcoinCoreWindow.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
-        torWindow.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
-        torAuthWindow.layer?.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
-        mainnetSyncedLabel.stringValue = ""
-        mainnetIncomingPeersLabel.stringValue = ""
-        mainnetOutgoingPeersLabel.stringValue = ""
     }
 
     func showstandUpAlert(message: String, info: String) {
@@ -1478,6 +1497,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         case "goInstall":
             if let vc = segue.destinationController as? Installer {
                 //vc.installLightning = installingLightning
+                vc.installingTor = self.installingTor
                 vc.standingUp = standingUp
                 vc.upgrading = upgrading
                 vc.ignoreExistingBitcoin = ignoreExistingBitcoin
