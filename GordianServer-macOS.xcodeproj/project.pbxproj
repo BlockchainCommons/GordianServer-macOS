@@ -13,6 +13,7 @@
 		0AD5BAA626F05D8E0091A075 /* TurnOffSignet.command in Resources */ = {isa = PBXBuildFile; fileRef = 0AD5BAA526F05D8E0091A075 /* TurnOffSignet.command */; };
 		0AD5BAA826F1C9F80091A075 /* RefreshSignetHS.command in Resources */ = {isa = PBXBuildFile; fileRef = 0AD5BAA726F1C9F80091A075 /* RefreshSignetHS.command */; };
 		0AD5BAAC26F1D0AC0091A075 /* InstallerPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD5BAAB26F1D0AC0091A075 /* InstallerPrompt.swift */; };
+		0AD5BAAE26F30ECA0091A075 /* InstallTor.command in Resources */ = {isa = PBXBuildFile; fileRef = 0AD5BAAD26F30ECA0091A075 /* InstallTor.command */; };
 		D01471A12371354700F64329 /* LaunchBitcoin.command in Resources */ = {isa = PBXBuildFile; fileRef = D01471A02371354700F64329 /* LaunchBitcoin.command */; };
 		D01B60E62484BAE1005D3090 /* IsMainOn.command in Resources */ = {isa = PBXBuildFile; fileRef = D01B60E52484BAE1005D3090 /* IsMainOn.command */; };
 		D01B60E82484BC20005D3090 /* IsTestOn.command in Resources */ = {isa = PBXBuildFile; fileRef = D01B60E72484BC20005D3090 /* IsTestOn.command */; };
@@ -130,6 +131,7 @@
 		0AD5BAA526F05D8E0091A075 /* TurnOffSignet.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = TurnOffSignet.command; sourceTree = "<group>"; };
 		0AD5BAA726F1C9F80091A075 /* RefreshSignetHS.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = RefreshSignetHS.command; sourceTree = "<group>"; };
 		0AD5BAAB26F1D0AC0091A075 /* InstallerPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallerPrompt.swift; sourceTree = "<group>"; };
+		0AD5BAAD26F30ECA0091A075 /* InstallTor.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = InstallTor.command; sourceTree = "<group>"; };
 		D01471A02371354700F64329 /* LaunchBitcoin.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = LaunchBitcoin.command; sourceTree = "<group>"; };
 		D01B60E52484BAE1005D3090 /* IsMainOn.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = IsMainOn.command; sourceTree = "<group>"; };
 		D01B60E72484BC20005D3090 /* IsTestOn.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = IsTestOn.command; sourceTree = "<group>"; };
@@ -339,6 +341,7 @@
 				0AD5BAA326F05AB50091A075 /* StartSignet.command */,
 				0AD5BAA526F05D8E0091A075 /* TurnOffSignet.command */,
 				0AD5BAA726F1C9F80091A075 /* RefreshSignetHS.command */,
+				0AD5BAAD26F30ECA0091A075 /* InstallTor.command */,
 			);
 			path = Scripts;
 			sourceTree = "<group>";
@@ -600,6 +603,7 @@
 				D0EB5318237E4E9F002212F8 /* fullynoded_share.png in Resources */,
 				D0BCB33A236A6D27000D8FDE /* Main.storyboard in Resources */,
 				D03063B924FE2375003B44BE /* OpenTorrc.command in Resources */,
+				0AD5BAAE26F30ECA0091A075 /* InstallTor.command in Resources */,
 				D0821043238AA78900E21EDC /* blockchaincommons.png in Resources */,
 				0AD5BAA226F054390091A075 /* IsSignetOn.command in Resources */,
 				D01471A12371354700F64329 /* LaunchBitcoin.command in Resources */,

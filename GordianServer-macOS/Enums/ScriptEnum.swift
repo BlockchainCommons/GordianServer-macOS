@@ -9,7 +9,6 @@
 import Foundation
 
 public enum SCRIPT: String {
-    
     case removeBitcoin = "RemoveBitcoin"
     case torStatus = "TorStatus"
     case getTorHostname = "GetHostname"
@@ -72,10 +71,10 @@ public enum SCRIPT: String {
     case writeLog = "WriteLog"
     case getLog = "GetLog"
     case openLog = "OpenLog"
+    case installTor = "InstallTor"
 }
 
 public enum BTCCONF: String {
-    
     case prune = "prune"
     case txindex = "txindex"
     case mainnet = "mainnet"
@@ -84,5 +83,4 @@ public enum BTCCONF: String {
     case disablewallet = "disablewallet"
     case datadir = "datadir"
     case blocksdir = "blocksdir"
-    
 }
