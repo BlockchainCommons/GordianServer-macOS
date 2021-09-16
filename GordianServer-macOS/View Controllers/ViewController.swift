@@ -224,11 +224,27 @@ class ViewController: NSViewController, NSWindowDelegate {
         refreshAction()
     }
     
+    private func addSpinnerDesc(_ description: String) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.taskDescription.stringValue = description
+            self.spinner.startAnimation(self)
+            self.spinner.alphaValue = 1
+            self.taskDescription.alphaValue = 1
+        }
+    }
+    
     private func refreshAction() {
-        taskDescription.stringValue = "checking system..."
-        spinner.startAnimation(self)
-        spinner.alphaValue = 1
-        taskDescription.alphaValue = 1
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.taskDescription.stringValue = "checking system..."
+            self.spinner.startAnimation(self)
+            self.spinner.alphaValue = 1
+            self.taskDescription.alphaValue = 1
+        }
+        
         refresh()
     }
 
@@ -259,24 +275,28 @@ class ViewController: NSViewController, NSWindowDelegate {
             if !mainOn {
                 runScript(script: .startMain)
             } else {
+                addSpinnerDesc("stopping mainnet...")
                 runScript(script: .stopMain)
             }
         case "test":
             if !testOn {
                 runScript(script: .startTestd)
             } else {
+                addSpinnerDesc("stopping testnet...")
                 runScript(script: .stopTest)
             }
         case "regtest":
             if !regTestOn {
                 runScript(script: .startRegtest)
             } else {
+                addSpinnerDesc("stopping regtest...")
                 runScript(script: .stopReg)
             }
         case "signet":
             if !isSignetOn {
                 runScript(script: .startSignet)
             } else {
+                addSpinnerDesc("stopping signet...")
                 runScript(script: .stopSignet)
             }
         default:
@@ -967,7 +987,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     private func parseIsBitcoinOn(result: String) {
         if result.contains("Could not connect to the server 127.0.0.1") {
             mainnetIsOff()
-        } else if result.contains("chain") || result.contains("Loading block index...") {
+        } else if result.contains("chain") || result.contains("Loading block index...") || result.contains("Verifying blocks...") {
 
             if result.contains("chain") {
                 if let dict = convertStringToDictionary(json: result) {
@@ -1065,7 +1085,11 @@ class ViewController: NSViewController, NSWindowDelegate {
             if error == nil {
                 completion((response))
             } else {
-                if !error!.contains("Could not connect to the server") {
+                if error!.contains("Loading block index") {
+                    simpleAlert(message: "Loading blocks...", info: "Your node is just getting started, Gordian Server will auto refresh every 15 seconds. Please be patient while your node loads its blocks.", buttonLabel: "OK")
+                } else if error!.contains("Verifying blocks...") {
+                    simpleAlert(message: "Verifying blocks...", info: "Your node is just getting started, Gordian Server will auto refresh every 15 seconds. Please be patient while your node verifies its blocks.", buttonLabel: "OK")
+                } else if !error!.contains("Could not connect to the server") {
                     simpleAlert(message: "There was an issue.", info: error!, buttonLabel: "OK")
                 }
             }
