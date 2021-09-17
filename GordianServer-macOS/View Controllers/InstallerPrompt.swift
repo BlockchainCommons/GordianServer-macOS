@@ -31,10 +31,11 @@ class InstallerPrompt: NSViewController {
     }
     
     @IBAction func installAction(_ sender: Any) {
-        doneBlock!(true)
-        
-        DispatchQueue.main.async { [unowned vc = self] in
-            vc.window?.performClose(nil)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.window?.performClose(self)
+            self.doneBlock!(true)
         }
     }
     

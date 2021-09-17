@@ -78,6 +78,7 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        isLoading = true
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNow), name: .refresh, object: nil)
         setScene()
     }
@@ -400,7 +401,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                     let rounded = Double(round(100 * pruneInGb) / 100)
 
                     self.infoMessage = """
-                    Gordian Server will install and configure a pruned (\(rounded)gb) Bitcoin Core node v\(version).
+                    Gordian Server will install and configure a pruned (\(rounded)gb) Bitcoin Core node.
 
                     You can always edit settings via File > Settings.
 
@@ -413,7 +414,7 @@ class ViewController: NSViewController, NSWindowDelegate {
 
                     if pruned == 0 || pruned == 1 {
                         self.infoMessage = """
-                        GordianServer will install and configure Bitcoin Core v\(version) node.
+                        GordianServer will install and configure Bitcoin Core node.
 
                         You have set pruning to \(pruned), you can always edit the pruning amount in settings.
 
@@ -427,7 +428,7 @@ class ViewController: NSViewController, NSWindowDelegate {
 
                     if txindex == 1 {
                         self.infoMessage = """
-                        Gordian Server will install and configure a fully indexed Bitcoin Core v\(version) node.
+                        Gordian Server will install and configure a fully indexed Bitcoin Core node.
 
                         You can always edit settings via File > Settings.
 
@@ -437,7 +438,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                         """
                     }
                     
-                    self.headerText = "Install Bitcoin Core and Tor?"
+                    self.headerText = "Install Bitcoin Core v\(version)?"
                     self.ignoreExistingBitcoin = false
                     DispatchQueue.main.async { [weak self] in
                         guard let self = self else { return }
@@ -995,6 +996,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     private func parseIsBitcoinOn(result: String) {
+        print("result: \(result)")
         if result.contains("Could not connect to the server 127.0.0.1") {
             mainnetIsOff()
         } else if result.contains("chain") || result.contains("Loading block index...") || result.contains("Verifying blocks...") {
@@ -1264,11 +1266,6 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     func parseBitcoindResponse(result: String) {
-        #if DEBUG
-        print("parsebitcoindresponse")
-        print("result = \(result)")
-        #endif
-
         if result.contains("Bitcoin Core Daemon version") || result.contains("Bitcoin Core version") {
             let arr = result.components(separatedBy: "Copyright (C)")
             var currentVersion = (arr[0]).replacingOccurrences(of: "Bitcoin Core Daemon version ", with: "")
