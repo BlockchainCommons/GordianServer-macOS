@@ -73,6 +73,8 @@ public enum SCRIPT: String {
     case openLog = "OpenLog"
     case installTor = "InstallTor"
     case uninstallTor = "UninstallTor"
+    case torUpdateAvailable = "TorUpdateAvailable"
+    case updateTor = "UpdateTor"
 }
 
 public enum BTCCONF: String {

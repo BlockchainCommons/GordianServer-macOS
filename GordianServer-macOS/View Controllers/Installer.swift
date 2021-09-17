@@ -30,6 +30,7 @@ class Installer: NSViewController {
     var rpcpassword = ""
     var lightningHostname = ""
     var installingTor = false
+    var updatingTor = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,17 +53,14 @@ class Installer: NSViewController {
     }
     
     func getURLs() {
-        
         showSpinner(description: "Fetching latest Bitcoin Core version and URL's...")
         FetchLatestRelease.get { (dict, error) in
             
             if error != nil {
-                
                 self.hideSpinner()
                 simpleAlert(message: "Error", info: "There was an error fetching the latest Bitcoin Core version number and related URL's, please check your internet connection and try again", buttonLabel: "OK")
                 
             } else {
-                
                 let binaryName = dict!["macosBinary"] as! String
                 let macosURL = dict!["macosURL"] as! String
                 let shaURL = dict!["shaURL"] as! String
@@ -72,19 +70,12 @@ class Installer: NSViewController {
                 self.showSpinner(description: "Setting Up...")
                 
                 if self.upgrading {
-
                     self.upgradeBitcoinCore(binaryName: binaryName, macosURL: macosURL, shaURL: shaURL, version: version, prefix: prefix, sigsUrl: signatures)
-
                 } else {
-
                     self.standUp(binaryName: binaryName, macosURL: macosURL, shaURL: shaURL, version: version, prefix: prefix, sigsUrl: signatures)
-
                 }
-                
             }
-            
         }
-        
     }
     
     func filterAction() {
@@ -102,6 +93,9 @@ class Installer: NSViewController {
             
         } else if installingTor {
             installTor()
+            
+        } else if updatingTor {
+            updateTor()
 
         } else if standingUp {
             standingUp = false
@@ -315,6 +309,24 @@ class Installer: NSViewController {
         let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
         taskQueue.async { [weak self] in
             self?.run(script: .installTor, env: ["":""]) { log in
+                
+                DispatchQueue.main.async { [weak self] in
+                    if self != nil {
+                        self?.setLog(content: log)
+                    }
+                    NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
+                    self?.goBack()
+                }
+            }
+        }
+    }
+    
+    func updateTor() {
+        showLog = true
+        showSpinner(description: "Updating Tor..")
+        let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
+        taskQueue.async { [weak self] in
+            self?.run(script: .updateTor, env: ["":""]) { log in
                 
                 DispatchQueue.main.async { [weak self] in
                     if self != nil {

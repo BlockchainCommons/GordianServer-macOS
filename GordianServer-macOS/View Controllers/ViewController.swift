@@ -75,6 +75,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     var infoMessage = ""
     var headerText = ""
     var installingTor = false
+    var updatingTor = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -122,6 +123,17 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
     
     @IBAction func updateTorAction(_ sender: Any) {
+        actionAlert(message: "Update Tor?", info: "") { [weak self] confirm in
+            
+            if confirm {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    
+                    self.updatingTor = true
+                    self.performSegue(withIdentifier: "goInstall", sender: self)
+                }
+            }
+        }
     }
     
     @IBAction func showSettingsAction(_ sender: Any) {
@@ -342,11 +354,11 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     @IBAction func bitcoinWindowHelp(_ sender: Any) {
-        showAlertMessage(message: "Bitcoin Core Help", info: "GordianServer allows you to run multiple networks simultaneously which can be useful for development and testing purposes. Each network has a dedicated hidden service which gives you the ability to remotely connect to all 3 networks remotely. Just tap the QuickConnect button for whichever network you want to remotely connect to and scan the QR with supporting apps such as Gordian Wallet and Fully Noded. Mainnet is the main network where you can spend real Bitcoins, Testnet is a test network where you can connect to other nodes on the testnet3 network, which is useful for testing new features of Bitcoin Core that you may not be familiar with. Regtest is meant for developers who want to run a local network, it essentially gives you access to your own local Bitcoin blockchain, you can mine blocks easily and instantly and add multiple nodes all from your local dev environment. The verify button allows you to check the sha256 hash of the Bitcoin Core binary against what we expect it to be as per LaanWJ Vlaadmirs pgp signature. The install/update button will either setup GordianServer completely or update Bitcoin Core if there is a newer version available.")
+        showAlertMessage(message: "Bitcoin Core", info: "Gordian Server creates a ~./gordian directory where it installs its own Bitcoin Core binaries, log, and signatures. This allows Gordian Server to verify the binaries and generally makes the app more reliable. Gordian Server only works with the default Bitcoin directory at /Users/You/Library/Application Support/Bitcoin, using a custom data directory is not supported. You may specify a custom blocksdir for storing the blockchain via File > Settings (or the gear box button). Gordian Server allows you to run multiple networks (main, test, regtest, signet) simultaneously which can be useful for development and testing purposes. Toggle between the networks to interact with them. Click the QR button to remotely connect with supporting apps such as Gordian Wallet and Fully Noded. Click the Go To menu item for more tools.")
     }
 
     @IBAction func torWindowHelp(_ sender: Any) {
-        showAlertMessage(message: "Tor Help", info: "This window gives you direct access to the three hidden service directories by tapping the forward button for each network. This is useful if you want to use your node's onion addresses for other apps. It is also useful if you want to refresh your hidden service which can be accomplished by deleting the hidden service directory altogether.  You may add and remove Tor v3 authenticaction keys from the \"add\" and \"remove\" button. You may add up to 330 auth keys to each hidden service. GordianServer by default adds the auth key to all three hidden services, if you tap \"remove\" it will remove auth from all three hidden services so use it with caution. The start/stop button allows you to start and stop tor. If Tor is stopped your node will not be reachable remotely. You may use the install/update button to install GordianServer or to update Tor.")
+        showAlertMessage(message: "Tor", info: "Gordian Server utilizes homebrew to install and manage Tor. In order to interact with your node remotely you will need to install Tor. Installing Tor with Gordian Server automatically configures Tor to work with your Bitcoin Core node so that you may securely connect to it using apps like Gordian Wallet and Fully Noded. You may install, uninstall, upgrade and add/remove Tor authentication keys with Gordian Server. Click the Go To menu item to see additonal Tor related tools.")
     }
 
     @IBAction func updateBitcoin(_ sender: Any) {
@@ -650,6 +662,9 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     func parseScriptResult(script: SCRIPT, result: String) {
         switch script {
+        case .torUpdateAvailable:
+            parseTorUpdateAvailable(result: result)
+            
         case .uninstallTor:
             refreshNow()
             
@@ -732,6 +747,22 @@ class ViewController: NSViewController, NSWindowDelegate {
 //            parseLightningConfig(result: result)
 
         default: break
+        }
+    }
+    
+    private func parseTorUpdateAvailable(result: String) {
+        if result.contains("Tor") || result.contains("tor") {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                
+                self.updateTorOutlet.isEnabled = true
+            }
+        } else {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                
+                self.updateTorOutlet.isEnabled = false
+            }
         }
     }
     
@@ -1099,7 +1130,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             } else {
                 if error!.contains("Loading block index") {
                     simpleAlert(message: "Loading blocks...", info: "Your node is just getting started, Gordian Server will auto refresh every 15 seconds. Please be patient while your node loads its blocks.", buttonLabel: "OK")
-                } else if error!.contains("Verifying blocks...") {
+                } else if error!.contains("Verifying blocks") {
                     simpleAlert(message: "Verifying blocks...", info: "Your node is just getting started, Gordian Server will auto refresh every 15 seconds. Please be patient while your node verifies its blocks.", buttonLabel: "OK")
                 } else if !error!.contains("Could not connect to the server") {
                     simpleAlert(message: "There was an issue.", info: error!, buttonLabel: "OK")
@@ -1181,8 +1212,10 @@ class ViewController: NSViewController, NSWindowDelegate {
                 self.startTorOutlet.isEnabled = true
                 self.installTorOutlet.title = "Uninstall"
                 self.installTorOutlet.isEnabled = true
-                self.updateTorOutlet.isEnabled = true
+                //self.updateTorOutlet.isEnabled = true
             }
+            // check if tor can be updated here
+            runScript(script: .torUpdateAvailable)
         } else {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
@@ -1490,6 +1523,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         case "goInstall":
             if let vc = segue.destinationController as? Installer {
                 //vc.installLightning = installingLightning
+                vc.updatingTor = self.updatingTor
                 vc.installingTor = self.installingTor
                 vc.standingUp = standingUp
                 vc.upgrading = upgrading
