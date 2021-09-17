@@ -5,7 +5,15 @@
 #
 #  Created by Peter on 27/05/20.
 #  Copyright © 2020 Peter. All rights reserved.
-if [[ $(command -v brew) == "" ]]; then
+arch=`uname -m`
+if [[ $arch =~ "arm" ]]
+then
+  export HOMEBREW="/opt/homebrew/bin/brew"
+else
+  export HOMEBREW="/usr/local/bin/brew"
+fi
+
+if [[ $(command -v $HOMEBREW) == "" ]]; then
     echo "Homebrew not installed"
 else
     echo "Homebrew installed"

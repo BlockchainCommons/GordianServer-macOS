@@ -5,5 +5,13 @@
 #
 #  Created by Peter on 15/11/19.
 #  Copyright © 2019 Blockchain Commons, LLC
-sudo -u $(whoami) $(command -v brew) services list | grep tor
+arch=`uname -m`
+if [[ $arch =~ "arm" ]]
+then
+  export HOMEBREW="/opt/homebrew/bin/brew"
+else
+  export HOMEBREW="/usr/local/bin/brew"
+fi
+
+sudo -u $(whoami) $HOMEBREW services list | grep tor
 exit 1

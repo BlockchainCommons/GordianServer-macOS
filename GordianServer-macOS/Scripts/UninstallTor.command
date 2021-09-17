@@ -9,12 +9,14 @@ arch=`uname -m`
 if [[ $arch =~ "arm" ]]
 then
   export HOMEBREW="/opt/homebrew/bin/brew"
+  export TOR_ETC="/opt/homebrew/etc/tor"
 else
   export HOMEBREW="/usr/local/bin/brew"
+  export TOR_ETC="/usr/local/etc/tor"
 fi
 
 echo "Removing /usr/local/etc/tor"
-rm -rf /usr/local/etc/tor
+rm -rf $TOR_ETC
 echo "Removing /usr/local/var/lib/tor"
 rm -rf /usr/local/var/lib/tor
 echo "Stopping Tor..."

@@ -5,5 +5,13 @@
 #
 #  Created by Peter on 20/11/19.
 #  Copyright © 2019 Blockchain Commons, LLC
-cat /usr/local/etc/tor/torrc
+arch=`uname -m`
+if [[ $arch =~ "arm" ]]
+then
+  export TORRC="/opt/homebrew/etc/tor/torrc"
+else
+  export TORRC="/usr/local/etc/tor/torrc"
+fi
+
+cat $TORRC
 exit 1

@@ -97,7 +97,6 @@ class ViewController: NSViewController, NSWindowDelegate {
     
     @IBAction func installTorAction(_ sender: Any) {
         if torInstalled {
-            // uninstall it
             actionAlert(message: "Uninstall Tor?", info: "This will delete your Tor config, hidden services and uninstall Tor.") { [weak self] confirm in
                 guard let self = self else { return }
                 
@@ -107,7 +106,6 @@ class ViewController: NSViewController, NSWindowDelegate {
                 }
             }
         } else {
-            // install it
             actionAlert(message: "Install Tor?", info: "This will run a series of checks to see if Tor needs to be installed from scratch, updated or configured to set up remote connection to your node and will take action accordingly.") { [weak self] confirm in
                 
                 if confirm {
@@ -117,9 +115,6 @@ class ViewController: NSViewController, NSWindowDelegate {
                         self.installingTor = true
                         self.performSegue(withIdentifier: "goInstall", sender: self)
                     }
-                    //segue to installer
-//                    self.addSpinnerDesc("Installing Tor...")
-//                    self.runScript(script: .installTor)
                 }
             }
         }
@@ -1130,7 +1125,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.torIsOn = false
                 vc.startTorOutlet.title = "Start Tor"
-                vc.startTorOutlet.isEnabled = false
+                vc.startTorOutlet.isEnabled = true
                 vc.updateTorStatus(isOn: false)
             }
         }
@@ -1181,6 +1176,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                 
                 self.torVersionOutlet.stringValue = result.torVersion
                 self.startTorOutlet.title = "Start"
+                self.startTorOutlet.isEnabled = true
                 self.installTorOutlet.title = "Uninstall"
                 self.installTorOutlet.isEnabled = true
                 self.updateTorOutlet.isEnabled = true

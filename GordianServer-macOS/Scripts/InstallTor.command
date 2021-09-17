@@ -9,19 +9,22 @@ arch=`uname -m`
 if [[ $arch =~ "arm" ]]
 then
   export HOMEBREW="/opt/homebrew/bin/brew"
+  export TOR="/opt/homebrew/opt/tor/bin/tor"
+  export TORRC="/opt/homebrew/etc/tor/torrc"
 else
   export HOMEBREW="/usr/local/bin/brew"
+  export TOR="/usr/local/bin/tor"
+  export TORRC="/usr/local/etc/tor/torrc"
 fi
 
 function installTor () {
-    if ! command -v /usr/local/bin/tor &> /dev/null
+    if ! command -v $TOR &> /dev/null
     then
     
         echo "Installing tor..."
         sudo -u $(whoami) $HOMEBREW install tor
         
         echo "Checking if torrc exists..."
-        TORRC=/usr/local/etc/tor/torrc
         if test -f "$TORRC"; then
             echo "$TORRC exists."
         else
@@ -48,8 +51,8 @@ function installTor () {
         
         # We now check if the torrc exists before creating one
         echo "Checking if torrc exists..."
-        if test -f /usr/local/etc/tor/torrc; then
-            echo "/usr/local/etc/tor/torrc exists."
+        if test -f $TORRC; then
+            echo "$TORRC exists."
         else
             createTorrc
         fi
@@ -70,13 +73,13 @@ function installTor () {
 
 function createTorrc () {
     echo "Creating torrc file..."
-    cp /usr/local/etc/tor/torrc.sample.default /usr/local/etc/tor/torrc
+    cp "$TORRC.sample" $TORRC
 }
 
 function configureTor () {
     echo "Configuring tor v3 hidden service's..."
-    sed -i -e 's/#ControlPort 9051/ControlPort 9051/g' /usr/local/etc/tor/torrc
-    sed -i -e 's/#CookieAuthentication 1/CookieAuthentication 1/g' /usr/local/etc/tor/torrc
+    sed -i -e 's/#ControlPort 9051/ControlPort 9051/g' $TORRC
+    sed -i -e 's/#CookieAuthentication 1/CookieAuthentication 1/g' $TORRC
     sed -i -e 's/## address y:z./## address y:z.\
 \
 HiddenServiceDir \/usr\/local\/var\/lib\/tor\/gordian\/main\/\
@@ -101,7 +104,7 @@ HiddenServicePort 9735 127.0.0.1:9735\
 \
 HiddenServiceDir \/usr\/local\/var\/lib\/tor\/gordian\/lightning\/rpc\/\
 HiddenServiceVersion 3\
-HiddenServicePort 8080 127.0.0.1:8080/g' /usr/local/etc/tor/torrc
+HiddenServicePort 8080 127.0.0.1:8080/g' $TORRC
 
     echo "Creating hidden service directories at /usr/local/var/lib/tor/gordian"
     
