@@ -43,53 +43,6 @@ class Settings: NSViewController, NSTextFieldDelegate {
     
     // MARK: User Actions
     
-    @IBAction func seeLightningLog(_ sender: Any) {
-        runScript(script: .openLightningLog, env: ["":""], args: []) { _ in }
-    }
-    
-    @IBAction func seeLightningConfig(_ sender: Any) {
-        runScript(script: .openLightningConfig, env: ["":""], args: []) { _ in }
-    }
-    
-    @IBAction func deleteWalletsAction(_ sender: Any) {
-        DispatchQueue.main.async { [weak self] in
-            self?.performSegue(withIdentifier: "segueToDeleteWallets", sender: self)
-        }
-    }
-    
-    @IBAction func seeBitcoinConf(_ sender: Any) {
-        let d = Defaults()
-        let path = d.dataDir()
-        let env = ["DATADIR":path]
-        runScript(script: .showBitcoinConf, env: env, args: []) { _ in }
-    }
-    
-    @IBAction func seeTorrc(_ sender: Any) {
-        runScript(script: .openTorrc, env: ["":""], args: []) { _ in }
-    }
-    
-    @IBAction func seeTorLog(_ sender: Any) {
-        runScript(script: .showTorLog, env: ["":""], args: []) { _ in }
-    }
-    
-    @IBAction func seeBtcLog(_ sender: Any) {
-        let d = Defaults()
-        let path = d.dataDir()
-        let env = ["DATADIR":path]
-        runScript(script: .showBitcoinLog, env: env, args: []) { _ in }
-    }
-        
-    @IBAction func refreshHS(_ sender: Any) {
-        actionAlert(message: "Refresh Hidden Service?", info: "This will remove your current Tor hidden service and start a new one, you will need to scan a new QuickConnect QR code to access your node remotely, all existing remote connections will fail.") { (response) in
-            if response {
-                DispatchQueue.main.async { [unowned vc = self] in
-                    vc.refreshing = true
-                    vc.performSegue(withIdentifier: "seeLog", sender: self)
-                }
-            }
-        }
-    }
-    
     @IBAction func goPrivate(_ sender: Any) {
         let value = goPrivateOutlet.state
         if value == .on {
@@ -201,25 +154,6 @@ class Settings: NSViewController, NSTextFieldDelegate {
         }
     }
     
-    @IBAction func seeStandUpLog(_ sender: Any) {
-         runScript(script: .openLog, env: ["":""], args: []) { _ in }
-    }
-    
-    @IBAction func removeStandUp(_ sender: Any) {
-        DispatchQueue.main.async {
-            actionAlert(message: "Danger!", info: "This will remove the ~/.gordian directory including *All* its contents!\n\nIt will remove your Bitcoin Core binaries.\n\nThis will remove the tor config, tor hidden services and uninstall tor.\n\nAre you aure you want to do this?") { [unowned vc = self] response in
-                if response {
-                    let domain = Bundle.main.bundleIdentifier!
-                    UserDefaults.standard.removePersistentDomain(forName: domain)
-                    UserDefaults.standard.synchronize()
-                    vc.seeLog = false
-                    vc.standingDown = true
-                    vc.performSegue(withIdentifier: "seeLog", sender: vc)
-                }
-            }
-        }
-    }
-    
     @IBAction func removeBitcoinCore(_ sender: Any) {
         DispatchQueue.main.async { [unowned vc = self] in
             actionAlert(message: "Danger!", info: "This will remove the Bitcoin directory! All Bitcoin Core data including your wallets will be deleted!\n\nAre you sure you want to continue?") { response in
@@ -238,13 +172,6 @@ class Settings: NSViewController, NSTextFieldDelegate {
         }
     }
     
-//    @IBAction func saveNodeLabel(_ sender: Any) {
-//        if nodeLabelField.stringValue != "" {
-//            ud.set(nodeLabelField.stringValue, forKey: "nodeLabel")
-//            simpleAlert(message: "Success", info: "Node label updated to: \(nodeLabelField.stringValue)", buttonLabel: "OK")
-//        }
-//    }
-    
     @IBAction func didSetWalletDisabled(_ sender: Any) {
         let value = walletDisabled.state.rawValue
         getBitcoinConf { [unowned vc = self] (conf, error) in
@@ -253,42 +180,6 @@ class Settings: NSViewController, NSTextFieldDelegate {
             }
         }
     }
-    
-//    @IBAction func didSetPrune(_ sender: Any) {
-//        let value = pruneOutlet.state.rawValue
-//        getBitcoinConf { [unowned vc = self] (conf, error) in
-//            if !error && conf != nil {
-//                if conf!.count > 0 {
-//                    DispatchQueue.main.async { [weak self] in
-//                        var newValue = value
-//                        if self?.pruneValueField.stringValue != "" {
-//                            if value == 0 {
-//                                //self?.pruneValueField.isEnabled = false
-//                                //self?.pruneValueField.stringValue = "0"
-//                            } else {
-//                                if self != nil {
-//                                    if let int = Int(self!.pruneValueField.stringValue) {
-//                                        self?.pruneValueField.isEnabled = true
-//                                        newValue = int
-//                                    }
-//                                }
-//                            }
-//                        }
-//                        vc.parseBitcoinConf(conf: conf!, keyToUpdate: .prune, outlet: vc.pruneOutlet, newValue: newValue)
-//                    }
-//                }
-//            } else {
-//                vc.ud.set(value, forKey: "prune")
-//                if value == 1 {
-//                    vc.setState(int: 0, outlet: vc.txIndexOutlet)
-//                    vc.ud.set(0, forKey: "txindex")
-//                    DispatchQueue.main.async { [weak self] in
-//                        self?.pruneValueField.stringValue = "\(value)"
-//                    }
-//                }
-//            }
-//        }
-//    }
     
     @IBAction func didSetTxIndex(_ sender: Any) {
         let value = txIndexOutlet.state.rawValue
