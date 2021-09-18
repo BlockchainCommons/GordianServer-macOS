@@ -53,13 +53,6 @@ class TorClient: NSObject, URLSessionDelegate {
         
         session = URLSession(configuration: sessionConfiguration, delegate: self, delegateQueue: .main)
         
-        #if targetEnvironment(macCatalyst)
-            // Code specific to Mac.
-        #else
-            // Code to exclude from Mac.
-            session.configuration.urlCache = URLCache(memoryCapacity: 0, diskCapacity: 0, diskPath: nil)
-        #endif
-        
         //add V3 auth keys to ClientOnionAuthDir if any exist
         createTorDirectory()
         authDirPath = createAuthDirectory()
@@ -88,7 +81,7 @@ class TorClient: NSObject, URLSessionDelegate {
                     "StrictNodes": "1"
                 ]
                 
-                //self?.config.arguments = ["--defaults-torrc \(NSTemporaryDirectory()).torrc"]
+                //self.config.arguments = ["--defaults-torrc \(NSTemporaryDirectory()).torrc"]
                 self.config.cookieAuthentication = true
                 self.config.dataDirectory = URL(fileURLWithPath: self.torPath())
                 self.config.controlSocket = self.config.dataDirectory?.appendingPathComponent("cp")
@@ -161,38 +154,6 @@ class TorClient: NSObject, URLSessionDelegate {
                 }
             //}
         //}
-    }
-    
-    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-        
-        guard let trust = challenge.protectionSpace.serverTrust else {
-            print("did not receive trust")
-            return
-        }
-        
-        let credential = URLCredential(trust: trust)
-        
-        if let certificate = cert,
-            let remoteCert = SecTrustGetCertificateAtIndex(trust, 0) {
-            let remoteCertData = SecCertificateCopyData(remoteCert) as NSData
-
-            let cert = certificate
-                .components(separatedBy: "\n")
-                .filter { !$0.isEmpty }
-                .dropLast()
-                .dropFirst()
-                .joined()
-            let certData = Data(base64Encoded: cert)
-
-            if let pinnedCertData = certData,
-                remoteCertData.isEqual(to: pinnedCertData as Data) {
-                completionHandler(.useCredential, credential)
-            } else {
-                completionHandler(.rejectProtectionSpace, nil)
-            }
-        } else {
-            completionHandler(.useCredential, credential)
-        }
     }
     
     func resign() {

@@ -10,31 +10,29 @@ import Cocoa
 
 class ViewController: NSViewController, NSWindowDelegate {
     
-    @IBOutlet weak var updateTorOutlet: NSButton!
-    @IBOutlet weak var installTorOutlet: NSButton!
-    @IBOutlet weak var startTorOutlet: NSButton!
-    @IBOutlet weak var networkLabel: NSTextField!
-    @IBOutlet weak var mainnetIncomingImage: NSImageView!
-    @IBOutlet weak var bitcoinCoreWindow: NSView!
-    @IBOutlet weak var torWindow: NSView!
-    @IBOutlet weak var torAuthWindow: NSView!
-    @IBOutlet weak var startMainnetOutlet: NSButton!
-    @IBOutlet weak var bitcoinCoreHeaderOutlet: NSTextField!
-    @IBOutlet weak var bitcoinCoreVersionOutlet: NSTextField!
-    @IBOutlet weak var torVersionOutlet: NSTextField!
-    @IBOutlet weak var torAuthLockImage: NSImageView!
-    @IBOutlet weak var torAuthRemoveOutlet: NSButton!
-    @IBOutlet var taskDescription: NSTextField!
-    @IBOutlet var spinner: NSProgressIndicator!
-    @IBOutlet var verifyOutlet: NSButton!
-    @IBOutlet var updateOutlet: NSButton!
-    @IBOutlet var icon: NSImageView!
-    @IBOutlet var torRunningImage: NSImageView!
-    @IBOutlet weak var mainnetSyncedLabel: NSTextField!
-    @IBOutlet weak var mainnetIncomingPeersLabel: NSTextField!
-    @IBOutlet weak var mainnetOutgoingPeersLabel: NSTextField!
-    @IBOutlet weak var bitcoinIsOnHeaderImage: NSImageView!
-    @IBOutlet weak var networkButton: NSPopUpButton!
+    @IBOutlet weak private var startTorOutlet: NSButton!
+    @IBOutlet weak private var networkLabel: NSTextField!
+    @IBOutlet weak private var mainnetIncomingImage: NSImageView!
+    @IBOutlet weak private var bitcoinCoreWindow: NSView!
+    @IBOutlet weak private var torWindow: NSView!
+    @IBOutlet weak private var torAuthWindow: NSView!
+    @IBOutlet weak private var startMainnetOutlet: NSButton!
+    @IBOutlet weak private var bitcoinCoreHeaderOutlet: NSTextField!
+    @IBOutlet weak private var bitcoinCoreVersionOutlet: NSTextField!
+    @IBOutlet weak private var torVersionOutlet: NSTextField!
+    @IBOutlet weak private var torAuthLockImage: NSImageView!
+    @IBOutlet weak private var torAuthRemoveOutlet: NSButton!
+    @IBOutlet weak private var taskDescription: NSTextField!
+    @IBOutlet weak private var spinner: NSProgressIndicator!
+    @IBOutlet weak private var verifyOutlet: NSButton!
+    @IBOutlet weak private var updateOutlet: NSButton!
+    @IBOutlet weak private var icon: NSImageView!
+    @IBOutlet weak private var torRunningImage: NSImageView!
+    @IBOutlet weak private var mainnetSyncedLabel: NSTextField!
+    @IBOutlet weak private var mainnetIncomingPeersLabel: NSTextField!
+    @IBOutlet weak private var mainnetOutgoingPeersLabel: NSTextField!
+    @IBOutlet weak private var bitcoinIsOnHeaderImage: NSImageView!
+    @IBOutlet weak private var networkButton: NSPopUpButton!
     
     weak var mgr = TorClient.sharedInstance
     //var installingLightning = Bool()
@@ -77,23 +75,24 @@ class ViewController: NSViewController, NSWindowDelegate {
     var headerText = ""
     var installingTor = false
     var updatingTor = false
+    var currentVersion = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
         isLoading = true
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNow), name: .refresh, object: nil)
-        setScene()
+        
+        d.setDefaults { [weak self] in
+            guard let self = self else { return }
+            
+            self.setEnv()
+            self.setScene()
+        }
     }
 
     override func viewWillAppear() {
         self.view.window?.delegate = self
         self.view.window?.minSize = NSSize(width: 544, height: 377)
-        
-        if isLoading {
-            if mgr?.state != .started && mgr?.state != .connected  {
-                mgr?.start(delegate: self)
-            }
-        }
     }
 
     override func viewDidAppear() {
@@ -101,47 +100,52 @@ class ViewController: NSViewController, NSWindowDelegate {
         let initialSize = NSSize(width: 544, height: 377)
         frame.size = initialSize
         self.view.window?.setFrame(frame, display: true)
-        refresh()
-    }
-    
-    @IBAction func installTorAction(_ sender: Any) {
-        if torInstalled {
-            actionAlert(message: "Uninstall Tor?", info: "This will delete your Tor config, hidden services and uninstall Tor.") { [weak self] confirm in
-                guard let self = self else { return }
-                
-                if confirm {
-                    self.addSpinnerDesc("Uninstalling Tor...")
-                    self.runScript(script: .uninstallTor)
-                }
-            }
-        } else {
-            actionAlert(message: "Install Tor?", info: "This will run a series of checks to see if Tor needs to be installed from scratch, updated or configured to set up remote connection to your node and will take action accordingly.") { [weak self] confirm in
-                
-                if confirm {
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
-                        
-                        self.installingTor = true
-                        self.performSegue(withIdentifier: "goInstall", sender: self)
-                    }
-                }
+        
+        if isLoading {
+            if mgr?.state != .started && mgr?.state != .connected  {
+                mgr?.start(delegate: self)
             }
         }
     }
     
-    @IBAction func updateTorAction(_ sender: Any) {
-        actionAlert(message: "Update Tor?", info: "") { [weak self] confirm in
-            
-            if confirm {
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    
-                    self.updatingTor = true
-                    self.performSegue(withIdentifier: "goInstall", sender: self)
-                }
-            }
-        }
-    }
+//    @IBAction func installTorAction(_ sender: Any) {
+//        if torInstalled {
+//            actionAlert(message: "Uninstall Tor?", info: "This will delete your Tor config, hidden services and uninstall Tor.") { [weak self] confirm in
+//                guard let self = self else { return }
+//
+//                if confirm {
+//                    self.addSpinnerDesc("Uninstalling Tor...")
+//                    self.runScript(script: .uninstallTor)
+//                }
+//            }
+//        } else {
+//            actionAlert(message: "Install Tor?", info: "This will run a series of checks to see if Tor needs to be installed from scratch, updated or configured to set up remote connection to your node and will take action accordingly.") { [weak self] confirm in
+//
+//                if confirm {
+//                    DispatchQueue.main.async { [weak self] in
+//                        guard let self = self else { return }
+//
+//                        self.installingTor = true
+//                        self.performSegue(withIdentifier: "goInstall", sender: self)
+//                    }
+//                }
+//            }
+//        }
+//    }
+    
+//    @IBAction func updateTorAction(_ sender: Any) {
+//        actionAlert(message: "Update Tor?", info: "") { [weak self] confirm in
+//
+//            if confirm {
+//                DispatchQueue.main.async { [weak self] in
+//                    guard let self = self else { return }
+//
+//                    self.updatingTor = true
+//                    self.performSegue(withIdentifier: "goInstall", sender: self)
+//                }
+//            }
+//        }
+//    }
     
     @IBAction func showSettingsAction(_ sender: Any) {
         var myWindow: NSWindow? = nil
@@ -155,7 +159,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
     
     @IBAction func showQuickConnectAction(_ sender: Any) {
-        if torInstalled {
+        if torIsOn {
             var myWindow: NSWindow? = nil
             let storyboard = NSStoryboard(name: "Main", bundle: nil)
             let quickconnect = storyboard.instantiateController(withIdentifier: "QuickConnect") as! QRDisplayer
@@ -170,15 +174,36 @@ class ViewController: NSViewController, NSWindowDelegate {
     }    
 
     @objc func refreshNow() {
-        refresh()
+        //refresh()
+        checkForGordian()
     }
 
-    private func refresh() {
-        setScene()
+    private func checkForBitcoinUpdate() {
         d.setDefaults { [unowned vc = self] in
             vc.getLatestVersion { [unowned vc = self] (success, errorMessage) in
                 if success {
                     vc.setEnv()
+                    if self.currentVersion.contains(self.d.existingVersion()) {
+                        DispatchQueue.main.async { [unowned vc = self] in
+                            vc.updateOutlet.isEnabled = false
+                            vc.updateOutlet.title = "Update"
+                        }
+                    } else {
+                        DispatchQueue.main.async { [unowned vc = self] in
+                            vc.updateOutlet.title = "Update"
+                            vc.updateOutlet.isEnabled = true
+                            
+                            actionAlert(message: "A newer version of Bitcoin Core has been released. Upgrade to Bitcoin Core \(vc.newestVersion)?", info: "") { (response) in
+                                if response {
+                                    DispatchQueue.main.async { [unowned vc = self] in
+                                        vc.upgrading = true
+                                        vc.timer?.invalidate()
+                                        vc.performSegue(withIdentifier: "goInstall", sender: vc)
+                                    }
+                                }
+                            }
+                        }
+                    }
                 } else {
                     vc.showAlertMessage(message: "Network request error", info: errorMessage ?? "We had an issue getting a response from the Bitcoin Core repo on GitHub, we do this to check for new releases, you can ignore this error but we thought you should know something is up, please check your internet connection.")
                     vc.setEnv()
@@ -300,7 +325,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             self.taskDescription.alphaValue = 1
         }
         
-        refresh()
+        checkForGordian()
     }
 
     @IBAction func removeAuthAction(_ sender: Any) {
@@ -501,15 +526,17 @@ class ViewController: NSViewController, NSWindowDelegate {
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.startSpinner(description: "starting tor...")
                 vc.startTorOutlet.isEnabled = false
+                vc.mgr?.start(delegate: self)
             }
-            runScript(script: .startTor)
+            //runScript(script: .startTor)
         } else {
 
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.startSpinner(description: "stopping tor...")
                 vc.startTorOutlet.isEnabled = false
+                vc.mgr?.resign()
             }
-            runScript(script: .stopTor)
+            //runScript(script: .stopTor)
         }
     }
     
@@ -564,20 +591,6 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
     }
 
-    func checkTorVersion() {
-        DispatchQueue.main.async { [unowned vc = self] in
-            vc.taskDescription.stringValue = "checking if tor is installed..."
-            vc.runScript(script: .checkForTor)
-        }
-    }
-
-    func getTorrcFile() {
-        DispatchQueue.main.async { [unowned vc = self] in
-            vc.taskDescription.stringValue = "fetching torrc file..."
-            vc.runScript(script: .getTorrc)
-        }
-    }
-
     func checkBitcoinConfForRPCCredentials() {
         DispatchQueue.main.async { [unowned vc = self] in
             vc.taskDescription.stringValue = "getting rpc credentials..."
@@ -585,24 +598,10 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
     }
 
-    func checkForStandUp() {
+    func checkForGordian() {
         DispatchQueue.main.async { [unowned vc = self] in
             vc.taskDescription.stringValue = "checking for ~/.gordian directory..."
             vc.runScript(script: .checkStandUp)
-        }
-    }
-
-    func getTorHostName() {
-        DispatchQueue.main.async { [unowned vc = self] in
-            vc.taskDescription.stringValue = "getting tor hostname..."
-            vc.runScript(script: .getTorHostname)
-        }
-    }
-
-    func isTorOn() {
-        DispatchQueue.main.async { [unowned vc = self] in
-            vc.taskDescription.stringValue = "checking tor status..."
-            vc.runScript(script: .torStatus)
         }
     }
     
@@ -627,7 +626,7 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     private func runScript(script: SCRIPT) {
         #if DEBUG
-        //print("script: \(script.rawValue)")
+        print("script: \(script.rawValue)")
         #endif
         
         let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
@@ -649,14 +648,18 @@ class ViewController: NSViewController, NSWindowDelegate {
             
             if let output = String(data: data, encoding: .utf8) {
                 #if DEBUG
-                //print("output: \(output)")
+                print("output: \(output)")
                 #endif
                 result += output
             }
             
             if let errorOutput = String(data: errData, encoding: .utf8) {
                 #if DEBUG
-                //print("error: \(errorOutput)")
+                print("error: \(errorOutput)")
+                if errorOutput != "" {
+                    simpleAlert(message: "Error", info: errorOutput, buttonLabel: "OK")
+                }
+                
                 #endif
                 result += errorOutput
             }
@@ -669,11 +672,8 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     func parseScriptResult(script: SCRIPT, result: String) {
         switch script {
-        case .torUpdateAvailable:
-            parseTorUpdateAvailable(result: result)
-            
-        case .uninstallTor:
-            refreshNow()
+        case .checkStandUp:
+            checkStandUpParser(result: result)
             
         case .stopMain:
             stopMainParse(result: result)
@@ -692,9 +692,9 @@ class ViewController: NSViewController, NSWindowDelegate {
 
         case .startRegtest:
             startRegtestParse(result: result)
-
-        case .checkStandUp:
-            checkStandUpParser(result: result)
+            
+        case .startSignet:
+            startSignetParse(result: result)
 
         case .isMainOn, .isTestOn, .isRegOn, .isSignetOn:
             parseIsBitcoinOn(result: result)
@@ -702,29 +702,23 @@ class ViewController: NSViewController, NSWindowDelegate {
         case .checkForBitcoin:
             parseBitcoindResponse(result: result)
 
-        case .checkForTor:
-            parseTorResult(result: result)
-
         case .getRPCCredentials:
             checkForRPCCredentials(response: result)
 
-        case .getTorrc:
-            checkIfTorIsConfigured(response: result)
+//        case .getTorrc:
+//            checkIfTorIsConfigured(response: result)
+//
+//        case .getTorHostname:
+//            parseHostname(response: result)
 
-        case .getTorHostname:
-            parseHostname(response: result)
-
-        case .torStatus:
-            parseTorStatus(result: result)
+//        case .torStatus:
+//            parseTorStatus(result: result)
 
         case .verifyBitcoin:
             parseVerifyResult(result: result)
 
-        case .startTor, .stopTor:
-            torStarted(result: result)
-
-        case .checkHomebrew:
-            parseHomebrewResult(result: result)
+//        case .checkHomebrew:
+//            parseHomebrewResult(result: result)
 
         case .checkXcodeSelect:
             parseXcodeSelectResult(result: result)
@@ -732,8 +726,8 @@ class ViewController: NSViewController, NSWindowDelegate {
         case .checkForAuth:
             parseAuthCheck(result: result)
 
-        case .checkForOldHost:
-            parseOldHostResponse(result: result)
+//        case .checkForOldHost:
+//            parseOldHostResponse(result: result)
             
 //        case .getLightningHostnames:
 //            parseLightningHostnames(result: result)
@@ -757,21 +751,21 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
     }
     
-    private func parseTorUpdateAvailable(result: String) {
-        if result.contains("Tor") || result.contains("tor") {
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                
-                self.updateTorOutlet.isEnabled = true
-            }
-        } else {
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                
-                self.updateTorOutlet.isEnabled = false
-            }
-        }
-    }
+//    private func parseTorUpdateAvailable(result: String) {
+//        if result.contains("Tor") || result.contains("tor") {
+//            DispatchQueue.main.async { [weak self] in
+//                guard let self = self else { return }
+//
+//                self.updateTorOutlet.isEnabled = true
+//            }
+//        } else {
+//            DispatchQueue.main.async { [weak self] in
+//                guard let self = self else { return }
+//
+//                self.updateTorOutlet.isEnabled = false
+//            }
+//        }
+//    }
     
 //    private func parseLightningConfig(result: String) {
 //        let arr = result.split(separator: "\n")
@@ -888,18 +882,18 @@ class ViewController: NSViewController, NSWindowDelegate {
 //        }
 //    }
 
-    private func parseOldHostResponse(result: String) {
-        if result.contains("Exists") {
-            actionAlert(message: "You have an outdated version of GordianServer", info: "You need to run through the installation script again to configure your new Tor hidden services and to be able to run more then one network at a time, GordianServer may not function properly otherwise.") { [unowned vc = self] response in
-                if response {
-                    vc.runScript(script: .removeOldHost)
-                    vc.installNow()
-                }
-            }
-        } else {
-            checkForAuth()
-        }
-    }
+//    private func parseOldHostResponse(result: String) {
+//        if result.contains("Exists") {
+//            actionAlert(message: "You have an outdated version of GordianServer", info: "You need to run through the installation script again to configure your new Tor hidden services and to be able to run more then one network at a time, GordianServer may not function properly otherwise.") { [unowned vc = self] response in
+//                if response {
+//                    vc.runScript(script: .removeOldHost)
+//                    vc.installNow()
+//                }
+//            }
+//        } else {
+//            checkForAuth()
+//        }
+//    }
 
     private func parseAuthCheck(result: String) {
         if result.contains("Unauthenticated") && torConfigured && bitcoinConfigured {
@@ -912,23 +906,62 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     private func mainnetIsOff() {
-        DispatchQueue.main.async { [unowned vc = self] in
-            vc.bitcoinRunning = false
-            vc.mainOn = false
-            vc.startMainnetOutlet.title = "Start"
-            vc.startMainnetOutlet.isEnabled = true
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
+            self.bitcoinRunning = false
+            self.mainOn = false
+            self.startMainnetOutlet.title = "Start"
+            self.startMainnetOutlet.isEnabled = true
+            self.mainnetSyncedLabel.stringValue = ""
+            self.mainnetIncomingPeersLabel.stringValue = ""
+            self.mainnetOutgoingPeersLabel.stringValue = ""
+        }
+    }
+    
+    private func signetIsOff() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
+            self.isSignetOn = false
+            self.bitcoinRunning = false
+            self.startMainnetOutlet.title = "Start"
+            self.startMainnetOutlet.isEnabled = true
+            self.mainnetSyncedLabel.stringValue = ""
+            self.mainnetIncomingPeersLabel.stringValue = ""
+            self.mainnetOutgoingPeersLabel.stringValue = ""
         }
     }
 
     private func testnetIsOff() {
-        DispatchQueue.main.async { [unowned vc = self] in
-            vc.testOn = false
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
+            self.testOn = false
+            self.bitcoinRunning = false
+            self.startMainnetOutlet.title = "Start"
+            self.startMainnetOutlet.isEnabled = true
+            self.mainnetSyncedLabel.stringValue = ""
+            self.mainnetIncomingPeersLabel.stringValue = ""
+            self.mainnetOutgoingPeersLabel.stringValue = ""
         }
     }
 
     private func regtestIsOff() {
-        DispatchQueue.main.async { [unowned vc = self] in
-            vc.regTestOn = false
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
+            self.regTestOn = false
+            self.bitcoinRunning = false
+            self.startMainnetOutlet.title = "Start"
+            self.startMainnetOutlet.isEnabled = true
+            self.mainnetSyncedLabel.stringValue = ""
+            self.mainnetIncomingPeersLabel.stringValue = ""
+            self.mainnetOutgoingPeersLabel.stringValue = ""
         }
     }
 
@@ -960,7 +993,7 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     private func startTestParse(result: String) {
         startSpinner(description: "turning on testnet")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [unowned vc = self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [unowned vc = self] in
             vc.runScript(script: .isTestOn)
             vc.hideSpinner()
         }
@@ -968,7 +1001,7 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     private func startMainParse(result: String) {
         startSpinner(description: "turning on mainnet")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [unowned vc = self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [unowned vc = self] in
             vc.runScript(script: .isMainOn)
             vc.hideSpinner()
         }
@@ -976,8 +1009,16 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     private func startRegtestParse(result: String) {
         startSpinner(description: "turning on regtest")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [unowned vc = self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [unowned vc = self] in
             vc.runScript(script: .isRegOn)
+            vc.hideSpinner()
+        }
+    }
+    
+    private func startSignetParse(result: String) {
+        startSpinner(description: "turning on signet")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [unowned vc = self] in
+            vc.runScript(script: .isSignetOn)
             vc.hideSpinner()
         }
     }
@@ -991,25 +1032,11 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
     }
 
-    private func parseHomebrewResult(result: String) {
-        if result.contains("Homebrew not installed") {
-            hideSpinner()
-            actionAlert(message: "Install dependencies?", info: "You do not appear to have Homebrew installed, GordianServer.app relies on homebrew for installing Tor. We use a well known open source script called Strap to setup your mac for best security and privacy practices, it also installs Homebrew and few other very useful tools. You can read more about Strap here: \"https://github.com/MikeMcQuaid/strap\". This will launch a terminal session and prompt you for your password to run through the process, once complete you can quit and open GordianServer to continue." ) { [unowned vc = self] response in
-                if response {
-                    vc.strap()
-                }
-            }
-        } else {
-            checkForXcodeSelect()
-        }
-    }
-
     func checkStandUpParser(result: String) {
         if result.contains("False") {
-            checkForHomebrew()
+            checkForXcodeSelect()
         } else {
-            hideSpinner()
-            runScript(script: .checkForOldHost)
+            checkBitcoindVersion()
         }
     }
 
@@ -1034,86 +1061,55 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     private func parseIsBitcoinOn(result: String) {
-        //print("result: \(result)")
-        if result.contains("Could not connect to the server 127.0.0.1") {
-            mainnetIsOff()
-        } else if result.contains("chain") || result.contains("Loading block index...") || result.contains("Verifying blocks...") {
-
-            if result.contains("chain") {
-                if let dict = convertStringToDictionary(json: result) {
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
-                        
-                        self.mainnetSyncedLabel.stringValue = self.progress(dict: dict)
-                        if let activeChain = dict["chain"] as? String {
-                            switch activeChain {
-                            case "main":
-                                self.mainOn = true
-                            case "test":
-                                self.testOn = true
-                            case "regtest":
-                                self.regTestOn = true
-                            case "signet":
-                                self.isSignetOn = true
-                            default:
-                                break
-                            }
+        if result.contains("Could not connect to the server") {
+            let activeChain = UserDefaults.standard.string(forKey: "chain") ?? "main"
+            switch activeChain {
+            case "main":
+                self.mainnetIsOff()
+            case "test":
+                self.testnetIsOff()
+            case "regtest":
+                self.regtestIsOff()
+            case "signet":
+                self.signetIsOff()
+            default:
+                break
+            }
+            self.hideSpinner()
+            
+        } else if result.contains("chain") || result.contains("block") {
+            if let dict = convertStringToDictionary(json: result) {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    
+                    self.mainnetSyncedLabel.stringValue = self.progress(dict: dict)
+                    
+                    if let activeChain = dict["chain"] as? String {
+                        switch activeChain {
+                        case "main":
+                            self.mainOn = true
+                        case "test":
+                            self.testOn = true
+                        case "regtest":
+                            self.regTestOn = true
+                        case "signet":
+                            self.isSignetOn = true
+                        default:
+                            break
                         }
+                        self.checkBitcoinConfForRPCCredentials()
                     }
+                    
+                    self.bitcoinRunning = true
+                    self.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
+                    self.startMainnetOutlet.title = "Stop"
+                    self.startMainnetOutlet.isEnabled = true
+                    self.setTimer()
                 }
-            // MARK: TODO - EXPAND THIS
-            } else if result.contains("Loading block index...") {
-                DispatchQueue.main.async { [unowned vc = self] in
-                    vc.mainnetSyncedLabel.stringValue = "Loading blocks..."
-                }
-            } else {
-                DispatchQueue.main.async { [unowned vc = self] in
-                    vc.mainnetSyncedLabel.stringValue = result
-                }
-            }
-
-            DispatchQueue.main.async { [unowned vc = self] in
-                vc.bitcoinRunning = true
-                switch self.chain {
-                case "main":
-                    self.mainOn = true
-                case "test":
-                    self.testOn = true
-                case "regtest":
-                    self.regTestOn = true
-                case "signet":
-                    self.isSignetOn = true
-                default:
-                    break
-                }
-                vc.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
-                vc.startMainnetOutlet.title = "Stop"
-                vc.startMainnetOutlet.isEnabled = true
-                vc.setTimer()
-            }
-        } else {
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                
-                switch self.chain {
-                case "main":
-                    self.mainOn = false
-                case "test":
-                    self.testOn = false
-                case "regtest":
-                    self.regTestOn = false
-                case "signet":
-                    self.isSignetOn = false
-                default:
-                    break
-                }
-                self.startMainnetOutlet.title = "Start"
-                self.startMainnetOutlet.isEnabled = false
             }
         }
-        if isLoading {
-            checkBitcoindVersion()
-        }
+        
+        checkForBitcoinUpdate()
     }
 
     private func command(command: String, completion: @escaping ((Any?)) -> Void) {
@@ -1146,54 +1142,6 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
     }
 
-    func parseTorStatus(result: String) {
-        if result.contains("started") {
-            DispatchQueue.main.async { [unowned vc = self] in
-                vc.torIsOn = true
-                vc.startTorOutlet.title = "Stop"
-                vc.startTorOutlet.isEnabled = true
-                vc.updateTorStatus(isOn: true)
-            }
-        } else if result.contains("stopped") {
-            DispatchQueue.main.async { [unowned vc = self] in
-                vc.torIsOn = false
-                vc.startTorOutlet.title = "Start"
-                vc.startTorOutlet.isEnabled = true
-                vc.updateTorStatus(isOn: false)
-            }
-        } else {
-            DispatchQueue.main.async { [unowned vc = self] in
-                vc.torIsOn = false
-                vc.startTorOutlet.title = "Start Tor"
-                vc.startTorOutlet.isEnabled = true
-                vc.updateTorStatus(isOn: false)
-            }
-        }
-        checkForStandUp()
-    }
-
-    func torStarted(result: String) {
-        var title = ""
-        if result.contains("Successfully started") {
-            torIsOn = true
-            title = "Stop Tor"
-            updateTorStatus(isOn: true)
-        } else if result.contains("Successfully stopped") {
-            torIsOn = false
-            title = "Start Tor"
-            updateTorStatus(isOn: false)
-        } else if result.contains("already started") {
-            torIsOn = true
-            title = "Stop Tor"
-            updateTorStatus(isOn: true)
-        }
-        DispatchQueue.main.async { [unowned vc = self] in
-            vc.hideSpinner()
-            vc.startTorOutlet.title = title
-            vc.startTorOutlet.isEnabled = true
-        }
-    }
-
     func updateTorStatus(isOn: Bool) {
         if isOn {
             DispatchQueue.main.async { [unowned vc = self] in
@@ -1206,32 +1154,6 @@ class ViewController: NSViewController, NSWindowDelegate {
                 vc.torRunningImage.image = NSImage.init(imageLiteralResourceName: "NSStatusUnavailable")
             }
         }
-    }
-
-    func parseTorResult(result: String) {
-        torInstalled = result.contains("Tor version")
-        if torInstalled {
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                
-                self.torVersionOutlet.stringValue = result.torVersion
-                self.startTorOutlet.title = "Start"
-                self.startTorOutlet.isEnabled = true
-                self.installTorOutlet.title = "Uninstall"
-                self.installTorOutlet.isEnabled = true
-                //self.updateTorOutlet.isEnabled = true
-            }
-            // check if tor can be updated here
-            runScript(script: .torUpdateAvailable)
-        } else {
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                
-                self.installTorOutlet.stringValue = "Install"
-                self.installTorOutlet.isEnabled = true
-            }
-        }
-        checkBitcoinConfForRPCCredentials()
     }
 
     func checkForRPCCredentials(response: String) {
@@ -1258,20 +1180,24 @@ class ViewController: NSViewController, NSWindowDelegate {
             getPeerInfo()
         } else {
             DispatchQueue.main.async { [unowned vc = self] in
+                vc.hideSpinner()
                 vc.bitcoinConfigured = false
             }
         }
-        getTorrcFile()
     }
 
     private func getPeerInfo() {
-        command(command: "getpeerinfo") { response in
+        command(command: "getpeerinfo") { [weak self] response in
+            guard let self = self else { return }
+            
             if let peerInfoArray = response as? NSArray {
                 DispatchQueue.main.async { [unowned vc = self] in
                     vc.mainnetIncomingPeersLabel.stringValue = vc.peerInfo(peerInfoArray).in
                     vc.mainnetOutgoingPeersLabel.stringValue = vc.peerInfo(peerInfoArray).out
                 }
             }
+            
+            self.hideSpinner()
         }
     }
 
@@ -1292,51 +1218,19 @@ class ViewController: NSViewController, NSWindowDelegate {
         return ("\(incomingCount)", "\(outgoingCount)")
     }
 
-    func checkIfTorIsConfigured(response: String) {
-        if response.contains("HiddenServiceDir /usr/local/var/lib/tor/gordian/") {
-            DispatchQueue.main.async { [unowned vc = self] in
-                vc.torConfigured = true
-            }
-        } else {
-            DispatchQueue.main.async { [unowned vc = self] in
-                vc.torConfigured = false
-            }
-        }
-        getTorHostName()
-    }
-
     func parseBitcoindResponse(result: String) {
         if result.contains("Bitcoin Core Daemon version") || result.contains("Bitcoin Core version") {
             let arr = result.components(separatedBy: "Copyright (C)")
-            var currentVersion = (arr[0]).replacingOccurrences(of: "Bitcoin Core Daemon version ", with: "")
+            currentVersion = (arr[0]).replacingOccurrences(of: "Bitcoin Core Daemon version ", with: "")
             currentVersion = currentVersion.replacingOccurrences(of: "Bitcoin Core version ", with: "")
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.verifyOutlet.isEnabled = true
-                vc.bitcoinCoreVersionOutlet.stringValue = currentVersion
+                vc.bitcoinCoreVersionOutlet.stringValue = self.currentVersion
                 vc.bitcoinInstalled = true
-                if currentVersion.contains(vc.newestVersion) {
-                    DispatchQueue.main.async { [unowned vc = self] in
-                        vc.updateOutlet.isEnabled = false
-                        vc.updateOutlet.title = "Update"
-                        vc.verifyOutlet.isEnabled = true
-                    }
-                } else {
-                    DispatchQueue.main.async { [unowned vc = self] in
-                        vc.updateOutlet.title = "Update"
-                        vc.updateOutlet.isEnabled = true
-                        vc.verifyOutlet.isEnabled = true
-                        actionAlert(message: "A newer version of Bitcoin Core has been released. Upgrade to Bitcoin Core \(vc.newestVersion)?", info: "") { (response) in
-                            if response {
-                                DispatchQueue.main.async { [unowned vc = self] in
-                                    vc.upgrading = true
-                                    vc.timer?.invalidate()
-                                    vc.performSegue(withIdentifier: "goInstall", sender: vc)
-                                }
-                            }
-                        }
-                    }
-                }
+                vc.verifyOutlet.isEnabled = true
             }
+            
+            isBitcoinOn()
         } else {
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.updateOutlet.title = "Install"
@@ -1345,24 +1239,6 @@ class ViewController: NSViewController, NSWindowDelegate {
                 vc.verifyOutlet.isEnabled = false
             }
         }
-        checkTorVersion()
-    }
-
-    func parseHostname(response: String) {
-        if !response.contains("No such file or directory") {
-            let hostnames = response.split(separator: "\n")
-            if hostnames.count >= 3 {
-                UserDefaults.standard.setValue("\(hostnames[0])", forKey: "mainHostname")
-                UserDefaults.standard.setValue("\(hostnames[1])", forKey: "testHostname")
-                UserDefaults.standard.setValue("\(hostnames[2])", forKey: "regHostname")
-                UserDefaults.standard.setValue("\(hostnames[3])", forKey: "signetHostname")
-                
-//                if hostnames.count == 4 {
-//                    lightningP2pHostname = "\(hostnames[3])"
-//                }
-            }
-        }
-        isTorOn()
     }
 
     func parseVerifyResult(result: String) {
@@ -1390,9 +1266,8 @@ class ViewController: NSViewController, NSWindowDelegate {
     func setEnv() {
         env = ["BINARY_NAME":d.existingBinary(),"VERSION":d.existingPrefix(),"PREFIX":d.existingPrefix(),"DATADIR":d.dataDir()]
         #if DEBUG
-        //print("env = \(env)")
+        print("env = \(env)")
         #endif
-        isBitcoinOn()
     }
 
     func showAlertMessage(message: String, info: String) {
@@ -1446,8 +1321,6 @@ class ViewController: NSViewController, NSWindowDelegate {
             self.bitcoinCoreVersionOutlet.stringValue = ""
             self.torVersionOutlet.stringValue = ""
             self.startTorOutlet.isEnabled = false
-            self.installTorOutlet.isEnabled = false
-            self.updateTorOutlet.isEnabled = false
             self.verifyOutlet.isEnabled = false
             self.torRunningImage.alphaValue = 0
             self.bitcoinCoreWindow.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)
@@ -1587,40 +1460,39 @@ extension NSView {
 extension ViewController: OnionManagerDelegate {
     
     func torConnProgress(_ progress: Int) {
-        print("Tor bootstrapping \(progress)% complete")
-//        DispatchQueue.main.async { [weak self] in
-//            self?.torProgressLabel.text = "Tor bootstrapping \(progress)% complete"
-//            self?.progressView.setProgress(Float(Double(progress) / 100.0), animated: true)
-//            self?.blurView.backgroundColor = #colorLiteral(red: 0.05172085258, green: 0.05855310153, blue: 0.06978280196, alpha: 1)
-//            self?.blurView.alpha = 1
-//        }
+        DispatchQueue.main.async { [unowned vc = self] in
+            vc.taskDescription.stringValue = "Tor bootstrapping \(progress)% complete..."
+            vc.updateTorStatus(isOn: false)
+        }
     }
     
     func torConnFinished() {
-//        viewHasLoaded = true
-//        removeBackView()
-//        loadTable()
-//        displayAlert(viewController: self, isError: false, message: "Tor finished bootstrapping")
-//
-//        DispatchQueue.main.async { [weak self] in
-//            self?.torProgressLabel.isHidden = true
-//            self?.progressView.isHidden = true
-//            self?.blurView.isHidden = true
-//        }
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.torIsOn = true
+            self.torVersionOutlet.stringValue = "v0.4.4.6"
+            self.startTorOutlet.title = "Stop"
+            self.startTorOutlet.isEnabled = true
+            self.updateTorStatus(isOn: true)
+            self.checkForGordian()
+        }
+        
         guard let hostname = mgr?.hostname() else {
-            print("error getting hostname")
+            simpleAlert(message: "Tor config issue.", info: "There was an issue fetching your nodes hidden service address. Your node may not be remotely reachable.", buttonLabel: "OK")
             return
         }
         
+        self.torConfigured = true
+        
+        #if DEBUG
         print("hostname: \(hostname)")
+        #endif
     }
     
     func torConnDifficulties() {
-//        displayAlert(viewController: self, isError: true, message: "We are having issues connecting tor")
-//        DispatchQueue.main.async { [weak self] in
-//            self?.torProgressLabel.isHidden = true
-//            self?.progressView.isHidden = true
-//            self?.blurView.isHidden = true
-//        }
+        self.hideSpinner()
+        simpleAlert(message: "Tor connection issue.", info: "We are having trouble starting Tor, your node will not be remotely reachable.", buttonLabel: "OK")
+        self.checkForGordian()
     }
 }

@@ -588,45 +588,15 @@
                                                     <action selector="startTorAction:" target="XfG-lQ-9wD" id="ZB5-uL-sa1"/>
                                                 </connections>
                                             </button>
-                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6By-3K-hw9">
-                                                <rect key="frame" x="36" y="48" width="125" height="28"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="111" id="b7p-ng-pDK"/>
-                                                    <constraint firstAttribute="height" constant="16" id="sAp-XL-knG"/>
-                                                </constraints>
-                                                <buttonCell key="cell" type="push" title="Install" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="aRS-nz-BHv">
-                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                    <font key="font" metaFont="system"/>
-                                                </buttonCell>
-                                                <connections>
-                                                    <action selector="installTorAction:" target="XfG-lQ-9wD" id="fWG-ee-YiD"/>
-                                                </connections>
-                                            </button>
-                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DyC-1k-dHu">
-                                                <rect key="frame" x="36" y="20" width="125" height="28"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="111" id="gBd-V6-saB"/>
-                                                    <constraint firstAttribute="height" constant="16" id="xwg-5g-4vc"/>
-                                                </constraints>
-                                                <buttonCell key="cell" type="push" title="Update" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="haN-lW-AEr">
-                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                    <font key="font" metaFont="system"/>
-                                                </buttonCell>
-                                                <connections>
-                                                    <action selector="updateTorAction:" target="XfG-lQ-9wD" id="aCY-1U-mEm"/>
-                                                </connections>
-                                            </button>
                                         </subviews>
                                         <constraints>
                                             <constraint firstItem="w4M-Pe-mtd" firstAttribute="top" secondItem="eeM-IX-v6E" secondAttribute="bottom" constant="8" id="3nb-Ch-uhi"/>
                                             <constraint firstItem="eeM-IX-v6E" firstAttribute="centerX" secondItem="hmk-BW-J2q" secondAttribute="centerX" id="4NH-Us-5Zi"/>
                                             <constraint firstAttribute="height" constant="251" id="9r8-Hx-ueJ"/>
                                             <constraint firstItem="eeM-IX-v6E" firstAttribute="top" secondItem="WGD-XP-1oR" secondAttribute="bottom" constant="8" symbolic="YES" id="Fc6-wU-qfo"/>
-                                            <constraint firstItem="DyC-1k-dHu" firstAttribute="top" secondItem="6By-3K-hw9" secondAttribute="bottom" constant="12" symbolic="YES" id="FsI-gx-fh0"/>
                                             <constraint firstItem="w4M-Pe-mtd" firstAttribute="centerX" secondItem="hmk-BW-J2q" secondAttribute="centerX" id="IPb-qx-hZs"/>
                                             <constraint firstItem="WGD-XP-1oR" firstAttribute="top" secondItem="2fT-tq-aCO" secondAttribute="bottom" constant="8" symbolic="YES" id="IUf-cV-jQs"/>
                                             <constraint firstAttribute="trailing" secondItem="e3P-9R-XcT" secondAttribute="trailing" constant="13" id="JBj-64-eAs"/>
-                                            <constraint firstItem="DyC-1k-dHu" firstAttribute="centerX" secondItem="hmk-BW-J2q" secondAttribute="centerX" id="Jd9-yf-ixl"/>
                                             <constraint firstItem="WGD-XP-1oR" firstAttribute="centerX" secondItem="hmk-BW-J2q" secondAttribute="centerX" id="Moq-uy-Wfg"/>
                                             <constraint firstAttribute="width" constant="196" id="OLo-7a-wIA"/>
                                             <constraint firstItem="2fT-tq-aCO" firstAttribute="centerX" secondItem="hmk-BW-J2q" secondAttribute="centerX" id="Wjt-Sc-W2C"/>
@@ -636,8 +606,6 @@
                                             <constraint firstItem="Oi9-qs-ufU" firstAttribute="leading" secondItem="mwn-Hz-Tc2" secondAttribute="trailing" constant="8" id="mLK-bd-qGO"/>
                                             <constraint firstItem="2fT-tq-aCO" firstAttribute="top" secondItem="Oi9-qs-ufU" secondAttribute="bottom" constant="2" id="oXo-bb-v3R"/>
                                             <constraint firstItem="Oi9-qs-ufU" firstAttribute="top" secondItem="hmk-BW-J2q" secondAttribute="top" constant="8" id="r85-dX-kAW"/>
-                                            <constraint firstItem="6By-3K-hw9" firstAttribute="top" secondItem="w4M-Pe-mtd" secondAttribute="bottom" constant="12" id="reg-Z4-shr"/>
-                                            <constraint firstItem="6By-3K-hw9" firstAttribute="centerX" secondItem="hmk-BW-J2q" secondAttribute="centerX" id="yDb-aJ-lSo"/>
                                         </constraints>
                                     </customView>
                                 </subviews>
@@ -732,7 +700,6 @@
                         <outlet property="bitcoinCoreWindow" destination="i70-xH-6Bd" id="Q0s-D6-kKh"/>
                         <outlet property="bitcoinIsOnHeaderImage" destination="IZe-rf-ugH" id="Ncd-MN-zJ5"/>
                         <outlet property="icon" destination="zZj-w8-TgT" id="mC2-fU-qbF"/>
-                        <outlet property="installTorOutlet" destination="6By-3K-hw9" id="kOM-89-0gb"/>
                         <outlet property="mainnetIncomingPeersLabel" destination="PMt-yp-b2E" id="qSk-0Q-URx"/>
                         <outlet property="mainnetOutgoingPeersLabel" destination="E12-C7-dPa" id="CFc-ZP-Y1C"/>
                         <outlet property="mainnetSyncedLabel" destination="Vdd-w0-AhZ" id="57y-nK-1TV"/>
@@ -748,7 +715,6 @@
                         <outlet property="torVersionOutlet" destination="2fT-tq-aCO" id="zpe-Z0-ULJ"/>
                         <outlet property="torWindow" destination="hmk-BW-J2q" id="xSN-4I-RFX"/>
                         <outlet property="updateOutlet" destination="tMm-82-jtg" id="b1B-LH-TKx"/>
-                        <outlet property="updateTorOutlet" destination="DyC-1k-dHu" id="00w-En-na9"/>
                         <outlet property="verifyOutlet" destination="y6q-T1-byM" id="I3N-1T-qsP"/>
                         <segue destination="eC6-Cf-Cnx" kind="show" identifier="showPairingCode" id="Yl0-9Y-9DR"/>
                         <segue destination="lGs-ue-8Wa" kind="show" identifier="goInstall" id="cqP-Ve-rOY"/>
