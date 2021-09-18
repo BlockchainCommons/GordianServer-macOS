@@ -156,7 +156,7 @@
 		0AD5BAAF26F319590091A075 /* UninstallTor.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = UninstallTor.command; sourceTree = "<group>"; };
 		0AD5BAB126F451D30091A075 /* TorUpdateAvailable.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = TorUpdateAvailable.command; sourceTree = "<group>"; };
 		0AD5BAB326F454710091A075 /* UpdateTor.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = UpdateTor.command; sourceTree = "<group>"; };
-		0AD5BAB626F568820091A075 /* Tor.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Tor.xcframework; path = ../FullyNoded/Tor.xcframework; sourceTree = "<group>"; };
+		0AD5BAB626F568820091A075 /* Tor.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = Tor.xcframework; sourceTree = "<group>"; };
 		0AD5BABA26F572330091A075 /* TorClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TorClient.swift; sourceTree = "<group>"; };
 		0AD5BABC26F572CB0091A075 /* Torrc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Torrc.swift; sourceTree = "<group>"; };
 		D01471A02371354700F64329 /* LaunchBitcoin.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = LaunchBitcoin.command; sourceTree = "<group>"; };
@@ -291,7 +291,7 @@
 				0AD5BAB626F568820091A075 /* Tor.xcframework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		0AD5BABE26F578230091A075 /* Tor */ = {
 			isa = PBXGroup;
