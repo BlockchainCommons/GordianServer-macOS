@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,6 +17,10 @@
 		0AD5BAB026F319590091A075 /* UninstallTor.command in Resources */ = {isa = PBXBuildFile; fileRef = 0AD5BAAF26F319590091A075 /* UninstallTor.command */; };
 		0AD5BAB226F451D30091A075 /* TorUpdateAvailable.command in Resources */ = {isa = PBXBuildFile; fileRef = 0AD5BAB126F451D30091A075 /* TorUpdateAvailable.command */; };
 		0AD5BAB426F454710091A075 /* UpdateTor.command in Resources */ = {isa = PBXBuildFile; fileRef = 0AD5BAB326F454710091A075 /* UpdateTor.command */; };
+		0AD5BAB726F568820091A075 /* Tor.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AD5BAB626F568820091A075 /* Tor.xcframework */; };
+		0AD5BAB826F568820091A075 /* Tor.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0AD5BAB626F568820091A075 /* Tor.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		0AD5BABB26F572330091A075 /* TorClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD5BABA26F572330091A075 /* TorClient.swift */; };
+		0AD5BABD26F572CB0091A075 /* Torrc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD5BABC26F572CB0091A075 /* Torrc.swift */; };
 		D01471A12371354700F64329 /* LaunchBitcoin.command in Resources */ = {isa = PBXBuildFile; fileRef = D01471A02371354700F64329 /* LaunchBitcoin.command */; };
 		D01B60E62484BAE1005D3090 /* IsMainOn.command in Resources */ = {isa = PBXBuildFile; fileRef = D01B60E52484BAE1005D3090 /* IsMainOn.command */; };
 		D01B60E82484BC20005D3090 /* IsTestOn.command in Resources */ = {isa = PBXBuildFile; fileRef = D01B60E72484BC20005D3090 /* IsTestOn.command */; };
@@ -127,6 +131,20 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		0AD5BAB926F568820091A075 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				0AD5BAB826F568820091A075 /* Tor.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		0AD5BA9F26EF2FA50091A075 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		0AD5BAA126F054390091A075 /* IsSignetOn.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = IsSignetOn.command; sourceTree = "<group>"; };
@@ -138,6 +156,9 @@
 		0AD5BAAF26F319590091A075 /* UninstallTor.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = UninstallTor.command; sourceTree = "<group>"; };
 		0AD5BAB126F451D30091A075 /* TorUpdateAvailable.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = TorUpdateAvailable.command; sourceTree = "<group>"; };
 		0AD5BAB326F454710091A075 /* UpdateTor.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = UpdateTor.command; sourceTree = "<group>"; };
+		0AD5BAB626F568820091A075 /* Tor.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Tor.xcframework; path = ../FullyNoded/Tor.xcframework; sourceTree = "<group>"; };
+		0AD5BABA26F572330091A075 /* TorClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TorClient.swift; sourceTree = "<group>"; };
+		0AD5BABC26F572CB0091A075 /* Torrc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Torrc.swift; sourceTree = "<group>"; };
 		D01471A02371354700F64329 /* LaunchBitcoin.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = LaunchBitcoin.command; sourceTree = "<group>"; };
 		D01B60E52484BAE1005D3090 /* IsMainOn.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = IsMainOn.command; sourceTree = "<group>"; };
 		D01B60E72484BC20005D3090 /* IsTestOn.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = IsTestOn.command; sourceTree = "<group>"; };
@@ -243,6 +264,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0AD5BAB726F568820091A075 /* Tor.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -263,6 +285,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0AD5BAB526F568820091A075 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0AD5BAB626F568820091A075 /* Tor.xcframework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		0AD5BABE26F578230091A075 /* Tor */ = {
+			isa = PBXGroup;
+			children = (
+				0AD5BABA26F572330091A075 /* TorClient.swift */,
+				0AD5BABC26F572CB0091A075 /* Torrc.swift */,
+			);
+			path = Tor;
+			sourceTree = "<group>";
+		};
 		D099F3352375847700AC0EF6 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -380,6 +419,7 @@
 				D0BCB344236A6D28000D8FDE /* GordianServer-macOSTests */,
 				D0BCB34F236A6D28000D8FDE /* GordianServer-macOSUITests */,
 				D0BCB330236A6D22000D8FDE /* Products */,
+				0AD5BAB526F568820091A075 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -407,6 +447,7 @@
 				D099F3362375914300AC0EF6 /* Scripts */,
 				D0EBC03323791DFF008302D2 /* Helpers */,
 				0AD5BA9F26EF2FA50091A075 /* Extensions.swift */,
+				0AD5BABE26F578230091A075 /* Tor */,
 			);
 			path = "GordianServer-macOS";
 			sourceTree = "<group>";
@@ -459,6 +500,7 @@
 				D0BCB32B236A6D22000D8FDE /* Sources */,
 				D0BCB32C236A6D22000D8FDE /* Frameworks */,
 				D0BCB32D236A6D22000D8FDE /* Resources */,
+				0AD5BAB926F568820091A075 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -660,6 +702,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0AD5BABD26F572CB0091A075 /* Torrc.swift in Sources */,
 				0AD5BAAC26F1D0AC0091A075 /* InstallerPrompt.swift in Sources */,
 				D08210372389058B00E21EDC /* Defaults.swift in Sources */,
 				D06E3937236BE46E0072924A /* Settings.swift in Sources */,
@@ -671,6 +714,7 @@
 				D0EBC0312377EE65008302D2 /* Utilities.swift in Sources */,
 				D0DCD8ED236ACD6300F2D15A /* Installer.swift in Sources */,
 				D0BCB335236A6D22000D8FDE /* ViewController.swift in Sources */,
+				0AD5BABB26F572330091A075 /* TorClient.swift in Sources */,
 				0AD5BAA026EF2FA50091A075 /* Extensions.swift in Sources */,
 				D0DCD8E6236ACC9E00F2D15A /* ScriptEnum.swift in Sources */,
 				D0BCB333236A6D22000D8FDE /* AppDelegate.swift in Sources */,

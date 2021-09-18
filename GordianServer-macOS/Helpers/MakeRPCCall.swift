@@ -47,7 +47,7 @@ class MakeRpcCall {
             }
             
             #if DEBUG
-            print("json: \(json)")
+            //print("json: \(json)")
             #endif
             
             guard let errorCheck = json["error"] as? NSDictionary else {

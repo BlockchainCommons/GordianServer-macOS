@@ -15,7 +15,7 @@ else
   export TOR_ETC="/usr/local/etc/tor"
 fi
 
-echo "Removing /usr/local/etc/tor"
+echo "Removing $TOR_ETC"
 rm -rf $TOR_ETC
 echo "Removing /usr/local/var/lib/tor"
 rm -rf /usr/local/var/lib/tor

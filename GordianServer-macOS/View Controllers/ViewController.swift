@@ -36,6 +36,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     @IBOutlet weak var bitcoinIsOnHeaderImage: NSImageView!
     @IBOutlet weak var networkButton: NSPopUpButton!
     
+    weak var mgr = TorClient.sharedInstance
     //var installingLightning = Bool()
     var timer: Timer?
     //var httpPass = ""
@@ -87,6 +88,12 @@ class ViewController: NSViewController, NSWindowDelegate {
     override func viewWillAppear() {
         self.view.window?.delegate = self
         self.view.window?.minSize = NSSize(width: 544, height: 377)
+        
+        if isLoading {
+            if mgr?.state != .started && mgr?.state != .connected  {
+                mgr?.start(delegate: self)
+            }
+        }
     }
 
     override func viewDidAppear() {
@@ -620,7 +627,7 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     private func runScript(script: SCRIPT) {
         #if DEBUG
-        print("script: \(script.rawValue)")
+        //print("script: \(script.rawValue)")
         #endif
         
         let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
@@ -1027,7 +1034,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     private func parseIsBitcoinOn(result: String) {
-        print("result: \(result)")
+        //print("result: \(result)")
         if result.contains("Could not connect to the server 127.0.0.1") {
             mainnetIsOff()
         } else if result.contains("chain") || result.contains("Loading block index...") || result.contains("Verifying blocks...") {
@@ -1383,7 +1390,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     func setEnv() {
         env = ["BINARY_NAME":d.existingBinary(),"VERSION":d.existingPrefix(),"PREFIX":d.existingPrefix(),"DATADIR":d.dataDir()]
         #if DEBUG
-        print("env = \(env)")
+        //print("env = \(env)")
         #endif
         isBitcoinOn()
     }
@@ -1574,5 +1581,46 @@ extension NSView {
             self.wantsLayer = true
             self.layer?.backgroundColor = newValue?.cgColor
         }
+    }
+}
+
+extension ViewController: OnionManagerDelegate {
+    
+    func torConnProgress(_ progress: Int) {
+        print("Tor bootstrapping \(progress)% complete")
+//        DispatchQueue.main.async { [weak self] in
+//            self?.torProgressLabel.text = "Tor bootstrapping \(progress)% complete"
+//            self?.progressView.setProgress(Float(Double(progress) / 100.0), animated: true)
+//            self?.blurView.backgroundColor = #colorLiteral(red: 0.05172085258, green: 0.05855310153, blue: 0.06978280196, alpha: 1)
+//            self?.blurView.alpha = 1
+//        }
+    }
+    
+    func torConnFinished() {
+//        viewHasLoaded = true
+//        removeBackView()
+//        loadTable()
+//        displayAlert(viewController: self, isError: false, message: "Tor finished bootstrapping")
+//
+//        DispatchQueue.main.async { [weak self] in
+//            self?.torProgressLabel.isHidden = true
+//            self?.progressView.isHidden = true
+//            self?.blurView.isHidden = true
+//        }
+        guard let hostname = mgr?.hostname() else {
+            print("error getting hostname")
+            return
+        }
+        
+        print("hostname: \(hostname)")
+    }
+    
+    func torConnDifficulties() {
+//        displayAlert(viewController: self, isError: true, message: "We are having issues connecting tor")
+//        DispatchQueue.main.async { [weak self] in
+//            self?.torProgressLabel.isHidden = true
+//            self?.progressView.isHidden = true
+//            self?.blurView.isHidden = true
+//        }
     }
 }

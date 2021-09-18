@@ -58,19 +58,23 @@ class QRDisplayer: NSViewController {
         switch chain {
         case "main":
             rpcport = "8332"
-            torHostname = UserDefaults.standard.object(forKey: "mainHostname") as? String ?? ""
+            //torHostname = UserDefaults.standard.object(forKey: "mainHostname") as? String ?? ""
         case "test":
             rpcport = "18332"
-            torHostname = UserDefaults.standard.object(forKey: "testHostname") as? String ?? ""
+            //torHostname = UserDefaults.standard.object(forKey: "testHostname") as? String ?? ""
         case "regtest":
             rpcport = "18334"
-            torHostname = UserDefaults.standard.object(forKey: "regHostname") as? String ?? ""
+            //torHostname = UserDefaults.standard.object(forKey: "regHostname") as? String ?? ""
         case "signet":
             rpcport = "38332"
-            torHostname = UserDefaults.standard.object(forKey: "signetHostname") as? String ?? ""
+            //torHostname = UserDefaults.standard.object(forKey: "signetHostname") as? String ?? ""
         default:
             break
         }
+        
+        guard let host = TorClient.sharedInstance.hostname() else { return }
+        
+        torHostname = host.replacingOccurrences(of: "\n", with: "")
         
         rpcuser = UserDefaults.standard.object(forKey: "rpcuser") as? String ?? "user"
         rpcpassword = UserDefaults.standard.object(forKey: "rpcpassword") as? String ?? "password"
@@ -79,11 +83,11 @@ class QRDisplayer: NSViewController {
         nodeLabel = nodeLabel.replacingOccurrences(of: "’", with: "")
         
         var url = "btcstandup://\(rpcuser):\(rpcpassword)@\(torHostname):\(rpcport)/?label=\(nodeLabel)%20-%20\(network)"
+        print("url: \(url)")
         if network == "lightning" {
             url = "clightning-rpc://lightning:\(httpPass)@\(torHostname):8080/?label=Lightning"
         }
         imageView.frame = CGRect(x: 30, y: 30, width: 100, height: 100)
-        print("textInput: \(url)")
         imageView.image = getQRCode(textInput: url)
     }
     
