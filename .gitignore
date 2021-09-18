@@ -3,11 +3,10 @@
 # Edit at https://www.gitignore.io/?templates=swift,xcode,macos,carthage,cocoapods,objective-c
 
 ### Carthage ###
-# Carthage
+#Carthage
 #
 # Add this line if you want to avoid checking in source code from Carthage dependencies.
-Carthage/Checkouts
-
+#Carthage/Checkouts
 Carthage/Build
 
 ### CocoaPods ###
@@ -173,10 +172,25 @@ Dependencies/
 !*.xcodeproj/project.pbxproj
 !*.xcodeproj/xcshareddata/
 !*.xcworkspace/contents.xcworkspacedata
-!*. xcodeproj/UserInterfaceState.xcuserstate
 /*.gcno
 
 ### Xcode Patch ###
 **/xcshareddata/WorkspaceSettings.xcsettings
 
 # End of https://www.gitignore.io/api/swift,xcode,macos,carthage,cocoapods,objective-c
+
+
+### Jekyll ignores done by hand by Henk van Cann, Aug 2020
+.jekyll-cache/
+_site/
+
+## vim
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+[._]*.un~
+Session.vim
+Sessionx.vim
+*~
