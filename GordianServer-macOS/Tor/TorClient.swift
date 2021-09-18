@@ -217,7 +217,7 @@ class TorClient: NSObject, URLSessionDelegate {
     }
     
     private func torPath() -> String {
-        return "\(NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first ?? "")/tor"
+        return "/Users/\(NSUserName())/Library/Caches/tor"
     }
     
     private func addTorrc() {

@@ -276,6 +276,6 @@ class Torrc {
     """
     
     static var torPath: String {
-        return "\(NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first ?? "")/tor"
+        return "/Users/\(NSUserName())/Library/Caches/tor"
     }
 }
