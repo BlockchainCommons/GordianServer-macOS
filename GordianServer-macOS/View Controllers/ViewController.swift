@@ -217,24 +217,28 @@ class ViewController: NSViewController, NSWindowDelegate {
     @IBAction func userSelectedMainnet(_ sender: Any) {
         UserDefaults.standard.setValue("main", forKey: "chain")
         chain = "main"
+        setEnv()
         refreshAction()
     }
     
     @IBAction func userSelectedTestnet(_ sender: Any) {
         UserDefaults.standard.setValue("test", forKey: "chain")
         chain = "test"
+        setEnv()
         refreshAction()
     }
     
     @IBAction func userSelectedRegtest(_ sender: Any) {
         UserDefaults.standard.setValue("regtest", forKey: "chain")
         chain = "regtest"
+        setEnv()
         refreshAction()
     }
     
     @IBAction func userSelectedSignet(_ sender: Any) {
         UserDefaults.standard.setValue("signet", forKey: "chain")
         chain = "signet"
+        setEnv()
         refreshAction()
     }
     
@@ -372,7 +376,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         case "main":
             if !mainOn {
                 addSpinnerDesc("starting mainnet...")
-                runScript(script: .startMain)
+                runScript(script: .startBitcoin)
             } else {
                 addSpinnerDesc("stopping mainnet...")
                 runScript(script: .stopMain)
@@ -380,7 +384,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         case "test":
             if !testOn {
                 addSpinnerDesc("starting testnet...")
-                runScript(script: .startTestd)
+                runScript(script: .startBitcoin)
             } else {
                 addSpinnerDesc("stopping testnet...")
                 runScript(script: .stopTest)
@@ -388,7 +392,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         case "regtest":
             if !regTestOn {
                 addSpinnerDesc("starting regtest...")
-                runScript(script: .startRegtest)
+                runScript(script: .startBitcoin)
             } else {
                 addSpinnerDesc("stopping regtest...")
                 runScript(script: .stopReg)
@@ -396,7 +400,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         case "signet":
             if !isSignetOn {
                 addSpinnerDesc("starting signet...")
-                runScript(script: .startSignet)
+                runScript(script: .startBitcoin)
             } else {
                 addSpinnerDesc("stopping signet...")
                 runScript(script: .stopSignet)
@@ -685,18 +689,21 @@ class ViewController: NSViewController, NSWindowDelegate {
 
         case .stopReg:
             stopRegParse(result: result)
-
-        case .startMain:
-            startMainParse(result: result)
-
-        case .startTestd:
-            startTestParse(result: result)
-
-        case .startRegtest:
-            startRegtestParse(result: result)
             
-        case .startSignet:
-            startSignetParse(result: result)
+        case .startBitcoin:
+            let chain = UserDefaults.standard.string(forKey: "chain") ?? "main"
+            switch chain {
+            case "main":
+                startMainParse(result: result)
+            case "test":
+                startTestParse(result: result)
+            case "regtest":
+                startRegtestParse(result: result)
+            case "signet":
+                startSignetParse(result: result)
+            default:
+                break
+            }
 
         case .isMainOn, .isTestOn, .isRegOn, .isSignetOn:
             parseIsBitcoinOn(result: result)
@@ -1261,7 +1268,8 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     func setEnv() {
-        env = ["BINARY_NAME":d.existingBinary(),"VERSION":d.existingPrefix(),"PREFIX":d.existingPrefix(),"DATADIR":d.dataDir()]
+        let chain = UserDefaults.standard.string(forKey: "chain") ?? "main"
+        env = ["BINARY_NAME":d.existingBinary(),"VERSION":d.existingPrefix(),"PREFIX":d.existingPrefix(),"DATADIR":d.dataDir(), "CHAIN": chain]
         #if DEBUG
         print("env = \(env)")
         #endif

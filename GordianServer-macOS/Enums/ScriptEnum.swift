@@ -26,10 +26,6 @@ public enum SCRIPT: String {
     case isTestOn = "IsTestOn"
     case isRegOn = "IsRegtestOn"
     case isSignetOn = "IsSignetOn"
-    case startMain = "StartMaind"
-    case startRegtest = "StartRegd"
-    case startTestd = "StartTestd"
-    case startSignet = "StartSignet"
     case stopMain = "StopMain"
     case stopTest = "StopTest"
     case stopReg = "StopReg"
@@ -48,6 +44,8 @@ public enum SCRIPT: String {
     case getLightningRpcCreds = "GetLightningRpcCreds"
     case writeLog = "WriteLog"
     case getLog = "GetLog"
+    case startBitcoin = "StartBitcoin"
+    
 }
 
 public enum BTCCONF: String {
