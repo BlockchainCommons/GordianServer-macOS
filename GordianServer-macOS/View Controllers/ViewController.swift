@@ -52,21 +52,17 @@ class ViewController: NSViewController, NSWindowDelegate {
     var newestVersion = ""
     var newestBinaryName = ""
     var newestPrefix = ""
-    var strapping = Bool()
-    var standingUp = Bool()
-    var bitcoinInstalled = Bool()
-    var torInstalled = Bool()
-    var torIsOn = Bool()
-    var bitcoinRunning = Bool()
-    var upgrading = Bool()
-    var isLoading = Bool()
-    var torConfigured = Bool()
-    var bitcoinConfigured = Bool()
-    var ignoreExistingBitcoin = Bool()
+    var strapping = false
+    var standingUp = false
+    var bitcoinInstalled = false
+    var torIsOn = false
+    var bitcoinRunning = false
+    var upgrading = false
+    var isLoading = false
+    var torConfigured = false
+    var bitcoinConfigured = false
+    var ignoreExistingBitcoin = false
     var regTestOn = false
-    var mainOn = false
-    var testOn = false
-    var isSignetOn = false
     //var lightningIsRunning = false
     //var lightningInstalled = false
     var env = [String:String]()
@@ -372,41 +368,12 @@ class ViewController: NSViewController, NSWindowDelegate {
             self.startMainnetOutlet.isEnabled = false
         }
         
-        switch chain {
-        case "main":
-            if !mainOn {
-                addSpinnerDesc("starting mainnet...")
-                runScript(script: .startBitcoin)
-            } else {
-                addSpinnerDesc("stopping mainnet...")
-                runScript(script: .stopMain)
-            }
-        case "test":
-            if !testOn {
-                addSpinnerDesc("starting testnet...")
-                runScript(script: .startBitcoin)
-            } else {
-                addSpinnerDesc("stopping testnet...")
-                runScript(script: .stopTest)
-            }
-        case "regtest":
-            if !regTestOn {
-                addSpinnerDesc("starting regtest...")
-                runScript(script: .startBitcoin)
-            } else {
-                addSpinnerDesc("stopping regtest...")
-                runScript(script: .stopReg)
-            }
-        case "signet":
-            if !isSignetOn {
-                addSpinnerDesc("starting signet...")
-                runScript(script: .startBitcoin)
-            } else {
-                addSpinnerDesc("stopping signet...")
-                runScript(script: .stopSignet)
-            }
-        default:
-            break
+        if !bitcoinRunning {
+            addSpinnerDesc("starting \(chain)...")
+            runScript(script: .startBitcoin)
+        } else {
+            addSpinnerDesc("stopping \(chain)...")
+            runScript(script: .stopBitcoin)
         }
     }
 
@@ -576,18 +543,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             self.taskDescription.stringValue = "checking if bitcoin core is running..."
         }
         
-        switch chain {
-        case "main":
-            runScript(script: .isMainOn)
-        case "test":
-            runScript(script: .isTestOn)
-        case "regtest":
-            runScript(script: .isRegOn)
-        case "signet":
-            runScript(script: .isSignetOn)
-        default:
-            break
-        }
+        runScript(script: .isBitcoinOn)
     }
 
     func checkBitcoindVersion() {
@@ -681,31 +637,13 @@ class ViewController: NSViewController, NSWindowDelegate {
         case .checkStandUp:
             checkStandUpParser(result: result)
             
-        case .stopMain:
-            stopMainParse(result: result)
-
-        case .stopTest:
-            stopTestParse(result: result)
-
-        case .stopReg:
-            stopRegParse(result: result)
+        case .stopBitcoin:
+            stopBitcoinParse(result: result)
             
         case .startBitcoin:
-            let chain = UserDefaults.standard.string(forKey: "chain") ?? "main"
-            switch chain {
-            case "main":
-                startMainParse(result: result)
-            case "test":
-                startTestParse(result: result)
-            case "regtest":
-                startRegtestParse(result: result)
-            case "signet":
-                startSignetParse(result: result)
-            default:
-                break
-            }
+            startBitcoinParse(result: result)
 
-        case .isMainOn, .isTestOn, .isRegOn, .isSignetOn:
+        case .isBitcoinOn:
             parseIsBitcoinOn(result: result)
 
         case .checkForBitcoin:
@@ -896,57 +834,11 @@ class ViewController: NSViewController, NSWindowDelegate {
         //runScript(script: .isLightningInstalled)
     }
 
-    private func mainnetIsOff() {
+    private func bitcoinIsOff() {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
             self.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
-            self.bitcoinRunning = false
-            self.mainOn = false
-            self.startMainnetOutlet.title = "Start"
-            self.startMainnetOutlet.isEnabled = true
-            self.mainnetSyncedLabel.stringValue = ""
-            self.mainnetIncomingPeersLabel.stringValue = ""
-            self.mainnetOutgoingPeersLabel.stringValue = ""
-        }
-    }
-    
-    private func signetIsOff() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            
-            self.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
-            self.isSignetOn = false
-            self.bitcoinRunning = false
-            self.startMainnetOutlet.title = "Start"
-            self.startMainnetOutlet.isEnabled = true
-            self.mainnetSyncedLabel.stringValue = ""
-            self.mainnetIncomingPeersLabel.stringValue = ""
-            self.mainnetOutgoingPeersLabel.stringValue = ""
-        }
-    }
-
-    private func testnetIsOff() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            
-            self.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
-            self.testOn = false
-            self.bitcoinRunning = false
-            self.startMainnetOutlet.title = "Start"
-            self.startMainnetOutlet.isEnabled = true
-            self.mainnetSyncedLabel.stringValue = ""
-            self.mainnetIncomingPeersLabel.stringValue = ""
-            self.mainnetOutgoingPeersLabel.stringValue = ""
-        }
-    }
-
-    private func regtestIsOff() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            
-            self.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
-            self.regTestOn = false
             self.bitcoinRunning = false
             self.startMainnetOutlet.title = "Start"
             self.startMainnetOutlet.isEnabled = true
@@ -957,64 +849,22 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     //MARK: Script Result Parsers
-
-    private func stopMainParse(result: String) {
+    
+    private func stopBitcoinParse(result: String) {
         if result.contains("Bitcoin Core stopping") {
             DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
                 guard let self = self else { return }
                 
-                self.mainnetIsOff()
+                self.bitcoinIsOff()
             }
         } else {
             simpleAlert(message: "Error turning off mainnet", info: result, buttonLabel: "OK")
         }
     }
 
-    private func stopTestParse(result: String) {
-        if result.contains("Bitcoin Core stopping") {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
-                guard let self = self else { return }
-                
-                self.testnetIsOff()
-            }
-        } else {
-            simpleAlert(message: "Error turning off testnet", info: result, buttonLabel: "OK")
-        }
-    }
-
-    private func stopRegParse(result: String) {
-        if result.contains("Bitcoin Core stopping") {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
-                guard let self = self else { return }
-                
-                self.regtestIsOff()
-            }
-        } else {
-            simpleAlert(message: "Error turning off regtest", info: result, buttonLabel: "OK")
-        }
-    }
-
-    private func startTestParse(result: String) {
+    private func startBitcoinParse(result: String) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [unowned vc = self] in
-            vc.runScript(script: .isTestOn)
-        }
-    }
-
-    private func startMainParse(result: String) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [unowned vc = self] in
-            vc.runScript(script: .isMainOn)
-        }
-    }
-
-    private func startRegtestParse(result: String) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [unowned vc = self] in
-            vc.runScript(script: .isRegOn)
-        }
-    }
-    
-    private func startSignetParse(result: String) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [unowned vc = self] in
-            vc.runScript(script: .isSignetOn)
+            vc.runScript(script: .isBitcoinOn)
         }
     }
 
@@ -1057,50 +907,25 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     private func parseIsBitcoinOn(result: String) {
         if result.contains("Could not connect to the server") {
-            let activeChain = UserDefaults.standard.string(forKey: "chain") ?? "main"
-            switch activeChain {
-            case "main":
-                self.mainnetIsOff()
-            case "test":
-                self.testnetIsOff()
-            case "regtest":
-                self.regtestIsOff()
-            case "signet":
-                self.signetIsOff()
-            default:
-                break
-            }
+            self.bitcoinIsOff()
             self.hideSpinner()
             
         } else if result.contains("chain") {
+            self.bitcoinRunning = true
+            
             if let dict = convertStringToDictionary(json: result) {
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     
                     self.mainnetSyncedLabel.stringValue = self.progress(dict: dict)
-                    
-                    if let activeChain = dict["chain"] as? String {
-                        switch activeChain {
-                        case "main":
-                            self.mainOn = true
-                        case "test":
-                            self.testOn = true
-                        case "regtest":
-                            self.regTestOn = true
-                        case "signet":
-                            self.isSignetOn = true
-                        default:
-                            break
-                        }
-                        self.checkBitcoinConfForRPCCredentials()
-                    }
-                    
-                    self.bitcoinRunning = true
+                    self.checkBitcoinConfForRPCCredentials()
                     self.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
                     self.startMainnetOutlet.title = "Stop"
                     self.startMainnetOutlet.isEnabled = true
                     self.setTimer()
                 }
+            } else {
+                simpleAlert(message: "There was an issue...", info: "We had a problem parsing the response from Bitcoin Core. Please let us know about this.", buttonLabel: "OK")
             }
         } else {
             self.bitcoinRunning = true
