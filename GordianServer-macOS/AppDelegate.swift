@@ -12,9 +12,8 @@ import Cocoa
 class AppDelegate: NSObject, NSApplicationDelegate {
     
     @IBAction func gordianLogClicked(_ sender: Any) {
-        runScript(script: .openLog, env: ["":""], args: []) { _ in }
+        runScript(script: .openFile, env: ["FILE":"/Users/\(NSUserName())/.gordian/gordian.log"], args: []) { _ in }
     }
-    
 
     @IBAction func settingsClicked(_ sender: Any) {
         var myWindow: NSWindow? = nil
@@ -39,30 +38,30 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @IBAction func torHostClicked(_ sender: Any) {
-        runScript(script: .openMainnetHiddenService, env: ["AUTH_DIR":"\(TorClient.sharedInstance.torPath())/host/bitcoin/\(UserDefaults.standard.string(forKey: "chain")!)/hostname"], args: []) { _ in }
+        runScript(script: .openFile, env: ["FILE":"\(TorClient.sharedInstance.torPath())/host/bitcoin/\(UserDefaults.standard.string(forKey: "chain")!)/hostname"], args: []) { _ in }
     }
     
     @IBAction func torAuthenticationClicked(_ sender: Any) {
-        runScript(script: .openAuth, env: ["AUTH_DIR":"\(TorClient.sharedInstance.torPath())/host/bitcoin/\(UserDefaults.standard.string(forKey: "chain")!)/authorized_clients/"], args: []) { _ in }
+        runScript(script: .openFile, env: ["FILE":"\(TorClient.sharedInstance.torPath())/host/bitcoin/\(UserDefaults.standard.string(forKey: "chain")!)/authorized_clients/"], args: []) { _ in }
     }
     
     @IBAction func hiddenServiceDirClicked(_ sender: Any) {
-        runScript(script: .openAuth, env: ["AUTH_DIR":"\(TorClient.sharedInstance.torPath())/host/bitcoin/\(UserDefaults.standard.string(forKey: "chain")!)"], args: []) { _ in }
+        runScript(script: .openFile, env: ["FILE":"\(TorClient.sharedInstance.torPath())/host/bitcoin/\(UserDefaults.standard.string(forKey: "chain")!)"], args: []) { _ in }
     }
     
     @IBAction func torCnfigClicked(_ sender: Any) {
-        runScript(script: .openTorrc, env: ["AUTH_DIR":"/Users/\(NSUserName())/.torrc"], args: []) { _ in }
+        runScript(script: .openFile, env: ["FILE":"/Users/\(NSUserName())/.torrc"], args: []) { _ in }
     }
     
     @IBAction func torLogClicked(_ sender: Any) {
-        runScript(script: .showTorLog, env: ["AUTH_DIR":"\(TorClient.sharedInstance.torPath())/debug.log"], args: []) { _ in }
+        runScript(script: .openFile, env: ["FILE":"\(TorClient.sharedInstance.torPath())/debug.log"], args: []) { _ in }
     }
     
     @IBAction func bitcoinCoreConfClicked(_ sender: Any) {
         let d = Defaults()
         let path = d.dataDir()
-        let env = ["DATADIR":path]
-        runScript(script: .showBitcoinConf, env: env, args: []) { _ in }
+        let env = ["FILE":"\(path)/bitcoin.conf"]
+        runScript(script: .openFile, env: env, args: []) { _ in }
     }
     
     @IBAction func bitcoinCoreLogClicked(_ sender: Any) {
@@ -73,17 +72,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         switch chain {
         case "main":
-            let env = ["DATADIR":path]
-            runScript(script: .showBitcoinLog, env: env, args: []) { _ in }
+            let env = ["FILE":"\(path)/debug.log"]
+            runScript(script: .openFile, env: env, args: []) { _ in }
         case "test":
-            let env = ["DATADIR":"\(path)/testnet3"]
-            runScript(script: .showBitcoinLog, env: env, args: []) { _ in }
+            let env = ["FILE":"\(path)/testnet3/debug.log"]
+            runScript(script: .openFile, env: env, args: []) { _ in }
         case "regtest":
-            let env = ["DATADIR":"\(path)/regtest"]
-            runScript(script: .showBitcoinLog, env: env, args: []) { _ in }
+            let env = ["FILE":"\(path)/regtest/debug.log"]
+            runScript(script: .openFile, env: env, args: []) { _ in }
         case "signet":
-            let env = ["DATADIR":"\(path)/signet"]
-            runScript(script: .showBitcoinLog, env: env, args: []) { _ in }
+            let env = ["FILE":"\(path)/signet/debug.log"]
+            runScript(script: .openFile, env: env, args: []) { _ in }
         default:
             break
         }        

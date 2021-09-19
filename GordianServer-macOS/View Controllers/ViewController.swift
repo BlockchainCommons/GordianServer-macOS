@@ -205,7 +205,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                         }
                     }
                 } else {
-                    vc.showAlertMessage(message: "Network request error", info: errorMessage ?? "We had an issue getting a response from the Bitcoin Core repo on GitHub, we do this to check for new releases, you can ignore this error but we thought you should know something is up, please check your internet connection.")
+                    simpleAlert(message: "Network request error", info: errorMessage ?? "We had an issue getting a response from the Bitcoin Core repo on GitHub, we do this to check for new releases, you can ignore this error but we thought you should know something is up, please check your internet connection.", buttonLabel: "OK")
                     vc.setEnv()
                 }
             }
@@ -331,7 +331,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     @IBAction func removeAuthAction(_ sender: Any) {
         let chain = UserDefaults.standard.string(forKey: "chain") ?? "main"
         
-        actionAlert(message: "Remove \(chain) network authentication keys?", info: "Removing your authentication keys means anyone who gets your quick connect QR will be able to access your \(chain) network Bitcoin Core wallets. Are you sure you want to remove all authentication keys?") { [unowned vc = self] response in
+        actionAlert(message: "Remove \(chain) network authentication keys?", info: "Removing your authentication keys means anyone who gets your quick connect QR will be able to access your \(chain) network Bitcoin Core wallets. Are you sure you want to remove all authentication keys?") { response in
             if response {
                 let path = "\(TorClient.sharedInstance.torPath())/host/bitcoin/\(chain)/authorized_clients/"
                 
@@ -341,12 +341,11 @@ class ViewController: NSViewController, NSWindowDelegate {
                         try FileManager.default.removeItem(atPath: path + filePath)
                         
                         if i + 1 == filePaths.count {
-                            vc.showAlertMessage(message: "Success", info: "Authorized clients files removed, your \(chain) network Bitcoin Core rpc hidden services are no longer authenticated!")
+                            simpleAlert(message: "Success", info: "Authorized clients files removed, your \(chain) network Bitcoin Core rpc hidden services are no longer authenticated!", buttonLabel: "OK")
                         }
                     }
                 } catch {
-                    print("Could not clear temp folder: \(error)")
-                    vc.showAlertMessage(message: "There was an issue deleting your auth keys...", info: "\(error.localizedDescription)\n\nPlease let us know about this bug.")
+                    simpleAlert(message: "There was an issue deleting your auth keys...", info: "\(error.localizedDescription)\n\nPlease let us know about this bug.", buttonLabel: "OK")
                 }
             }
         }
@@ -408,11 +407,11 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     @IBAction func bitcoinWindowHelp(_ sender: Any) {
-        showAlertMessage(message: "Bitcoin Core", info: "Gordian Server creates a ~./gordian directory where it installs its own Bitcoin Core binaries, log, and signatures. This allows Gordian Server to verify the binaries and generally makes the app more reliable. Gordian Server only works with the default Bitcoin directory at /Users/You/Library/Application Support/Bitcoin, using a custom data directory is not supported. You may specify a custom blocksdir for storing the blockchain via File > Settings (or the gear box button). Gordian Server allows you to run multiple networks (main, test, regtest, signet) simultaneously which can be useful for development and testing purposes. Toggle between the networks to interact with them. Click the QR button to remotely connect with supporting apps such as Gordian Wallet and Fully Noded. Click the Go To menu item for more tools.")
+        simpleAlert(message: "Bitcoin Core", info: "Gordian Server creates a ~./gordian directory where it installs its own Bitcoin Core binaries, log, and signatures. This allows Gordian Server to verify the binaries and generally makes the app more reliable. Gordian Server only works with the default Bitcoin directory at /Users/You/Library/Application Support/Bitcoin, using a custom data directory is not supported. You may specify a custom blocksdir for storing the blockchain via File > Settings (or the gear box button). Gordian Server allows you to run multiple networks (main, test, regtest, signet) simultaneously which can be useful for development and testing purposes. Toggle between the networks to interact with them. Click the QR button to remotely connect with supporting apps such as Gordian Wallet and Fully Noded. Click the Go To menu item for more tools.", buttonLabel: "OK")
     }
 
     @IBAction func torWindowHelp(_ sender: Any) {
-        showAlertMessage(message: "Tor", info: "Gordian Server utilizes homebrew to install and manage Tor. In order to interact with your node remotely you will need to install Tor. Installing Tor with Gordian Server automatically configures Tor to work with your Bitcoin Core node so that you may securely connect to it using apps like Gordian Wallet and Fully Noded. You may install, uninstall, upgrade and add/remove Tor authentication keys with Gordian Server. Click the Go To menu item to see additonal Tor related tools.")
+        simpleAlert(message: "Tor", info: "Gordian Server utilizes homebrew to install and manage Tor. In order to interact with your node remotely you will need to install Tor. Installing Tor with Gordian Server automatically configures Tor to work with your Bitcoin Core node so that you may securely connect to it using apps like Gordian Wallet and Fully Noded. You may install, uninstall, upgrade and add/remove Tor authentication keys with Gordian Server. Click the Go To menu item to see additonal Tor related tools.", buttonLabel: "OK")
     }
 
     @IBAction func updateBitcoin(_ sender: Any) {
@@ -559,24 +558,10 @@ class ViewController: NSViewController, NSWindowDelegate {
     
     // MARK: Script Methods
 
-    private func checkForAuth() {
-        DispatchQueue.main.async { [unowned vc = self] in
-            vc.taskDescription.stringValue = "checking for auth..."
-            vc.runScript(script: .checkForAuth)
-        }
-    }
-
     func checkForXcodeSelect() {
         DispatchQueue.main.async { [unowned vc = self] in
             vc.taskDescription.stringValue = "checking for xcode select..."
             vc.runScript(script: .checkXcodeSelect)
-        }
-    }
-
-    func checkForHomebrew() {
-        DispatchQueue.main.async { [unowned vc = self] in
-            vc.taskDescription.stringValue = "checking for homebrew..."
-            vc.runScript(script: .checkHomebrew)
         }
     }
 
@@ -722,29 +707,11 @@ class ViewController: NSViewController, NSWindowDelegate {
         case .getRPCCredentials:
             checkForRPCCredentials(response: result)
 
-//        case .getTorrc:
-//            checkIfTorIsConfigured(response: result)
-//
-//        case .getTorHostname:
-//            parseHostname(response: result)
-
-//        case .torStatus:
-//            parseTorStatus(result: result)
-
         case .verifyBitcoin:
             parseVerifyResult(result: result)
 
-//        case .checkHomebrew:
-//            parseHomebrewResult(result: result)
-
         case .checkXcodeSelect:
             parseXcodeSelectResult(result: result)
-
-        case .checkForAuth:
-            parseAuthCheck(result: result)
-
-//        case .checkForOldHost:
-//            parseOldHostResponse(result: result)
             
 //        case .getLightningHostnames:
 //            parseLightningHostnames(result: result)
@@ -992,7 +959,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                 self.mainnetIsOff()
             }
         } else {
-            showAlertMessage(message: "Error turning off mainnet", info: result)
+            simpleAlert(message: "Error turning off mainnet", info: result, buttonLabel: "OK")
         }
     }
 
@@ -1004,7 +971,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                 self.testnetIsOff()
             }
         } else {
-            showAlertMessage(message: "Error turning off testnet", info: result)
+            simpleAlert(message: "Error turning off testnet", info: result, buttonLabel: "OK")
         }
     }
 
@@ -1016,7 +983,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                 self.regtestIsOff()
             }
         } else {
-            showAlertMessage(message: "Error turning off regtest", info: result)
+            simpleAlert(message: "Error turning off regtest", info: result, buttonLabel: "OK")
         }
     }
 
@@ -1047,7 +1014,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     private func parseXcodeSelectResult(result: String) {
         hideSpinner()
         if result.contains("XCode select not installed") {
-            showAlertMessage(message: "Dependencies missing", info: "You do not appear to have XCode command line tools installed, GordianServer.app relies on XCode command line tools for installing Bitcoin Core, therefore in order to continue please select \"Install Dependencies\".")
+            simpleAlert(message: "Dependencies missing", info: "You do not appear to have XCode command line tools installed, Gordian Server relies on XCode command line tools for installing Bitcoin Core, in order to continue please select \"Install Dependencies\".", buttonLabel: "OK")
         } else {
             installNow()
         }
@@ -1082,7 +1049,6 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     private func parseIsBitcoinOn(result: String) {
-        print("parseIsBitcoinOn: \(result)")
         if result.contains("Could not connect to the server") {
             let activeChain = UserDefaults.standard.string(forKey: "chain") ?? "main"
             switch activeChain {
@@ -1275,11 +1241,11 @@ class ViewController: NSViewController, NSWindowDelegate {
     func parseVerifyResult(result: String) {
         let binaryName = env["BINARY_NAME"] ?? ""
         if result.contains("\(binaryName): OK") {
-            showAlertMessage(message: "Verified ✓", info: "The sha256 hashes for \(binaryName) and the SHA256SUMS file match.")
+            simpleAlert(message: "Verified ✓", info: "The sha256 hashes for \(binaryName) and the SHA256SUMS file match.", buttonLabel: "OK")
         } else if result.contains("No ~/.gordian/BitcoinCore directory") {
-            showAlertMessage(message: "Error", info: "You are using a version of Bitcoin Core which was not installed by GordianServer, we are not yet able to verify Bitcoin Core instances not installed by GordianServer.")
+            simpleAlert(message: "Error", info: "You are using a version of Bitcoin Core which was not installed by GordianServer, we are not yet able to verify Bitcoin Core instances not installed by GordianServer.", buttonLabel: "OK")
         } else {
-            showAlertMessage(message: "DANGER!!! Invalid signatures...", info: "Please delete the ~/.gordian folder and app and report an issue on the github, hashes do not match.")
+            simpleAlert(message: "DANGER!!! Invalid signatures...", info: "Please delete the ~/.gordian folder and app and report an issue on the github, hashes do not match.", buttonLabel: "OK")
         }
     }
 
@@ -1299,10 +1265,6 @@ class ViewController: NSViewController, NSWindowDelegate {
         #if DEBUG
         print("env = \(env)")
         #endif
-    }
-
-    func showAlertMessage(message: String, info: String) {
-        simpleAlert(message: message, info: info, buttonLabel: "OK")
     }
 
     func startSpinner(description: String) {
