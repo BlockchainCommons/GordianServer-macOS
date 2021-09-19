@@ -345,6 +345,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                         }
                     }
                 } catch {
+                    print("Could not clear temp folder: \(error)")
                     vc.showAlertMessage(message: "There was an issue deleting your auth keys...", info: "\(error.localizedDescription)\n\nPlease let us know about this bug.")
                 }
             }
@@ -518,8 +519,6 @@ class ViewController: NSViewController, NSWindowDelegate {
                     self.headerText = "Install Bitcoin Core v\(version)?"
 
                     self.infoMessage = """
-                    You have an existing version of Bitcoin Core installed.
-
                     Selecting yes will tell Gordian Server to download, verify and install a fresh Bitcoin Core v\(version) installation in ~/.gordian/BitcoinCore, Gordian Server will not overwrite your existing node.
 
                     Your existing bitcoin.conf file will be checked for rpc username and password, if none exist Gordian Server will create them for you, all other bitcoin.conf settings will remain in place.
@@ -1131,8 +1130,9 @@ class ViewController: NSViewController, NSWindowDelegate {
                 }
             }
         } else {
-            simpleAlert(message: "Bitcoin Core Message", info: result + "\n\nGordian Server will auto refresh every 15 seconds, please be patient and check back again shortly.", buttonLabel: "OK")
+            self.bitcoinRunning = true
             self.setTimer()
+            simpleAlert(message: "Bitcoin Core Message", info: result + "\n\nGordian Server will auto refresh every 15 seconds, please be patient and check back again shortly.", buttonLabel: "OK")
         }
         
         checkForBitcoinUpdate()
