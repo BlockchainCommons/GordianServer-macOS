@@ -536,7 +536,6 @@ class ViewController: NSViewController, NSWindowDelegate {
                 vc.mgr?.start(delegate: self)
             }
         } else {
-
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.startTorOutlet.isEnabled = false
                 vc.mgr?.resign()

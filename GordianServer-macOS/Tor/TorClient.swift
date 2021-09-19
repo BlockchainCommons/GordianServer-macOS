@@ -177,7 +177,7 @@ class TorClient: NSObject, URLSessionDelegate {
         createHiddenServiceDirectory()
     }
     
-    private func torPath() -> String {
+    func torPath() -> String {
         return "/Users/\(NSUserName())/Library/Caches/tor"
     }
     

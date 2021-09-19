@@ -81,19 +81,19 @@ class Torrc {
     ## HiddenServicePort x y:z says to redirect requests on port x to the
     ## address y:z.
 
-    HiddenServiceDir \(torPath)/host/bitcoin/main/
+    HiddenServiceDir \(TorClient.sharedInstance.torPath())/host/bitcoin/main/
     HiddenServiceVersion 3
     HiddenServicePort 8332 127.0.0.1:8332
     
-    HiddenServiceDir \(torPath)/host/bitcoin/test/
+    HiddenServiceDir \(TorClient.sharedInstance.torPath())/host/bitcoin/test/
     HiddenServiceVersion 3
     HiddenServicePort 18332 127.0.0.1:18332
 
-    HiddenServiceDir \(torPath)/host/bitcoin/regtest/
+    HiddenServiceDir \(TorClient.sharedInstance.torPath())/host/bitcoin/regtest/
     HiddenServiceVersion 3
     HiddenServicePort 18443 127.0.0.1:18443
     
-    HiddenServiceDir \(torPath)/host/bitcoin/signet/
+    HiddenServiceDir \(TorClient.sharedInstance.torPath())/host/bitcoin/signet/
     HiddenServiceVersion 3
     HiddenServicePort 38332 127.0.0.1:38332
     
@@ -274,8 +274,4 @@ class Torrc {
 
 
     """
-    
-    static var torPath: String {
-        return "/Users/\(NSUserName())/Library/Caches/tor"
-    }
 }

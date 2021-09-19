@@ -61,46 +61,24 @@ class AddAuthentication: NSViewController, NSWindowDelegate {
     
     private func authenticate() {
         let filename = randomString(length: 10)
-        let pubkey = self.textInput.stringValue
-        runScript(script: .authenticate, env: ["":""], args: [pubkey,filename]) { success in
-            if success {
-                DispatchQueue.main.async { [unowned vc = self] in
-                    simpleAlert(message: "Successfully added auth key", info: "Tor is now restarting.", buttonLabel: "OK")
-                    vc.textInput.stringValue = ""
-                    vc.textInput.resignFirstResponder()
-                }
-            } else {
-                simpleAlert(message: "Error", info: "error authenticating", buttonLabel: "OK")
-            }
+        let pubkey = self.textInput.stringValue.data(using: .utf8)
+        let chain = UserDefaults.standard.string(forKey: "chain") ?? "main"
+        let path = "\(TorClient.sharedInstance.torPath())/host/bitcoin/\(chain)/authorized_clients/"
+        
+        do {
+            try FileManager.default.createDirectory(atPath: path,
+                                                    withIntermediateDirectories: true,
+                                                    attributes: [FileAttributeKey.posixPermissions: 0o700])
+        } catch {
+            print("Directory previously created.")
         }
-    }
-    
-    private func runScript(script: SCRIPT, env: [String:String], args: [String], completion: @escaping ((Bool)) -> Void) {
-        #if DEBUG
-        print("script: \(script.rawValue)")
-        #endif
-        let resource = script.rawValue
-        guard let path = Bundle.main.path(forResource: resource, ofType: "command") else {
-            return
-        }
-        let stdOut = Pipe()
-        let task = Process()
-        task.launchPath = path
-        task.environment = env
-        task.arguments = args
-        task.standardOutput = stdOut
-        task.launch()
-        task.waitUntilExit()
-        let data = stdOut.fileHandleForReading.readDataToEndOfFile()
-        var result = ""
-        if let output = String(data: data, encoding: .utf8) {
-            #if DEBUG
-            print("result: \(output)")
-            #endif
-            result += output
-            completion(true)
-        } else {
-            completion(false)
+        
+        FileManager.default.createFile(atPath: "\(path)\(filename).auth", contents: pubkey, attributes: [FileAttributeKey.posixPermissions: 0o700])
+        
+        guard let data = FileManager.default.contents(atPath: "\(path)\(filename).auth"), let retrievedPubkey = String(data: data, encoding: .utf8) else { return }
+        
+        if retrievedPubkey == self.textInput.stringValue {
+            simpleAlert(message: "Authentication added ✓", info: "\(self.textInput.stringValue) was saved to \("\(path)\(filename).auth")", buttonLabel: "OK")
         }
     }
     
