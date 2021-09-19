@@ -348,11 +348,16 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     @IBAction func startMainnetAction(_ sender: Any) {
-        startMainnetOutlet.isEnabled = false
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.startMainnetOutlet.isEnabled = false
+        }
         
         switch chain {
         case "main":
             if !mainOn {
+                addSpinnerDesc("starting mainnet...")
                 runScript(script: .startMain)
             } else {
                 addSpinnerDesc("stopping mainnet...")
@@ -360,6 +365,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             }
         case "test":
             if !testOn {
+                addSpinnerDesc("starting testnet...")
                 runScript(script: .startTestd)
             } else {
                 addSpinnerDesc("stopping testnet...")
@@ -367,6 +373,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             }
         case "regtest":
             if !regTestOn {
+                addSpinnerDesc("starting regtest...")
                 runScript(script: .startRegtest)
             } else {
                 addSpinnerDesc("stopping regtest...")
@@ -374,6 +381,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             }
         case "signet":
             if !isSignetOn {
+                addSpinnerDesc("starting signet...")
                 runScript(script: .startSignet)
             } else {
                 addSpinnerDesc("stopping signet...")
@@ -382,7 +390,6 @@ class ViewController: NSViewController, NSWindowDelegate {
         default:
             break
         }
-        
     }
 
     @IBAction func bitcoinWindowHelp(_ sender: Any) {
@@ -528,15 +535,13 @@ class ViewController: NSViewController, NSWindowDelegate {
                 vc.startTorOutlet.isEnabled = false
                 vc.mgr?.start(delegate: self)
             }
-            //runScript(script: .startTor)
         } else {
 
             DispatchQueue.main.async { [unowned vc = self] in
-                vc.startSpinner(description: "stopping tor...")
                 vc.startTorOutlet.isEnabled = false
                 vc.mgr?.resign()
+                vc.updateTorStatus(isOn: false)
             }
-            //runScript(script: .stopTor)
         }
     }
     
@@ -656,7 +661,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             if let errorOutput = String(data: errData, encoding: .utf8) {
                 #if DEBUG
                 print("error: \(errorOutput)")
-                if errorOutput != "" {
+                if errorOutput != "" && !errorOutput.contains("not connect to the server") && !errorOutput.contains("block") && !errorOutput.contains("Loading P2P addresses")  {
                     simpleAlert(message: "Error", info: errorOutput, buttonLabel: "OK")
                 }
                 
@@ -969,7 +974,11 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     private func stopMainParse(result: String) {
         if result.contains("Bitcoin Core stopping") {
-            mainnetIsOff()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
+                guard let self = self else { return }
+                
+                self.mainnetIsOff()
+            }
         } else {
             showAlertMessage(message: "Error turning off mainnet", info: result)
         }
@@ -977,7 +986,11 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     private func stopTestParse(result: String) {
         if result.contains("Bitcoin Core stopping") {
-            testnetIsOff()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
+                guard let self = self else { return }
+                
+                self.testnetIsOff()
+            }
         } else {
             showAlertMessage(message: "Error turning off testnet", info: result)
         }
@@ -985,41 +998,37 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     private func stopRegParse(result: String) {
         if result.contains("Bitcoin Core stopping") {
-            regtestIsOff()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
+                guard let self = self else { return }
+                
+                self.regtestIsOff()
+            }
         } else {
             showAlertMessage(message: "Error turning off regtest", info: result)
         }
     }
 
     private func startTestParse(result: String) {
-        startSpinner(description: "turning on testnet")
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [unowned vc = self] in
             vc.runScript(script: .isTestOn)
-            vc.hideSpinner()
         }
     }
 
     private func startMainParse(result: String) {
-        startSpinner(description: "turning on mainnet")
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [unowned vc = self] in
             vc.runScript(script: .isMainOn)
-            vc.hideSpinner()
         }
     }
 
     private func startRegtestParse(result: String) {
-        startSpinner(description: "turning on regtest")
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [unowned vc = self] in
             vc.runScript(script: .isRegOn)
-            vc.hideSpinner()
         }
     }
     
     private func startSignetParse(result: String) {
-        startSpinner(description: "turning on signet")
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [unowned vc = self] in
             vc.runScript(script: .isSignetOn)
-            vc.hideSpinner()
         }
     }
 
@@ -1061,6 +1070,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     private func parseIsBitcoinOn(result: String) {
+        print("parseIsBitcoinOn: \(result)")
         if result.contains("Could not connect to the server") {
             let activeChain = UserDefaults.standard.string(forKey: "chain") ?? "main"
             switch activeChain {
@@ -1077,7 +1087,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             }
             self.hideSpinner()
             
-        } else if result.contains("chain") || result.contains("block") {
+        } else if result.contains("chain") {
             if let dict = convertStringToDictionary(json: result) {
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
@@ -1107,6 +1117,9 @@ class ViewController: NSViewController, NSWindowDelegate {
                     self.setTimer()
                 }
             }
+        } else {
+            simpleAlert(message: "Bitcoin Core Message", info: result + "\n\nGordian Server will auto refresh every 15 seconds, please be patient and check back again shortly.", buttonLabel: "OK")
+            self.setTimer()
         }
         
         checkForBitcoinUpdate()
@@ -1143,15 +1156,20 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     func updateTorStatus(isOn: Bool) {
+        torIsOn = isOn
         if isOn {
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.torRunningImage.alphaValue = 1
                 vc.torRunningImage.image = NSImage.init(imageLiteralResourceName: "NSStatusAvailable")
+                vc.startTorOutlet.isEnabled = true
+                vc.startTorOutlet.title = "Stop"
             }
         } else {
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.torRunningImage.alphaValue = 1
                 vc.torRunningImage.image = NSImage.init(imageLiteralResourceName: "NSStatusUnavailable")
+                vc.startTorOutlet.isEnabled = true
+                vc.startTorOutlet.title = "Start"
             }
         }
     }
