@@ -49,7 +49,7 @@ class Torrc {
     ## Send all messages of level 'notice' or higher to /usr/local/var/log/tor/notices.log
     #Log notice file /usr/local/var/log/tor/notices.log
     ## Send every possible message to /usr/local/var/log/tor/debug.log
-    #Log debug file /usr/local/var/log/tor/debug.log
+    Log debug file \(TorClient.sharedInstance.torPath())/debug.log
     ## Use the system log instead of Tor's logfiles
     #Log notice syslog
     ## To send all messages to stderr:

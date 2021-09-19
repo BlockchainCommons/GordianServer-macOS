@@ -345,9 +345,8 @@ class ViewController: NSViewController, NSWindowDelegate {
                         }
                     }
                 } catch {
-                    print("Could not clear temp folder: \(error)")
                     vc.showAlertMessage(message: "There was an issue deleting your auth keys...", info: "\(error.localizedDescription)\n\nPlease let us know about this bug.")
-                }                
+                }
             }
         }
     }
