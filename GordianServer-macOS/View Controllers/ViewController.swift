@@ -329,10 +329,25 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     @IBAction func removeAuthAction(_ sender: Any) {
-        actionAlert(message: "Warning!", info: "Removing your authentication keys means anyone who gets your hidden service url will have access to it. Are you sure you want to remove all authentication keys?") { [unowned vc = self] response in
+        let chain = UserDefaults.standard.string(forKey: "chain") ?? "main"
+        
+        actionAlert(message: "Remove \(chain) network authentication keys?", info: "Removing your authentication keys means anyone who gets your quick connect QR will be able to access your \(chain) network Bitcoin Core wallets. Are you sure you want to remove all authentication keys?") { [unowned vc = self] response in
             if response {
-                vc.runScript(script: .removeAuth)
-                vc.showAlertMessage(message: "Success", info: "Authorized clients directories removed, your rpc hidden services are no longer authenticated!")
+                let path = "\(TorClient.sharedInstance.torPath())/host/bitcoin/\(chain)/authorized_clients/"
+                
+                do {
+                    let filePaths = try FileManager.default.contentsOfDirectory(atPath: path)
+                    for (i, filePath) in filePaths.enumerated() {
+                        try FileManager.default.removeItem(atPath: path + filePath)
+                        
+                        if i + 1 == filePaths.count {
+                            vc.showAlertMessage(message: "Success", info: "Authorized clients files removed, your \(chain) network Bitcoin Core rpc hidden services are no longer authenticated!")
+                        }
+                    }
+                } catch {
+                    print("Could not clear temp folder: \(error)")
+                    vc.showAlertMessage(message: "There was an issue deleting your auth keys...", info: "\(error.localizedDescription)\n\nPlease let us know about this bug.")
+                }                
             }
         }
     }

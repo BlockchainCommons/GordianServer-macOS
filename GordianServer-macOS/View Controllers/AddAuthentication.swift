@@ -75,10 +75,15 @@ class AddAuthentication: NSViewController, NSWindowDelegate {
         
         FileManager.default.createFile(atPath: "\(path)\(filename).auth", contents: pubkey, attributes: [FileAttributeKey.posixPermissions: 0o700])
         
-        guard let data = FileManager.default.contents(atPath: "\(path)\(filename).auth"), let retrievedPubkey = String(data: data, encoding: .utf8) else { return }
+        guard let data = FileManager.default.contents(atPath: "\(path)\(filename).auth"), let retrievedPubkey = String(data: data, encoding: .utf8) else {
+            simpleAlert(message: "Auth key not added!", info: "Something went wrong and your auth key was not saved. Please reach out and let us know about this bug.", buttonLabel: "OK")
+            return
+        }
         
         if retrievedPubkey == self.textInput.stringValue {
             simpleAlert(message: "Authentication added ✓", info: "\(self.textInput.stringValue) was saved to \("\(path)\(filename).auth")", buttonLabel: "OK")
+        } else {
+            simpleAlert(message: "Auth key error.", info: "Something went wrong and your auth key was not saved correctly. Please reach out and let us know about this bug.", buttonLabel: "OK")
         }
     }
     
