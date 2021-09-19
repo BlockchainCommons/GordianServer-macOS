@@ -1314,13 +1314,14 @@
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="xvw-wj-H7H"/>
                             </imageView>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JVq-OX-ett">
-                                <rect key="frame" x="180" y="38" width="20" height="18"/>
+                                <rect key="frame" x="182" y="38" width="17.5" height="36"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="18" id="q7E-hh-oAm"/>
+                                    <constraint firstAttribute="height" constant="25" id="q7E-hh-oAm"/>
                                 </constraints>
-                                <buttonCell key="cell" type="inline" bezelStyle="inline" image="NSRefreshFreestandingTemplate" imagePosition="overlaps" alignment="center" borderStyle="border" inset="2" id="jCv-TO-8os">
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="overlaps" alignment="center" inset="2" id="jCv-TO-8os">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="smallSystemBold"/>
+                                    <font key="font" metaFont="system"/>
+                                    <imageReference key="image" image="arrow.clockwise" catalog="system" symbolScale="large"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="refreshHS:" target="eC6-Cf-Cnx" id="scY-S6-igy"/>
@@ -1370,12 +1371,12 @@
                         <constraints>
                             <constraint firstItem="JzY-eJ-FZH" firstAttribute="top" secondItem="TXs-2Y-7lq" secondAttribute="top" constant="22" id="2aZ-mZ-9Qy"/>
                             <constraint firstItem="wKT-1w-B96" firstAttribute="centerX" secondItem="TXs-2Y-7lq" secondAttribute="centerX" id="50j-Ta-Tgl"/>
-                            <constraint firstItem="JVq-OX-ett" firstAttribute="centerX" secondItem="TXs-2Y-7lq" secondAttribute="centerX" id="7ho-fy-4kJ"/>
                             <constraint firstItem="JzY-eJ-FZH" firstAttribute="centerX" secondItem="TXs-2Y-7lq" secondAttribute="centerX" id="AjQ-7O-rA2"/>
-                            <constraint firstItem="JVq-OX-ett" firstAttribute="top" secondItem="N7B-O2-k1D" secondAttribute="bottom" constant="19" id="S1k-FU-VCq"/>
+                            <constraint firstItem="JVq-OX-ett" firstAttribute="centerX" secondItem="TXs-2Y-7lq" secondAttribute="centerX" id="GRn-Xt-M99"/>
+                            <constraint firstItem="JVq-OX-ett" firstAttribute="top" secondItem="N7B-O2-k1D" secondAttribute="bottom" constant="8" id="S1k-FU-VCq"/>
                             <constraint firstItem="N7B-O2-k1D" firstAttribute="centerY" secondItem="TXs-2Y-7lq" secondAttribute="centerY" id="Y0d-1F-aTv"/>
                             <constraint firstItem="RFC-uu-5PC" firstAttribute="top" secondItem="JzY-eJ-FZH" secondAttribute="bottom" constant="8" id="lPe-ra-bbK"/>
-                            <constraint firstItem="wKT-1w-B96" firstAttribute="top" secondItem="JVq-OX-ett" secondAttribute="bottom" constant="7" id="pyF-qz-fWG"/>
+                            <constraint firstItem="wKT-1w-B96" firstAttribute="top" secondItem="JVq-OX-ett" secondAttribute="bottom" constant="11" id="pyF-qz-fWG"/>
                             <constraint firstItem="N7B-O2-k1D" firstAttribute="centerX" secondItem="TXs-2Y-7lq" secondAttribute="centerX" id="tXi-Bm-MRo"/>
                             <constraint firstItem="RFC-uu-5PC" firstAttribute="centerX" secondItem="TXs-2Y-7lq" secondAttribute="centerX" id="wGy-jB-Q2M"/>
                         </constraints>
@@ -1388,16 +1389,15 @@
                 </viewController>
                 <customObject id="tHe-2w-L5w" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="15" y="1575"/>
+            <point key="canvasLocation" x="15" y="1574.5"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Yel-Hw-wBk"/>
+        <segue reference="cqP-Ve-rOY"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="NSActionTemplate" width="15" height="15"/>
         <image name="NSLockLockedTemplate" width="14" height="15"/>
-        <image name="NSRefreshFreestandingTemplate" width="15" height="15"/>
         <image name="NSStatusAvailable" width="16" height="16"/>
         <image name="arrow.clockwise" catalog="system" width="11" height="13"/>
         <image name="blockchaincommons" width="256" height="256"/>

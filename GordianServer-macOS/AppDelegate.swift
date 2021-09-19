@@ -39,7 +39,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @IBAction func torHostClicked(_ sender: Any) {
-        //runScript(script: .openMainnetHiddenService, env: ["CHAIN":UserDefaults.standard.string(forKey: "chain")!], args: []) { _ in }
         runScript(script: .openMainnetHiddenService, env: ["AUTH_DIR":"\(TorClient.sharedInstance.torPath())/host/bitcoin/\(UserDefaults.standard.string(forKey: "chain")!)/hostname"], args: []) { _ in }
     }
     
@@ -56,7 +55,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @IBAction func torLogClicked(_ sender: Any) {
-        //runScript(script: .showTorLog, env: ["":""], args: []) { _ in }
         runScript(script: .showTorLog, env: ["AUTH_DIR":"\(TorClient.sharedInstance.torPath())/debug.log"], args: []) { _ in }
     }
     
@@ -70,8 +68,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBAction func bitcoinCoreLogClicked(_ sender: Any) {
         let d = Defaults()
         let path = d.dataDir()
-        let env = ["DATADIR":path]
-        runScript(script: .showBitcoinLog, env: env, args: []) { _ in }
+        
+        let chain = UserDefaults.standard.string(forKey: "chain") ?? "main"
+        
+        switch chain {
+        case "main":
+            let env = ["DATADIR":path]
+            runScript(script: .showBitcoinLog, env: env, args: []) { _ in }
+        case "test":
+            let env = ["DATADIR":"\(path)/testnet3"]
+            runScript(script: .showBitcoinLog, env: env, args: []) { _ in }
+        case "regtest":
+            let env = ["DATADIR":"\(path)/regtest"]
+            runScript(script: .showBitcoinLog, env: env, args: []) { _ in }
+        case "signet":
+            let env = ["DATADIR":"\(path)/signet"]
+            runScript(script: .showBitcoinLog, env: env, args: []) { _ in }
+        default:
+            break
+        }        
     }
     
     @IBAction func quickConnectClicked(_ sender: Any) {
