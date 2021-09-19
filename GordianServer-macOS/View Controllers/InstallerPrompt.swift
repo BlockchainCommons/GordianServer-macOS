@@ -11,18 +11,23 @@ import Cocoa
 class InstallerPrompt: NSViewController {
     
     var window: NSWindow?
+    var isHelp = false
     var text = ""
     var headerText = ""
     var doneBlock: ((Bool) -> Void)?
     @IBOutlet weak var label: NSTextField!
     @IBOutlet weak var header: NSTextField!
-    
+    @IBOutlet weak var buttonOutlet: NSButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         label.stringValue = text
         header.stringValue = headerText
+        
+        if isHelp {
+            buttonOutlet.title = "OK"
+        }
     }
     
     override func viewDidAppear() {
@@ -35,7 +40,9 @@ class InstallerPrompt: NSViewController {
             guard let self = self else { return }
             
             self.window?.performClose(self)
-            self.doneBlock!(true)
+            if !self.isHelp {
+                self.doneBlock!(true)
+            }
         }
     }
     

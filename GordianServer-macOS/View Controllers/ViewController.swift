@@ -104,45 +104,6 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
     }
     
-//    @IBAction func installTorAction(_ sender: Any) {
-//        if torInstalled {
-//            actionAlert(message: "Uninstall Tor?", info: "This will delete your Tor config, hidden services and uninstall Tor.") { [weak self] confirm in
-//                guard let self = self else { return }
-//
-//                if confirm {
-//                    self.addSpinnerDesc("Uninstalling Tor...")
-//                    self.runScript(script: .uninstallTor)
-//                }
-//            }
-//        } else {
-//            actionAlert(message: "Install Tor?", info: "This will run a series of checks to see if Tor needs to be installed from scratch, updated or configured to set up remote connection to your node and will take action accordingly.") { [weak self] confirm in
-//
-//                if confirm {
-//                    DispatchQueue.main.async { [weak self] in
-//                        guard let self = self else { return }
-//
-//                        self.installingTor = true
-//                        self.performSegue(withIdentifier: "goInstall", sender: self)
-//                    }
-//                }
-//            }
-//        }
-//    }
-    
-//    @IBAction func updateTorAction(_ sender: Any) {
-//        actionAlert(message: "Update Tor?", info: "") { [weak self] confirm in
-//
-//            if confirm {
-//                DispatchQueue.main.async { [weak self] in
-//                    guard let self = self else { return }
-//
-//                    self.updatingTor = true
-//                    self.performSegue(withIdentifier: "goInstall", sender: self)
-//                }
-//            }
-//        }
-//    }
-    
     @IBAction func showSettingsAction(_ sender: Any) {
         var myWindow: NSWindow? = nil
         let storyboard = NSStoryboard(name: "Main", bundle: nil)
@@ -378,11 +339,23 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     @IBAction func bitcoinWindowHelp(_ sender: Any) {
-        simpleAlert(message: "Bitcoin Core", info: "Gordian Server creates a ~./gordian directory where it installs its own Bitcoin Core binaries, log, and signatures. This allows Gordian Server to verify the binaries and generally makes the app more reliable. Gordian Server only works with the default Bitcoin directory at /Users/You/Library/Application Support/Bitcoin, using a custom data directory is not supported. You may specify a custom blocksdir for storing the blockchain via File > Settings (or the gear box button). Gordian Server allows you to run multiple networks (main, test, regtest, signet) simultaneously which can be useful for development and testing purposes. Toggle between the networks to interact with them. Click the QR button to remotely connect with supporting apps such as Gordian Wallet and Fully Noded. Click the Go To menu item for more tools.", buttonLabel: "OK")
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.headerText = "Bitcoin Core"
+            self.infoMessage = "Gordian Server creates a ~./gordian directory where it installs Bitcoin Core. Gordian Server works with the default Bitcoin directory at /Users/\(NSUserName())/Library/Application Support/Bitcoin. Specify a custom blocksdir for storing the blockchain via File > Settings (or the settings button). Run multiple networks (main, test, regtest, signet) simultaneously, useful for development and testing purposes. Click the QR button to remotely connect to your node. Click Go To for more tools. Bitcoin is run in the background, even if you quit Gordian Server Bitcoin Core will continue running unless you stop it."
+            self.performSegue(withIdentifier: "segueToHelp", sender: self)
+        }
     }
 
     @IBAction func torWindowHelp(_ sender: Any) {
-        simpleAlert(message: "Tor", info: "Gordian Server utilizes homebrew to install and manage Tor. In order to interact with your node remotely you will need to install Tor. Installing Tor with Gordian Server automatically configures Tor to work with your Bitcoin Core node so that you may securely connect to it using apps like Gordian Wallet and Fully Noded. You may install, uninstall, upgrade and add/remove Tor authentication keys with Gordian Server. Click the Go To menu item to see additonal Tor related tools.", buttonLabel: "OK")
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.headerText = "Tor"
+            self.infoMessage = "Gordian Server integrates Tor to make connecting to your node easy, secure and private. You must leave Gordian Server running in order to connect to your node remotely as quitting the app will also quit Tor. If you run Tor elsewhere on your computer Gordian Server will not interfere with it. You may start/stop Tor and add/remove Tor authentication keys with Gordian Server. Click the Go To menu item to see additonal Tor related tools."
+            self.performSegue(withIdentifier: "segueToHelp", sender: self)
+        }
     }
 
     @IBAction func updateBitcoin(_ sender: Any) {
@@ -1224,6 +1197,13 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
         switch segue.identifier {
+        case "segueToHelp":
+            if let vc = segue.destinationController as? InstallerPrompt {
+                vc.text = infoMessage
+                vc.headerText = headerText
+                vc.isHelp = true
+            }
+            
         case "showPairingCode":
             if let vc = segue.destinationController as? QRDisplayer {
                 vc.rpcport = rpcport

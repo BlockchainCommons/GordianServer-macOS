@@ -337,8 +337,6 @@ class Settings: NSViewController, NSTextFieldDelegate {
         }
     }
     
-    
-    
     func getBitcoinConf(completion: @escaping ((conf: [String]?, error: Bool)) -> Void) {
         let path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/bitcoin.conf")
         
@@ -386,11 +384,6 @@ class Settings: NSViewController, NSTextFieldDelegate {
                 vc.directoryLabel.stringValue = d.blocksDir()
             }
         }
-//        if ud.object(forKey: "nodeLabel") != nil {
-//            DispatchQueue.main.async { [unowned vc = self] in
-//                vc.nodeLabelField.stringValue = vc.ud.object(forKey: "nodeLabel") as! String
-//            }
-//        }
         DispatchQueue.main.async { [weak self] in
             self?.pruneValueField.stringValue = "\(pruneValue)"
         }

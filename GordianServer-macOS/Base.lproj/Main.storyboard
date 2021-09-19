@@ -720,6 +720,7 @@
                         <segue destination="lGs-ue-8Wa" kind="show" identifier="goInstall" id="cqP-Ve-rOY"/>
                         <segue destination="ISO-tJ-wFf" kind="show" identifier="addAuth" id="Emg-xH-9n3"/>
                         <segue destination="4YR-eD-8jP" kind="show" identifier="segueToInstallPrompt" id="eOO-Cx-yzE"/>
+                        <segue destination="4YR-eD-8jP" kind="show" identifier="segueToHelp" id="g0J-5Z-aqE"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -988,6 +989,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="buttonOutlet" destination="955-94-4Ru" id="fnK-JH-UE7"/>
                         <outlet property="header" destination="FhE-sA-Djn" id="e8S-dU-vqe"/>
                         <outlet property="label" destination="4dS-mf-dlr" id="pPV-TY-Jyz"/>
                     </connections>
@@ -1393,6 +1395,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="g0J-5Z-aqE"/>
         <segue reference="cqP-Ve-rOY"/>
     </inferredMetricsTieBreakers>
     <resources>
