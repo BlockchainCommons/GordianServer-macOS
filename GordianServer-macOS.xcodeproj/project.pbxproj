@@ -20,7 +20,6 @@
 		D01B610A2487873F005D3090 /* AddAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01B61092487873F005D3090 /* AddAuthentication.swift */; };
 		D0211A4E250493CB00F7517A /* WalletDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0211A4D250493CB00F7517A /* WalletDetail.swift */; };
 		D0211A50250497C100F7517A /* DeleteWallet.command in Resources */ = {isa = PBXBuildFile; fileRef = D0211A4F250497C100F7517A /* DeleteWallet.command */; };
-		D03063B524FE1FCA003B44BE /* ShowBitcoinConf.command in Resources */ = {isa = PBXBuildFile; fileRef = D03063B424FE1FCA003B44BE /* ShowBitcoinConf.command */; };
 		D042FAB8250B521B00E99D9B /* GetLightningHostname.command in Resources */ = {isa = PBXBuildFile; fileRef = D042FAB7250B521B00E99D9B /* GetLightningHostname.command */; };
 		D049E89E237BD09200294E70 /* StandDown.command in Resources */ = {isa = PBXBuildFile; fileRef = D049E89D237BD09200294E70 /* StandDown.command */; };
 		D049E8A0237BFF9E00294E70 /* UpdateBTCConf.command in Resources */ = {isa = PBXBuildFile; fileRef = D049E89F237BFF9E00294E70 /* UpdateBTCConf.command */; };
@@ -46,7 +45,6 @@
 		D0B9277A2383F8D400956651 /* CheckForBitcoinCore.command in Resources */ = {isa = PBXBuildFile; fileRef = D0B927792383F8D400956651 /* CheckForBitcoinCore.command */; };
 		D0B9277E2383FCD000956651 /* StopBitcoin.command in Resources */ = {isa = PBXBuildFile; fileRef = D0B9277D2383FCD000956651 /* StopBitcoin.command */; };
 		D0B9278023840D3C00956651 /* IsBitcoinOn.command in Resources */ = {isa = PBXBuildFile; fileRef = D0B9277F23840D3C00956651 /* IsBitcoinOn.command */; };
-		D0B927862384E18500956651 /* GetBitcoinConf.command in Resources */ = {isa = PBXBuildFile; fileRef = D0B927852384E18500956651 /* GetBitcoinConf.command */; };
 		D0B9278A2384E54900956651 /* RemoveBitcoin.command in Resources */ = {isa = PBXBuildFile; fileRef = D0B927892384E54900956651 /* RemoveBitcoin.command */; };
 		D0B9278C2385045400956651 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B9278B2385045400956651 /* Log.swift */; };
 		D0BCB333236A6D22000D8FDE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BCB332236A6D22000D8FDE /* AppDelegate.swift */; };
@@ -122,7 +120,6 @@
 		D01B61092487873F005D3090 /* AddAuthentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAuthentication.swift; sourceTree = "<group>"; };
 		D0211A4D250493CB00F7517A /* WalletDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletDetail.swift; sourceTree = "<group>"; };
 		D0211A4F250497C100F7517A /* DeleteWallet.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = DeleteWallet.command; sourceTree = "<group>"; };
-		D03063B424FE1FCA003B44BE /* ShowBitcoinConf.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ShowBitcoinConf.command; sourceTree = "<group>"; };
 		D042FAB7250B521B00E99D9B /* GetLightningHostname.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = GetLightningHostname.command; sourceTree = "<group>"; };
 		D049E89D237BD09200294E70 /* StandDown.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = StandDown.command; sourceTree = "<group>"; };
 		D049E89F237BFF9E00294E70 /* UpdateBTCConf.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = UpdateBTCConf.command; sourceTree = "<group>"; };
@@ -148,7 +145,6 @@
 		D0B927792383F8D400956651 /* CheckForBitcoinCore.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = CheckForBitcoinCore.command; sourceTree = "<group>"; };
 		D0B9277D2383FCD000956651 /* StopBitcoin.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = StopBitcoin.command; sourceTree = "<group>"; };
 		D0B9277F23840D3C00956651 /* IsBitcoinOn.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = IsBitcoinOn.command; sourceTree = "<group>"; };
-		D0B927852384E18500956651 /* GetBitcoinConf.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = GetBitcoinConf.command; sourceTree = "<group>"; };
 		D0B927892384E54900956651 /* RemoveBitcoin.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = RemoveBitcoin.command; sourceTree = "<group>"; };
 		D0B9278B2385045400956651 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		D0BCB32F236A6D22000D8FDE /* GordianServer-macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "GordianServer-macOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -260,7 +256,6 @@
 				D0B927792383F8D400956651 /* CheckForBitcoinCore.command */,
 				D0B9277D2383FCD000956651 /* StopBitcoin.command */,
 				D0B9277F23840D3C00956651 /* IsBitcoinOn.command */,
-				D0B927852384E18500956651 /* GetBitcoinConf.command */,
 				D0B927892384E54900956651 /* RemoveBitcoin.command */,
 				D0E74F2223B6A527008B1EC5 /* CheckStandUp.command */,
 				D0760105247DFEF200706F70 /* Strap.command */,
@@ -268,7 +263,6 @@
 				D0760113247F491E00706F70 /* LaunchStrap.command */,
 				D0F613EB2489278B0057CC93 /* CheckForOldHost.command */,
 				D0F613ED24892B680057CC93 /* RemoveOldHost.command */,
-				D03063B424FE1FCA003B44BE /* ShowBitcoinConf.command */,
 				D0C9439D2500C5AA00DF7339 /* RPC.command */,
 				D0211A4F250497C100F7517A /* DeleteWallet.command */,
 				D0DCD8802508BAF100243916 /* InstallLightning.command */,
@@ -496,7 +490,6 @@
 				D0EB5319237E4E9F002212F8 /* fullynoded_generate.png in Resources */,
 				D0DACF4E25132E0C00846590 /* StopLightning.command in Resources */,
 				D0B9277A2383F8D400956651 /* CheckForBitcoinCore.command in Resources */,
-				D03063B524FE1FCA003B44BE /* ShowBitcoinConf.command in Resources */,
 				D0DCD8EE236ACD6300F2D15A /* Installer.xib in Resources */,
 				D0F9352C238CAC48001FF151 /* onion.png in Resources */,
 				D0BCB337236A6D27000D8FDE /* Assets.xcassets in Resources */,
@@ -528,7 +521,6 @@
 				D0821043238AA78900E21EDC /* blockchaincommons.png in Resources */,
 				D01471A12371354700F64329 /* LaunchBitcoin.command in Resources */,
 				D0F613EE24892B680057CC93 /* RemoveOldHost.command in Resources */,
-				D0B927862384E18500956651 /* GetBitcoinConf.command in Resources */,
 				D0B9278023840D3C00956651 /* IsBitcoinOn.command in Resources */,
 				D06E3938236BE46E0072924A /* Settings.xib in Resources */,
 				D0760106247DFEF200706F70 /* Strap.command in Resources */,

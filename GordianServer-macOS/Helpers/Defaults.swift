@@ -11,27 +11,16 @@ import Foundation
 class Defaults {
     
     private func getBitcoinConf(completion: @escaping ((conf: [String]?, error: Bool)) -> Void) {
-        guard let path = Bundle.main.path(forResource: SCRIPT.getRPCCredentials.rawValue, ofType: "command") else {
+        let path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/bitcoin.conf")
+        
+        guard let bitcoinConf = try? String(contentsOf: path, encoding: .utf8) else {
+            print("can not get bitcoin.conf")
+            completion((nil, false))
             return
         }
-        let stdOut = Pipe()
-        let task = Process()
-        task.launchPath = path
-        task.environment = ["DATADIR":dataDir()]
-        task.standardOutput = stdOut
-        task.launch()
-        task.waitUntilExit()
-        let data = stdOut.fileHandleForReading.readDataToEndOfFile()
-        if let output = String(data: data, encoding: .utf8) {
-            if output != "" {
-                let conf = output.components(separatedBy: "\n")
-                completion((conf, false))
-            } else {
-                completion((nil, false))
-            }
-        } else {
-            completion((nil, true))
-        }
+        
+        let conf = bitcoinConf.components(separatedBy: "\n")
+        completion((conf, false))
     }
     
     let ud = UserDefaults.standard

@@ -11,7 +11,6 @@ import Foundation
 public enum SCRIPT: String {
     case openFile = "OpenFile"
     case removeBitcoin = "RemoveBitcoin"
-    case getRPCCredentials = "GetBitcoinConf"
     case verifyBitcoin = "Verify"
     case checkForBitcoin = "CheckForBitcoinCore"
     case standUp = "StandUp"
@@ -24,7 +23,6 @@ public enum SCRIPT: String {
     case launchStrap = "LaunchStrap"
     case isBitcoinOn = "IsBitcoinOn"
     case stopBitcoin = "StopBitcoin"
-    case removeAuth = "RemoveAuth"
     case checkForOldHost = "CheckForOldHost"
     case removeOldHost = "RemoveOldHost"
     case rpc = "RPC"
@@ -39,7 +37,6 @@ public enum SCRIPT: String {
     case writeLog = "WriteLog"
     case getLog = "GetLog"
     case startBitcoin = "StartBitcoin"
-    
 }
 
 public enum BTCCONF: String {

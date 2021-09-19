@@ -556,7 +556,15 @@ class ViewController: NSViewController, NSWindowDelegate {
     func checkBitcoinConfForRPCCredentials() {
         DispatchQueue.main.async { [unowned vc = self] in
             vc.taskDescription.stringValue = "getting rpc credentials..."
-            vc.runScript(script: .getRPCCredentials)
+            
+            let path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/bitcoin.conf")
+            
+            guard let conf = try? String(contentsOf: path, encoding: .utf8) else {
+                print("can not get bitcoin.conf")
+                return
+            }
+            
+            self.checkForRPCCredentials(response: conf)
         }
     }
 
@@ -649,8 +657,8 @@ class ViewController: NSViewController, NSWindowDelegate {
         case .checkForBitcoin:
             parseBitcoindResponse(result: result)
 
-        case .getRPCCredentials:
-            checkForRPCCredentials(response: result)
+//        case .getRPCCredentials:
+//            checkForRPCCredentials(response: result)
 
         case .verifyBitcoin:
             parseVerifyResult(result: result)
