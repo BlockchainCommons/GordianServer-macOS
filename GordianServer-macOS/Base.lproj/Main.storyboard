@@ -42,16 +42,10 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="File" id="bib-Uj-vzu">
                                     <items>
-                                        <menuItem title="Settings" id="WnG-vp-Vo3" userLabel="Settings">
+                                        <menuItem title="Settings" id="0yf-GN-Ap7" userLabel="Settings">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
-                                                <action selector="settingsClicked:" target="Voe-Tx-rLC" id="DBQ-Pe-axW"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="m54-Is-iLE"/>
-                                        <menuItem title="Close" keyEquivalent="w" id="DVo-aG-piG">
-                                            <connections>
-                                                <action selector="performClose:" target="Ady-hI-5gd" id="HmO-Ls-i7Q"/>
+                                                <action selector="settingsClicked:" target="Voe-Tx-rLC" id="mnB-rE-cOc"/>
                                             </connections>
                                         </menuItem>
                                     </items>
@@ -1409,7 +1403,7 @@
         <image name="NSActionTemplate" width="15" height="15"/>
         <image name="NSLockLockedTemplate" width="14" height="15"/>
         <image name="NSStatusAvailable" width="16" height="16"/>
-        <image name="arrow.clockwise" catalog="system" width="17" height="20"/>
+        <image name="arrow.clockwise" catalog="system" width="11" height="13"/>
         <image name="blockchaincommons" width="256" height="256"/>
         <image name="gearshape" catalog="system" width="16" height="16"/>
         <image name="qrcode" catalog="system" width="15" height="14"/>

@@ -105,6 +105,21 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
     }
     
+    func windowShouldClose(_ sender: NSWindow) -> Bool {
+        let alert = NSAlert()
+        alert.messageText = "Quit Tor and Bitcoin Core?"
+        alert.informativeText = "Closing this window does not automatically quit Tor or Bitcoin Core."
+        alert.addButton(withTitle: "Quit")
+        alert.addButton(withTitle: "Leave Running")
+        alert.alertStyle = .warning
+        let modalResponse = alert.runModal()
+        if (modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn) {
+            self.runScript(script: .stopBitcoin)
+            self.mgr?.resign()
+        }
+        return true
+    }
+    
     @IBAction func showSettingsAction(_ sender: Any) {
         var myWindow: NSWindow? = nil
         let storyboard = NSStoryboard(name: "Main", bundle: nil)
@@ -916,7 +931,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         } else {
             self.bitcoinRunning = true
             self.setTimer()
-            simpleAlert(message: "Bitcoin Core Message", info: result + "\n\nGordian Server will auto refresh every 15 seconds, please be patient and check back again shortly.", buttonLabel: "OK")
+            simpleAlert(message: "Bitcoin Core Message", info: result + "\n\nGordian Server will auto refresh every 15 seconds. Please be patient while Bitcoin Core starts as it can take time. If the app feels stuck just tap the refresh button located under the logo. You can always monitor the log to see details of what is happening in real time by clicking \"Go To\" > \"Bitcoin Core Log\".", buttonLabel: "OK")
         }
         
         checkForBitcoinUpdate()
