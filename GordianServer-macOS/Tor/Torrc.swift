@@ -23,13 +23,13 @@ class Torrc {
     ##
     ## Tor will look for this file in various places based on your platform:
     ## https://www.torproject.org/docs/faq#torrc
-
+    
     ## Tor opens a SOCKS proxy on port 9050 by default -- even if you don't
     ## configure one below. Set "SOCKSPort 0" if you plan to run Tor only
     ## as a relay, and not make any local application connections yourself.
     #SOCKSPort 9050 # Default: Bind to localhost:9050 for local connections.
     #SOCKSPort 192.168.0.1:9100 # Bind to this address:port too.
-
+    
     ## Entry policies to allow/deny SOCKS requests based on IP address.
     ## First entry that matches wins. If no SOCKSPolicy is set, we accept
     ## all (and only) requests that reach a SOCKSPort. Untrusted users who
@@ -38,7 +38,7 @@ class Torrc {
     #SOCKSPolicy accept 192.168.0.0/16
     #SOCKSPolicy accept6 FC00::/7
     #SOCKSPolicy reject *
-
+    
     ## Logs go to stdout at level "notice" unless redirected by something
     ## else, like one of the below lines. You can have as many Log lines as
     ## you want.
@@ -54,16 +54,16 @@ class Torrc {
     #Log notice syslog
     ## To send all messages to stderr:
     #Log debug stderr
-
+    
     ## Uncomment this to start the process in the background... or use
     ## --runasdaemon 1 on the command line. This is ignored on Windows;
     ## see the FAQ entry if you want Tor to run as an NT service.
     #RunAsDaemon 1
-
+    
     ## The directory for keeping all the keys/etc. By default, we store
     ## things in $HOME/.tor on Unix, and in Application Data\tor on Windows.
     #DataDirectory /usr/local/var/lib/tor
-
+    
     ## The port on which Tor will listen for local connections from Tor
     ## controller applications, as documented in control-spec.txt.
     #ControlPort 9051
@@ -71,36 +71,48 @@ class Torrc {
     ## authentication methods, to prevent attackers from accessing it.
     #HashedControlPassword 16:872860B76453A77D60CA2BB8C1A7042072093276A3D701AD684053EC4C
     #CookieAuthentication 1
-
+    
     ############### This section is just for location-hidden services ###
-
+    
     ## Once you have configured a hidden service, you can look at the
     ## contents of the file ".../hidden_service/hostname" for the address
     ## to tell people.
     ##
     ## HiddenServicePort x y:z says to redirect requests on port x to the
     ## address y:z.
-
-    HiddenServiceDir \(TorClient.sharedInstance.torPath())/host/bitcoin/main/
+    
+    HiddenServiceDir \(TorClient.sharedInstance.torPath())/host/bitcoin/rpc/main/
     HiddenServiceVersion 3
     HiddenServicePort 8332 127.0.0.1:8332
     
-    HiddenServiceDir \(TorClient.sharedInstance.torPath())/host/bitcoin/test/
+    HiddenServiceDir \(TorClient.sharedInstance.torPath())/host/bitcoin/p2p/main/
+    HiddenServiceVersion 3
+    HiddenServicePort 8333 127.0.0.1:8333
+    
+    HiddenServiceDir \(TorClient.sharedInstance.torPath())/host/bitcoin/rpc/test/
     HiddenServiceVersion 3
     HiddenServicePort 18332 127.0.0.1:18332
-
-    HiddenServiceDir \(TorClient.sharedInstance.torPath())/host/bitcoin/regtest/
+    
+    HiddenServiceDir \(TorClient.sharedInstance.torPath())/host/bitcoin/p2p/test/
+    HiddenServiceVersion 3
+    HiddenServicePort 18333 127.0.0.1:18333
+    
+    HiddenServiceDir \(TorClient.sharedInstance.torPath())/host/bitcoin/rpc/regtest/
     HiddenServiceVersion 3
     HiddenServicePort 18443 127.0.0.1:18443
     
-    HiddenServiceDir \(TorClient.sharedInstance.torPath())/host/bitcoin/signet/
+    HiddenServiceDir \(TorClient.sharedInstance.torPath())/host/bitcoin/rpc/signet/
     HiddenServiceVersion 3
     HiddenServicePort 38332 127.0.0.1:38332
+    
+    HiddenServiceDir \(TorClient.sharedInstance.torPath())/host/bitcoin/p2p/signet/
+    HiddenServiceVersion 3
+    HiddenServicePort 38333 127.0.0.1:38333
     
     ################ This section is just for relays #####################
     #
     ## See https://www.torproject.org/docs/tor-doc-relay for details.
-
+    
     ## Required: what port to advertise for incoming Tor connections.
     #ORPort 9001
     ## If you want to listen on a port other than the one advertised in
@@ -112,11 +124,11 @@ class Torrc {
     ## If you want to listen on IPv6 your numeric address must be explictly
     ## between square brackets as follows. You must also listen on IPv4.
     #ORPort [2001:DB8::1]:9050
-
+    
     ## The IP address or full DNS name for incoming connections to your
     ## relay. Leave commented out and Tor will guess.
     #Address noname.example.com
-
+    
     ## If you have multiple network interfaces, you can specify one for
     ## outgoing traffic to use.
     ## OutboundBindAddressExit will be used for all exit traffic, while
@@ -126,13 +138,13 @@ class Torrc {
     ## specify the same address for both in a single line.
     #OutboundBindAddressExit 10.0.0.4
     #OutboundBindAddressOR 10.0.0.5
-
+    
     ## A handle for your relay, so people don't have to refer to it by key.
     ## Nicknames must be between 1 and 19 characters inclusive, and must
     ## contain only the characters [a-zA-Z0-9].
     ## If not set, "Unnamed" will be used.
     #Nickname ididnteditheconfig
-
+    
     ## Define these to limit how much relayed traffic you will allow. Your
     ## own traffic is still unthrottled. Note that RelayBandwidthRate must
     ## be at least 75 kilobytes per second.
@@ -141,7 +153,7 @@ class Torrc {
     ## 2^20, etc.
     #RelayBandwidthRate 100 KBytes  # Throttle traffic to 100KB/s (800Kbps)
     #RelayBandwidthBurst 200 KBytes # But allow bursts up to 200KB (1600Kb)
-
+    
     ## Use these to restrict the maximum traffic per day, week, or month.
     ## Note that this threshold applies separately to sent and received bytes,
     ## not to their sum: setting "40 GB" may allow up to 80 GB total before
@@ -154,7 +166,7 @@ class Torrc {
     ## Each period starts on the 3rd of the month at 15:00 (AccountingMax
     ## is per month)
     #AccountingStart month 3 15:00
-
+    
     ## Administrative contact information for this relay or bridge. This line
     ## can be used to contact you if your relay or bridge is misconfigured or
     ## something else goes wrong. Note that we archive and publish all
@@ -167,7 +179,7 @@ class Torrc {
     #ContactInfo Random Person <nobody AT example dot com>
     ## You might also include your PGP or GPG fingerprint if you have one:
     #ContactInfo 0xFFFFFFFF Random Person <nobody AT example dot com>
-
+    
     ## Uncomment this to mirror directory information for others. Please do
     ## if you have enough bandwidth.
     #DirPort 9030 # what port to advertise for directory connections
@@ -182,7 +194,7 @@ class Torrc {
     ## contacting them. See contrib/tor-exit-notice.html in Tor's source
     ## distribution for a sample.
     #DirPortFrontPage /usr/local/etc/tor/tor-exit-notice.html
-
+    
     ## Uncomment this if you run more than one Tor relay, and add the identity
     ## key fingerprint of each Tor relay you control, even if they're on
     ## different networks. You declare it here so Tor clients can avoid
@@ -195,21 +207,21 @@ class Torrc {
     ##
     ## Note: do not use MyFamily on bridge relays.
     #MyFamily $keyid,$keyid,...
-
+    
     ## Uncomment this if you want your relay to be an exit, with the default
     ## exit policy (or whatever exit policy you set below).
     ## (If ReducedExitPolicy, ExitPolicy, or IPv6Exit are set, relays are exits.
     ## If none of these options are set, relays are non-exits.)
     #ExitRelay 1
-
+    
     ## Uncomment this if you want your relay to allow IPv6 exit traffic.
     ## (Relays do not allow any exit traffic by default.)
     #IPv6Exit 1
-
+    
     ## Uncomment this if you want your relay to be an exit, with a reduced set
     ## of exit ports.
     #ReducedExitPolicy 1
-
+    
     ## Uncomment these lines if you want your relay to be an exit, with the
     ## specified set of exit IPs and ports.
     ##
@@ -245,7 +257,7 @@ class Torrc {
     #ExitPolicy accept *4:119 # accept nntp ports on IPv4 only as well as default exit policy
     #ExitPolicy accept6 *6:119 # accept nntp ports on IPv6 only as well as default exit policy
     #ExitPolicy reject *:* # no exits allowed
-
+    
     ## Bridge relays (or "bridges") are Tor relays that aren't listed in the
     ## main directory. Since there is no complete public list of them, even an
     ## ISP that filters connections to all the known Tor relays probably
@@ -261,7 +273,7 @@ class Torrc {
     ## a private bridge, for example because you'll give out your bridge
     ## address manually to your friends, uncomment this line:
     #PublishServerDescriptor 0
-
+    
     ## Configuration options can be imported from files or folders using the %include
     ## option with the value being a path. If the path is a file, the options from the
     ## file will be parsed as if they were written where the %include option is. If
@@ -270,8 +282,8 @@ class Torrc {
     ## The %include option can be used recursively.
     #%include /etc/torrc.d/
     #%include /etc/torrc.custom
-
-
-
+    
+    
+    
     """
 }

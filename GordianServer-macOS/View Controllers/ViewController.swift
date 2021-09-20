@@ -1332,7 +1332,7 @@ extension ViewController: OnionManagerDelegate {
             self.checkForGordian()
         }
         
-        guard let hostname = mgr?.hostname() else {
+        guard let hostname = mgr?.rpcHostname() else {
             simpleAlert(message: "Tor config issue.", info: "There was an issue fetching your nodes hidden service address. Your node may not be remotely reachable.", buttonLabel: "OK")
             return
         }

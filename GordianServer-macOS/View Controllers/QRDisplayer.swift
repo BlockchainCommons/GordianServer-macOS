@@ -68,7 +68,7 @@ class QRDisplayer: NSViewController {
             break
         }
         
-        guard let host = TorClient.sharedInstance.hostname() else {
+        guard let host = TorClient.sharedInstance.rpcHostname() else {
             simpleAlert(message: "No hostname found..", info: "Please ensure Tor is running. If you can not resolve this issue please let us know about it.", buttonLabel: "OK")
             return
         }
