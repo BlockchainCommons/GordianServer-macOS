@@ -71,6 +71,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     var headerText = ""
     var installingTor = false
     var updatingTor = false
+    var installingXcode = false
     var currentVersion = ""
 
     override func viewDidLoad() {
@@ -630,9 +631,6 @@ class ViewController: NSViewController, NSWindowDelegate {
         case .checkForBitcoin:
             parseBitcoindResponse(result: result)
 
-//        case .getRPCCredentials:
-//            checkForRPCCredentials(response: result)
-
         case .verifyBitcoin:
             parseVerifyResult(result: result)
 
@@ -852,7 +850,14 @@ class ViewController: NSViewController, NSWindowDelegate {
     private func parseXcodeSelectResult(result: String) {
         hideSpinner()
         if result.contains("XCode select not installed") {
-            simpleAlert(message: "Dependencies missing", info: "You do not appear to have XCode command line tools installed, Gordian Server relies on XCode command line tools for installing Bitcoin Core, in order to continue please select \"Install Dependencies\".", buttonLabel: "OK")
+            self.headerText = "Xcode command line tools is not installed."
+            self.infoMessage = "Gordian Server relies on Xcode command line tools for installing Bitcoin Core. It uses about 2.7gb of space and includes a bunch of useful tools to do Bitcoin and Lightning related tasks. Clicking \"Install\" will launch a terminal which starts the installation process for you, please follow any prompts and wait for the installation to complete."
+            
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                
+                self.performSegue(withIdentifier: "segueToInstallXcode", sender: self)
+            }
         } else {
             installNow()
         }
@@ -1192,6 +1197,10 @@ class ViewController: NSViewController, NSWindowDelegate {
     private func strap() {
         runScript(script: .launchStrap)
     }
+    
+    private func installXcodeCLTools() {
+        runScript(script: .installXcode)
+    }
 
     // MARK: Segue Prep
 
@@ -1202,6 +1211,22 @@ class ViewController: NSViewController, NSWindowDelegate {
                 vc.text = infoMessage
                 vc.headerText = headerText
                 vc.isHelp = true
+            }
+            
+        case "segueToInstallXcode":
+            if let vc = segue.destinationController as? InstallerPrompt {
+                vc.text = infoMessage
+                vc.headerText = headerText
+                vc.isHelp = false
+                
+                vc.doneBlock = { response in
+                    if response {
+                        DispatchQueue.main.async { [unowned vc = self] in
+                            vc.timer?.invalidate()
+                            vc.installXcodeCLTools()
+                        }
+                    }
+                }
             }
             
         case "showPairingCode":

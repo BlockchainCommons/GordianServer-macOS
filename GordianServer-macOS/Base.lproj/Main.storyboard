@@ -721,6 +721,7 @@
                         <segue destination="ISO-tJ-wFf" kind="show" identifier="addAuth" id="Emg-xH-9n3"/>
                         <segue destination="4YR-eD-8jP" kind="show" identifier="segueToInstallPrompt" id="eOO-Cx-yzE"/>
                         <segue destination="4YR-eD-8jP" kind="show" identifier="segueToHelp" id="g0J-5Z-aqE"/>
+                        <segue destination="4YR-eD-8jP" kind="show" identifier="segueToInstallXcode" id="Mv4-Eu-EeQ"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -1395,7 +1396,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="g0J-5Z-aqE"/>
+        <segue reference="Mv4-Eu-EeQ"/>
         <segue reference="cqP-Ve-rOY"/>
     </inferredMetricsTieBreakers>
     <resources>

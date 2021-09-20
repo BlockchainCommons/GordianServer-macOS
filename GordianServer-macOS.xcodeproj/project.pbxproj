@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0A92AE3F26F75E310034B7B4 /* OpenFile.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A92AE3E26F75E310034B7B4 /* OpenFile.command */; };
 		0A92AE4126F761260034B7B4 /* StartBitcoin.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A92AE4026F761260034B7B4 /* StartBitcoin.command */; };
+		0A92AE4326F81F490034B7B4 /* InstallXcode.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A92AE4226F81F490034B7B4 /* InstallXcode.command */; };
+		0A92AE4526F822090034B7B4 /* LaunchXcodeInstall.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A92AE4426F822090034B7B4 /* LaunchXcodeInstall.command */; };
 		0AD5BAA026EF2FA50091A075 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD5BA9F26EF2FA50091A075 /* Extensions.swift */; };
 		0AD5BAAC26F1D0AC0091A075 /* InstallerPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD5BAAB26F1D0AC0091A075 /* InstallerPrompt.swift */; };
 		0AD5BAB726F568820091A075 /* Tor.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AD5BAB626F568820091A075 /* Tor.xcframework */; };
@@ -110,6 +112,8 @@
 /* Begin PBXFileReference section */
 		0A92AE3E26F75E310034B7B4 /* OpenFile.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = OpenFile.command; sourceTree = "<group>"; };
 		0A92AE4026F761260034B7B4 /* StartBitcoin.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = StartBitcoin.command; sourceTree = "<group>"; };
+		0A92AE4226F81F490034B7B4 /* InstallXcode.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = InstallXcode.command; sourceTree = "<group>"; };
+		0A92AE4426F822090034B7B4 /* LaunchXcodeInstall.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = LaunchXcodeInstall.command; sourceTree = "<group>"; };
 		0AD5BA9F26EF2FA50091A075 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		0AD5BAAB26F1D0AC0091A075 /* InstallerPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallerPrompt.swift; sourceTree = "<group>"; };
 		0AD5BAB626F568820091A075 /* Tor.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = Tor.xcframework; sourceTree = "<group>"; };
@@ -276,6 +280,8 @@
 				D04D4989252C676200D7383E /* GetLog.command */,
 				0A92AE3E26F75E310034B7B4 /* OpenFile.command */,
 				0A92AE4026F761260034B7B4 /* StartBitcoin.command */,
+				0A92AE4226F81F490034B7B4 /* InstallXcode.command */,
+				0A92AE4426F822090034B7B4 /* LaunchXcodeInstall.command */,
 			);
 			path = Scripts;
 			sourceTree = "<group>";
@@ -488,6 +494,7 @@
 				D0B9278A2384E54900956651 /* RemoveBitcoin.command in Resources */,
 				D0EB531A237E4E9F002212F8 /* fullynoded_tap_pubkey.png in Resources */,
 				D0EB5319237E4E9F002212F8 /* fullynoded_generate.png in Resources */,
+				0A92AE4326F81F490034B7B4 /* InstallXcode.command in Resources */,
 				D0DACF4E25132E0C00846590 /* StopLightning.command in Resources */,
 				D0B9277A2383F8D400956651 /* CheckForBitcoinCore.command in Resources */,
 				D0DCD8EE236ACD6300F2D15A /* Installer.xib in Resources */,
@@ -514,6 +521,7 @@
 				D049E89E237BD09200294E70 /* StandDown.command in Resources */,
 				D0B9277E2383FCD000956651 /* StopBitcoin.command in Resources */,
 				D0C9439E2500C5AA00DF7339 /* RPC.command in Resources */,
+				0A92AE4526F822090034B7B4 /* LaunchXcodeInstall.command in Resources */,
 				D0DACF5425145EB300846590 /* GetLightningRpcCreds.command in Resources */,
 				D0534CC8237E4CE70093DE67 /* paste.png in Resources */,
 				D0EB5318237E4E9F002212F8 /* fullynoded_share.png in Resources */,

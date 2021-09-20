@@ -373,8 +373,6 @@ class Installer: NSViewController {
     }
     
     func getExisistingRPCCreds(completion: @escaping ((user: String, password: String)) -> Void) {
-        print("getExisistingRPCCreds")
-        
         var user = ""
         var password = ""
         
