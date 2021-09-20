@@ -183,8 +183,7 @@ logn "Checking full-disk encryption status:"
 if fdesetup status | grep $Q -E "FileVault is (On|Off, but will be enabled after the next restart)."; then
   logk
 elif [ -n "$STRAP_CI" ]; then
-  echo
-  logn "Skipping full-disk encryption for CI"
+  echo "SKIPPED (for CI)"
 elif [ -n "$STRAP_INTERACTIVE" ]; then
   echo
   log "Enabling full-disk encryption on next reboot:"
@@ -261,17 +260,19 @@ fi
 # Setup GitHub HTTPS credentials.
 if git credential-osxkeychain 2>&1 | grep $Q "git.credential-osxkeychain"
 then
-  if [ "$(git config --global credential.helper)" != "osxkeychain" ]
+  # Actually execute the credential in case it's a wrapper script for credential-osxkeychain
+  if git "credential-$(git config --global credential.helper 2>/dev/null)" 2>&1 \
+     | grep -v $Q "git.credential-osxkeychain"
   then
     git config --global credential.helper osxkeychain
   fi
 
   if [ -n "$STRAP_GITHUB_USER" ] && [ -n "$STRAP_GITHUB_TOKEN" ]
   then
-    printf "protocol=https\\nhost=github.com\\n" | git credential-osxkeychain erase
+    printf "protocol=https\\nhost=github.com\\n" | git credential reject
     printf "protocol=https\\nhost=github.com\\nusername=%s\\npassword=%s\\n" \
           "$STRAP_GITHUB_USER" "$STRAP_GITHUB_TOKEN" \
-          | git credential-osxkeychain store
+          | git credential approve
   fi
 fi
 logk
@@ -279,7 +280,17 @@ logk
 # Setup Homebrew directory and permissions.
 logn "Installing Homebrew:"
 HOMEBREW_PREFIX="$(brew --prefix 2>/dev/null || true)"
-[ -n "$HOMEBREW_PREFIX" ] || HOMEBREW_PREFIX="/usr/local"
+HOMEBREW_REPOSITORY="$(brew --repository 2>/dev/null || true)"
+if [ -z "$HOMEBREW_PREFIX" ] || [ -z "$HOMEBREW_REPOSITORY" ]; then
+  UNAME_MACHINE="$(/usr/bin/uname -m)"
+  if [[ "$UNAME_MACHINE" == "arm64" ]]; then
+    HOMEBREW_PREFIX="/opt/homebrew"
+    HOMEBREW_REPOSITORY="${HOMEBREW_PREFIX}"
+  else
+    HOMEBREW_PREFIX="/usr/local"
+    HOMEBREW_REPOSITORY="${HOMEBREW_PREFIX}/Homebrew"
+  fi
+fi
 [ -d "$HOMEBREW_PREFIX" ] || sudo_askpass mkdir -p "$HOMEBREW_PREFIX"
 if [ "$HOMEBREW_PREFIX" = "/usr/local" ]
 then
@@ -287,12 +298,10 @@ then
 fi
 (
   cd "$HOMEBREW_PREFIX"
-  sudo_askpass mkdir -p               Cellar Frameworks bin etc include lib opt sbin share var
-  sudo_askpass chown -R "$USER:admin" Cellar Frameworks bin etc include lib opt sbin share var
+  sudo_askpass mkdir -p               Cellar Caskroom Frameworks bin etc include lib opt sbin share var
+  sudo_askpass chown    "$USER:admin" Cellar Caskroom Frameworks bin etc include lib opt sbin share var
 )
 
-HOMEBREW_REPOSITORY="$(brew --repository 2>/dev/null || true)"
-[ -n "$HOMEBREW_REPOSITORY" ] || HOMEBREW_REPOSITORY="/usr/local/Homebrew"
 [ -d "$HOMEBREW_REPOSITORY" ] || sudo_askpass mkdir -p "$HOMEBREW_REPOSITORY"
 sudo_askpass chown -R "$USER:admin" "$HOMEBREW_REPOSITORY"
 
@@ -313,16 +322,16 @@ logk
 
 # Update Homebrew.
 export PATH="$HOMEBREW_PREFIX/bin:$PATH"
-log "Updating Homebrew:"
-brew update
+logn "Updating Homebrew:"
+brew update --quiet
 logk
 
 # Install Homebrew Bundle, Cask and Services tap.
 log "Installing Homebrew taps and extensions:"
-brew bundle --file=- <<RUBY
-tap 'homebrew/cask'
-tap 'homebrew/core'
-tap 'homebrew/services'
+brew bundle --quiet --file=- <<RUBY
+tap "homebrew/cask"
+tap "homebrew/core"
+tap "homebrew/services"
 RUBY
 logk
 
@@ -336,10 +345,10 @@ else
   if [ -z "$STRAP_CI" ]; then
     sudo_askpass softwareupdate --install --all
     xcode_license
+    logk
   else
-    echo "Skipping software updates for CI"
+    echo "SKIPPED (for CI)"
   fi
-  logk
 fi
 
 # Setup dotfiles
@@ -410,4 +419,4 @@ fi
 run_dotfile_scripts script/strap-after-setup
 
 STRAP_SUCCESS="1"
-log "Finished! Your system is now Strap'd! Close this terminal window and restart StandUp.app to continue."
+log "Your system is now Strap'd!"
