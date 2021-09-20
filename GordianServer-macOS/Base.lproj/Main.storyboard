@@ -67,6 +67,12 @@
                                                 <action selector="gordianLogClicked:" target="Voe-Tx-rLC" id="sSN-X3-bVc"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Install Secure Development Environment" id="gar-Bu-uJo">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="installStrapClicked:" target="Voe-Tx-rLC" id="a1I-wE-kGG"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="rQS-f7-wUP"/>
                                         <menuItem title="Tor Host" id="WNo-zO-KSp">
                                             <modifierMask key="keyEquivalentModifierMask"/>

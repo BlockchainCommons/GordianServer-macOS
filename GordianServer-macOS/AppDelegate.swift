@@ -14,6 +14,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBAction func gordianLogClicked(_ sender: Any) {
         runScript(script: .openFile, env: ["FILE":"/Users/\(NSUserName())/.gordian/gordian.log"], args: []) { _ in }
     }
+    
+    @IBAction func installStrapClicked(_ sender: Any) {
+        var myWindow: NSWindow? = nil
+        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+        let installPrompt = storyboard.instantiateController(withIdentifier: "InstallerPrompt") as! InstallerPrompt
+        installPrompt.headerText = "Setup Secure Development Environment"
+        installPrompt.isHelp = false
+        installPrompt.text = "This will run a script to setup a minimal macOS development system and also configures your Macintosh with enhanced security settings. To read more about it please visit https://github.com/MikeMcQuaid/strap"
+        myWindow = NSWindow(contentViewController: installPrompt)
+        NSApp.activate(ignoringOtherApps: true)
+        myWindow?.makeKeyAndOrderFront(self)
+        let vc = NSWindowController(window: myWindow)
+        vc.showWindow(self)
+    }
+    
 
     @IBAction func settingsClicked(_ sender: Any) {
         var myWindow: NSWindow? = nil

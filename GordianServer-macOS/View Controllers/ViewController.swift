@@ -850,9 +850,6 @@ class ViewController: NSViewController, NSWindowDelegate {
     private func parseXcodeSelectResult(result: String) {
         hideSpinner()
         if result.contains("XCode select not installed") {
-            
-            // Prompt to setup your machine for best security and development tools. Not required but optional. 
-            
             self.headerText = "Xcode command line tools is not installed."
             self.infoMessage = "Gordian Server relies on Xcode command line tools for installing Bitcoin Core. It uses about 2.7gb of space and includes a bunch of useful tools to do Bitcoin and Lightning related tasks. Clicking \"Install\" will launch a terminal which starts the installation process for you, please follow any prompts and wait for the installation to complete."
             
