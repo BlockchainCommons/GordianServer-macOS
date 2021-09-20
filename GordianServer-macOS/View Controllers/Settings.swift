@@ -67,8 +67,9 @@ class Settings: NSViewController, NSTextFieldDelegate {
     func privateOn() {
         var proxyExists = false
         var debugExists = false
-        var bindExists = false
+        //var bindExists = false
         var listenExists = false
+        var discoverExists = false
         getBitcoinConf { [unowned vc = self] (conf, error) in
             if !error && conf != nil {
                 var stringConf = conf!.joined(separator: "\n")
@@ -78,39 +79,46 @@ class Settings: NSViewController, NSTextFieldDelegate {
                         let k = arr[0]
                         let existingValue = arr[1]
                         switch k {
+                        case "discover", "#discover":
+                            discoverExists = true
+                            stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "discover=0")
+                            
                         case "#debug":
                             debugExists = true
                             stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "debug=tor")
                             
                         case "#proxy":
                             proxyExists = true
-                            stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "proxy=127.0.0.1:9050")
+                            stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "proxy=127.0.0.1:19050")
                             
                         case "#listen":
                             listenExists = true
                             stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "listen=1")
                             
-                        case "#bindaddress":
-                            bindExists = true
-                            stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "bindaddress=127.0.0.1")
+//                        case "#bindaddress":
+//                            bindExists = true
+//                            stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "bindaddress=127.0.0.1")
                             
                         default:
                             break
                         }
                     }
                 }
+                if !discoverExists {
+                    stringConf = "discover=0\n" + stringConf
+                }
                 if !debugExists {
                     stringConf = "debug=tor\n" + stringConf
                 }
                 if !proxyExists {
-                    stringConf = "proxy=127.0.0.1:9050\n" + stringConf
+                    stringConf = "proxy=127.0.0.1:19050\n" + stringConf
                 }
                 if !listenExists {
                     stringConf = "listen=1\n" + stringConf
                 }
-                if !bindExists {
-                    stringConf = "bindaddress=127.0.0.1\n" + stringConf
-                }
+//                if !bindExists {
+//                    stringConf = "bindaddress=127.0.0.1\n" + stringConf
+//                }
                 vc.setBitcoinConf(conf: stringConf, activeOutlet: vc.goPrivateOutlet, newValue: 3, key: "")
             } else {
                 simpleAlert(message: "Error", info: "We had a problem getting your bitcoin.conf, please try again", buttonLabel: "OK")
@@ -128,19 +136,24 @@ class Settings: NSViewController, NSTextFieldDelegate {
                         let k = arr[0]
                         let existingValue = arr[1]
                         switch k {
+                        case "discover", "#discover":
+                            if existingValue == "0" {
+                                stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "discover=1")
+                            }
+                            
                         case "debug", "#debug":
                             if existingValue == "tor" {
                                 stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "#debug=\(existingValue)")
                             }
-                            
+
                         case "proxy", "#proxy":
                             stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "#proxy=\(existingValue)")
-                            
+
                         case "listen", "#listen":
                             stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "#listen=\(existingValue)")
-                            
-                        case "bindaddress", "#bindaddress":
-                            stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "#bindaddress=\(existingValue)")
+
+//                        case "bindaddress", "#bindaddress":
+//                            stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "#bindaddress=\(existingValue)")
                             
                         default:
                             break

@@ -142,12 +142,11 @@ class ViewController: NSViewController, NSWindowDelegate {
             let vc = NSWindowController(window: myWindow)
             vc.showWindow(self)
         } else {
-            simpleAlert(message: "Tor not installed...", info: "In order to connect to your node remotely you need to install Tor first.", buttonLabel: "OK")
+            simpleAlert(message: "Tor not running...", info: "In order to connect to your node remotely you need to start Tor first.", buttonLabel: "OK")
         }
     }    
 
     @objc func refreshNow() {
-        //refresh()
         checkForGordian()
     }
 

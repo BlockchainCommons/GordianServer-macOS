@@ -87,7 +87,7 @@ class Torrc {
     
     HiddenServiceDir \(TorClient.sharedInstance.torPath())/host/bitcoin/p2p/main/
     HiddenServiceVersion 3
-    HiddenServicePort 8333 127.0.0.1:8333
+    HiddenServicePort 8333 127.0.0.1:8334
     
     HiddenServiceDir \(TorClient.sharedInstance.torPath())/host/bitcoin/rpc/test/
     HiddenServiceVersion 3
@@ -95,7 +95,7 @@ class Torrc {
     
     HiddenServiceDir \(TorClient.sharedInstance.torPath())/host/bitcoin/p2p/test/
     HiddenServiceVersion 3
-    HiddenServicePort 18333 127.0.0.1:18333
+    HiddenServicePort 18333 127.0.0.1:8334
     
     HiddenServiceDir \(TorClient.sharedInstance.torPath())/host/bitcoin/rpc/regtest/
     HiddenServiceVersion 3
@@ -107,7 +107,7 @@ class Torrc {
     
     HiddenServiceDir \(TorClient.sharedInstance.torPath())/host/bitcoin/p2p/signet/
     HiddenServiceVersion 3
-    HiddenServicePort 38333 127.0.0.1:38333
+    HiddenServicePort 38333 127.0.0.1:8334
     
     ################ This section is just for relays #####################
     #

@@ -138,8 +138,9 @@ class Installer: NSViewController {
         var passwordExists = false
         var proxyExists = false
         var debugExists = false
-        var bindExists = false
+        var discoverExists = false
         var listenExists = false
+        var externalIpExists = false
         
         getBitcoinConf { [unowned vc = self] (conf, error) in
             if !error && conf != nil {
@@ -151,6 +152,12 @@ class Installer: NSViewController {
                             let existingValue = arr[1]
                             
                             switch k {
+                            case "externalip":
+                                externalIpExists = true
+                                
+                            case "discover", "#discover":
+                                discoverExists = true
+                                
                             case "blocksdir":
                                 UserDefaults.standard.setValue(existingValue, forKey: "blockDir")
                                 
@@ -166,7 +173,7 @@ class Installer: NSViewController {
                                     vc.rpcpassword = existingValue
                                 }
                                 
-                            case "testnet", "regtest":
+                            case "testnet", "regtest", "signet":
                                 if existingValue != "" {
                                     simpleAlert(message: "Incompatible bitcoin.conf setting!", info: "GordianServer allows you to run multiple networks simultaneously, we do this by specifying which chain we want to launch as a command line argument. Specifying a network in your bitcoin.conf is not compatible with this approach, please remove the line in your conf file which specifies a network.", buttonLabel: "OK")
                                 }
@@ -177,8 +184,8 @@ class Installer: NSViewController {
                             case "listen", "#listen":
                                 listenExists = true
                                 
-                            case "bindaddress", "#bindaddress":
-                                bindExists = true
+//                            case "bindaddress", "#bindaddress":
+//                                bindExists = true
                                 
                             case "debug", "#debug":
                                 debugExists = true
@@ -205,20 +212,28 @@ class Installer: NSViewController {
                     }
                     
                     if !debugExists {
-                        vc.standUpConf = "#debug=tor\n" + vc.standUpConf
+                        vc.standUpConf = "debug=tor\n" + vc.standUpConf
                     }
                     
                     if !proxyExists {
-                        vc.standUpConf = "#proxy=127.0.0.1:9050\n" + vc.standUpConf
+                        vc.standUpConf = "proxy=127.0.0.1:19050\n" + vc.standUpConf
                     }
                     
                     if !listenExists {
-                        vc.standUpConf = "#listen=1\n" + vc.standUpConf
+                        vc.standUpConf = "listen=1\n" + vc.standUpConf
                     }
                     
-                    if !bindExists {
-                        vc.standUpConf = "#bindaddress=127.0.0.1\n" + vc.standUpConf
+                    if !discoverExists {
+                        vc.standUpConf = "discover=1" + vc.standUpConf
                     }
+                    
+                    if !externalIpExists {
+                        vc.standUpConf = "externalip=\(TorClient.sharedInstance.p2pHostname(chain: "main") ?? "")"
+                    }
+                    
+//                    if !bindExists {
+//                        vc.standUpConf = "#bindaddress=127.0.0.1\n" + vc.standUpConf
+//                    }
                     
                     if !vc.installLightning {
                         vc.getURLs()
@@ -260,17 +275,22 @@ class Installer: NSViewController {
         maxuploadtarget=500
         fallbackfee=0.00009
         blocksdir=\(d.blocksDir())
-        #bindaddress=127.0.0.1
-        #proxy=127.0.0.1:9050
-        #listen=1
-        #debug=tor
+        proxy=127.0.0.1:19050
+        listen=1
+        debug=tor
+        discover=1
         [main]
+        externalip=\(TorClient.sharedInstance.p2pHostname(chain: "main") ?? "")
         rpcport=8332
         rpcwhitelist=\(rpcuser):\(whitelistedRpc())
         [test]
+        externalip=\(TorClient.sharedInstance.p2pHostname(chain: "test") ?? "")
         rpcport=18332
         [regtest]
         rpcport=18443
+        [signet]
+        rpcport=38332
+        externalip=\(TorClient.sharedInstance.p2pHostname(chain: "signet") ?? "")
         """
         getURLs()
     }

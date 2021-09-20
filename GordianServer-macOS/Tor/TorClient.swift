@@ -67,13 +67,13 @@ class TorClient: NSObject, URLSessionDelegate {
                 self.config.options = [
                     "DNSPort": "12345",
                     "AutomapHostsOnResolve": "1",
-                    "SocksPort": "19050 OnionTrafficOnly",
+                    "SocksPort": "19050",//OnionTrafficOnly
                     "AvoidDiskWrites": "1",
                     "ClientOnionAuthDir": "\(self.authDirPath)",
                     "LearnCircuitBuildTimeout": "1",
                     "NumEntryGuards": "8",
                     "SafeSocks": "1",
-                    "LongLivedPorts": "80,443",
+                    "LongLivedPorts": "80,443,8334",
                     "NumCPUs": "2",
                     "DisableDebuggerAttachment": "1",
                     "SafeLogging": "1",
@@ -292,9 +292,7 @@ class TorClient: NSObject, URLSessionDelegate {
         return try? String(contentsOf: path, encoding: .utf8)
     }
     
-    func p2pHostname() -> String? {
-        guard let chain = UserDefaults.standard.string(forKey: "chain") else { return nil }
-        
+    func p2pHostname(chain: String) -> String? {
         let path = URL(fileURLWithPath: "\(torPath())/host/bitcoin/p2p/\(chain)/hostname")
         return try? String(contentsOf: path, encoding: .utf8)
     }
