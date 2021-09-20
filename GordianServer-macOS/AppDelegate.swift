@@ -11,6 +11,36 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
     
+    func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        let alert = NSAlert()
+        alert.messageText = "Quit Bitcoin Core?"
+        alert.informativeText = "Quitting the app does not stop Bitcoin Core automatically. Tor automatically quits so your node will not be remotely reachable.\n\nIf you opt to quit Bitcoin Core only the active network will be stopped, if you want to close all networks do that with the Stop button before quitting the app."
+        alert.addButton(withTitle: "Quit Bitcoin Core")
+        alert.addButton(withTitle: "Leave Running")
+        alert.alertStyle = .warning
+        let modalResponse = alert.runModal()
+        if (modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn) {
+            self.quitBitcoin()
+        } else {
+            TorClient.sharedInstance.resign()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                NSApplication.shared.reply(toApplicationShouldTerminate: true)
+            }
+        }
+        
+        return .terminateLater
+    }
+    
+    func quitBitcoin() {
+        let chain = UserDefaults.standard.string(forKey: "chain") ?? "main"
+        runScript(script: .stopBitcoin, env: ["CHAIN":chain, "PREFIX":Defaults().existingPrefix()], args: []) { _ in
+            TorClient.sharedInstance.resign()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                NSApplication.shared.reply(toApplicationShouldTerminate: true)
+            }
+        }
+    }
+    
     @IBAction func gordianLogClicked(_ sender: Any) {
         runScript(script: .openFile, env: ["FILE":"/Users/\(NSUserName())/.gordian/gordian.log"], args: []) { _ in }
     }

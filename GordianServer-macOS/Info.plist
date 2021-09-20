@@ -33,7 +33,7 @@
 	<key>NSSupportsAutomaticTermination</key>
 	<true/>
 	<key>NSSupportsSuddenTermination</key>
-	<true/>
+	<false/>
 	<key>UIUserInterfaceStyle</key>
 	<string>Dark</string>
 </dict>
