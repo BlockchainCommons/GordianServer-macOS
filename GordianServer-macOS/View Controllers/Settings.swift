@@ -156,13 +156,13 @@ class Settings: NSViewController, NSTextFieldDelegate {
     
     @IBAction func removeBitcoinCore(_ sender: Any) {
         DispatchQueue.main.async { [unowned vc = self] in
-            actionAlert(message: "Danger!", info: "This will remove the Bitcoin directory! All Bitcoin Core data including your wallets will be deleted!\n\nAre you sure you want to continue?") { response in
+            destructiveActionAlert(message: "Danger! Master kill switch!", info: "This action PERMANENTLY, IMMEDIATELY and IRREVERSIBLY deletes ALL WALLETS, Bitcoin Core binaries, and Gordian Server Tor related files and directories!") { response in
                 if response {
                     let d = Defaults()
                     let env = ["DATADIR":d.dataDir()]
                     vc.runScript(script: .removeBitcoin, env: env, args: []) { success in
                         if success {
-                            simpleAlert(message: "Bitcoin directory and its contents were deleted", info: "", buttonLabel: "OK")
+                            simpleAlert(message: "Your system has been purged.", info: "", buttonLabel: "OK")
                         } else {
                            simpleAlert(message: "Error", info: "There was an issue deleting the directory", buttonLabel: "OK")
                         }
