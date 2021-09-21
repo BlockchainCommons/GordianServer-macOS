@@ -31,6 +31,7 @@ class Installer: NSViewController {
     var lightningHostname = ""
     var installingTor = false
     var updatingTor = false
+    var peerInfo = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -89,6 +90,15 @@ class Installer: NSViewController {
                 DispatchQueue.main.async { [unowned vc = self] in
                     vc.consoleOutput.string = log
                 }
+            }
+            
+        } else if peerInfo != "" {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                
+                self.consoleOutput.string = self.peerInfo
+                self.window?.title = "Peer Info"
+                self.hideSpinner()
             }
             
         } else if standingUp {

@@ -459,8 +459,20 @@
                                                     </menu>
                                                 </popUpButtonCell>
                                             </popUpButton>
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YTp-pd-6SJ">
+                                                <rect key="frame" x="152" y="141" width="15" height="15"/>
+                                                <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="info.circle" catalog="system" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="88A-d6-LCi">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                                <color key="contentTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <connections>
+                                                    <action selector="peerDetailAction:" target="XfG-lQ-9wD" id="gdn-F1-5Zo"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <constraints>
+                                            <constraint firstItem="YTp-pd-6SJ" firstAttribute="centerY" secondItem="PMt-yp-b2E" secondAttribute="centerY" id="1RV-8i-5pW"/>
                                             <constraint firstAttribute="height" constant="251" id="2Le-eX-Lt7"/>
                                             <constraint firstItem="OfC-XQ-ENN" firstAttribute="top" secondItem="IBs-yd-qdH" secondAttribute="bottom" constant="3" id="6RA-c9-uu2"/>
                                             <constraint firstAttribute="trailing" secondItem="q6e-1y-IAn" secondAttribute="trailing" constant="20" symbolic="YES" id="8J2-Qr-Pbw"/>
@@ -478,6 +490,7 @@
                                             <constraint firstItem="7yr-ry-ECs" firstAttribute="top" secondItem="iiJ-vd-PHR" secondAttribute="bottom" constant="8" symbolic="YES" id="Leg-y9-OXF"/>
                                             <constraint firstAttribute="width" constant="196" id="Mfq-ia-bZ2"/>
                                             <constraint firstItem="y6q-T1-byM" firstAttribute="top" secondItem="twO-63-MCl" secondAttribute="bottom" constant="12" symbolic="YES" id="OcR-Cx-QrJ"/>
+                                            <constraint firstAttribute="trailing" secondItem="YTp-pd-6SJ" secondAttribute="trailing" constant="29" id="Pzd-3d-hyU"/>
                                             <constraint firstItem="twO-63-MCl" firstAttribute="top" secondItem="E12-C7-dPa" secondAttribute="bottom" constant="12" id="QKV-Xa-pBp"/>
                                             <constraint firstItem="L8k-j2-T7d" firstAttribute="centerY" secondItem="iiJ-vd-PHR" secondAttribute="centerY" id="RfJ-nq-tFk"/>
                                             <constraint firstItem="q6e-1y-IAn" firstAttribute="top" secondItem="i70-xH-6Bd" secondAttribute="top" constant="6" id="Rqk-cc-hRq"/>
@@ -710,7 +723,7 @@
                                     <constraint firstAttribute="width" constant="398" id="8Mr-9n-mgs"/>
                                     <constraint firstAttribute="height" constant="31" id="wta-7Q-gOh"/>
                                 </constraints>
-                                <textFieldCell key="cell" selectable="YES" title="Multiline Label" id="9Py-3x-gCm">
+                                <textFieldCell key="cell" selectable="YES" id="9Py-3x-gCm">
                                     <font key="font" metaFont="system" size="9"/>
                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -757,6 +770,8 @@
                         <outlet property="mainnetOutgoingPeersLabel" destination="E12-C7-dPa" id="CFc-ZP-Y1C"/>
                         <outlet property="mainnetSyncedLabel" destination="Vdd-w0-AhZ" id="57y-nK-1TV"/>
                         <outlet property="networkButton" destination="L8k-j2-T7d" id="Jba-Po-tFG"/>
+                        <outlet property="peerDetailsButton" destination="YTp-pd-6SJ" id="9Gd-fv-bPb"/>
+                        <outlet property="perrDetailsButton" destination="YTp-pd-6SJ" id="OtQ-8s-USu"/>
                         <outlet property="spinner" destination="kdQ-HU-D0l" id="t8O-5u-PXb"/>
                         <outlet property="startMainnetOutlet" destination="twO-63-MCl" id="WEZ-Qq-VGp"/>
                         <outlet property="startTorOutlet" destination="w4M-Pe-mtd" id="cwJ-5u-NXL"/>
@@ -775,6 +790,7 @@
                         <segue destination="4YR-eD-8jP" kind="show" identifier="segueToInstallPrompt" id="eOO-Cx-yzE"/>
                         <segue destination="4YR-eD-8jP" kind="show" identifier="segueToHelp" id="g0J-5Z-aqE"/>
                         <segue destination="4YR-eD-8jP" kind="show" identifier="segueToInstallXcode" id="Mv4-Eu-EeQ"/>
+                        <segue destination="lGs-ue-8Wa" kind="show" identifier="showInfo" id="nGq-Ho-dU1"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -1450,15 +1466,16 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="Mv4-Eu-EeQ"/>
-        <segue reference="cqP-Ve-rOY"/>
+        <segue reference="nGq-Ho-dU1"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="NSActionTemplate" width="15" height="15"/>
         <image name="NSLockLockedTemplate" width="14" height="15"/>
         <image name="NSStatusAvailable" width="16" height="16"/>
-        <image name="arrow.clockwise" catalog="system" width="11" height="13"/>
+        <image name="arrow.clockwise" catalog="system" width="17" height="20"/>
         <image name="blockchaincommons" width="256" height="256"/>
         <image name="gearshape" catalog="system" width="16" height="16"/>
+        <image name="info.circle" catalog="system" width="15" height="15"/>
         <image name="qrcode" catalog="system" width="15" height="14"/>
     </resources>
 </document>

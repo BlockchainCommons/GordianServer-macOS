@@ -10,6 +10,7 @@ import Cocoa
 
 class ViewController: NSViewController, NSWindowDelegate {
     
+    @IBOutlet weak private var peerDetailsButton: NSButton!
     @IBOutlet weak private var startTorOutlet: NSButton!
     @IBOutlet weak private var networkLabel: NSTextField!
     @IBOutlet weak private var mainnetIncomingImage: NSImageView!
@@ -74,10 +75,12 @@ class ViewController: NSViewController, NSWindowDelegate {
     var updatingTor = false
     var installingXcode = false
     var currentVersion = ""
+    var peerInfo = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
         isLoading = true
+        peerDetailsButton.alphaValue = 0
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNow), name: .refresh, object: nil)
         
         d.setDefaults { [weak self] in
@@ -153,6 +156,15 @@ class ViewController: NSViewController, NSWindowDelegate {
             return false
         }
     }
+    
+    @IBAction func peerDetailAction(_ sender: Any) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.performSegue(withIdentifier: "showInfo", sender: self)
+        }
+    }
+    
     
     @IBAction func showSettingsAction(_ sender: Any) {
         var myWindow: NSWindow? = nil
@@ -1170,6 +1182,8 @@ class ViewController: NSViewController, NSWindowDelegate {
                 DispatchQueue.main.async { [unowned vc = self] in
                     vc.mainnetIncomingPeersLabel.stringValue = vc.peerInfo(peerInfoArray).in
                     vc.mainnetOutgoingPeersLabel.stringValue = vc.peerInfo(peerInfoArray).out
+                    vc.peerInfo = peerInfoArray.description
+                    vc.peerDetailsButton.alphaValue = 1
                 }
             }
             
@@ -1371,6 +1385,11 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
         switch segue.identifier {
+        case "showInfo":
+            if let vc = segue.destinationController as? Installer {
+                vc.peerInfo = self.peerInfo
+            }
+            
         case "segueToHelp":
             if let vc = segue.destinationController as? InstallerPrompt {
                 vc.text = infoMessage
