@@ -102,12 +102,12 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     override func viewWillAppear() {
         self.view.window?.delegate = self
-        self.view.window?.minSize = NSSize(width: 544, height: 377)
+        self.view.window?.minSize = NSSize(width: 544, height: 568)
     }
 
     override func viewDidAppear() {
         var frame = self.view.window!.frame
-        let initialSize = NSSize(width: 544, height: 377)
+        let initialSize = NSSize(width: 544, height: 568)
         frame.size = initialSize
         self.view.window?.setFrame(frame, display: true)
         

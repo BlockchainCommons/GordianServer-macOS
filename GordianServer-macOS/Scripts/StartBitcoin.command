@@ -9,6 +9,6 @@ ulimit -n 188898
 if [ "$CHAIN" == "main" ]; then
     sudo -u $(whoami) ~/.gordian/BitcoinCore/$PREFIX/bin/bitcoind -daemon
 else
-    sudo -u $(whoami) ~/.gordian/BitcoinCore/$PREFIX/bin/bitcoind -$CHAIN -daemon
+    sudo -u $(whoami) ~/.gordian/BitcoinCore/$PREFIX/bin/bitcoind -chain=$CHAIN -daemon
 fi
 exit 1
