@@ -13,15 +13,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     
     @IBAction func newWindowClicked(_ sender: Any) {
-//        var myWindow: NSWindow? = nil
-//        let storyboard = NSStoryboard(name: "Main", bundle: nil)
-//        let console = storyboard.instantiateController(withIdentifier: "MainWindow") as! NSW
-//        myWindow = NSWindow(contentViewController: console)
-//        NSApp.activate(ignoringOtherApps: true)
-//        myWindow?.makeKeyAndOrderFront(self)
-//        let vc = NSWindowController(window: myWindow)
-//        vc.showWindow(self)
-        
         let storyboard = NSStoryboard(name: "Main", bundle: nil)
         let settingsController:NSWindowController = storyboard.instantiateController(withIdentifier: "MainWindow") as! NSWindowController
         settingsController.showWindow(settingsController)
@@ -163,6 +154,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         vc.showWindow(self)
     }
     
+    func applicationDidResignActive(_ notification: Notification) {
+        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+        let mainConsole = storyboard.instantiateController(withIdentifier: "Console") as! ViewController
+        mainConsole.timer?.invalidate()
+    }
+    
+    func applicationDidBecomeActive(_ notification: Notification) {
+        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+        let mainConsole = storyboard.instantiateController(withIdentifier: "Console") as! ViewController
+        mainConsole.setTimer()
+    }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
