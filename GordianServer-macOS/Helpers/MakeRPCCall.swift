@@ -23,6 +23,7 @@ class MakeRpcCall {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("text/plain", forHTTPHeaderField: "Content-Type")
+        print("method: \(method)")
         request.httpBody = "{\"jsonrpc\":\"1.0\",\"id\":\"curltest\",\"method\":\"\(method)\",\"params\":[]}".data(using: .utf8)
         let task = session.dataTask(with: request as URLRequest) { (data, response, error) in
             guard let urlContent = data else {
@@ -37,6 +38,8 @@ class MakeRpcCall {
                         completion((nil, "Looks like your rpc credentials are incorrect, please double check them. If you changed your rpc creds in your bitcoin.conf you need to restart your node for the changes to take effect."))
                     case 503:
                         completion(("", nil))
+                    case 403:
+                        completion((nil, "Http error 403, this usually means you are trying to use an rpc command (\(method)) which is not included in your bitcoin.conf rpcwhitelist. See Bitcoin Core debug.log for details."))
                     default:
                         completion((nil, "Unable to decode the response from your node, http status code: \(httpResponse.statusCode)"))
                     }

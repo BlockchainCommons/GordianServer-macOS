@@ -36,6 +36,15 @@ class ViewController: NSViewController, NSWindowDelegate {
     @IBOutlet weak private var networkButton: NSPopUpButton!
     @IBOutlet weak private var bitcoinCoreLogOutlet: NSTextField!
     
+    @IBOutlet weak var blocksOutlet: NSTextField!
+    @IBOutlet weak var hashrateOutlet: NSTextField!
+    @IBOutlet weak var pruningOutlet: NSTextField!
+    @IBOutlet weak var uptimeOutlet: NSTextField!
+    @IBOutlet weak var mempoolOutlet: NSTextField!
+    @IBOutlet weak var difficultyOutlet: NSTextField!
+    @IBOutlet weak var sizeOutlet: NSTextField!
+    
+    
     weak var mgr = TorClient.sharedInstance
     //var installingLightning = Bool()
     var timer: Timer?
@@ -609,56 +618,13 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
     }
     
-    private func whitelistedRpc() -> String {
-        return "getblockcount, abortrescan, listlockunspent, lockunspent, getbestblockhash, getaddressesbylabel, listlabels, decodescript, combinepsbt, utxoupdatepsbt, listaddressgroupings, converttopsbt, getaddressinfo, analyzepsbt, createpsbt, joinpsbts, getmempoolinfo, signrawtransactionwithkey, listwallets, unloadwallet, rescanblockchain, listwalletdir, loadwallet, createwallet, finalizepsbt, walletprocesspsbt, decodepsbt, walletcreatefundedpsbt, fundrawtransaction, uptime, importmulti, getdescriptorinfo, deriveaddresses, getrawtransaction, decoderawtransaction, getnewaddress, gettransaction, signrawtransactionwithwallet, createrawtransaction, getrawchangeaddress, getwalletinfo, getblockchaininfo, getbalance, getunconfirmedbalance, listtransactions, listunspent, bumpfee, importprivkey, abandontransaction, getpeerinfo, getnetworkinfo, getmininginfo, estimatesmartfee, sendrawtransaction, importaddress, signmessagewithprivkey, verifymessage, signmessage, encryptwallet, walletpassphrase, walletlock, walletpassphrasechange, gettxoutsetinfo, help, stop, gettxout, getblockhash"
-    }
     
-    private func optimumCache() -> Int {
-        /// Converts devices ram to gb, divides it by two and converts that to mebibytes. That way we use half the RAM for IBD cache as a reasonable default.
-        return Int(((Double(ProcessInfo.processInfo.physicalMemory) / 1073741824.0) / 2.0) * 954.0)
-    }
     
     private func setDefaultBitcoinConf() {
         //no existing settings - use default
-        let d = Defaults()
-        let prune = d.prune()
-        let txindex = d.txindex()
-        let walletDisabled = d.walletdisabled()
-        rpcpassword = randomString(length: 32)
-        rpcuser = randomString(length: 10)
-        let defaultConf = """
-        disablewallet=\(walletDisabled)
-        rpcuser=\(rpcuser)
-        rpcpassword=\(rpcpassword)
-        server=1
-        prune=\(prune)
-        txindex=\(txindex)
-        rpcallowip=127.0.0.1
-        dbcache=\(optimumCache())
-        maxconnections=20
-        maxuploadtarget=500
-        fallbackfee=0.00009
-        blocksdir=\(d.blocksDir())
-        proxy=127.0.0.1:19050
-        listen=1
-        discover=1
-        [main]
-        externalip=\(TorClient.sharedInstance.p2pHostname(chain: "main") ?? "")
-        rpcport=8332
-        rpcwhitelist=\(rpcuser):\(whitelistedRpc())
-        [test]
-        externalip=\(TorClient.sharedInstance.p2pHostname(chain: "test") ?? "")
-        rpcport=18332
-        [regtest]
-        rpcport=18443
-        [signet]
-        rpcport=38332
-        externalip=\(TorClient.sharedInstance.p2pHostname(chain: "signet") ?? "")
-        """
-        
         let bitcoinConfUrl = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/bitcoin.conf")
         
-        guard let bitcoinConf = defaultConf.data(using: .utf8) else { return }
+        guard let bitcoinConf = BitcoinConf.bitcoinConf().data(using: .utf8) else { return }
         
         do {
             try bitcoinConf.write(to: bitcoinConfUrl)
@@ -1064,12 +1030,19 @@ class ViewController: NSViewController, NSWindowDelegate {
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     
+                    let blockchainInfo = BlockchainInfo(dict)
+                    self.blocksOutlet.stringValue = "\(blockchainInfo.blocks)"
+                    self.difficultyOutlet.stringValue = "\(blockchainInfo.difficulty.diffString)"
+                    self.pruningOutlet.stringValue = "\(blockchainInfo.pruned)"
+                    self.sizeOutlet.stringValue = "\(blockchainInfo.size_on_disk.size)"
+                    
                     self.mainnetSyncedLabel.stringValue = self.progress(dict: dict)
                     self.checkBitcoinConfForRPCCredentials()
                     self.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
                     self.startMainnetOutlet.title = "Stop"
                     self.startMainnetOutlet.isEnabled = true
                 }
+                
             } else {
                 simpleAlert(message: "There was an issue...", info: "We had a problem parsing the response from Bitcoin Core. Please let us know about this.", buttonLabel: "OK")
             }
@@ -1186,7 +1159,47 @@ class ViewController: NSViewController, NSWindowDelegate {
                     vc.peerDetailsButton.alphaValue = 1
                 }
             }
+            self.getUpTime()
+        }
+    }
+    
+    private func getUpTime() {
+        command(command: "uptime") { [weak self] response in
+            guard let self = self else { return }
             
+            if let uptime = response as? Double {
+                DispatchQueue.main.async { [unowned vc = self] in
+                    vc.uptimeOutlet.stringValue = uptime.uptime
+                }
+            }
+            self.getMempool()
+        }
+    }
+    
+    private func getMempool() {
+        command(command: "getmempoolinfo") { [weak self] response in
+            guard let self = self else { return }
+            
+            if let response = response as? [String:Any] {
+                DispatchQueue.main.async { [unowned vc = self] in
+                    let mempoolInfo = MempoolInfo(response)
+                    vc.mempoolOutlet.stringValue = "\(mempoolInfo.mempoolCount) txs"
+                }
+            }
+            self.getMiningInfo()
+        }
+    }
+    
+    private func getMiningInfo() {
+        command(command: "getmininginfo") { [weak self] response in
+            guard let self = self else { return }
+            
+            if let response = response as? [String:Any] {
+                DispatchQueue.main.async { [unowned vc = self] in
+                    let miningInfo = MiningInfo(response)
+                    vc.hashrateOutlet.stringValue = "\(miningInfo.hashrate)"
+                }
+            }
             self.hideSpinner()
         }
     }
