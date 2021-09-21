@@ -33,11 +33,11 @@ class ViewController: NSViewController, NSWindowDelegate {
     @IBOutlet weak private var mainnetOutgoingPeersLabel: NSTextField!
     @IBOutlet weak private var bitcoinIsOnHeaderImage: NSImageView!
     @IBOutlet weak private var networkButton: NSPopUpButton!
+    @IBOutlet weak private var bitcoinCoreLogOutlet: NSTextField!
     
     weak var mgr = TorClient.sharedInstance
     //var installingLightning = Bool()
     var timer: Timer?
-    var secondsToRefresh = 5
     //var httpPass = ""
     var chain = UserDefaults.standard.object(forKey: "chain") as? String ?? "main"
     var rpcpassword = ""
@@ -105,6 +105,8 @@ class ViewController: NSViewController, NSWindowDelegate {
             }
             
             if mgr?.state == .connected {
+                self.setTimer()
+                
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     
@@ -222,28 +224,28 @@ class ViewController: NSViewController, NSWindowDelegate {
         UserDefaults.standard.setValue("main", forKey: "chain")
         chain = "main"
         setEnv()
-        refreshAction()
+        checkSystem()
     }
     
     @IBAction func userSelectedTestnet(_ sender: Any) {
         UserDefaults.standard.setValue("test", forKey: "chain")
         chain = "test"
         setEnv()
-        refreshAction()
+        checkSystem()
     }
     
     @IBAction func userSelectedRegtest(_ sender: Any) {
         UserDefaults.standard.setValue("regtest", forKey: "chain")
         chain = "regtest"
         setEnv()
-        refreshAction()
+        checkSystem()
     }
     
     @IBAction func userSelectedSignet(_ sender: Any) {
         UserDefaults.standard.setValue("signet", forKey: "chain")
         chain = "signet"
         setEnv()
-        refreshAction()
+        checkSystem()
     }
     
     @IBAction func showLightningQuickConnect(_ sender: Any) {
@@ -309,7 +311,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     @IBAction func refreshAction(_ sender: Any) {
-        refreshAction()
+        checkSystem()
     }
     
     private func addSpinnerDesc(_ description: String) {
@@ -323,7 +325,8 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
     }
     
-    private func refreshAction() {
+    private func checkSystem() {
+        print("refresh action")
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
@@ -580,11 +583,76 @@ class ViewController: NSViewController, NSWindowDelegate {
             let path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/bitcoin.conf")
             
             guard let conf = try? String(contentsOf: path, encoding: .utf8) else {
-                print("can not get bitcoin.conf")
+                actionAlert(message: "Missing bitcoin.conf file.",
+                            info: "You need a bitcoin.conf file for Gordian Server to funtion. Would you like to add the default bitcoin.conf?") { [weak self] response in
+                    guard let self = self else { return }
+                    
+                    if response {
+                        self.setDefaultBitcoinConf()
+                    }
+                }
                 return
             }
-            
             self.checkForRPCCredentials(response: conf)
+        }
+    }
+    
+    private func whitelistedRpc() -> String {
+        return "getblockcount, abortrescan, listlockunspent, lockunspent, getbestblockhash, getaddressesbylabel, listlabels, decodescript, combinepsbt, utxoupdatepsbt, listaddressgroupings, converttopsbt, getaddressinfo, analyzepsbt, createpsbt, joinpsbts, getmempoolinfo, signrawtransactionwithkey, listwallets, unloadwallet, rescanblockchain, listwalletdir, loadwallet, createwallet, finalizepsbt, walletprocesspsbt, decodepsbt, walletcreatefundedpsbt, fundrawtransaction, uptime, importmulti, getdescriptorinfo, deriveaddresses, getrawtransaction, decoderawtransaction, getnewaddress, gettransaction, signrawtransactionwithwallet, createrawtransaction, getrawchangeaddress, getwalletinfo, getblockchaininfo, getbalance, getunconfirmedbalance, listtransactions, listunspent, bumpfee, importprivkey, abandontransaction, getpeerinfo, getnetworkinfo, getmininginfo, estimatesmartfee, sendrawtransaction, importaddress, signmessagewithprivkey, verifymessage, signmessage, encryptwallet, walletpassphrase, walletlock, walletpassphrasechange, gettxoutsetinfo, help, stop, gettxout, getblockhash"
+    }
+    
+    private func optimumCache() -> Int {
+        /// Converts devices ram to gb, divides it by two and converts that to mebibytes. That way we use half the RAM for IBD cache as a reasonable default.
+        return Int(((Double(ProcessInfo.processInfo.physicalMemory) / 1073741824.0) / 2.0) * 954.0)
+    }
+    
+    private func setDefaultBitcoinConf() {
+        //no existing settings - use default
+        let d = Defaults()
+        let prune = d.prune()
+        let txindex = d.txindex()
+        let walletDisabled = d.walletdisabled()
+        rpcpassword = randomString(length: 32)
+        rpcuser = randomString(length: 10)
+        let defaultConf = """
+        disablewallet=\(walletDisabled)
+        rpcuser=\(rpcuser)
+        rpcpassword=\(rpcpassword)
+        server=1
+        prune=\(prune)
+        txindex=\(txindex)
+        rpcallowip=127.0.0.1
+        dbcache=\(optimumCache())
+        maxconnections=20
+        maxuploadtarget=500
+        fallbackfee=0.00009
+        blocksdir=\(d.blocksDir())
+        proxy=127.0.0.1:19050
+        listen=1
+        discover=1
+        [main]
+        externalip=\(TorClient.sharedInstance.p2pHostname(chain: "main") ?? "")
+        rpcport=8332
+        rpcwhitelist=\(rpcuser):\(whitelistedRpc())
+        [test]
+        externalip=\(TorClient.sharedInstance.p2pHostname(chain: "test") ?? "")
+        rpcport=18332
+        [regtest]
+        rpcport=18443
+        [signet]
+        rpcport=38332
+        externalip=\(TorClient.sharedInstance.p2pHostname(chain: "signet") ?? "")
+        """
+        
+        let bitcoinConfUrl = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/bitcoin.conf")
+        
+        guard let bitcoinConf = defaultConf.data(using: .utf8) else { return }
+        
+        do {
+            try bitcoinConf.write(to: bitcoinConfUrl)
+            simpleAlert(message: "bitcoin.conf created ✓", info: "In order for the changes to take effect you need to stop and start Bitcoin Core.", buttonLabel: "OK")
+        } catch {
+            simpleAlert(message: "There was an issue...", info: "Unable to create the bitcoin.conf, please let us know about this bug.", buttonLabel: "OK")
         }
     }
 
@@ -657,6 +725,38 @@ class ViewController: NSViewController, NSWindowDelegate {
             self?.parseScriptResult(script: script, result: result)
         }
     }
+    
+    private func showBitcoinLog() {
+        let chain = UserDefaults.standard.string(forKey: "chain") ?? "main"
+        var path:URL?
+        
+        switch chain {
+        case "main":
+            path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/debug.log")
+        case "test":
+            path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/testnet3/debug.log")
+        case "regtest":
+            path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/regtest/debug.log")
+        case "signet":
+            path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/signet/debug.log")
+        default:
+            break
+        }
+        
+        guard let path = path, let log = try? String(contentsOf: path, encoding: .utf8) else {
+            print("can not get \(chain) debug.log")
+            return
+        }
+        
+        let logItems = log.components(separatedBy: "\n")
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            print("last log item: \(logItems[logItems.count - 2])")
+            self.bitcoinCoreLogOutlet.stringValue = "\(logItems[logItems.count - 2])"
+        }
+    }
 
     //MARK: Script Result Filters
 
@@ -666,12 +766,15 @@ class ViewController: NSViewController, NSWindowDelegate {
             checkStandUpParser(result: result)
             
         case .stopBitcoin:
+            showBitcoinLog()
             stopBitcoinParse(result: result)
             
         case .startBitcoin:
+            showBitcoinLog()
             startBitcoinParse(result: result)
 
         case .isBitcoinOn:
+            showBitcoinLog()
             parseIsBitcoinOn(result: result)
 
         case .checkForBitcoin:
@@ -954,15 +1057,27 @@ class ViewController: NSViewController, NSWindowDelegate {
                     self.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
                     self.startMainnetOutlet.title = "Stop"
                     self.startMainnetOutlet.isEnabled = true
-                    self.setTimer()
                 }
             } else {
                 simpleAlert(message: "There was an issue...", info: "We had a problem parsing the response from Bitcoin Core. Please let us know about this.", buttonLabel: "OK")
             }
         } else {
             self.bitcoinRunning = true
-            self.setTimer()
-            simpleAlert(message: "Bitcoin Core Message", info: result + "\n\nGordian Server will auto refresh every 15 seconds. Please be patient while Bitcoin Core starts as it can take time. If the app feels stuck just tap the refresh button located under the logo. You can always monitor the log to see details of what is happening in real time by clicking \"Go To\" > \"Bitcoin Core Log\".", buttonLabel: "OK")
+            
+            if result.contains("addresses") || result.contains("Verifying") || result.contains("Loading") || result.contains("Rewinding") || result.contains("Rescanning") {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    
+                    self.mainnetSyncedLabel.stringValue = "Loading..."
+                    self.checkBitcoinConfForRPCCredentials()
+                    self.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
+                    self.startMainnetOutlet.title = "Stop"
+                    self.startMainnetOutlet.isEnabled = false
+                }
+                
+            } else {
+                simpleAlert(message: "Bitcoin Core Message", info: result + "\n\nGordian Server will auto refresh every 5 seconds. Please be patient while Bitcoin Core starts as it can take time. If the app feels stuck just tap the refresh button located under the logo. You can always monitor the log to see details of what is happening in real time by clicking \"Go To\" > \"Bitcoin Core Log\".", buttonLabel: "OK")
+            }
         }
         
         checkForBitcoinUpdate()
@@ -988,9 +1103,9 @@ class ViewController: NSViewController, NSWindowDelegate {
                 completion((response))
             } else {
                 if error!.contains("Loading block index") {
-                    simpleAlert(message: "Loading blocks...", info: "Your node is just getting started, Gordian Server will auto refresh every 15 seconds. Please be patient while your node loads its blocks.", buttonLabel: "OK")
+                    //simpleAlert(message: "Loading blocks...", info: "Your node is just getting started, Gordian Server will auto refresh every 15 seconds. Please be patient while your node loads its blocks.", buttonLabel: "OK")
                 } else if error!.contains("Verifying blocks") {
-                    simpleAlert(message: "Verifying blocks...", info: "Your node is just getting started, Gordian Server will auto refresh every 15 seconds. Please be patient while your node verifies its blocks.", buttonLabel: "OK")
+                    //simpleAlert(message: "Verifying blocks...", info: "Your node is just getting started, Gordian Server will auto refresh every 15 seconds. Please be patient while your node verifies its blocks.", buttonLabel: "OK")
                 } else if !error!.contains("Could not connect to the server") {
                     simpleAlert(message: "There was an issue.", info: error!, buttonLabel: "OK")
                 }
@@ -1116,12 +1231,16 @@ class ViewController: NSViewController, NSWindowDelegate {
     //MARK: User Inteface
 
     private func setTimer() {
-        timer?.invalidate()
-        timer = Timer.scheduledTimer(timeInterval: 15.0, target: self, selector: #selector(automaticRefresh), userInfo: nil, repeats: true)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.timer?.invalidate()
+            self.timer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(self.automaticRefresh), userInfo: nil, repeats: true)
+        }
     }
 
     @objc func automaticRefresh() {
-        refreshAction()
+        checkSystem()
     }
 
     func setEnv() {
@@ -1352,6 +1471,8 @@ extension ViewController: OnionManagerDelegate {
     }
     
     func torConnFinished() {
+        self.setTimer()
+        
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             

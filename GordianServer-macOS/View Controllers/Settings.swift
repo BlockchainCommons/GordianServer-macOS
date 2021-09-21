@@ -46,7 +46,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
     @IBAction func goPrivate(_ sender: Any) {
         let value = goPrivateOutlet.state
         if value == .on {
-            actionAlert(message: "Go private?", info: "This sets your proxy to the local host and tors control port, binds localhost address, and sets listen to true in your bitcoin.conf, in plain english this means your node will only accept connections over the Tor network, this can make initial block download very slow, it is recommended to go private once your node is fully synced.") { [unowned vc = self] (response) in
+            actionAlert(message: "Go private?", info: "Your node will only accept connections over the Tor network, this can make initial block download very slow, it is recommended to go private once your node is fully synced.") { [unowned vc = self] (response) in
                 if response {
                     vc.privateOn()
                 } else {
@@ -66,7 +66,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
     
     func privateOn() {
         var proxyExists = false
-        var debugExists = false
+        //var debugExists = false
         //var bindExists = false
         var listenExists = false
         var discoverExists = false
@@ -83,9 +83,9 @@ class Settings: NSViewController, NSTextFieldDelegate {
                             discoverExists = true
                             stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "discover=0")
                             
-                        case "#debug":
-                            debugExists = true
-                            stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "debug=tor")
+//                        case "#debug":
+//                            debugExists = true
+//                            stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "debug=tor")
                             
                         case "#proxy":
                             proxyExists = true
@@ -107,9 +107,9 @@ class Settings: NSViewController, NSTextFieldDelegate {
                 if !discoverExists {
                     stringConf = "discover=0\n" + stringConf
                 }
-                if !debugExists {
-                    stringConf = "debug=tor\n" + stringConf
-                }
+//                if !debugExists {
+//                    stringConf = "debug=tor\n" + stringConf
+//                }
                 if !proxyExists {
                     stringConf = "proxy=127.0.0.1:19050\n" + stringConf
                 }
@@ -141,16 +141,16 @@ class Settings: NSViewController, NSTextFieldDelegate {
                                 stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "discover=1")
                             }
                             
-                        case "debug", "#debug":
-                            if existingValue == "tor" {
-                                stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "#debug=\(existingValue)")
-                            }
+//                        case "debug", "#debug":
+//                            if existingValue == "tor" {
+//                                stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "#debug=\(existingValue)")
+//                            }
 
-                        case "proxy", "#proxy":
-                            stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "#proxy=\(existingValue)")
-
-                        case "listen", "#listen":
-                            stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "#listen=\(existingValue)")
+//                        case "proxy", "#proxy":
+//                            stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "#proxy=\(existingValue)")
+//
+//                        case "listen", "#listen":
+//                            stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "#listen=\(existingValue)")
 
 //                        case "bindaddress", "#bindaddress":
 //                            stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "#bindaddress=\(existingValue)")

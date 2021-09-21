@@ -182,8 +182,6 @@ class TorClient: NSObject, URLSessionDelegate {
     }
     
     private func addTorrc() {
-        //guard let bundleId = Bundle.main.bundleIdentifier else { return }
-        
         let torrcUrl = URL(fileURLWithPath: "/Users/\(NSUserName())/.torrc")
         
         guard let torrc = Torrc.torrc.data(using: .utf8) else { return }

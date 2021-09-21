@@ -704,8 +704,29 @@
                                     <action selector="refreshAction:" target="XfG-lQ-9wD" id="lAe-FJ-8wJ"/>
                                 </connections>
                             </button>
+                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="ij1-9D-yib">
+                                <rect key="frame" x="70" y="10" width="402" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="398" id="8Mr-9n-mgs"/>
+                                    <constraint firstAttribute="height" constant="31" id="wta-7Q-gOh"/>
+                                </constraints>
+                                <textFieldCell key="cell" selectable="YES" title="Multiline Label" id="9Py-3x-gCm">
+                                    <font key="font" metaFont="system" size="9"/>
+                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qja-rn-gD6">
+                                <rect key="frame" x="70" y="42" width="119" height="13"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Bitcoin Core log output:" id="8C8-fh-K85">
+                                    <font key="font" metaFont="system" size="10"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="qja-rn-gD6" firstAttribute="leading" secondItem="nxx-XH-rol" secondAttribute="leading" id="3UD-3m-1IC"/>
                             <constraint firstItem="nxx-XH-rol" firstAttribute="centerY" secondItem="m2S-Jp-Qdl" secondAttribute="centerY" id="9iF-dC-I79"/>
                             <constraint firstAttribute="trailing" secondItem="kdQ-HU-D0l" secondAttribute="trailing" constant="20" id="BO7-20-JBr"/>
                             <constraint firstItem="cIX-w1-69c" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="11" id="EwV-Nc-lro"/>
@@ -718,12 +739,16 @@
                             <constraint firstAttribute="bottom" secondItem="Hsc-NE-dUX" secondAttribute="bottom" id="YDt-3o-FIF"/>
                             <constraint firstItem="HEa-N4-orm" firstAttribute="leading" secondItem="Hsc-NE-dUX" secondAttribute="trailing" constant="10" symbolic="YES" id="eaN-6a-0DJ"/>
                             <constraint firstItem="cIX-w1-69c" firstAttribute="top" secondItem="zZj-w8-TgT" secondAttribute="bottom" constant="8" symbolic="YES" id="mGx-kh-h7K"/>
+                            <constraint firstItem="ij1-9D-yib" firstAttribute="leading" secondItem="nxx-XH-rol" secondAttribute="leading" id="mdP-XC-6wy"/>
                             <constraint firstItem="Hsc-NE-dUX" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="11" id="t9H-1g-XWR"/>
+                            <constraint firstItem="ij1-9D-yib" firstAttribute="top" secondItem="qja-rn-gD6" secondAttribute="bottom" constant="1" id="t9s-Q4-4dF"/>
                             <constraint firstAttribute="bottom" secondItem="HEa-N4-orm" secondAttribute="bottom" id="xNM-Oo-aZv"/>
+                            <constraint firstItem="qja-rn-gD6" firstAttribute="top" secondItem="nxx-XH-rol" secondAttribute="bottom" constant="8" symbolic="YES" id="xcf-s1-zqb"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="bitcoinCoreHeaderOutlet" destination="IBs-yd-qdH" id="BP3-aB-2Zv"/>
+                        <outlet property="bitcoinCoreLogOutlet" destination="ij1-9D-yib" id="OFq-e3-k0b"/>
                         <outlet property="bitcoinCoreVersionOutlet" destination="OfC-XQ-ENN" id="1a4-gR-VTi"/>
                         <outlet property="bitcoinCoreWindow" destination="i70-xH-6Bd" id="Q0s-D6-kKh"/>
                         <outlet property="bitcoinIsOnHeaderImage" destination="IZe-rf-ugH" id="Ncd-MN-zJ5"/>
