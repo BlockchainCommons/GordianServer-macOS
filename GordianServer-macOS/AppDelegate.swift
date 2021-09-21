@@ -11,24 +11,43 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
     
+    
+    @IBAction func newWindowClicked(_ sender: Any) {
+//        var myWindow: NSWindow? = nil
+//        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+//        let console = storyboard.instantiateController(withIdentifier: "MainWindow") as! NSW
+//        myWindow = NSWindow(contentViewController: console)
+//        NSApp.activate(ignoringOtherApps: true)
+//        myWindow?.makeKeyAndOrderFront(self)
+//        let vc = NSWindowController(window: myWindow)
+//        vc.showWindow(self)
+        
+        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+        let settingsController:NSWindowController = storyboard.instantiateController(withIdentifier: "MainWindow") as! NSWindowController
+        settingsController.showWindow(settingsController)
+    }
+    
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
         let alert = NSAlert()
         alert.messageText = "Quit Bitcoin Core?"
         alert.informativeText = "Quitting the app does not stop Bitcoin Core automatically. Tor automatically quits so your node will not be remotely reachable.\n\nIf you opt to quit Bitcoin Core only the active network will be stopped, if you want to close all networks do that with the Stop button before quitting the app."
         alert.addButton(withTitle: "Quit Bitcoin Core")
         alert.addButton(withTitle: "Leave Running")
+        alert.addButton(withTitle: "Cancel")
         alert.alertStyle = .warning
         let modalResponse = alert.runModal()
         if (modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn) {
             self.quitBitcoin()
-        } else {
+            return .terminateLater
+        } else if modalResponse == NSApplication.ModalResponse.alertSecondButtonReturn {
             TorClient.sharedInstance.resign()
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                 NSApplication.shared.reply(toApplicationShouldTerminate: true)
             }
+            return .terminateLater
+        } else {
+            return .terminateCancel
         }
-        
-        return .terminateLater
     }
     
     func quitBitcoin() {

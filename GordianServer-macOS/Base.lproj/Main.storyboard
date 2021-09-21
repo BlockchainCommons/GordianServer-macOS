@@ -42,10 +42,16 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="File" id="bib-Uj-vzu">
                                     <items>
-                                        <menuItem title="Settings" id="0yf-GN-Ap7" userLabel="Settings">
+                                        <menuItem title="New Window" id="0yf-GN-Ap7">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
-                                                <action selector="settingsClicked:" target="Voe-Tx-rLC" id="mnB-rE-cOc"/>
+                                                <action selector="newWindowClicked:" target="Voe-Tx-rLC" id="Emc-03-IKF"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Settings" id="bVD-G8-aXs" userLabel="Settings">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="settingsClicked:" target="Voe-Tx-rLC" id="hvu-W9-44c"/>
                                             </connections>
                                         </menuItem>
                                     </items>
@@ -133,7 +139,11 @@
                         <outlet property="delegate" destination="Voe-Tx-rLC" id="PrD-fu-P6m"/>
                     </connections>
                 </application>
-                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="GordianServer_macOS" customModuleProvider="target"/>
+                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="GordianServer_macOS" customModuleProvider="target">
+                    <connections>
+                        <outlet property="newWindowClicked" destination="0yf-GN-Ap7" id="ODv-9f-Qvg"/>
+                    </connections>
+                </customObject>
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -142,7 +152,7 @@
         <!--Window Controller-->
         <scene sceneID="R2V-B0-nI4">
             <objects>
-                <windowController id="B8D-0N-5wS" sceneMemberID="viewController">
+                <windowController storyboardIdentifier="MainWindow" id="B8D-0N-5wS" sceneMemberID="viewController">
                     <window key="window" title="Gordian Server v0.2.0" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES"/>
                         <windowPositionMask key="initialPositionMask" topStrut="YES"/>
@@ -245,7 +255,7 @@
         <!--View Controller-->
         <scene sceneID="hIz-AP-VOD">
             <objects>
-                <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="GordianServer_macOS" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Console" id="XfG-lQ-9wD" customClass="ViewController" customModule="GordianServer_macOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" appearanceType="darkAqua" id="m2S-Jp-Qdl">
                         <rect key="frame" x="0.0" y="0.0" width="544" height="377"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1397,7 +1407,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="Mv4-Eu-EeQ"/>
-        <segue reference="Yel-Hw-wBk"/>
+        <segue reference="cqP-Ve-rOY"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="NSActionTemplate" width="15" height="15"/>

@@ -37,6 +37,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     weak var mgr = TorClient.sharedInstance
     //var installingLightning = Bool()
     var timer: Timer?
+    var secondsToRefresh = 5
     //var httpPass = ""
     var chain = UserDefaults.standard.object(forKey: "chain") as? String ?? "main"
     var rpcpassword = ""
@@ -102,6 +103,30 @@ class ViewController: NSViewController, NSWindowDelegate {
             if mgr?.state != .started && mgr?.state != .connected  {
                 mgr?.start(delegate: self)
             }
+            
+            if mgr?.state == .connected {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    
+                    self.torIsOn = true
+                    self.torVersionOutlet.stringValue = "v0.4.4.6"
+                    self.startTorOutlet.title = "Stop"
+                    self.startTorOutlet.isEnabled = true
+                    self.updateTorStatus(isOn: true)
+                    self.checkForGordian()
+                }
+                
+                guard let hostname = mgr?.rpcHostname() else {
+                    simpleAlert(message: "Tor config issue.", info: "There was an issue fetching your nodes hidden service address. Your node may not be remotely reachable.", buttonLabel: "OK")
+                    return
+                }
+                
+                self.torConfigured = true
+                
+                #if DEBUG
+                print("hostname: \(hostname)")
+                #endif
+            }
         }
     }
     
@@ -111,13 +136,20 @@ class ViewController: NSViewController, NSWindowDelegate {
         alert.informativeText = "Closing this window does not automatically quit Tor or Bitcoin Core."
         alert.addButton(withTitle: "Quit")
         alert.addButton(withTitle: "Leave Running")
+        alert.addButton(withTitle: "Cancel")
         alert.alertStyle = .warning
         let modalResponse = alert.runModal()
         if (modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn) {
             self.runScript(script: .stopBitcoin)
             self.mgr?.resign()
+            isLoading = true
+            return true
+        } else if modalResponse == NSApplication.ModalResponse.alertSecondButtonReturn {
+            isLoading = true
+            return true
+        } else {
+            return false
         }
-        return true
     }
     
     @IBAction func showSettingsAction(_ sender: Any) {
