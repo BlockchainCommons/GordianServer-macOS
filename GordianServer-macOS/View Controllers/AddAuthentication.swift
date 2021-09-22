@@ -32,6 +32,23 @@ class AddAuthentication: NSViewController, NSWindowDelegate {
         self.view.window?.title = "Tor V3 Authentication"
     }
     
+    @IBAction func cancelAction(_ sender: Any) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.window?.performClose(nil)
+        }
+    }
+    
+    
+    @IBAction func helpAction(_ sender: Any) {
+        DispatchQueue.main.async {
+            guard let url = URL(string: "https://community.torproject.org/onion-services/advanced/client-auth/") else { return }
+            NSWorkspace.shared.open(url)
+        }
+    }
+    
+    
     @IBAction func addAction(_ sender: Any) {
         if textInput.stringValue != "" {
             let descriptor = textInput.stringValue.replacingOccurrences(of: " ", with: "")

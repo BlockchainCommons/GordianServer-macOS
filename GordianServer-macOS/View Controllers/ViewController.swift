@@ -357,7 +357,6 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
     
     private func checkSystem() {
-        print("refresh action")
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
@@ -535,6 +534,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                     
                     self.headerText = "Install Bitcoin Core v\(version)?"
                     self.ignoreExistingBitcoin = false
+                    
                     DispatchQueue.main.async { [weak self] in
                         guard let self = self else { return }
                         
@@ -565,6 +565,14 @@ class ViewController: NSViewController, NSWindowDelegate {
             }
         }
     }
+    
+    @IBAction func torAuthHelpAction(_ sender: Any) {
+        DispatchQueue.main.async {
+            guard let url = URL(string: "https://community.torproject.org/onion-services/advanced/client-auth/") else { return }
+            NSWorkspace.shared.open(url)
+        }
+    }
+    
 
     @IBAction func standUp(_ sender: Any) {
         installNow()
@@ -957,17 +965,7 @@ class ViewController: NSViewController, NSWindowDelegate {
 //        }
 //    }
 
-    private func parseAuthCheck(result: String) {
-        if result.contains("Unauthenticated") && torConfigured && bitcoinConfigured {
-            let ud = UserDefaults.standard
-            if ud.object(forKey: "doNotAskForAuthAgain") == nil {
-               //addAuth()
-            }
-        }
-        //runScript(script: .isLightningInstalled)
-    }
-
-    private func bitcoinIsOff() {
+     private func bitcoinIsOff() {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
