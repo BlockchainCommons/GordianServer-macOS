@@ -1238,7 +1238,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                     guard let self = self else { return }
                     
                     let mempoolInfo = MempoolInfo(response)
-                    self.mempoolOutlet.stringValue = "\(mempoolInfo.mempoolCount) txs"
+                    self.mempoolOutlet.stringValue = "\(mempoolInfo.size) txs"
                 }
             }
             self.getMiningInfo()
