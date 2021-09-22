@@ -69,12 +69,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             
             for (i, filePath) in filePaths.enumerated() {
                 print("file path: \(filePath)")
-                if filePath == "Fully Noded - Desktop.app" {
+                if filePath == "FullyNoded.app" {
                     exists = true
                 }
                 if i + 1 == filePaths.count {
                     if exists {
-                        runScript(script: .openFile, env: ["FILE":"/Applications/Fully Noded - Desktop.app"], args: []) { _ in }
+                        runScript(script: .openFile, env: ["FILE":"/Applications/FullyNoded.app"], args: []) { _ in }
                     } else {
                         DispatchQueue.main.async {
                             guard let url = URL(string: "https://apps.apple.com/us/app/fully-noded-desktop/id1530816100?mt=12") else { return }

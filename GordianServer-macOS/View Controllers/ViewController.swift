@@ -733,7 +733,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             if let errorOutput = String(data: errData, encoding: .utf8) {
                 #if DEBUG
                 print("error: \(errorOutput)")
-                if errorOutput != "" && !errorOutput.contains("not connect to the server") && !errorOutput.contains("block") && !errorOutput.contains("Loading P2P addresses")  {
+                if errorOutput != "" && !errorOutput.contains("Pruning blockstore") && !errorOutput.contains("not connect to the server") && !errorOutput.contains("block") && !errorOutput.contains("Loading P2P addresses")  {
                     if errorOutput.contains("Cannot obtain a lock on data directory") {
                         simpleAlert(message: "Shutdown in progress...", info: "Please be patient while Bitcoin Core shuts down, you will see \"Shutdown: done\" in the log output below when it has completely stopped.", buttonLabel: "OK")
                     } else {
@@ -777,7 +777,6 @@ class ViewController: NSViewController, NSWindowDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
-            print("last log item: \(logItems[logItems.count - 2])")
             self.bitcoinCoreLogOutlet.stringValue = "\(logItems[logItems.count - 2])"
         }
     }
@@ -1091,7 +1090,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         } else {
             self.bitcoinRunning = true
             
-            if result.contains("addresses") || result.contains("Verifying") || result.contains("Loading") || result.contains("Rewinding") || result.contains("Rescanning") {
+            if result.contains("addresses") || result.contains("Verifying") || result.contains("Loading") || result.contains("Rewinding") || result.contains("Rescanning") || result.contains("Pruning") {
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     
