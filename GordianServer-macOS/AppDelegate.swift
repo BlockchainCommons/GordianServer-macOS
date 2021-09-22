@@ -17,12 +17,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             var exists = false
             
             for (i, filePath) in filePaths.enumerated() {
-                if filePath == "Gordian QR Tool" {
+                if filePath == "Gordian QR Tool.app" {
                     exists = true
                 }
                 if i + 1 == filePaths.count {
                     if exists {
-                        //Launch it
+                        runScript(script: .openFile, env: ["FILE":"/Applications/Gordian QR Tool.app"], args: []) { _ in }
                     } else {
                         DispatchQueue.main.async {
                             guard let url = URL(string: "https://apps.apple.com/us/app/gordian-qr-tool/id1506851070") else { return }
@@ -43,12 +43,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             
             for (i, filePath) in filePaths.enumerated() {
                 print("file path: \(filePath)")
-                if filePath == "Fully Noded - Desktop" {
+                if filePath == "Fully Noded - Desktop.app" {
                     exists = true
                 }
                 if i + 1 == filePaths.count {
                     if exists {
-                        //Launch it
+                        runScript(script: .openFile, env: ["FILE":"/Applications/Fully Noded - Desktop.app"], args: []) { _ in }
                     } else {
                         DispatchQueue.main.async {
                             guard let url = URL(string: "https://apps.apple.com/us/app/fully-noded-desktop/id1530816100?mt=12") else { return }

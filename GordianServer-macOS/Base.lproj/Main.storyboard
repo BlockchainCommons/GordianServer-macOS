@@ -155,18 +155,6 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Supported Apps" id="gKP-oc-zhu">
                                     <items>
-                                        <menuItem title="Gordian Seed Tool" id="vye-h4-dDJ">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="seedToolClicked:" target="Voe-Tx-rLC" id="9oV-Y8-Ooc"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Gordian Wallet" id="nYB-Mz-9vg">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="gordianWalletClicked:" target="Voe-Tx-rLC" id="Tto-kU-5Qo"/>
-                                            </connections>
-                                        </menuItem>
                                         <menuItem title="Gordian QR Tool" id="cF0-sx-U8Y">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
@@ -191,7 +179,6 @@
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="GordianServer_macOS" customModuleProvider="target">
                     <connections>
                         <outlet property="newWindowClicked" destination="0yf-GN-Ap7" id="ODv-9f-Qvg"/>
-                        <outlet property="seedToolClicked" destination="vye-h4-dDJ" id="pc0-ot-M7n"/>
                     </connections>
                 </customObject>
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
