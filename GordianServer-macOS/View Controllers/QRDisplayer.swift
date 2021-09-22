@@ -18,6 +18,7 @@ class QRDisplayer: NSViewController {
     var nodeLabel = ""
     var network = ""
     var httpPass = ""
+    var url = ""
     
     @IBOutlet var imageView: NSImageView!
     
@@ -30,6 +31,14 @@ class QRDisplayer: NSViewController {
         window = self.view.window!
         self.view.window?.title = "\(network)"
     }
+    
+    @IBAction func copyAction(_ sender: Any) {
+        let pasteboard = NSPasteboard.general
+        pasteboard.declareTypes([.string], owner: nil)
+        pasteboard.setString(url, forType: .string)
+        simpleAlert(message: "Copied ✓", info: "", buttonLabel: "OK")
+    }
+    
     
     private func setQR() {
         let chain = UserDefaults.standard.object(forKey: "chain") as? String ?? "main"
@@ -61,7 +70,7 @@ class QRDisplayer: NSViewController {
         nodeLabel = Host.current().localizedName?.replacingOccurrences(of: " ", with: "%20") ?? "Gordian%20Server"
         nodeLabel = nodeLabel.replacingOccurrences(of: "’", with: "")
         
-        var url = "btcstandup://\(rpcuser):\(rpcpassword)@\(torHostname):\(rpcport)/?label=\(nodeLabel)%20-%20\(network)"
+        url = "btcstandup://\(rpcuser):\(rpcpassword)@\(torHostname):\(rpcport)/?label=\(nodeLabel)%20-%20\(network)"
         if network == "lightning" {
             url = "clightning-rpc://lightning:\(httpPass)@\(torHostname):8080/?label=Lightning"
         }

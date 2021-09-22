@@ -1668,8 +1668,8 @@ Gw
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="xvw-wj-H7H"/>
                             </imageView>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JzY-eJ-FZH">
-                                <rect key="frame" x="134" y="331" width="112" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="QuickConnect QR" id="1fJ-Sk-KbP">
+                                <rect key="frame" x="122" y="331" width="137" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Quick Connect 1.0 QR" id="1fJ-Sk-KbP">
                                     <font key="font" metaFont="message"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1678,11 +1678,23 @@ Gw
                             <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RFC-uu-5PC">
                                 <rect key="frame" x="190" y="323" width="0.0" height="0.0"/>
                             </stackView>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="b6i-dF-92Y">
+                                <rect key="frame" x="157" y="13" width="66" height="32"/>
+                                <buttonCell key="cell" type="push" title="Copy" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fpi-hE-qRw">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="copyAction:" target="eC6-Cf-Cnx" id="FS4-uw-MJR"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="JzY-eJ-FZH" firstAttribute="top" secondItem="TXs-2Y-7lq" secondAttribute="top" constant="22" id="2aZ-mZ-9Qy"/>
+                            <constraint firstItem="b6i-dF-92Y" firstAttribute="centerX" secondItem="TXs-2Y-7lq" secondAttribute="centerX" id="4B0-dx-ibu"/>
                             <constraint firstItem="JzY-eJ-FZH" firstAttribute="centerX" secondItem="TXs-2Y-7lq" secondAttribute="centerX" id="AjQ-7O-rA2"/>
                             <constraint firstItem="N7B-O2-k1D" firstAttribute="centerY" secondItem="TXs-2Y-7lq" secondAttribute="centerY" id="Y0d-1F-aTv"/>
+                            <constraint firstAttribute="bottom" secondItem="b6i-dF-92Y" secondAttribute="bottom" constant="20" symbolic="YES" id="hyw-k9-zeR"/>
                             <constraint firstItem="RFC-uu-5PC" firstAttribute="top" secondItem="JzY-eJ-FZH" secondAttribute="bottom" constant="8" id="lPe-ra-bbK"/>
                             <constraint firstItem="N7B-O2-k1D" firstAttribute="centerX" secondItem="TXs-2Y-7lq" secondAttribute="centerX" id="tXi-Bm-MRo"/>
                             <constraint firstItem="RFC-uu-5PC" firstAttribute="centerX" secondItem="TXs-2Y-7lq" secondAttribute="centerX" id="wGy-jB-Q2M"/>
