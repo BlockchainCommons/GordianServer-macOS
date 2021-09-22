@@ -65,7 +65,7 @@ class Defaults {
                                     onlyNetOnion = true
                                 }
                             case "proxy":
-                                if existingValue == "127.0.0.1:19050" {
+                                if existingValue == "127.0.0.1:19150" {
                                     proxyOn = true
                                 }
                                 

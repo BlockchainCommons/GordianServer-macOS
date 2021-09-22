@@ -11,6 +11,56 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
     
+    @IBAction func gordianQRToolClicked(_ sender: Any) {
+        do {
+            let filePaths = try FileManager.default.contentsOfDirectory(atPath: "/Applications")
+            var exists = false
+            
+            for (i, filePath) in filePaths.enumerated() {
+                if filePath == "Gordian QR Tool" {
+                    exists = true
+                }
+                if i + 1 == filePaths.count {
+                    if exists {
+                        //Launch it
+                    } else {
+                        DispatchQueue.main.async {
+                            guard let url = URL(string: "https://apps.apple.com/us/app/gordian-qr-tool/id1506851070") else { return }
+                            NSWorkspace.shared.open(url)
+                        }
+                    }
+                }
+            }
+        } catch {
+            simpleAlert(message: "There was an issue accessing your installed applications.", info: "\(error.localizedDescription)\n\nPlease let us know about this bug.", buttonLabel: "OK")
+        }
+    }
+    
+    @IBAction func fullyNodedClicked(_ sender: Any) {
+        do {
+            let filePaths = try FileManager.default.contentsOfDirectory(atPath: "/Applications")
+            var exists = false
+            
+            for (i, filePath) in filePaths.enumerated() {
+                print("file path: \(filePath)")
+                if filePath == "Fully Noded - Desktop" {
+                    exists = true
+                }
+                if i + 1 == filePaths.count {
+                    if exists {
+                        //Launch it
+                    } else {
+                        DispatchQueue.main.async {
+                            guard let url = URL(string: "https://apps.apple.com/us/app/fully-noded-desktop/id1530816100?mt=12") else { return }
+                            NSWorkspace.shared.open(url)
+                        }
+                    }
+                }
+            }
+        } catch {
+            simpleAlert(message: "There was an issue accessing your installed applications.", info: "\(error.localizedDescription)\n\nPlease let us know about this bug.", buttonLabel: "OK")
+        }
+    }
     
     @IBAction func newWindowClicked(_ sender: Any) {
         let storyboard = NSStoryboard(name: "Main", bundle: nil)

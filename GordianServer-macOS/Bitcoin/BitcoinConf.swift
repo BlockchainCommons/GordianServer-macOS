@@ -31,7 +31,7 @@ class BitcoinConf {
         maxuploadtarget=500
         fallbackfee=0.00009
         blocksdir=\(d.blocksDir())
-        proxy=127.0.0.1:19050
+        proxy=127.0.0.1:19150
         listen=1
         discover=1
         [main]

@@ -49,7 +49,7 @@ class TorClient: NSObject, URLSessionDelegate {
         
         sessionConfiguration.connectionProxyDictionary = [kCFProxyTypeKey: kCFProxyTypeSOCKS,
                                                           kCFStreamPropertySOCKSProxyHost: "localhost",
-                                                          kCFStreamPropertySOCKSProxyPort: 19050]
+                                                          kCFStreamPropertySOCKSProxyPort: 19150]
         
         session = URLSession(configuration: sessionConfiguration, delegate: self, delegateQueue: .main)
         
@@ -65,9 +65,9 @@ class TorClient: NSObject, URLSessionDelegate {
                 self.thread = nil
                 
                 self.config.options = [
-                    "DNSPort": "12345",
+                    "DNSPort": "12346",
                     "AutomapHostsOnResolve": "1",
-                    "SocksPort": "19050",//OnionTrafficOnly
+                    "SocksPort": "19150",//OnionTrafficOnly
                     "AvoidDiskWrites": "1",
                     "ClientOnionAuthDir": "\(self.authDirPath)",
                     "LearnCircuitBuildTimeout": "1",

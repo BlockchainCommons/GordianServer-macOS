@@ -125,7 +125,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
                             
                         case "#proxy", "proxy":
                             proxyExists = true
-                            stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "proxy=127.0.0.1:19050")
+                            stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "proxy=127.0.0.1:19150")
                             
                         case "#listen", "listen":
                             listenExists = true
@@ -145,7 +145,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
                 }
 
                 if !proxyExists {
-                    stringConf = "proxy=127.0.0.1:19050\n" + stringConf
+                    stringConf = "proxy=127.0.0.1:19150\n" + stringConf
                 }
                 if !listenExists {
                     stringConf = "listen=1\n" + stringConf
