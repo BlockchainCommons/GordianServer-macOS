@@ -21,6 +21,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
     var args = [String]()
     var refreshing = Bool()
     
+    @IBOutlet weak var autoStartOutlet: NSButton!
     @IBOutlet weak var pruneValueField: NSTextField!
     @IBOutlet var directoryLabel: NSTextField!
     @IBOutlet var walletDisabled: NSButton!
@@ -43,6 +44,12 @@ class Settings: NSViewController, NSTextFieldDelegate {
     }
     
     // MARK: User Actions
+    
+    
+    @IBAction func didSelectAutoStart(_ sender: Any) {
+        let value = autoStartOutlet.state
+        UserDefaults.standard.setValue((value == .on), forKey: "autoStart")
+    }
     
     @IBAction func refreshHiddenServiceAction(_ sender: Any) {
         let network = UserDefaults.standard.string(forKey: "chain") ?? "main"
@@ -411,6 +418,13 @@ class Settings: NSViewController, NSTextFieldDelegate {
         setState(int: d.txindex(), outlet: txIndexOutlet)
         setState(int: d.walletdisabled(), outlet: walletDisabled)
         setState(int: d.isPrivate(), outlet: goPrivateOutlet)
+        
+        if d.autoStart() {
+            setState(int: 1, outlet: autoStartOutlet)
+        } else {
+            setState(int: 0, outlet: autoStartOutlet)
+        }
+        
         if ud.object(forKey: "dataDir") != nil {
             DispatchQueue.main.async { [unowned vc = self] in
                 vc.directoryLabel.stringValue = d.blocksDir()
@@ -419,6 +433,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
         DispatchQueue.main.async { [weak self] in
             self?.pruneValueField.stringValue = "\(pruneValue)"
         }
+        
     }
     
     func getSetting(key: BTCCONF, button: NSButton, def: Int) {

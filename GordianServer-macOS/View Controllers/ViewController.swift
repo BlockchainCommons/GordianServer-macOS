@@ -209,6 +209,8 @@ class ViewController: NSViewController, NSWindowDelegate {
         d.setDefaults { [weak self] in
             guard let self = self else { return }
             
+            self.isLoading = false
+            
             self.getLatestVersion { [weak self] (success, errorMessage) in
                 guard let self = self else { return }
                 
@@ -255,6 +257,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         UserDefaults.standard.setValue("main", forKey: "chain")
         chain = "main"
         setEnv()
+        resetOutlets()
         checkSystem()
     }
     
@@ -262,6 +265,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         UserDefaults.standard.setValue("test", forKey: "chain")
         chain = "test"
         setEnv()
+        resetOutlets()
         checkSystem()
     }
     
@@ -269,6 +273,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         UserDefaults.standard.setValue("regtest", forKey: "chain")
         chain = "regtest"
         setEnv()
+        resetOutlets()
         checkSystem()
     }
     
@@ -276,6 +281,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         UserDefaults.standard.setValue("signet", forKey: "chain")
         chain = "signet"
         setEnv()
+        resetOutlets()
         checkSystem()
     }
     
@@ -728,7 +734,12 @@ class ViewController: NSViewController, NSWindowDelegate {
                 #if DEBUG
                 print("error: \(errorOutput)")
                 if errorOutput != "" && !errorOutput.contains("not connect to the server") && !errorOutput.contains("block") && !errorOutput.contains("Loading P2P addresses")  {
-                    simpleAlert(message: "Error", info: errorOutput, buttonLabel: "OK")
+                    if errorOutput.contains("Cannot obtain a lock on data directory") {
+                        simpleAlert(message: "Shutdown in progress...", info: "Please be patient while Bitcoin Core shuts down, you will see \"Shutdown: done\" in the log output below when it has completely stopped.", buttonLabel: "OK")
+                    } else {
+                        simpleAlert(message: "Error", info: errorOutput, buttonLabel: "OK")
+                    }
+                    
                 }
                 
                 #endif
@@ -973,9 +984,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             self.bitcoinRunning = false
             self.startMainnetOutlet.title = "Start"
             self.startMainnetOutlet.isEnabled = true
-            self.mainnetSyncedLabel.stringValue = ""
-            self.mainnetIncomingPeersLabel.stringValue = ""
-            self.mainnetOutgoingPeersLabel.stringValue = ""
+            self.resetOutlets()
         }
     }
 
@@ -1048,7 +1057,13 @@ class ViewController: NSViewController, NSWindowDelegate {
     private func parseIsBitcoinOn(result: String) {
         if result.contains("Could not connect to the server") {
             self.bitcoinIsOff()
-            self.hideSpinner()
+            
+            if d.autoStart() && isLoading {
+                addSpinnerDesc("starting \(chain)...")
+                runScript(script: .startBitcoin)
+            } else {
+                self.hideSpinner()
+            }
             
         } else if result.contains("chain") {
             self.bitcoinRunning = true
@@ -1118,7 +1133,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                     //simpleAlert(message: "Loading blocks...", info: "Your node is just getting started, Gordian Server will auto refresh every 15 seconds. Please be patient while your node loads its blocks.", buttonLabel: "OK")
                 } else if error!.contains("Verifying blocks") {
                     //simpleAlert(message: "Verifying blocks...", info: "Your node is just getting started, Gordian Server will auto refresh every 15 seconds. Please be patient while your node verifies its blocks.", buttonLabel: "OK")
-                } else if !error!.contains("Could not connect to the server") {
+                } else if !error!.contains("Could not connect to the server") && !error!.contains("Loading P2P addresses…") {
                     simpleAlert(message: "There was an issue.", info: error!, buttonLabel: "OK")
                 }
             }
@@ -1397,6 +1412,23 @@ class ViewController: NSViewController, NSWindowDelegate {
             self.mainnetSyncedLabel.stringValue = ""
             self.mainnetIncomingPeersLabel.stringValue = ""
             self.mainnetOutgoingPeersLabel.stringValue = ""
+        }
+    }
+    
+    private func resetOutlets() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.mainnetSyncedLabel.stringValue = ""
+            self.mainnetIncomingPeersLabel.stringValue = ""
+            self.mainnetOutgoingPeersLabel.stringValue = ""
+            self.hashrateOutlet.stringValue = ""
+            self.mempoolOutlet.stringValue = ""
+            self.uptimeOutlet.stringValue = ""
+            self.difficultyOutlet.stringValue = ""
+            self.blocksOutlet.stringValue = ""
+            self.pruningOutlet.stringValue = ""
+            self.sizeOutlet.stringValue = ""
         }
     }
 

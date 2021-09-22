@@ -14,7 +14,6 @@ class Defaults {
         let path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/bitcoin.conf")
         
         guard let bitcoinConf = try? String(contentsOf: path, encoding: .utf8) else {
-            print("can not get bitcoin.conf")
             completion((nil, false))
             return
         }
@@ -117,6 +116,14 @@ class Defaults {
         if ud.object(forKey: "nodeLabel") == nil {
             ud.set("StandUp Node", forKey: "nodeLabel")
         }
+        
+        if ud.object(forKey: "autoStart") == nil {
+            ud.setValue(true, forKey: "autoStart")
+        }
+    }
+    
+    func autoStart() -> Bool {
+        return ud.object(forKey: "autoStart") as? Bool ?? true
     }
     
     func dataDir() -> String {

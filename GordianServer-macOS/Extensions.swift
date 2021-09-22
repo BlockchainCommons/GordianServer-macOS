@@ -34,7 +34,7 @@ extension Double {
         if self >= 0.9999 {
             return "100%"
         } else {
-            return "\(Int(self*100))% synced"
+            return "\(Int(self*100))%"
         }
     }
     
