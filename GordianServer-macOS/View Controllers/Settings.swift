@@ -26,6 +26,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
     @IBOutlet var walletDisabled: NSButton!
     @IBOutlet var txIndexOutlet: NSButton!
     @IBOutlet var goPrivateOutlet: NSButton!
+    @IBOutlet weak var refreshButtonOutlet: NSButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,6 +43,39 @@ class Settings: NSViewController, NSTextFieldDelegate {
     }
     
     // MARK: User Actions
+    
+    @IBAction func refreshHiddenServiceAction(_ sender: Any) {
+        let network = UserDefaults.standard.string(forKey: "chain") ?? "main"
+        
+        actionAlert(message: "Refresh \(network) hidden service?", info: "This refreshes your hidden service so that any clients that were connected to your node will no longer be able to connect, it's a good idea to do this if for some reason you think someone may have access to your node if for example your phone was lost or stolen.") { [weak self] (response) in
+            guard let self = self else { return }
+            
+            if response {
+                
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    
+                    self.refreshButtonOutlet.isEnabled = false
+                }
+                
+                let path = "\(TorClient.sharedInstance.torPath())/host/bitcoin/rpc/\(network)/"
+                
+                do {
+                    try FileManager.default.removeItem(atPath: path)
+                        
+                    TorClient.sharedInstance.resign()
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        TorClient.sharedInstance.start(delegate: self)
+                    }
+                    
+                } catch {
+                    simpleAlert(message: "There was an issue...", info: "Your hidden service was not refreshed. Please let us know about this bug.", buttonLabel: "OK")
+                }
+            }
+        }
+    }
+    
     
     @IBAction func goPrivate(_ sender: Any) {
         let value = goPrivateOutlet.state
@@ -497,5 +531,22 @@ class Settings: NSViewController, NSTextFieldDelegate {
             break
         }
     }
+}
+
+extension Settings: OnionManagerDelegate {
     
+    func torConnProgress(_ progress: Int) {}
+    
+    func torConnFinished() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.refreshButtonOutlet.isEnabled = true
+            simpleAlert(message: "Hidden Service refreshed ✓", info: "You will need to reconnect any client apps as they will no longer have access.", buttonLabel: "OK")
+        }
+    }
+    
+    func torConnDifficulties() {
+        simpleAlert(message: "Tor connection issue.", info: "We are having trouble restarting Tor. Your hidden service will not refresh until Tor reboots successfully.", buttonLabel: "OK")
+    }
 }
