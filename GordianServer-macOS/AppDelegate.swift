@@ -11,6 +11,32 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
     
+    @IBAction func gordianSeedToolClicked(_ sender: Any) {
+        do {
+            let filePaths = try FileManager.default.contentsOfDirectory(atPath: "/Applications")
+            var exists = false
+            
+            for (i, filePath) in filePaths.enumerated() {
+                if filePath == "Gordian Seed Tool.app" {
+                    exists = true
+                }
+                if i + 1 == filePaths.count {
+                    if exists {
+                        runScript(script: .openFile, env: ["FILE":"/Applications/Gordian Seed Tool.app"], args: []) { _ in }
+                    } else {
+                        DispatchQueue.main.async {
+                            guard let url = URL(string: "https://apps.apple.com/us/app/gordian-seed-tool/id1545088229") else { return }
+                            NSWorkspace.shared.open(url)
+                        }
+                    }
+                }
+            }
+        } catch {
+            simpleAlert(message: "There was an issue accessing your installed applications.", info: "\(error.localizedDescription)\n\nPlease let us know about this bug.", buttonLabel: "OK")
+        }
+    }
+    
+    
     @IBAction func gordianQRToolClicked(_ sender: Any) {
         do {
             let filePaths = try FileManager.default.contentsOfDirectory(atPath: "/Applications")

@@ -155,10 +155,16 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Supported Apps" id="gKP-oc-zhu">
                                     <items>
-                                        <menuItem title="Gordian QR Tool" id="cF0-sx-U8Y">
+                                        <menuItem title="Gordian Seed Tool" id="cF0-sx-U8Y" userLabel="Gordian Seed Tool">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
-                                                <action selector="gordianQRToolClicked:" target="Voe-Tx-rLC" id="jiN-gc-a0a"/>
+                                                <action selector="gordianSeedToolClicked:" target="Voe-Tx-rLC" id="djq-kJ-1Uz"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Gordian QR Tool" id="hfO-1k-AaS">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="gordianQRToolClicked:" target="Voe-Tx-rLC" id="6t1-ds-VAI"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Fully Noded" id="6Lv-st-X2d">
