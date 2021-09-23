@@ -175,15 +175,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @IBAction func torHostClicked(_ sender: Any) {
-        runScript(script: .openFile, env: ["FILE":"\(TorClient.sharedInstance.torPath())/host/bitcoin/rpc/\(UserDefaults.standard.string(forKey: "chain")!)/hostname"], args: []) { _ in }
+        runScript(script: .openFile, env: ["FILE":"\(TorClient.sharedInstance.hiddenServicePath)/bitcoin/rpc/\(UserDefaults.standard.string(forKey: "chain")!)/hostname"], args: []) { _ in }
     }
     
     @IBAction func torAuthenticationClicked(_ sender: Any) {
-        runScript(script: .openFile, env: ["FILE":"\(TorClient.sharedInstance.torPath())/host/bitcoin/rpc/\(UserDefaults.standard.string(forKey: "chain")!)/authorized_clients/"], args: []) { _ in }
+        runScript(script: .openFile, env: ["FILE":"\(TorClient.sharedInstance.hiddenServicePath)/bitcoin/rpc/\(UserDefaults.standard.string(forKey: "chain")!)/authorized_clients/"], args: []) { _ in }
     }
     
     @IBAction func hiddenServiceDirClicked(_ sender: Any) {
-        runScript(script: .openFile, env: ["FILE":"\(TorClient.sharedInstance.torPath())/host/bitcoin/rpc/\(UserDefaults.standard.string(forKey: "chain")!)"], args: []) { _ in }
+        runScript(script: .openFile, env: ["FILE":"\(TorClient.sharedInstance.hiddenServicePath)/bitcoin/rpc/\(UserDefaults.standard.string(forKey: "chain")!)"], args: []) { _ in }
     }
     
     @IBAction func torCnfigClicked(_ sender: Any) {
@@ -191,7 +191,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @IBAction func torLogClicked(_ sender: Any) {
-        runScript(script: .openFile, env: ["FILE":"\(TorClient.sharedInstance.torPath())/debug.log"], args: []) { _ in }
+        runScript(script: .openFile, env: ["FILE":"/Users/\(NSUserName())/.gordian/tor/notices.log"], args: []) { _ in }
     }
     
     @IBAction func bitcoinCoreConfClicked(_ sender: Any) {
