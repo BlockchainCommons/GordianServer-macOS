@@ -480,6 +480,13 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     private func installNow() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.timer?.invalidate()
+            self.timer = nil
+        }
+        
         startSpinner(description: "Fetching latest Bitcoin Core version...")
         FetchLatestRelease.get { [weak self] (dict, error) in
             guard let self = self else { return }
