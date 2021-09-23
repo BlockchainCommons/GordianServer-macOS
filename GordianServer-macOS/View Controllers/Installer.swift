@@ -22,15 +22,12 @@ class Installer: NSViewController {
     var standingDown = Bool()
     var upgrading = Bool()
     var showLog = Bool()
-    var installLightning = Bool()
     var standUpConf = ""
     var refreshing = Bool()
     var ignoreExistingBitcoin = Bool()
     var rpcuser = ""
     var rpcpassword = ""
-    var lightningHostname = ""
-    var installingTor = false
-    var updatingTor = false
+    var isVerifying = false
     var peerInfo = ""
 
     override func viewDidLoad() {
@@ -101,6 +98,13 @@ class Installer: NSViewController {
                 self.hideSpinner()
             }
             
+        } else if isVerifying {
+            DispatchQueue.main.async { [unowned vc = self] in
+                vc.spinner.startAnimation(vc)
+            }
+            desc = "Verifying Bitcoin Core signatures..."
+            verify()
+            
         } else if standingUp {
             standingUp = false
             checkExistingConf()
@@ -116,14 +120,16 @@ class Installer: NSViewController {
         } else if upgrading {
             getURLs()
             
-        } else if installLightning {
-            DispatchQueue.main.async { [unowned vc = self] in
-                vc.spinner.startAnimation(vc)
-            }
-            desc = "Installing Lightning..."
-            //installLightningAction()
-            checkExistingConf()
         }
+            
+//        } else if installLightning {
+//            DispatchQueue.main.async { [unowned vc = self] in
+//                vc.spinner.startAnimation(vc)
+//            }
+//            desc = "Installing Lightning..."
+//            //installLightningAction()
+//            checkExistingConf()
+//        }
         
         DispatchQueue.main.async { [unowned vc = self] in
             vc.spinnerDescription.stringValue = desc
@@ -194,9 +200,6 @@ class Installer: NSViewController {
                             case "listen", "#listen":
                                 listenExists = true
                                 
-//                            case "bindaddress", "#bindaddress":
-//                                bindExists = true
-                                
                             case "debug", "#debug":
                                 debugExists = true
                                 
@@ -241,25 +244,13 @@ class Installer: NSViewController {
                         vc.standUpConf = "externalip=\(TorClient.sharedInstance.p2pHostname(chain: "main") ?? "")"
                     }
                     
-//                    if !bindExists {
-//                        vc.standUpConf = "#bindaddress=127.0.0.1\n" + vc.standUpConf
-//                    }
-                    
-                    if !vc.installLightning {
-                        vc.getURLs()
-                    } else {
-                        vc.installLightningAction()
-                    }
+                    vc.getURLs()
                                         
                 } else {
-                    if !vc.installLightning {
-                        vc.setDefaultBitcoinConf()
-                    }
-                }
-            } else {
-                if !vc.installLightning {
                     vc.setDefaultBitcoinConf()
                 }
+            } else {
+                vc.setDefaultBitcoinConf()
             }
         }
     }
@@ -305,6 +296,21 @@ class Installer: NSViewController {
                     ud.set(version, forKey: "version")
                     NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
                     self?.goBack()
+                }
+            }
+        }
+    }
+    
+    func verify() {
+        showLog = true
+        let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
+        taskQueue.async { [weak self] in
+            self?.run(script: .verifyBitcoin, env: ["":""]) { log in
+                DispatchQueue.main.async { [weak self] in
+                    if self != nil {
+                        self?.hideSpinner()
+                        self?.setLog(content: log)
+                    }
                 }
             }
         }
@@ -396,32 +402,7 @@ class Installer: NSViewController {
         let conf = bitcoinConf.components(separatedBy: "\n")
         completion((conf, false))
     }
-    
-    private func installLightningAction() {
-        print("installLightningAction")
-        showLog = true
-        let d = Defaults()
-        let env = ["RPC_PASSWORD":rpcpassword, "RPC_USER":rpcuser, "HTTP_PASS":randomString(length: 32), "PREFIX": d.existingPrefix(), "DATA_DIR": d.dataDir(), "USER":NSUserName()]
-        #if DEBUG
-        print("env: \(env)")
-        #endif
         
-        let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
-        taskQueue.async { [weak self] in
-            self?.run(script: .installLightning, env: env) { log in
-                
-                DispatchQueue.main.async { [weak self] in
-                    if self != nil {
-                        self?.setLog(content: log)
-                    }
-                    NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
-                    self?.goBack()
-                }
-            }
-        }
-        
-    }
-    
     private func run(script: SCRIPT, env: [String:String], completion: @escaping ((String)) -> Void) {
         #if DEBUG
         print("script: \(script.rawValue)")

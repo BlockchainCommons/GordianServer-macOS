@@ -30,10 +30,6 @@ function installBitcoin () {
   curl $SIGS_URL -o ~/.gordian/BitcoinCore/SHA256SUMS.asc -s
   echo "Saved to ~/.gordian/BitcoinCore/SHA256SUMS.asc"
   
-#  echo "Downloading Laanwj PGP public key from https://github.com/laanwj.gpg"
-#  curl https://github.com/laanwj.gpg -o ~/.gordian/BitcoinCore/laanwj.gpg -s
-#  #gpg --import ~/.gordian/BitcoinCore/laanwj.gpg
-  
   echo "Downloading Bitcoin Core $VERSION from $MACOS_URL"
   cd ~/.gordian/BitcoinCore
   curl $MACOS_URL -o ~/.gordian/BitcoinCore/$BINARY_NAME --progress-bar

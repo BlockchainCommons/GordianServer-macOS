@@ -14,7 +14,6 @@ class ViewController: NSViewController, NSWindowDelegate {
     @IBOutlet weak private var torAddAuthOutlet: NSButton!
     @IBOutlet weak private var peerDetailsButton: NSButton!
     @IBOutlet weak private var startTorOutlet: NSButton!
-    //@IBOutlet weak private var networkLabel: NSTextField!
     @IBOutlet weak private var mainnetIncomingImage: NSImageView!
     @IBOutlet weak private var bitcoinCoreWindow: NSView!
     @IBOutlet weak private var torWindow: NSView!
@@ -67,6 +66,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     var torConfigured = false
     var bitcoinConfigured = false
     var ignoreExistingBitcoin = false
+    var isVerifying = false
     var regTestOn = false
     var env = [String:String]()
     let d = Defaults()
@@ -77,6 +77,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     var installingXcode = false
     var currentVersion = ""
     var peerInfo = ""
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -165,7 +166,6 @@ class ViewController: NSViewController, NSWindowDelegate {
             self.performSegue(withIdentifier: "showInfo", sender: self)
         }
     }
-    
     
     @IBAction func showSettingsAction(_ sender: Any) {
         var myWindow: NSWindow? = nil
@@ -406,7 +406,12 @@ class ViewController: NSViewController, NSWindowDelegate {
     //MARK: User Action Installers, Starters and Configurators
 
     @IBAction func verifyAction(_ sender: Any) {
-        runScript(script: .verifyBitcoin)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.isVerifying = true
+            self.performSegue(withIdentifier: "goInstall", sender: self)
+        }
     }
 
     private func installNow() {
@@ -757,9 +762,6 @@ class ViewController: NSViewController, NSWindowDelegate {
         case .checkForBitcoin:
             parseBitcoindResponse(result: result)
 
-        case .verifyBitcoin:
-            parseVerifyResult(result: result)
-
         case .checkXcodeSelect:
             parseXcodeSelectResult(result: result)
 
@@ -1051,17 +1053,6 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
     }
 
-    func parseVerifyResult(result: String) {
-        let binaryName = env["BINARY_NAME"] ?? ""
-        if result.contains("\(binaryName): OK") {
-            simpleAlert(message: "Verified ✓", info: "The sha256 hashes for \(binaryName) and the SHA256SUMS file match.", buttonLabel: "OK")
-        } else if result.contains("No ~/.gordian/BitcoinCore directory") {
-            simpleAlert(message: "Error", info: "You are using a version of Bitcoin Core which was not installed by GordianServer, we are not yet able to verify Bitcoin Core instances not installed by GordianServer.", buttonLabel: "OK")
-        } else {
-            simpleAlert(message: "DANGER!!! Invalid signatures...", info: "Please delete the ~/.gordian folder and app and report an issue on the github, hashes do not match.", buttonLabel: "OK")
-        }
-    }
-
     //MARK: User Inteface
 
     func setTimer() {
@@ -1274,6 +1265,7 @@ class ViewController: NSViewController, NSWindowDelegate {
 
         case "goInstall":
             if let vc = segue.destinationController as? Installer {
+                vc.isVerifying = self.isVerifying
                 vc.updatingTor = self.updatingTor
                 vc.installingTor = self.installingTor
                 vc.standingUp = standingUp
