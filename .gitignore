@@ -174,6 +174,7 @@ Dependencies/
 !*.xcworkspace/contents.xcworkspacedata
 /*.gcno
 
+
 ### Xcode Patch ###
 **/xcshareddata/WorkspaceSettings.xcsettings
 
