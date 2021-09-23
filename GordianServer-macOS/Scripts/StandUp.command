@@ -30,9 +30,9 @@ function installBitcoin () {
   curl $SIGS_URL -o ~/.gordian/BitcoinCore/SHA256SUMS.asc -s
   echo "Saved to ~/.gordian/BitcoinCore/SHA256SUMS.asc"
   
-  echo "Downloading Laanwj PGP public key from https://github.com/laanwj.gpg"
-  curl https://github.com/laanwj.gpg -o ~/.gordian/BitcoinCore/laanwj.gpg -s
-  #gpg --import ~/.gordian/BitcoinCore/laanwj.gpg
+#  echo "Downloading Laanwj PGP public key from https://github.com/laanwj.gpg"
+#  curl https://github.com/laanwj.gpg -o ~/.gordian/BitcoinCore/laanwj.gpg -s
+#  #gpg --import ~/.gordian/BitcoinCore/laanwj.gpg
   
   echo "Downloading Bitcoin Core $VERSION from $MACOS_URL"
   cd ~/.gordian/BitcoinCore
@@ -49,16 +49,42 @@ function installBitcoin () {
   if [ "$ACTUAL_SHA" == "$EXPECTED_SHA" ]; then
     echo "Hashes match"
     echo "Checking Signatures"
-    # Need to check signatures too, having issues so skipping for now, user can do it manually.
-    #gpg --verify ~/.gordian/BitcoinCore/SHA256SUMS.asc ~/.gordian/BitcoinCore/SHA256SUMS
+    verifySigs
     
-    echo "Unpacking $BINARY_NAME"
-    tar -zxvf $BINARY_NAME
   else
     echo "Hashes do not match! Terminating..."
     exit 1
   fi
 
+}
+
+function verifySigs() {
+  curl https://raw.githubusercontent.com/bitcoin/bitcoin/master/contrib/builder-keys/keys.txt -o ~/.gordian/BitcoinCore/keys.txt
+  sh -c 'while read fingerprint keyholder_name; do gpg --keyserver hkps://keys.openpgp.org --recv-keys ${fingerprint}; done < ~/.gordian/BitcoinCore/keys.txt'
+
+  # Verifying Bitcoin: Signature
+  echo "Verifying Bitcoin."
+
+  export SHASIG=`sudo -u $(whoami) /usr/local/bin/gpg --verify ~/.gordian/BitcoinCore/SHA256SUMS.asc ~/.gordian/BitcoinCore/SHA256SUMS 2>&1 | grep "Good signature"`
+  export SHACOUNT=`sudo -u $(whoami) /usr/local/bin/gpg --verify ~/.gordian/BitcoinCore/SHA256SUMS.asc ~/.gordian/BitcoinCore/SHA256SUMS 2>&1 | grep "Good signature" | wc -l`
+  
+  echo "SHASIG: $SHASIG"
+
+  if [[ "$SHASIG" ]]; then
+
+    echo "SIG VERIFICATION SUCCESS: $SHACOUNT GOOD SIGNATURES FOUND."
+    echo "$SHASIG"
+
+    echo "Unpacking $BINARY_NAME"
+    tar -zxvf $BINARY_NAME
+    configureBitcoin
+
+  else
+
+    echo "SIG VERIFICATION ERROR: No verified signatures for Bitcoin!"
+    exit 1
+
+  fi
 }
 
 function configureBitcoin () {
@@ -78,4 +104,3 @@ function configureBitcoin () {
 
 setUpGordianDir
 installBitcoin
-configureBitcoin

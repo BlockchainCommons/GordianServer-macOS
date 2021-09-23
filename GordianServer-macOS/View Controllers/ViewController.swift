@@ -10,9 +10,11 @@ import Cocoa
 
 class ViewController: NSViewController, NSWindowDelegate {
     
+    @IBOutlet weak private var torRemoveAuthOutlet: NSButton!
+    @IBOutlet weak private var torAddAuthOutlet: NSButton!
     @IBOutlet weak private var peerDetailsButton: NSButton!
     @IBOutlet weak private var startTorOutlet: NSButton!
-    @IBOutlet weak private var networkLabel: NSTextField!
+    //@IBOutlet weak private var networkLabel: NSTextField!
     @IBOutlet weak private var mainnetIncomingImage: NSImageView!
     @IBOutlet weak private var bitcoinCoreWindow: NSView!
     @IBOutlet weak private var torWindow: NSView!
@@ -1032,11 +1034,10 @@ class ViewController: NSViewController, NSWindowDelegate {
                 guard let self = self else { return }
                 
                 self.verifyOutlet.isEnabled = true
+                self.networkButton.isEnabled = true
                 self.bitcoinCoreVersionOutlet.stringValue = self.currentVersion
                 self.bitcoinInstalled = true
-                self.verifyOutlet.isEnabled = true
             }
-            
             isBitcoinOn()
         } else {
             DispatchQueue.main.async { [weak self] in
@@ -1136,7 +1137,10 @@ class ViewController: NSViewController, NSWindowDelegate {
             self.torVersionOutlet.stringValue = ""
             self.startTorOutlet.isEnabled = false
             self.verifyOutlet.isEnabled = false
+            self.networkButton.isEnabled = false
             self.startMainnetOutlet.isEnabled = false
+            self.torRemoveAuthOutlet.isEnabled = false
+            self.torAddAuthOutlet.isEnabled = false
             self.torRunningImage.alphaValue = 0
             self.bitcoinCoreWindow.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)
             self.torWindow.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)
@@ -1346,6 +1350,8 @@ extension ViewController: OnionManagerDelegate {
             self.torVersionOutlet.stringValue = "v0.4.4.6"
             self.startTorOutlet.title = "Stop"
             self.startTorOutlet.isEnabled = true
+            self.torRemoveAuthOutlet.isEnabled = true
+            self.torAddAuthOutlet.isEnabled = true
             self.updateTorStatus(isOn: true)
             self.checkForGordian()
         }

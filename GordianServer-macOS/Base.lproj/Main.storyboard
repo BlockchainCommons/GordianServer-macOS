@@ -994,9 +994,11 @@
                         <outlet property="startMainnetOutlet" destination="twO-63-MCl" id="WEZ-Qq-VGp"/>
                         <outlet property="startTorOutlet" destination="w4M-Pe-mtd" id="cwJ-5u-NXL"/>
                         <outlet property="taskDescription" destination="K4o-Sf-dSl" id="Xb9-TC-9s2"/>
+                        <outlet property="torAddAuthOutlet" destination="YDF-ZK-BZU" id="OSs-Ux-PYb"/>
                         <outlet property="torAuthLockImage" destination="Nzy-A1-ER9" id="tCB-Cd-SHR"/>
                         <outlet property="torAuthRemoveOutlet" destination="whm-EA-eFM" id="pCm-49-bcC"/>
                         <outlet property="torAuthWindow" destination="WGD-XP-1oR" id="ssD-dC-lnj"/>
+                        <outlet property="torRemoveAuthOutlet" destination="whm-EA-eFM" id="63L-Eb-UMb"/>
                         <outlet property="torRunningImage" destination="mwn-Hz-Tc2" id="6iH-Pv-QIC"/>
                         <outlet property="torVersionOutlet" destination="2fT-tq-aCO" id="zpe-Z0-ULJ"/>
                         <outlet property="torWindow" destination="hmk-BW-J2q" id="xSN-4I-RFX"/>
