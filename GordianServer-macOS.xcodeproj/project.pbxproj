@@ -22,7 +22,6 @@
 		0AD5BAB826F568820091A075 /* Tor.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0AD5BAB626F568820091A075 /* Tor.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0AD5BABB26F572330091A075 /* TorClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD5BABA26F572330091A075 /* TorClient.swift */; };
 		0AD5BABD26F572CB0091A075 /* Torrc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD5BABC26F572CB0091A075 /* Torrc.swift */; };
-		D01471A12371354700F64329 /* LaunchBitcoin.command in Resources */ = {isa = PBXBuildFile; fileRef = D01471A02371354700F64329 /* LaunchBitcoin.command */; };
 		D01B610824877301005D3090 /* MakeRPCCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01B610724877301005D3090 /* MakeRPCCall.swift */; };
 		D01B610A2487873F005D3090 /* AddAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01B61092487873F005D3090 /* AddAuthentication.swift */; };
 		D0211A4E250493CB00F7517A /* WalletDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0211A4D250493CB00F7517A /* WalletDetail.swift */; };
@@ -138,7 +137,6 @@
 		0AD5BAB626F568820091A075 /* Tor.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = Tor.xcframework; sourceTree = "<group>"; };
 		0AD5BABA26F572330091A075 /* TorClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TorClient.swift; sourceTree = "<group>"; };
 		0AD5BABC26F572CB0091A075 /* Torrc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Torrc.swift; sourceTree = "<group>"; };
-		D01471A02371354700F64329 /* LaunchBitcoin.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = LaunchBitcoin.command; sourceTree = "<group>"; };
 		D01B610724877301005D3090 /* MakeRPCCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeRPCCall.swift; sourceTree = "<group>"; };
 		D01B61092487873F005D3090 /* AddAuthentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAuthentication.swift; sourceTree = "<group>"; };
 		D0211A4D250493CB00F7517A /* WalletDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletDetail.swift; sourceTree = "<group>"; };
@@ -289,7 +287,6 @@
 		D099F3362375914300AC0EF6 /* Scripts */ = {
 			isa = PBXGroup;
 			children = (
-				D01471A02371354700F64329 /* LaunchBitcoin.command */,
 				D0A3B6F023739FCF00253635 /* StandUp.command */,
 				D0B36C442373E521004B2D63 /* Verify.command */,
 				D049E89D237BD09200294E70 /* StandDown.command */,
@@ -567,7 +564,6 @@
 				D0EB5318237E4E9F002212F8 /* fullynoded_share.png in Resources */,
 				D0BCB33A236A6D27000D8FDE /* Main.storyboard in Resources */,
 				D0821043238AA78900E21EDC /* blockchaincommons.png in Resources */,
-				D01471A12371354700F64329 /* LaunchBitcoin.command in Resources */,
 				D0F613EE24892B680057CC93 /* RemoveOldHost.command in Resources */,
 				D06E3938236BE46E0072924A /* Settings.xib in Resources */,
 				D0760106247DFEF200706F70 /* Strap.command in Resources */,

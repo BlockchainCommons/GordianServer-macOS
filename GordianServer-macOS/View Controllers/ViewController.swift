@@ -740,7 +740,9 @@ class ViewController: NSViewController, NSWindowDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
-            self.bitcoinCoreLogOutlet.stringValue = "\(logItems[logItems.count - 2])"
+            if logItems.count > 2 {
+                self.bitcoinCoreLogOutlet.stringValue = "\(logItems[logItems.count - 2])"
+            }
         }
     }
 
@@ -1266,8 +1268,6 @@ class ViewController: NSViewController, NSWindowDelegate {
         case "goInstall":
             if let vc = segue.destinationController as? Installer {
                 vc.isVerifying = self.isVerifying
-                vc.updatingTor = self.updatingTor
-                vc.installingTor = self.installingTor
                 vc.standingUp = standingUp
                 vc.upgrading = upgrading
                 vc.ignoreExistingBitcoin = ignoreExistingBitcoin

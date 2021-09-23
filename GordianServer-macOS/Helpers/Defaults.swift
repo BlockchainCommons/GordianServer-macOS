@@ -55,6 +55,9 @@ class Defaults {
                             let k = arr[0]
                             let existingValue = arr[1]
                             switch k {
+                            case "blocksdir":
+                                self.ud.setValue(existingValue, forKey: "blocksDir")
+                                
                             case "discover":
                                 if existingValue == "0" {
                                     discover = false
