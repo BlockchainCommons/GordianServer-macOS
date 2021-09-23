@@ -1398,6 +1398,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             self.torVersionOutlet.stringValue = ""
             self.startTorOutlet.isEnabled = false
             self.verifyOutlet.isEnabled = false
+            self.startMainnetOutlet.isEnabled = false
             self.torRunningImage.alphaValue = 0
             self.bitcoinCoreWindow.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)
             self.torWindow.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)
