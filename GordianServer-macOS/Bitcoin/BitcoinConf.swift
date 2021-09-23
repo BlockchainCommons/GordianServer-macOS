@@ -25,7 +25,6 @@ class BitcoinConf {
         server=1
         prune=\(prune)
         txindex=\(txindex)
-        rpcallowip=127.0.0.1
         dbcache=\(optimumCache())
         maxconnections=20
         maxuploadtarget=500
@@ -37,14 +36,22 @@ class BitcoinConf {
         [main]
         externalip=\(TorClient.sharedInstance.p2pHostname(chain: "main") ?? "")
         rpcport=8332
+        rpcallowip=127.0.0.1
+        rpcbind=127.0.0.1
         rpcwhitelist=\(rpcuser):\(rpcWhiteList)
         [test]
         externalip=\(TorClient.sharedInstance.p2pHostname(chain: "test") ?? "")
         rpcport=18332
+        rpcallowip=127.0.0.1
+        rpcbind=127.0.0.1
         [regtest]
         rpcport=18443
+        rpcallowip=127.0.0.1
+        rpcbind=127.0.0.1
         [signet]
         rpcport=38332
+        rpcallowip=127.0.0.1
+        rpcbind=127.0.0.1
         externalip=\(TorClient.sharedInstance.p2pHostname(chain: "signet") ?? "")
         """
     }

@@ -33,6 +33,7 @@ class TorClient: NSObject, URLSessionDelegate {
     private var controller: TorController?
     private var authDirPath = ""
     var isRefreshing = false
+    let hiddenServicePath = "/Users/\(NSUserName())/.gordian/tor/host"
     
     // The tor url session configuration.
     // Start with default config as fallback.
@@ -173,12 +174,36 @@ class TorClient: NSObject, URLSessionDelegate {
         } catch {
             print("Directory previously created.")
         }
+        
+        let gordianPath = "/Users/\(NSUserName())/.gordian"
+        
+        do {
+            try FileManager.default.createDirectory(atPath: gordianPath,
+                                                    withIntermediateDirectories: true,
+                                                    attributes: [FileAttributeKey.posixPermissions: 0o700])
+        } catch {
+            print("\(gordianPath) directory previously created.")
+        }
+        
+        let torGordianPath = "/Users/\(NSUserName())/.gordian/tor"
+        
+        do {
+            try FileManager.default.createDirectory(atPath: torGordianPath,
+                                                    withIntermediateDirectories: true,
+                                                    attributes: [FileAttributeKey.posixPermissions: 0o700])
+        } catch {
+            print("\(torGordianPath) directory previously created.")
+        }
+        
+        
+        
         addTorrc()
         createHiddenServiceDirectory()
     }
     
     func torPath() -> String {
-        return "/Users/\(NSUserName())/Library/Caches/tor"
+        //return "/Users/\(NSUserName())/Library/Caches/tor"
+        return "/Users/\(NSUserName())/.gordian/.tor"
     }
     
     private func addTorrc() {
@@ -195,7 +220,7 @@ class TorClient: NSObject, URLSessionDelegate {
     
     private func createHiddenServiceDirectory() {
         do {
-            try FileManager.default.createDirectory(atPath: "\(torPath())/host",
+            try FileManager.default.createDirectory(atPath: hiddenServicePath,
                                                     withIntermediateDirectories: true,
                                                     attributes: [FileAttributeKey.posixPermissions: 0o700])
         } catch {
@@ -203,7 +228,7 @@ class TorClient: NSObject, URLSessionDelegate {
         }
         
         do {
-            try FileManager.default.createDirectory(atPath: "\(torPath())/host/bitcoin",
+            try FileManager.default.createDirectory(atPath: "\(hiddenServicePath)/bitcoin",
                                                     withIntermediateDirectories: true,
                                                     attributes: [FileAttributeKey.posixPermissions: 0o700])
         } catch {
@@ -211,7 +236,7 @@ class TorClient: NSObject, URLSessionDelegate {
         }
         
         do {
-            try FileManager.default.createDirectory(atPath: "\(torPath())/host/bitcoin/rpc",
+            try FileManager.default.createDirectory(atPath: "\(hiddenServicePath)/bitcoin/rpc",
                                                     withIntermediateDirectories: true,
                                                     attributes: [FileAttributeKey.posixPermissions: 0o700])
         } catch {
@@ -219,7 +244,7 @@ class TorClient: NSObject, URLSessionDelegate {
         }
         
         do {
-            try FileManager.default.createDirectory(atPath: "\(torPath())/host/bitcoin/p2p",
+            try FileManager.default.createDirectory(atPath: "\(hiddenServicePath)/bitcoin/p2p",
                                                     withIntermediateDirectories: true,
                                                     attributes: [FileAttributeKey.posixPermissions: 0o700])
         } catch {
@@ -227,7 +252,7 @@ class TorClient: NSObject, URLSessionDelegate {
         }
         
         do {
-            try FileManager.default.createDirectory(atPath: "\(torPath())/host/bitcoin/rpc/main",
+            try FileManager.default.createDirectory(atPath: "\(hiddenServicePath)/bitcoin/rpc/main",
                                                     withIntermediateDirectories: true,
                                                     attributes: [FileAttributeKey.posixPermissions: 0o700])
         } catch {
@@ -235,7 +260,7 @@ class TorClient: NSObject, URLSessionDelegate {
         }
         
         do {
-            try FileManager.default.createDirectory(atPath: "\(torPath())/host/bitcoin/p2p/main",
+            try FileManager.default.createDirectory(atPath: "\(hiddenServicePath)/bitcoin/p2p/main",
                                                     withIntermediateDirectories: true,
                                                     attributes: [FileAttributeKey.posixPermissions: 0o700])
         } catch {
@@ -243,7 +268,7 @@ class TorClient: NSObject, URLSessionDelegate {
         }
         
         do {
-            try FileManager.default.createDirectory(atPath: "\(torPath())/host/bitcoin/rpc/test",
+            try FileManager.default.createDirectory(atPath: "\(hiddenServicePath)/bitcoin/rpc/test",
                                                     withIntermediateDirectories: true,
                                                     attributes: [FileAttributeKey.posixPermissions: 0o700])
         } catch {
@@ -251,7 +276,7 @@ class TorClient: NSObject, URLSessionDelegate {
         }
         
         do {
-            try FileManager.default.createDirectory(atPath: "\(torPath())/host/bitcoin/p2p/test",
+            try FileManager.default.createDirectory(atPath: "\(hiddenServicePath)/bitcoin/p2p/test",
                                                     withIntermediateDirectories: true,
                                                     attributes: [FileAttributeKey.posixPermissions: 0o700])
         } catch {
@@ -259,7 +284,7 @@ class TorClient: NSObject, URLSessionDelegate {
         }
         
         do {
-            try FileManager.default.createDirectory(atPath: "\(torPath())/host/bitcoin/rpc/regtest",
+            try FileManager.default.createDirectory(atPath: "\(hiddenServicePath)/bitcoin/rpc/regtest",
                                                     withIntermediateDirectories: true,
                                                     attributes: [FileAttributeKey.posixPermissions: 0o700])
         } catch {
@@ -267,7 +292,7 @@ class TorClient: NSObject, URLSessionDelegate {
         }
         
         do {
-            try FileManager.default.createDirectory(atPath: "\(torPath())/host/bitcoin/rpc/signet",
+            try FileManager.default.createDirectory(atPath: "\(hiddenServicePath)/bitcoin/rpc/signet",
                                                     withIntermediateDirectories: true,
                                                     attributes: [FileAttributeKey.posixPermissions: 0o700])
         } catch {
@@ -275,7 +300,7 @@ class TorClient: NSObject, URLSessionDelegate {
         }
         
         do {
-            try FileManager.default.createDirectory(atPath: "\(torPath())/host/bitcoin/p2p/signet",
+            try FileManager.default.createDirectory(atPath: "\(hiddenServicePath)/bitcoin/p2p/signet",
                                                     withIntermediateDirectories: true,
                                                     attributes: [FileAttributeKey.posixPermissions: 0o700])
         } catch {
@@ -286,18 +311,20 @@ class TorClient: NSObject, URLSessionDelegate {
     func rpcHostname() -> String? {
         guard let chain = UserDefaults.standard.string(forKey: "chain") else { return nil }
         
-        let path = URL(fileURLWithPath: "\(torPath())/host/bitcoin/rpc/\(chain)/hostname")
-        return try? String(contentsOf: path, encoding: .utf8)
+        let path = URL(fileURLWithPath: "\(hiddenServicePath)/bitcoin/rpc/\(chain)/hostname")
+        guard let host = try? String(contentsOf: path, encoding: .utf8) else { return nil }
+        return host.replacingOccurrences(of: "\n", with: "")
     }
     
     func p2pHostname(chain: String) -> String? {
-        let path = URL(fileURLWithPath: "\(torPath())/host/bitcoin/p2p/\(chain)/hostname")
-        return try? String(contentsOf: path, encoding: .utf8)
+        let path = URL(fileURLWithPath: "\(hiddenServicePath)/bitcoin/p2p/\(chain)/hostname")
+        guard let host = try? String(contentsOf: path, encoding: .utf8) else { return nil }
+        return host.replacingOccurrences(of: "\n", with: "")
     }
     
     private func createAuthDirectory() -> String {
         // Create tor v3 auth directory if it does not yet exist
-        let authPath = URL(fileURLWithPath: self.torPath(), isDirectory: true).appendingPathComponent("onion_auth", isDirectory: true).path
+        let authPath = URL(fileURLWithPath: hiddenServicePath, isDirectory: true).appendingPathComponent("onion_auth", isDirectory: true).path
         
         do {
             try FileManager.default.createDirectory(atPath: authPath,

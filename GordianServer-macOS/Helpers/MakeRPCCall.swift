@@ -23,7 +23,6 @@ class MakeRpcCall {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("text/plain", forHTTPHeaderField: "Content-Type")
-        print("method: \(method)")
         request.httpBody = "{\"jsonrpc\":\"1.0\",\"id\":\"curltest\",\"method\":\"\(method)\",\"params\":[]}".data(using: .utf8)
         let task = session.dataTask(with: request as URLRequest) { (data, response, error) in
             guard let urlContent = data else {

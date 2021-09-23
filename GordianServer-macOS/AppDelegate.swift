@@ -11,6 +11,8 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
     
+    public var isKilling = false
+    
     @IBAction func gordianSeedToolClicked(_ sender: Any) {
         do {
             let filePaths = try FileManager.default.contentsOfDirectory(atPath: "/Applications")
@@ -95,25 +97,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
-        let alert = NSAlert()
-        alert.messageText = "Quit Bitcoin Core?"
-        alert.informativeText = "Quitting the app does not stop Bitcoin Core automatically. Tor automatically quits so your node will not be remotely reachable.\n\nIf you opt to quit Bitcoin Core only the active network will be stopped, if you want to close all networks do that with the Stop button before quitting the app."
-        alert.addButton(withTitle: "Quit Bitcoin Core")
-        alert.addButton(withTitle: "Leave Running")
-        alert.addButton(withTitle: "Cancel")
-        alert.alertStyle = .warning
-        let modalResponse = alert.runModal()
-        if (modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn) {
-            self.quitBitcoin()
-            return .terminateLater
-        } else if modalResponse == NSApplication.ModalResponse.alertSecondButtonReturn {
-            TorClient.sharedInstance.resign()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                NSApplication.shared.reply(toApplicationShouldTerminate: true)
+        if !isKilling {
+            let alert = NSAlert()
+            alert.messageText = "Quit Bitcoin Core?"
+            alert.informativeText = "Quitting the app does not stop Bitcoin Core automatically. Tor automatically quits so your node will not be remotely reachable.\n\nIf you opt to quit Bitcoin Core only the active network will be stopped, if you want to close all networks do that with the Stop button before quitting the app."
+            alert.addButton(withTitle: "Quit Bitcoin Core")
+            alert.addButton(withTitle: "Leave Running")
+            alert.addButton(withTitle: "Cancel")
+            alert.alertStyle = .warning
+            let modalResponse = alert.runModal()
+            if (modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn) {
+                self.quitBitcoin()
+                return .terminateLater
+            } else if modalResponse == NSApplication.ModalResponse.alertSecondButtonReturn {
+                TorClient.sharedInstance.resign()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                    NSApplication.shared.reply(toApplicationShouldTerminate: true)
+                }
+                return .terminateLater
+            } else {
+                return .terminateCancel
             }
-            return .terminateLater
         } else {
-            return .terminateCancel
+            return .terminateNow
         }
     }
     

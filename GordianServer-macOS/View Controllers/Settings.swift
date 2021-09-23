@@ -194,18 +194,55 @@ class Settings: NSViewController, NSTextFieldDelegate {
     }
     
     @IBAction func removeBitcoinCore(_ sender: Any) {
-        DispatchQueue.main.async { [unowned vc = self] in
-            destructiveActionAlert(message: "Danger! Master kill switch!", info: "This action PERMANENTLY, IMMEDIATELY and IRREVERSIBLY deletes ALL WALLETS, Bitcoin Core binaries, and Gordian Server Tor related files and directories!") { response in
-                if response {
-                    let d = Defaults()
-                    let env = ["DATADIR":d.dataDir()]
-                    vc.runScript(script: .removeBitcoin, env: env, args: []) { success in
-                        if success {
-                            simpleAlert(message: "Your system has been purged.", info: "", buttonLabel: "OK")
-                        } else {
-                           simpleAlert(message: "Error", info: "There was an issue deleting the directory", buttonLabel: "OK")
+        let rpc = MakeRpcCall.shared
+        var port:String!
+        let chain = UserDefaults.standard.object(forKey: "chain") as? String ?? "main"
+        let rpcuser = UserDefaults.standard.object(forKey: "rpcuser") as? String ?? ""
+        let rpcpassword = UserDefaults.standard.object(forKey: "rpcpassword") as? String ?? ""
+        switch chain {
+        case "main":
+            port = "8332"
+        case "test":
+            port = "18332"
+        case "regtest":
+            port = "18443"
+        case "signet":
+            port = "38332"
+        default:
+            break
+        }
+        rpc.command(method: "getblockchaininfo", port: port, user: rpcuser, password: rpcpassword) { [weak self] (response, error) in
+            guard let self = self else { return }
+            
+            if error == nil {
+                simpleAlert(message: "Bitcoin Core is running!", info: "You must shutdown Bitcoin Core before using this kill switch.", buttonLabel: "OK")
+            } else if let error = error {
+                switch error {
+                case _ where error.contains("Could not connect to the server"):
+                    DispatchQueue.main.async { [unowned vc = self] in
+                        destructiveActionAlert(message: "Danger! Master kill switch!", info: "This action PERMANENTLY, IMMEDIATELY and IRREVERSIBLY deletes ALL WALLETS, Bitcoin Core binaries, and Gordian Server Tor related files and directories!") { response in
+                            if response {
+                                TorClient.sharedInstance.resign()
+                                let d = Defaults()
+                                let env = ["DATADIR":d.dataDir()]
+                                vc.runScript(script: .removeBitcoin, env: env, args: []) { success in
+                                    if success {
+                                        DispatchQueue.main.async { [weak self] in
+                                            guard let self = self else { return }
+                                            
+                                            guard let appDelegate = NSApplication.shared.delegate as? AppDelegate else { return }
+                                            appDelegate.isKilling = true
+                                            NSApp.terminate(self)
+                                        }
+                                    } else {
+                                       simpleAlert(message: "Error", info: "There was an issue deleting the directory", buttonLabel: "OK")
+                                    }
+                                }
+                            }
                         }
                     }
+                default:
+                    simpleAlert(message: "Bitcoin Core is running!", info: "You must shutdown Bitcoin Core before using this kill switch.", buttonLabel: "OK")
                 }
             }
         }

@@ -73,6 +73,7 @@ function configureBitcoin () {
   fi
 
   echo "$CONF" > bitcoin.conf
+  exit 1
 }
 
 setUpGordianDir

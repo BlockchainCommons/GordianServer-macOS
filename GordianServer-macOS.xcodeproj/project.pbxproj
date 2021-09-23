@@ -51,7 +51,6 @@
 		D0B927782383E59700956651 /* UpgradeBitcoin.command in Resources */ = {isa = PBXBuildFile; fileRef = D0B927772383E59700956651 /* UpgradeBitcoin.command */; };
 		D0B9277A2383F8D400956651 /* CheckForBitcoinCore.command in Resources */ = {isa = PBXBuildFile; fileRef = D0B927792383F8D400956651 /* CheckForBitcoinCore.command */; };
 		D0B9277E2383FCD000956651 /* StopBitcoin.command in Resources */ = {isa = PBXBuildFile; fileRef = D0B9277D2383FCD000956651 /* StopBitcoin.command */; };
-		D0B9278023840D3C00956651 /* IsBitcoinOn.command in Resources */ = {isa = PBXBuildFile; fileRef = D0B9277F23840D3C00956651 /* IsBitcoinOn.command */; };
 		D0B9278A2384E54900956651 /* RemoveBitcoin.command in Resources */ = {isa = PBXBuildFile; fileRef = D0B927892384E54900956651 /* RemoveBitcoin.command */; };
 		D0B9278C2385045400956651 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B9278B2385045400956651 /* Log.swift */; };
 		D0BCB333236A6D22000D8FDE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BCB332236A6D22000D8FDE /* AppDelegate.swift */; };
@@ -168,7 +167,6 @@
 		D0B927772383E59700956651 /* UpgradeBitcoin.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = UpgradeBitcoin.command; sourceTree = "<group>"; };
 		D0B927792383F8D400956651 /* CheckForBitcoinCore.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = CheckForBitcoinCore.command; sourceTree = "<group>"; };
 		D0B9277D2383FCD000956651 /* StopBitcoin.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = StopBitcoin.command; sourceTree = "<group>"; };
-		D0B9277F23840D3C00956651 /* IsBitcoinOn.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = IsBitcoinOn.command; sourceTree = "<group>"; };
 		D0B927892384E54900956651 /* RemoveBitcoin.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = RemoveBitcoin.command; sourceTree = "<group>"; };
 		D0B9278B2385045400956651 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		D0BCB32F236A6D22000D8FDE /* GordianServer-macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "GordianServer-macOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -299,7 +297,6 @@
 				D0B927772383E59700956651 /* UpgradeBitcoin.command */,
 				D0B927792383F8D400956651 /* CheckForBitcoinCore.command */,
 				D0B9277D2383FCD000956651 /* StopBitcoin.command */,
-				D0B9277F23840D3C00956651 /* IsBitcoinOn.command */,
 				D0B927892384E54900956651 /* RemoveBitcoin.command */,
 				D0E74F2223B6A527008B1EC5 /* CheckStandUp.command */,
 				D0760105247DFEF200706F70 /* Strap.command */,
@@ -572,7 +569,6 @@
 				D0821043238AA78900E21EDC /* blockchaincommons.png in Resources */,
 				D01471A12371354700F64329 /* LaunchBitcoin.command in Resources */,
 				D0F613EE24892B680057CC93 /* RemoveOldHost.command in Resources */,
-				D0B9278023840D3C00956651 /* IsBitcoinOn.command in Resources */,
 				D06E3938236BE46E0072924A /* Settings.xib in Resources */,
 				D0760106247DFEF200706F70 /* Strap.command in Resources */,
 				D0A871CF237E4B9D006033C9 /* yes.png in Resources */,
