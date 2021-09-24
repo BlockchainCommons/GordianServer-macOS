@@ -1276,8 +1276,10 @@ class ViewController: NSViewController, NSWindowDelegate {
                 vc.upgrading = upgrading
                 vc.ignoreExistingBitcoin = ignoreExistingBitcoin
                 vc.strapping = strapping
-                timer?.invalidate()
-                timer = nil
+                if !isVerifying {
+                    timer?.invalidate()
+                    timer = nil
+                }
             }
 
         case "segueToWallets":
