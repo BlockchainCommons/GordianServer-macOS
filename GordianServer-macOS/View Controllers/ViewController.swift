@@ -105,36 +105,44 @@ class ViewController: NSViewController, NSWindowDelegate {
         self.view.window?.setFrame(frame, display: true)
         
         if isLoading {
-            if mgr?.state != .started && mgr?.state != .connected  {
-                mgr?.start(delegate: self)
-            }
+            //mgr?.resign()
             
-            if mgr?.state == .connected {
-                self.setTimer()
+            //DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                //guard let self = self else { return }
                 
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
+                if self.mgr?.state != .started && self.mgr?.state != .connected  {
+                    self.mgr?.start(delegate: self)
+                }
+                
+                if self.mgr?.state == .connected {
+                    self.setTimer()
                     
-                    self.torIsOn = true
-                    self.torVersionOutlet.stringValue = "v0.4.4.6"
-                    self.startTorOutlet.title = "Stop"
-                    self.startTorOutlet.isEnabled = true
-                    self.updateTorStatus(isOn: true)
-                    self.checkForGordian()
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        
+                        self.torIsOn = true
+                        self.torVersionOutlet.stringValue = "v0.4.4.6"
+                        self.startTorOutlet.title = "Stop"
+                        self.startTorOutlet.isEnabled = true
+                        self.updateTorStatus(isOn: true)
+                        self.checkForGordian()
+                    }
+                    
+                    guard let hostname = self.mgr?.rpcHostname() else {
+                        simpleAlert(message: "Tor config issue.", info: "There was an issue fetching your nodes hidden service address. Your node may not be remotely reachable.", buttonLabel: "OK")
+                        return
+                    }
+                    
+                    self.torConfigured = true
+                    
+                    #if DEBUG
+                    print("hostname: \(hostname)")
+                    #endif
                 }
-                
-                guard let hostname = mgr?.rpcHostname() else {
-                    simpleAlert(message: "Tor config issue.", info: "There was an issue fetching your nodes hidden service address. Your node may not be remotely reachable.", buttonLabel: "OK")
-                    return
-                }
-                
-                self.torConfigured = true
-                
-                #if DEBUG
-                print("hostname: \(hostname)")
-                #endif
-            }
+            //}
         }
+        
+        
     }
     
     func windowShouldClose(_ sender: NSWindow) -> Bool {
@@ -1215,10 +1223,6 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
     }
 
-    private func strap() {
-        runScript(script: .launchStrap)
-    }
-    
     private func installXcodeCLTools() {
         runScript(script: .installXcode)
     }

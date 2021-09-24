@@ -28,16 +28,17 @@ function verifySigs() {
   fi
 }
 
-if [ -d ~/.gordian/BitcoinCore ]; then
-
-  verifySigs
-
-else
-
-  echo "No ~/.gordian/BitcoinCore directory"
-
+  if [[ $(command -v /usr/local/bin/gpg) == "" ]]; then
+     echo "GPG NOT INSTALLED, UNABLE TO VERIFY SIGNATURES!"
+     echo "Go to https://gpgtools.org to install GPG on your machine."
+     exit 1
+  else
+     if [ -d ~/.gordian/BitcoinCore ]; then
+       verifySigs
+     else
+       echo "No ~/.gordian/BitcoinCore directory"
+       exit 1
+     fi
 fi
-
-exit 1
 
 
