@@ -30,7 +30,7 @@ function verifySigs() {
 
   if [[ $(command -v /usr/local/bin/gpg) == "" ]]; then
      echo "GPG NOT INSTALLED, UNABLE TO VERIFY SIGNATURES!"
-     echo "Go to https://gpgtools.org to install GPG on your machine."
+     echo "Click the Supported Apps menu item and GPG Suite to install GPG."
      exit 1
   else
      if [ -d ~/.gordian/BitcoinCore ]; then

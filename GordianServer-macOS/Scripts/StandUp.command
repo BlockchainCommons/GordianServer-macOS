@@ -56,7 +56,8 @@ function installBitcoin () {
 function verifySigs() {
   if [[ $(command -v /usr/local/bin/gpg) == "" ]]; then
     echo "GPG NOT INSTALLED, UNABLE TO VERIFY SIGNAURES!"
-    echo "Go to https://gpgtools.org to install GPG on your machine."
+    echo "To install GPG click Supported Apps in the menu and GPG Suite, signature verification can be done later."
+    curl https://raw.githubusercontent.com/bitcoin/bitcoin/master/contrib/builder-keys/keys.txt -o ~/.gordian/BitcoinCore/keys.txt
     echo "Unpacking $BINARY_NAME"
     tar -zxvf $BINARY_NAME
     configureBitcoin
