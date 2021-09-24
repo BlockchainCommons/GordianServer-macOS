@@ -97,6 +97,11 @@ class ViewController: NSViewController, NSWindowDelegate {
         self.view.window?.delegate = self
         self.view.window?.minSize = NSSize(width: 544, height: 568)
     }
+    
+    override func viewWillDisappear() {
+        timer?.invalidate()
+        timer = nil
+    }
 
     override func viewDidAppear() {
         var frame = self.view.window!.frame
@@ -105,41 +110,35 @@ class ViewController: NSViewController, NSWindowDelegate {
         self.view.window?.setFrame(frame, display: true)
         
         if isLoading {
-            //mgr?.resign()
+            if self.mgr?.state != .started && self.mgr?.state != .connected  {
+                self.mgr?.start(delegate: self)
+            }
             
-            //DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-                //guard let self = self else { return }
+            if self.mgr?.state == .connected {
+                self.setTimer()
                 
-                if self.mgr?.state != .started && self.mgr?.state != .connected  {
-                    self.mgr?.start(delegate: self)
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    
+                    self.torIsOn = true
+                    self.torVersionOutlet.stringValue = "v0.4.4.6"
+                    self.startTorOutlet.title = "Stop"
+                    self.startTorOutlet.isEnabled = true
+                    self.updateTorStatus(isOn: true)
+                    self.checkForGordian()
                 }
                 
-                if self.mgr?.state == .connected {
-                    self.setTimer()
-                    
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
-                        
-                        self.torIsOn = true
-                        self.torVersionOutlet.stringValue = "v0.4.4.6"
-                        self.startTorOutlet.title = "Stop"
-                        self.startTorOutlet.isEnabled = true
-                        self.updateTorStatus(isOn: true)
-                        self.checkForGordian()
-                    }
-                    
-                    guard let hostname = self.mgr?.rpcHostname() else {
-                        simpleAlert(message: "Tor config issue.", info: "There was an issue fetching your nodes hidden service address. Your node may not be remotely reachable.", buttonLabel: "OK")
-                        return
-                    }
-                    
-                    self.torConfigured = true
-                    
-                    #if DEBUG
-                    print("hostname: \(hostname)")
-                    #endif
+                guard let hostname = self.mgr?.rpcHostname() else {
+                    simpleAlert(message: "Tor config issue.", info: "There was an issue fetching your nodes hidden service address. Your node may not be remotely reachable.", buttonLabel: "OK")
+                    return
                 }
-            //}
+                
+                self.torConfigured = true
+                
+                #if DEBUG
+                print("hostname: \(hostname)")
+                #endif
+            }
         }
         
         
