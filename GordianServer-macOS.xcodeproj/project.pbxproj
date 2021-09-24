@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A2FE80126FD7A1B00B18859 /* LaunchBrewInstall.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A2FE80026FD7A1B00B18859 /* LaunchBrewInstall.command */; };
+		0A2FE80326FD7A4C00B18859 /* InstallBrew.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A2FE80226FD7A4C00B18859 /* InstallBrew.command */; };
 		0A92AE3F26F75E310034B7B4 /* OpenFile.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A92AE3E26F75E310034B7B4 /* OpenFile.command */; };
 		0A92AE4126F761260034B7B4 /* StartBitcoin.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A92AE4026F761260034B7B4 /* StartBitcoin.command */; };
 		0A92AE4326F81F490034B7B4 /* InstallXcode.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A92AE4226F81F490034B7B4 /* InstallXcode.command */; };
@@ -122,6 +124,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0A2FE80026FD7A1B00B18859 /* LaunchBrewInstall.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = LaunchBrewInstall.command; sourceTree = "<group>"; };
+		0A2FE80226FD7A4C00B18859 /* InstallBrew.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = InstallBrew.command; sourceTree = "<group>"; };
 		0A92AE3E26F75E310034B7B4 /* OpenFile.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = OpenFile.command; sourceTree = "<group>"; };
 		0A92AE4026F761260034B7B4 /* StartBitcoin.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = StartBitcoin.command; sourceTree = "<group>"; };
 		0A92AE4226F81F490034B7B4 /* InstallXcode.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = InstallXcode.command; sourceTree = "<group>"; };
@@ -316,6 +320,8 @@
 				0A92AE4026F761260034B7B4 /* StartBitcoin.command */,
 				0A92AE4226F81F490034B7B4 /* InstallXcode.command */,
 				0A92AE4426F822090034B7B4 /* LaunchXcodeInstall.command */,
+				0A2FE80026FD7A1B00B18859 /* LaunchBrewInstall.command */,
+				0A2FE80226FD7A4C00B18859 /* InstallBrew.command */,
 			);
 			path = Scripts;
 			sourceTree = "<group>";
@@ -556,6 +562,8 @@
 				D0DCD8812508BAF100243916 /* InstallLightning.command in Resources */,
 				D042FAB8250B521B00E99D9B /* GetLightningHostname.command in Resources */,
 				D049E89E237BD09200294E70 /* StandDown.command in Resources */,
+				0A2FE80126FD7A1B00B18859 /* LaunchBrewInstall.command in Resources */,
+				0A2FE80326FD7A4C00B18859 /* InstallBrew.command in Resources */,
 				D0B9277E2383FCD000956651 /* StopBitcoin.command in Resources */,
 				D0C9439E2500C5AA00DF7339 /* RPC.command in Resources */,
 				0A92AE4526F822090034B7B4 /* LaunchXcodeInstall.command in Resources */,

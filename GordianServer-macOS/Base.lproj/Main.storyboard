@@ -173,6 +173,18 @@
                                                 <action selector="fullyNodedClicked:" target="Voe-Tx-rLC" id="sIS-TY-DrN"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="GPG Suite" id="KrK-O9-GRD">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="installGpgAction:" target="Voe-Tx-rLC" id="gxS-h6-SgE"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Homebrew" id="feo-jd-W9P" userLabel="Homebrew">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="installHomebrewAction:" target="Voe-Tx-rLC" id="2hP-IC-aXT"/>
+                                            </connections>
+                                        </menuItem>
                                     </items>
                                 </menu>
                             </menuItem>

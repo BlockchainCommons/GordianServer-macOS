@@ -13,6 +13,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     public var isKilling = false
     
+    @IBAction func installHomebrewAction(_ sender: Any) {
+        runScript(script: .installHomebrew, env: ["":""], args: []) { _ in }
+    }
+    
+    @IBAction func installGpgAction(_ sender: Any) {
+        DispatchQueue.main.async {
+            guard let url = URL(string: "https://gpgtools.org") else { return }
+            NSWorkspace.shared.open(url)
+        }
+    }
+    
     @IBAction func gordianSeedToolClicked(_ sender: Any) {
         do {
             let filePaths = try FileManager.default.contentsOfDirectory(atPath: "/Applications")
