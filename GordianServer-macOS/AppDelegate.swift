@@ -136,7 +136,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func quitBitcoin() {
         let chain = UserDefaults.standard.string(forKey: "chain") ?? "main"
-        runScript(script: .stopBitcoin, env: ["CHAIN":chain, "PREFIX":Defaults().existingPrefix], args: []) { _ in
+        runScript(script: .stopBitcoin, env: ["CHAIN":chain, "PREFIX":Defaults.shared.existingPrefix], args: []) { _ in
             TorClient.sharedInstance.resign()
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                 NSApplication.shared.reply(toApplicationShouldTerminate: true)
@@ -206,14 +206,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @IBAction func bitcoinCoreConfClicked(_ sender: Any) {
-        let d = Defaults()
+        let d = Defaults.shared
         let path = d.dataDir
         let env = ["FILE":"\(path)/bitcoin.conf"]
         runScript(script: .openFile, env: env, args: []) { _ in }
     }
     
     @IBAction func bitcoinCoreLogClicked(_ sender: Any) {
-        let d = Defaults()
+        let d = Defaults.shared
         let path = d.dataDir
         
         let chain = UserDefaults.standard.string(forKey: "chain") ?? "main"

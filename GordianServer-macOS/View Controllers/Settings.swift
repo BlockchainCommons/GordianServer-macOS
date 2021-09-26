@@ -33,7 +33,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         pruneValueField.delegate = self
-        let d = Defaults()
+        let d = Defaults.shared
         d.setDefaults() { [unowned vc = self] in
             vc.getSettings()
         }
@@ -49,6 +49,10 @@ class Settings: NSViewController, NSTextFieldDelegate {
     @IBAction func autoRefreshAction(_ sender: Any) {
         let value = autoRefreshOutlet.state
         UserDefaults.standard.setValue((value == .on), forKey: "autoRefresh")
+        
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
+        }
     }
     
     @IBAction func didSelectAutoStart(_ sender: Any) {
@@ -228,7 +232,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
                         destructiveActionAlert(message: "Danger! Master kill switch!", info: "This action PERMANENTLY, IMMEDIATELY and IRREVERSIBLY deletes ALL WALLETS, Bitcoin Core binaries, and Gordian Server Tor related files and directories!") { response in
                             if response {
                                 TorClient.sharedInstance.resign()
-                                let d = Defaults()
+                                let d = Defaults.shared
                                 let env = ["DATADIR":d.dataDir]
                                 vc.runScript(script: .removeBitcoin, env: env, args: []) { success in
                                     if success {
@@ -288,7 +292,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
             if result.rawValue == NSApplication.ModalResponse.OK.rawValue {
                 vc.selectedFolder = panel.urls[0]
                 DispatchQueue.main.async { [unowned vc = self] in
-                    vc.directoryLabel.stringValue = self.selectedFolder?.path ?? Defaults().blocksDir
+                    vc.directoryLabel.stringValue = self.selectedFolder?.path ?? Defaults.shared.blocksDir
                     
                     self.getBitcoinConf { [unowned vc = self] (conf, error) in
                         if !error && conf != nil {
@@ -326,7 +330,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
     }
     
     func setBitcoinConf(conf: String, activeOutlet: NSButton?, newValue: Int, key: String) {
-        let d = Defaults()
+        let d = Defaults.shared
         let env = ["CONF":conf,"DATADIR":d.dataDir]
         runScript(script: .updateBTCConf, env: env, args: args) { [unowned vc = self] success in
             if success {
@@ -341,7 +345,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
     }
     
     func setBlocksDir(conf: String, newValue: String) {
-        let d = Defaults()
+        let d = Defaults.shared
         let env = ["CONF":conf,"DATADIR":d.dataDir]
         runScript(script: .updateBTCConf, env: env, args: args) { [weak self] success in
             guard let self = self else { return }
@@ -455,7 +459,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
     }
     
     func getSettings() {
-        let d = Defaults()
+        let d = Defaults.shared
         let pruneValue = d.prune
         setState(int: d.txindex, outlet: txIndexOutlet)
         setState(int: d.walletdisabled, outlet: walletDisabled)

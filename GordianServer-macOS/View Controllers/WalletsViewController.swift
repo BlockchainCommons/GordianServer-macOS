@@ -16,7 +16,7 @@ class WalletsViewController: NSViewController, NSTableViewDelegate, NSTableViewD
     var env = [String:String]()
     var index = 0
     var chain = UserDefaults.standard.object(forKey: "chain") as? String ?? "main"
-    let d = Defaults()
+    let d = Defaults.shared
     @IBOutlet weak var tableView: NSTableView!
     @IBOutlet weak var spinner: NSProgressIndicator!
     

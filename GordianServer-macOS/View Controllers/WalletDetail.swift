@@ -11,7 +11,7 @@ import Cocoa
 class WalletDetail: NSViewController {
     
     var env = [String:String]()
-    var d = Defaults()
+    var d = Defaults.shared
     var name = ""
     var window: NSWindow?
 

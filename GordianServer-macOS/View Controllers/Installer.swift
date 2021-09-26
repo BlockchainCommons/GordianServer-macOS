@@ -279,7 +279,7 @@ class Installer: NSViewController {
         if ignoreExistingBitcoin {
             ignore = "YES"
         }
-        let d = Defaults()
+        let d = Defaults.shared
         showLog = true
         let env = ["BINARY_NAME":binaryName, "MACOS_URL":macosURL, "SHA_URL":shaURL, "VERSION":version, "PREFIX":prefix, "CONF":standUpConf, "DATADIR":d.dataDir, "IGNORE_EXISTING_BITCOIN":ignore, "SIGS_URL": sigsUrl]
         let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)

@@ -11,7 +11,7 @@ import Foundation
 class BitcoinConf {
     
     static func bitcoinConf() -> String {
-        let d = Defaults()
+        let d = Defaults.shared
         let prune = d.prune
         let txindex = d.txindex
         let walletDisabled = d.walletdisabled

@@ -10,6 +10,9 @@ import Foundation
 
 class Defaults {
     
+    static let shared = Defaults()
+    private init() {}
+    
     private func getBitcoinConf(completion: @escaping ((conf: [String]?, error: Bool)) -> Void) {
         let path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/bitcoin.conf")
         

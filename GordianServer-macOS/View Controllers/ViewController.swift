@@ -69,7 +69,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     var isVerifying = false
     var regTestOn = false
     var env = [String:String]()
-    let d = Defaults()
+    let d = Defaults.shared
     var infoMessage = ""
     var headerText = ""
     var installingTor = false
@@ -201,7 +201,11 @@ class ViewController: NSViewController, NSWindowDelegate {
     }    
 
     @objc func refreshNow() {
-        checkForGordian()
+        d.setDefaults { [weak self] in
+            guard let self = self else { return }
+            
+            self.checkForGordian()
+        }
     }
 
     private func checkForBitcoinUpdate() {
@@ -1072,6 +1076,9 @@ class ViewController: NSViewController, NSWindowDelegate {
                 self.timer?.invalidate()
                 self.timer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(self.automaticRefresh), userInfo: nil, repeats: true)
             }
+        } else {
+            self.timer?.invalidate()
+            self.timer = nil
         }
     }
 
