@@ -28,6 +28,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
     @IBOutlet var txIndexOutlet: NSButton!
     @IBOutlet var goPrivateOutlet: NSButton!
     @IBOutlet weak var refreshButtonOutlet: NSButton!
+    @IBOutlet weak var autoRefreshOutlet: NSButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,6 +46,10 @@ class Settings: NSViewController, NSTextFieldDelegate {
     
     // MARK: User Actions
     
+    @IBAction func autoRefreshAction(_ sender: Any) {
+        let value = autoRefreshOutlet.state
+        UserDefaults.standard.setValue((value == .on), forKey: "autoRefresh")
+    }
     
     @IBAction func didSelectAutoStart(_ sender: Any) {
         let value = autoStartOutlet.state
@@ -224,7 +229,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
                             if response {
                                 TorClient.sharedInstance.resign()
                                 let d = Defaults()
-                                let env = ["DATADIR":d.dataDir()]
+                                let env = ["DATADIR":d.dataDir]
                                 vc.runScript(script: .removeBitcoin, env: env, args: []) { success in
                                     if success {
                                         DispatchQueue.main.async { [weak self] in
@@ -283,7 +288,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
             if result.rawValue == NSApplication.ModalResponse.OK.rawValue {
                 vc.selectedFolder = panel.urls[0]
                 DispatchQueue.main.async { [unowned vc = self] in
-                    vc.directoryLabel.stringValue = self.selectedFolder?.path ?? Defaults().blocksDir()
+                    vc.directoryLabel.stringValue = self.selectedFolder?.path ?? Defaults().blocksDir
                     
                     self.getBitcoinConf { [unowned vc = self] (conf, error) in
                         if !error && conf != nil {
@@ -322,7 +327,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
     
     func setBitcoinConf(conf: String, activeOutlet: NSButton?, newValue: Int, key: String) {
         let d = Defaults()
-        let env = ["CONF":conf,"DATADIR":d.dataDir()]
+        let env = ["CONF":conf,"DATADIR":d.dataDir]
         runScript(script: .updateBTCConf, env: env, args: args) { [unowned vc = self] success in
             if success {
                 if newValue < 2 || key == "prune" {
@@ -337,7 +342,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
     
     func setBlocksDir(conf: String, newValue: String) {
         let d = Defaults()
-        let env = ["CONF":conf,"DATADIR":d.dataDir()]
+        let env = ["CONF":conf,"DATADIR":d.dataDir]
         runScript(script: .updateBTCConf, env: env, args: args) { [weak self] success in
             guard let self = self else { return }
             
@@ -451,20 +456,26 @@ class Settings: NSViewController, NSTextFieldDelegate {
     
     func getSettings() {
         let d = Defaults()
-        let pruneValue = d.prune()
-        setState(int: d.txindex(), outlet: txIndexOutlet)
-        setState(int: d.walletdisabled(), outlet: walletDisabled)
-        setState(int: d.isPrivate(), outlet: goPrivateOutlet)
+        let pruneValue = d.prune
+        setState(int: d.txindex, outlet: txIndexOutlet)
+        setState(int: d.walletdisabled, outlet: walletDisabled)
+        setState(int: d.isPrivate, outlet: goPrivateOutlet)
         
-        if d.autoStart() {
+        if d.autoStart {
             setState(int: 1, outlet: autoStartOutlet)
         } else {
             setState(int: 0, outlet: autoStartOutlet)
         }
         
+        if d.autoRefresh {
+            setState(int: 1, outlet: autoRefreshOutlet)
+        } else {
+            setState(int: 0, outlet: autoRefreshOutlet)
+        }
+        
         if ud.object(forKey: "dataDir") != nil {
             DispatchQueue.main.async { [unowned vc = self] in
-                vc.directoryLabel.stringValue = d.blocksDir()
+                vc.directoryLabel.stringValue = d.blocksDir
             }
         }
         DispatchQueue.main.async { [weak self] in

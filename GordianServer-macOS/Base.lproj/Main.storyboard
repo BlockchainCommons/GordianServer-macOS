@@ -1306,14 +1306,14 @@
             <objects>
                 <viewController title="segueToWallets" storyboardIdentifier="Settings" id="mY6-pf-cJ7" customClass="Settings" customModule="GordianServer_macOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="NdO-VV-y8O">
-                        <rect key="frame" x="0.0" y="0.0" width="418" height="251"/>
+                        <rect key="frame" x="0.0" y="0.0" width="418" height="270"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="10" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ipZ-DW-tbb">
-                                <rect key="frame" x="20" y="80" width="150" height="151"/>
+                                <rect key="frame" x="20" y="73" width="150" height="177"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="U4W-f9-hMb">
-                                        <rect key="frame" x="-2" y="135" width="109" height="16"/>
+                                        <rect key="frame" x="-2" y="161" width="109" height="16"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Prune Value (mb)" id="YKA-zt-TP3">
                                             <font key="font" metaFont="message"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1321,7 +1321,7 @@
                                         </textFieldCell>
                                     </textField>
                                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="m7e-xa-P8l">
-                                        <rect key="frame" x="0.0" y="104" width="96" height="21"/>
+                                        <rect key="frame" x="0.0" y="130" width="96" height="21"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="Mlo-Pf-0va">
                                             <font key="font" usesAppearanceFont="YES"/>
                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -1329,7 +1329,7 @@
                                         </textFieldCell>
                                     </textField>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="uMK-KT-7YU">
-                                        <rect key="frame" x="-2" y="77" width="70" height="18"/>
+                                        <rect key="frame" x="-2" y="103" width="70" height="18"/>
                                         <buttonCell key="cell" type="check" title="txindex" bezelStyle="regularSquare" imagePosition="left" inset="2" id="yWX-Mi-W1P">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="system"/>
@@ -1339,7 +1339,7 @@
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="e28-lY-Luw">
-                                        <rect key="frame" x="-2" y="51" width="87" height="18"/>
+                                        <rect key="frame" x="-2" y="77" width="87" height="18"/>
                                         <buttonCell key="cell" type="check" title="go private" bezelStyle="regularSquare" imagePosition="left" inset="2" id="L3J-mZ-hBc">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="system"/>
@@ -1349,7 +1349,7 @@
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="H4u-my-R0l">
-                                        <rect key="frame" x="-2" y="25" width="117" height="18"/>
+                                        <rect key="frame" x="-2" y="51" width="117" height="18"/>
                                         <buttonCell key="cell" type="check" title="wallet disabled" bezelStyle="regularSquare" imagePosition="left" inset="2" id="fm4-Sp-NJA">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="system"/>
@@ -1359,13 +1359,23 @@
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="B0p-hM-5Na">
-                                        <rect key="frame" x="-2" y="-1" width="152" height="18"/>
+                                        <rect key="frame" x="-2" y="25" width="152" height="18"/>
                                         <buttonCell key="cell" type="check" title="start bitcoin on open" bezelStyle="regularSquare" imagePosition="left" inset="2" id="oyL-ji-G2K">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="didSelectAutoStart:" target="mY6-pf-cJ7" id="O9p-EW-YyH"/>
+                                        </connections>
+                                    </button>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="uU7-em-Vpb">
+                                        <rect key="frame" x="-2" y="-1" width="100" height="18"/>
+                                        <buttonCell key="cell" type="check" title="auto refresh" bezelStyle="regularSquare" imagePosition="left" inset="2" id="kYU-XY-FsO">
+                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="autoRefreshAction:" target="mY6-pf-cJ7" id="G2N-sG-6eV"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -1376,8 +1386,10 @@
                                     <integer value="1000"/>
                                     <integer value="1000"/>
                                     <integer value="1000"/>
+                                    <integer value="1000"/>
                                 </visibilityPriorities>
                                 <customSpacing>
+                                    <real value="3.4028234663852886e+38"/>
                                     <real value="3.4028234663852886e+38"/>
                                     <real value="3.4028234663852886e+38"/>
                                     <real value="3.4028234663852886e+38"/>
@@ -1419,10 +1431,10 @@
                                 <rect key="frame" x="309" y="22" width="0.0" height="0.0"/>
                             </stackView>
                             <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iWM-Px-J16">
-                                <rect key="frame" x="276" y="190" width="96" height="41"/>
+                                <rect key="frame" x="276" y="190" width="96" height="60"/>
                                 <subviews>
                                     <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="5" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o4N-yv-dtg">
-                                        <rect key="frame" x="0.0" y="0.0" width="96" height="41"/>
+                                        <rect key="frame" x="0.0" y="19" width="96" height="41"/>
                                         <subviews>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1fo-RR-AkI">
                                                 <rect key="frame" x="-2" y="25" width="70" height="16"/>
@@ -1511,6 +1523,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="autoRefreshOutlet" destination="uU7-em-Vpb" id="mGY-bQ-iYw"/>
                         <outlet property="autoStartOutlet" destination="B0p-hM-5Na" id="Cyc-K3-H99"/>
                         <outlet property="directoryLabel" destination="0cQ-HR-WIM" id="QAr-Tz-hyK"/>
                         <outlet property="goPrivateOutlet" destination="e28-lY-Luw" id="10A-GQ-gto"/>
@@ -1524,7 +1537,7 @@
                 </viewController>
                 <customObject id="UGA-2H-5l6" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="781" y="755.5"/>
+            <point key="canvasLocation" x="781" y="765"/>
         </scene>
         <!--Add Authentication-->
         <scene sceneID="GLN-ED-BZ5">
@@ -1725,7 +1738,7 @@ Gw
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="Mv4-Eu-EeQ"/>
-        <segue reference="cqP-Ve-rOY"/>
+        <segue reference="Yel-Hw-wBk"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="NSActionTemplate" width="15" height="15"/>

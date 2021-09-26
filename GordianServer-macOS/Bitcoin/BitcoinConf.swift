@@ -12,9 +12,9 @@ class BitcoinConf {
     
     static func bitcoinConf() -> String {
         let d = Defaults()
-        let prune = d.prune()
-        let txindex = d.txindex()
-        let walletDisabled = d.walletdisabled()
+        let prune = d.prune
+        let txindex = d.txindex
+        let walletDisabled = d.walletdisabled
         let rpcpassword = randomString(length: 32)
         let rpcuser = randomString(length: 10)
         
@@ -25,11 +25,11 @@ class BitcoinConf {
         server=1
         prune=\(prune)
         txindex=\(txindex)
-        dbcache=\(optimumCache())
+        dbcache=\(optimumCache)
         maxconnections=20
         maxuploadtarget=500
         fallbackfee=0.00009
-        blocksdir=\(d.blocksDir())
+        blocksdir=\(d.blocksDir)
         proxy=127.0.0.1:19150
         listen=1
         discover=1
@@ -56,7 +56,7 @@ class BitcoinConf {
         """
     }
     
-    static func optimumCache() -> Int {
+    static var optimumCache: Int {
         /// Converts devices ram to gb, divides it by two and converts that to mebibytes. That way we use half the RAM for IBD cache as a reasonable default.
         return Int(((Double(ProcessInfo.processInfo.physicalMemory) / 1073741824.0) / 2.0) * 954.0)
     }

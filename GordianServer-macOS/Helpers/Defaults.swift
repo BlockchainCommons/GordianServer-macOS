@@ -25,9 +25,6 @@ class Defaults {
     let ud = UserDefaults.standard
     
     func setDefaults(completion: @escaping () -> Void) {
-//        if ud.object(forKey: "dataDir") == nil {
-//            ud.set("/Users/\(NSUserName())/Library/Application\\ Support/Bitcoin", forKey: "dataDir")
-//        }
         
         func setLocals() {
             if ud.object(forKey: "prune") == nil {
@@ -125,48 +122,52 @@ class Defaults {
         }
     }
     
-    func autoStart() -> Bool {
+    var autoRefresh: Bool {
+        return ud.object(forKey: "autoRefresh") as? Bool ?? true
+    }
+    
+    var autoStart: Bool {
         return ud.object(forKey: "autoStart") as? Bool ?? true
     }
     
-    func dataDir() -> String {
+    var dataDir: String {
         return "/Users/\(NSUserName())/Library/Application Support/Bitcoin"
     }
     
-    func blocksDir() -> String {
+    var blocksDir: String {
         return ud.object(forKey: "blocksDir") as? String ?? "/Users/\(NSUserName())/Library/Application Support/Bitcoin"
     }
     
-    func isPrivate() -> Int {
+    var isPrivate: Int {
         return ud.object(forKey: "isPrivate") as? Int ?? 0
     }
     
-    func prune() -> Int {
+    var prune: Int {
         return ud.object(forKey:"prune") as? Int ?? 1000
     }
     
-    func txindex() -> Int {
+    var txindex: Int {
         return ud.object(forKey: "txindex") as? Int ?? 0
     }
     
-    func walletdisabled() -> Int {
+    var walletdisabled: Int {
         return ud.object(forKey: "disablewallet") as? Int ?? 0
     }
     
-    func setDataDir(value: String) {
-        ud.set(value, forKey: "dataDir")
-    }
+//    func setDataDir(value: String) {
+//        ud.set(value, forKey: "dataDir")
+//    }
     
-    func existingVersion() -> String {
+    var existingVersion: String {
         return ud.object(forKey: "version") as? String ?? "22.0"
     }
     
-    func existingBinary() -> String {
-        return ud.object(forKey: "macosBinary") as? String ?? "bitcoin-\(existingVersion())-osx64.tar.gz"
+    var existingBinary: String {
+        return ud.object(forKey: "macosBinary") as? String ?? "bitcoin-\(existingVersion)-osx64.tar.gz"
     }
     
-    func existingPrefix() -> String {
-        return ud.object(forKey: "binaryPrefix") as? String ?? "bitcoin-\(existingVersion())"
+    var existingPrefix: String {
+        return ud.object(forKey: "binaryPrefix") as? String ?? "bitcoin-\(existingVersion)"
     }
 
 }

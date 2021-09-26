@@ -109,6 +109,8 @@ class ViewController: NSViewController, NSWindowDelegate {
         frame.size = initialSize
         self.view.window?.setFrame(frame, display: true)
         
+        d.setDefaults {}
+        
         if isLoading {
             if self.mgr?.state != .started && self.mgr?.state != .connected  {
                 self.mgr?.start(delegate: self)
@@ -139,9 +141,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                 print("hostname: \(hostname)")
                 #endif
             }
-        }
-        
-        
+        }        
     }
     
     func windowShouldClose(_ sender: NSWindow) -> Bool {
@@ -215,7 +215,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                 
                 if success {
                     self.setEnv()
-                    if self.currentVersion.contains(self.d.existingVersion()) {
+                    if self.currentVersion.contains(self.d.existingVersion) {
                         DispatchQueue.main.async { [weak self] in
                             guard let self = self else { return }
                             
@@ -443,9 +443,9 @@ class ViewController: NSViewController, NSWindowDelegate {
 
                 // Installing from scratch, however user may have gone into settings and changed some things so we need to check for that.
                 func standup() {
-                    let pruned = self.d.prune()
-                    let txindex = self.d.txindex()
-                    let directory = self.d.dataDir()
+                    let pruned = self.d.prune
+                    let txindex = self.d.txindex
+                    let directory = self.d.dataDir
                     let pruneInGb = Double(pruned) / 954.0
                     let rounded = Double(round(100 * pruneInGb) / 100)
 
@@ -882,7 +882,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                     self.bitcoinIsOff()
                     self.showBitcoinLog()
                     
-                    if self.d.autoStart() && self.isLoading {
+                    if self.d.autoStart && self.isLoading {
                         self.addSpinnerDesc("starting \(self.chain)...")
                         self.runScript(script: .startBitcoin)
                     } else {
@@ -1065,11 +1065,13 @@ class ViewController: NSViewController, NSWindowDelegate {
     //MARK: User Inteface
 
     func setTimer() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            
-            self.timer?.invalidate()
-            self.timer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(self.automaticRefresh), userInfo: nil, repeats: true)
+        if d.autoRefresh {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                
+                self.timer?.invalidate()
+                self.timer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(self.automaticRefresh), userInfo: nil, repeats: true)
+            }
         }
     }
 
@@ -1079,7 +1081,7 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     func setEnv() {
         let chain = UserDefaults.standard.string(forKey: "chain") ?? "main"
-        env = ["BINARY_NAME":d.existingBinary(),"VERSION":d.existingPrefix(),"PREFIX":d.existingPrefix(),"DATADIR":d.dataDir(), "CHAIN": chain]
+        env = ["BINARY_NAME":d.existingBinary,"VERSION":d.existingPrefix,"PREFIX":d.existingPrefix,"DATADIR":d.dataDir, "CHAIN": chain]
         #if DEBUG
         print("env = \(env)")
         #endif

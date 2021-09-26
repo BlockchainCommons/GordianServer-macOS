@@ -38,7 +38,7 @@ class WalletDetail: NSViewController {
     }
     
     func setEnv() {
-        env = ["BINARY_NAME":d.existingBinary(),"VERSION":d.existingPrefix(),"PREFIX":d.existingPrefix(),"DATADIR":d.dataDir(), "WALLET":name]
+        env = ["BINARY_NAME":d.existingBinary,"VERSION":d.existingPrefix,"PREFIX":d.existingPrefix,"DATADIR":d.dataDir, "WALLET":name]
         #if DEBUG
         print("env = \(env)")
         #endif

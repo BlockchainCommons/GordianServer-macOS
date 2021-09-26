@@ -281,7 +281,7 @@ class Installer: NSViewController {
         }
         let d = Defaults()
         showLog = true
-        let env = ["BINARY_NAME":binaryName, "MACOS_URL":macosURL, "SHA_URL":shaURL, "VERSION":version, "PREFIX":prefix, "CONF":standUpConf, "DATADIR":d.dataDir(), "IGNORE_EXISTING_BITCOIN":ignore, "SIGS_URL": sigsUrl]
+        let env = ["BINARY_NAME":binaryName, "MACOS_URL":macosURL, "SHA_URL":shaURL, "VERSION":version, "PREFIX":prefix, "CONF":standUpConf, "DATADIR":d.dataDir, "IGNORE_EXISTING_BITCOIN":ignore, "SIGS_URL": sigsUrl]
         let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
         taskQueue.async { [weak self] in
             self?.run(script: .standUp, env: env) { log in
