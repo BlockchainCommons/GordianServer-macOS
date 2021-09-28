@@ -16,6 +16,7 @@ class AddAuthentication: NSViewController, NSWindowDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
+        
     }
     
     override func viewWillAppear() {
@@ -40,14 +41,12 @@ class AddAuthentication: NSViewController, NSWindowDelegate {
         }
     }
     
-    
     @IBAction func helpAction(_ sender: Any) {
         DispatchQueue.main.async {
             guard let url = URL(string: "https://community.torproject.org/onion-services/advanced/client-auth/") else { return }
             NSWorkspace.shared.open(url)
         }
     }
-    
     
     @IBAction func addAction(_ sender: Any) {
         if textInput.stringValue != "" {
@@ -65,14 +64,6 @@ class AddAuthentication: NSViewController, NSWindowDelegate {
             }
         } else {
             simpleAlert(message: "Fill out a public key first", info: "", buttonLabel: "OK")
-        }
-    }
-    
-    @IBAction func doNotAskAgainAction(_ sender: Any) {
-        DispatchQueue.main.async { [unowned vc = self] in
-            let ud = UserDefaults.standard
-            ud.set(true, forKey: "doNotAskForAuthAgain")
-            vc.window?.performClose(nil)
         }
     }
     
