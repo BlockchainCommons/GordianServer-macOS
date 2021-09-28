@@ -9,7 +9,7 @@
 import Foundation
 
 public enum SCRIPT: String {
-    case isBitcoinRunning = "IsProcessRunning"
+    case hasBitcoinShutdownCompleted, isBitcoindRunning = "IsProcessRunning"
     case installHomebrew = "LaunchBrewInstall"
     case installXcode = "LaunchXcodeInstall"
     case openFile = "OpenFile"
@@ -20,7 +20,7 @@ public enum SCRIPT: String {
     case standDown = "StandDown"
     case updateBTCConf = "UpdateBTCConf"
     case upgradeBitcoin = "UpgradeBitcoin"
-    case checkStandUp = "CheckStandUp"
+    case checkForGordian = "CheckStandUp"
     case checkXcodeSelect = "CheckXCodeSelect"
     case getStrapped = "Strap"
     case launchStrap = "LaunchStrap"

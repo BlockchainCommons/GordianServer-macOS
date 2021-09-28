@@ -364,7 +364,7 @@
                                                     <constraint firstAttribute="width" constant="16" id="HC2-aF-MrV"/>
                                                     <constraint firstAttribute="height" constant="20" id="tti-FK-oqU"/>
                                                 </constraints>
-                                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSStatusAvailable" id="dZG-SJ-M94"/>
+                                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSStatusNone" id="dZG-SJ-M94"/>
                                             </imageView>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="y6q-T1-byM">
                                                 <rect key="frame" x="36" y="314" width="125" height="28"/>
@@ -759,7 +759,7 @@
                                                     <constraint firstAttribute="width" constant="16" id="1Bi-Wc-AH5"/>
                                                     <constraint firstAttribute="height" constant="20" id="dah-kL-ZdT"/>
                                                 </constraints>
-                                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSStatusAvailable" id="Amy-lY-9Zx"/>
+                                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSStatusNone" id="Amy-lY-9Zx"/>
                                             </imageView>
                                             <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" ambiguous="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eeM-IX-v6E">
                                                 <rect key="frame" x="43" y="487" width="111" height="0.0"/>
@@ -1743,7 +1743,7 @@ Gw
     <resources>
         <image name="NSActionTemplate" width="15" height="15"/>
         <image name="NSLockLockedTemplate" width="14" height="15"/>
-        <image name="NSStatusAvailable" width="16" height="16"/>
+        <image name="NSStatusNone" width="16" height="16"/>
         <image name="arrow.clockwise" catalog="system" width="11" height="13"/>
         <image name="blockchaincommons" width="256" height="256"/>
         <image name="gearshape" catalog="system" width="16" height="16"/>

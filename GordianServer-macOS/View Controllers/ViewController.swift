@@ -46,7 +46,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     @IBOutlet weak var sizeOutlet: NSTextField!
     
     weak var mgr = TorClient.sharedInstance
-    var timer: Timer?
+    var autoRefreshTimer: Timer?
     var shutDownTimer: Timer?
     var chain = UserDefaults.standard.object(forKey: "chain") as? String ?? "main"
     var rpcpassword = ""
@@ -99,8 +99,8 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
     
     override func viewWillDisappear() {
-        timer?.invalidate()
-        timer = nil
+        autoRefreshTimer?.invalidate()
+        autoRefreshTimer = nil
     }
 
     override func viewDidAppear() {
@@ -117,7 +117,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             }
             
             if self.mgr?.state == .connected {
-                self.setTimer()
+                self.setAutoRefreshTimer()
                 
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
@@ -239,7 +239,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                                         guard let self = self else { return }
                                         
                                         self.upgrading = true
-                                        self.timer?.invalidate()
+                                        self.autoRefreshTimer?.invalidate()
                                         self.performSegue(withIdentifier: "goInstall", sender: self)
                                     }
                                 }
@@ -366,8 +366,8 @@ class ViewController: NSViewController, NSWindowDelegate {
             runScript(script: .startBitcoin)
         } else {
             addSpinnerDesc("stopping \(chain)...")
-            self.timer?.invalidate()
-            self.timer = nil
+            self.autoRefreshTimer?.invalidate()
+            self.autoRefreshTimer = nil
             runScript(script: .stopBitcoin)
         }
     }
@@ -408,7 +408,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                                     guard let self = self else { return }
                                     
                                     self.upgrading = true
-                                    self.timer?.invalidate()
+                                    self.autoRefreshTimer?.invalidate()
                                     self.performSegue(withIdentifier: "goInstall", sender: self)
                                 }
                             }
@@ -434,8 +434,8 @@ class ViewController: NSViewController, NSWindowDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
-            self.timer?.invalidate()
-            self.timer = nil
+            self.autoRefreshTimer?.invalidate()
+            self.autoRefreshTimer = nil
         }
         
         startSpinner(description: "Fetching latest Bitcoin Core version...")
@@ -579,35 +579,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             self.taskDescription.stringValue = "checking if bitcoin core is running..."
         }
         
-        command(command: "getblockchaininfo") { [weak self] response in
-            guard let self = self else { return }
-            
-            self.showBitcoinLog()
-            
-            guard let response = response as? [String:Any] else {
-                return
-            }
-            
-            self.setTimer()
-            
-            self.bitcoinRunning = true
-            
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                
-                let blockchainInfo = BlockchainInfo(response)
-                self.blocksOutlet.stringValue = "\(blockchainInfo.blocks)"
-                self.difficultyOutlet.stringValue = "\(blockchainInfo.difficulty.diffString)"
-                self.pruningOutlet.stringValue = "\(blockchainInfo.pruned)"
-                self.sizeOutlet.stringValue = "\(blockchainInfo.size_on_disk.size)"
-                
-                self.mainnetSyncedLabel.stringValue = blockchainInfo.verificationprogress.bitcoinCoreSyncStatus
-                self.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
-                self.startMainnetOutlet.title = "Stop"
-                self.startMainnetOutlet.isEnabled = true
-                self.getPeerInfo()
-            }
-        }
+        runScript(script: .isBitcoindRunning)
     }
 
     func checkBitcoindVersion() {
@@ -623,7 +595,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
-            self.taskDescription.stringValue = "getting rpc credentials..."
+            self.taskDescription.stringValue = "checking for default Bitcoin data directory..."
             
             let path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/bitcoin.conf")
             
@@ -676,7 +648,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             guard let self = self else { return }
             
             self.taskDescription.stringValue = "checking for ~/.gordian/BitcoinCore directory..."
-            self.runScript(script: .checkStandUp)
+            self.runScript(script: .checkForGordian)
         }
     }
 
@@ -766,8 +738,8 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     func parseScriptResult(script: SCRIPT, result: String) {
         switch script {
-        case .checkStandUp:
-            checkStandUpParser(result: result)
+        case .checkForGordian:
+            checkGordianParser(result: result)
             
         case .stopBitcoin:
             showBitcoinLog()
@@ -778,13 +750,16 @@ class ViewController: NSViewController, NSWindowDelegate {
             startBitcoinParse(result: result)
 
         case .checkForBitcoin:
-            parseBitcoindResponse(result: result)
+            parseBitcoindVersionResponse(result: result)
 
         case .checkXcodeSelect:
             parseXcodeSelectResult(result: result)
             
-        case .isBitcoinRunning:
-            parseIsBitcoinRunning(result: result)
+        case .hasBitcoinShutdownCompleted:
+            parseHasBitcoinShutdownCompleted(result: result)
+            
+        case .isBitcoindRunning:
+            parseIsBitcoindRunning(result: result)
 
         default:
             break
@@ -807,6 +782,20 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     //MARK: Script Result Parsers
     
+    private func parseIsBitcoindRunning(result: String) {
+        if result.contains("Stopped") {
+            bitcoinIsOff()
+        } else {
+            bitcoinRunning = true
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                
+                self.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusPartiallyAvailable")
+            }
+            getBlockchainInfo()
+        }
+    }
+    
     private func stopBitcoinParse(result: String) {
         if result.contains("Bitcoin Core stopping") {
             DispatchQueue.main.async() { [weak self] in
@@ -820,7 +809,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
     }
     
-    private func parseIsBitcoinRunning(result: String) {
+    private func parseHasBitcoinShutdownCompleted(result: String) {
         if result.contains("Stopped") {
             shutDownTimer?.invalidate()
             shutDownTimer = nil
@@ -831,7 +820,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     
     @objc func queryShutDownStatus() {
         showBitcoinLog()
-        runScript(script: .isBitcoinRunning)
+        runScript(script: .hasBitcoinShutdownCompleted)
     }
 
     private func startBitcoinParse(result: String) {
@@ -858,11 +847,10 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
     }
 
-    func checkStandUpParser(result: String) {
+    func checkGordianParser(result: String) {
         if result.contains("False") {
             checkForXcodeSelect()
         } else {
-            // first check if Bitocin Directory exists
             checkBitcoinConfForRPCCredentials()
         }
     }
@@ -981,6 +969,36 @@ class ViewController: NSViewController, NSWindowDelegate {
             }
         }
     }
+    
+    private func getBlockchainInfo() {
+        command(command: "getblockchaininfo") { [weak self] response in
+            guard let self = self else { return }
+            
+            self.showBitcoinLog()
+            
+            guard let response = response as? [String:Any] else {
+                return
+            }
+            
+            self.setAutoRefreshTimer()
+                        
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                
+                let blockchainInfo = BlockchainInfo(response)
+                self.blocksOutlet.stringValue = "\(blockchainInfo.blocks)"
+                self.difficultyOutlet.stringValue = "\(blockchainInfo.difficulty.diffString)"
+                self.pruningOutlet.stringValue = "\(blockchainInfo.pruned)"
+                self.sizeOutlet.stringValue = "\(blockchainInfo.size_on_disk.size)"
+                
+                self.mainnetSyncedLabel.stringValue = blockchainInfo.verificationprogress.bitcoinCoreSyncStatus
+                self.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
+                self.startMainnetOutlet.title = "Stop"
+                self.startMainnetOutlet.isEnabled = true
+                self.getPeerInfo()
+            }
+        }
+    }
 
     private func getPeerInfo() {
         command(command: "getpeerinfo") { [weak self] response in
@@ -1065,7 +1083,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         return ("\(incomingCount)", "\(outgoingCount)")
     }
 
-    func parseBitcoindResponse(result: String) {
+    func parseBitcoindVersionResponse(result: String) {
         if result.contains("Bitcoin Core Daemon version") || result.contains("Bitcoin Core version") {
             let arr = result.components(separatedBy: "Copyright (C)")
             currentVersion = (arr[0]).replacingOccurrences(of: "Bitcoin Core Daemon version ", with: "")
@@ -1093,17 +1111,17 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     //MARK: User Inteface
 
-    func setTimer() {
+    func setAutoRefreshTimer() {
         if d.autoRefresh {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 
-                self.timer?.invalidate()
-                self.timer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(self.automaticRefresh), userInfo: nil, repeats: true)
+                self.autoRefreshTimer?.invalidate()
+                self.autoRefreshTimer = Timer.scheduledTimer(timeInterval: 15.0, target: self, selector: #selector(self.automaticRefresh), userInfo: nil, repeats: true)
             }
         } else {
-            self.timer?.invalidate()
-            self.timer = nil
+            self.autoRefreshTimer?.invalidate()
+            self.autoRefreshTimer = nil
         }
     }
 
@@ -1165,7 +1183,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             self.icon.layer?.cornerRadius = self.icon.frame.width / 2
             self.icon.layer?.masksToBounds = true
             self.isLoading = true
-            self.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
+            self.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusNone")
             self.updateOutlet.isEnabled = false
             self.bitcoinCoreVersionOutlet.stringValue = ""
             self.torVersionOutlet.stringValue = ""
@@ -1175,7 +1193,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             self.startMainnetOutlet.isEnabled = false
             self.torRemoveAuthOutlet.isEnabled = false
             self.torAddAuthOutlet.isEnabled = false
-            self.torRunningImage.alphaValue = 0
+            //self.torRunningImage.alphaValue = 0
             self.bitcoinCoreWindow.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)
             self.torWindow.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)
             self.torAuthWindow.backgroundColor = #colorLiteral(red: 0.2548701465, green: 0.2549202442, blue: 0.2548669279, alpha: 1)
@@ -1223,7 +1241,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                         guard let self = self else { return }
                         
                         self.standingUp = true
-                        self.timer?.invalidate()
+                        self.autoRefreshTimer?.invalidate()
                         self.performSegue(withIdentifier: "goInstall", sender: self)
                     }
                 }
@@ -1287,7 +1305,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                         DispatchQueue.main.async { [weak self] in
                             guard let self = self else { return }
                             
-                            self.timer?.invalidate()
+                            self.autoRefreshTimer?.invalidate()
                             self.installXcodeCLTools()
                         }
                     }
@@ -1310,8 +1328,8 @@ class ViewController: NSViewController, NSWindowDelegate {
                 vc.ignoreExistingBitcoin = ignoreExistingBitcoin
                 vc.strapping = strapping
                 if !isVerifying {
-                    timer?.invalidate()
-                    timer = nil
+                    autoRefreshTimer?.invalidate()
+                    autoRefreshTimer = nil
                 }
             }
 
@@ -1331,7 +1349,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                             guard let self = self else { return }
                             
                             self.standingUp = true
-                            self.timer?.invalidate()
+                            self.autoRefreshTimer?.invalidate()
                             self.performSegue(withIdentifier: "goInstall", sender: vc)
                         }
                     }
@@ -1367,12 +1385,13 @@ extension ViewController: OnionManagerDelegate {
             guard let self = self else { return }
             
             self.taskDescription.stringValue = "Tor bootstrapping \(progress)% complete..."
-            self.updateTorStatus(isOn: false)
+            self.torRunningImage.image = NSImage.init(imageLiteralResourceName: "NSStatusPartiallyAvailable")
+            //self.updateTorStatus(isOn: false)
         }
     }
     
     func torConnFinished() {
-        self.setTimer()
+        self.setAutoRefreshTimer()
         
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }

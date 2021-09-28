@@ -250,13 +250,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidResignActive(_ notification: Notification) {
         let storyboard = NSStoryboard(name: "Main", bundle: nil)
         let mainConsole = storyboard.instantiateController(withIdentifier: "Console") as! ViewController
-        mainConsole.timer?.invalidate()
+        mainConsole.autoRefreshTimer?.invalidate()
     }
     
     func applicationDidBecomeActive(_ notification: Notification) {
-        let storyboard = NSStoryboard(name: "Main", bundle: nil)
-        let mainConsole = storyboard.instantiateController(withIdentifier: "Console") as! ViewController
-        mainConsole.setTimer()
+//        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+//        let mainConsole = storyboard.instantiateController(withIdentifier: "Console") as! ViewController
+//        mainConsole.setTimer()
     }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
