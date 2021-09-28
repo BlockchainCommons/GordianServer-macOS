@@ -45,9 +45,9 @@ class ViewController: NSViewController, NSWindowDelegate {
     @IBOutlet weak var difficultyOutlet: NSTextField!
     @IBOutlet weak var sizeOutlet: NSTextField!
     
-    
     weak var mgr = TorClient.sharedInstance
     var timer: Timer?
+    var shutDownTimer: Timer?
     var chain = UserDefaults.standard.object(forKey: "chain") as? String ?? "main"
     var rpcpassword = ""
     var rpcuser = ""
@@ -356,6 +356,9 @@ class ViewController: NSViewController, NSWindowDelegate {
             guard let self = self else { return }
             
             self.startMainnetOutlet.isEnabled = false
+            self.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusPartiallyAvailable")
+            self.networkButton.isEnabled = false
+            self.verifyOutlet.isEnabled = false
         }
         
         if !bitcoinRunning {
@@ -363,6 +366,8 @@ class ViewController: NSViewController, NSWindowDelegate {
             runScript(script: .startBitcoin)
         } else {
             addSpinnerDesc("stopping \(chain)...")
+            self.timer?.invalidate()
+            self.timer = nil
             runScript(script: .stopBitcoin)
         }
     }
@@ -777,6 +782,9 @@ class ViewController: NSViewController, NSWindowDelegate {
 
         case .checkXcodeSelect:
             parseXcodeSelectResult(result: result)
+            
+        case .isBitcoinRunning:
+            parseIsBitcoinRunning(result: result)
 
         default:
             break
@@ -791,6 +799,8 @@ class ViewController: NSViewController, NSWindowDelegate {
             self.bitcoinRunning = false
             self.startMainnetOutlet.title = "Start"
             self.startMainnetOutlet.isEnabled = true
+            self.networkButton.isEnabled = true
+            self.verifyOutlet.isEnabled = true
             self.resetOutlets()
         }
     }
@@ -799,14 +809,29 @@ class ViewController: NSViewController, NSWindowDelegate {
     
     private func stopBitcoinParse(result: String) {
         if result.contains("Bitcoin Core stopping") {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
+            DispatchQueue.main.async() { [weak self] in
                 guard let self = self else { return }
                 
-                self.bitcoinIsOff()
+                self.shutDownTimer?.invalidate()
+                self.shutDownTimer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(self.queryShutDownStatus), userInfo: nil, repeats: true)
             }
         } else {
             simpleAlert(message: "Error turning off mainnet", info: result, buttonLabel: "OK")
         }
+    }
+    
+    private func parseIsBitcoinRunning(result: String) {
+        if result.contains("Stopped") {
+            shutDownTimer?.invalidate()
+            shutDownTimer = nil
+            hideSpinner()
+            bitcoinIsOff()
+        }
+    }
+    
+    @objc func queryShutDownStatus() {
+        showBitcoinLog()
+        runScript(script: .isBitcoinRunning)
     }
 
     private func startBitcoinParse(result: String) {

@@ -9,6 +9,7 @@
 import Foundation
 
 public enum SCRIPT: String {
+    case isBitcoinRunning = "IsProcessRunning"
     case installHomebrew = "LaunchBrewInstall"
     case installXcode = "LaunchXcodeInstall"
     case openFile = "OpenFile"

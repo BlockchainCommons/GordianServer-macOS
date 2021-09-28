@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0A2FE80126FD7A1B00B18859 /* LaunchBrewInstall.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A2FE80026FD7A1B00B18859 /* LaunchBrewInstall.command */; };
 		0A2FE80326FD7A4C00B18859 /* InstallBrew.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A2FE80226FD7A4C00B18859 /* InstallBrew.command */; };
+		0A8B41162702CB8B00815E65 /* IsProcessRunning.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A8B41152702CB8B00815E65 /* IsProcessRunning.command */; };
 		0A92AE3F26F75E310034B7B4 /* OpenFile.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A92AE3E26F75E310034B7B4 /* OpenFile.command */; };
 		0A92AE4126F761260034B7B4 /* StartBitcoin.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A92AE4026F761260034B7B4 /* StartBitcoin.command */; };
 		0A92AE4326F81F490034B7B4 /* InstallXcode.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A92AE4226F81F490034B7B4 /* InstallXcode.command */; };
@@ -126,6 +127,7 @@
 /* Begin PBXFileReference section */
 		0A2FE80026FD7A1B00B18859 /* LaunchBrewInstall.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = LaunchBrewInstall.command; sourceTree = "<group>"; };
 		0A2FE80226FD7A4C00B18859 /* InstallBrew.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = InstallBrew.command; sourceTree = "<group>"; };
+		0A8B41152702CB8B00815E65 /* IsProcessRunning.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = IsProcessRunning.command; sourceTree = "<group>"; };
 		0A92AE3E26F75E310034B7B4 /* OpenFile.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = OpenFile.command; sourceTree = "<group>"; };
 		0A92AE4026F761260034B7B4 /* StartBitcoin.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = StartBitcoin.command; sourceTree = "<group>"; };
 		0A92AE4226F81F490034B7B4 /* InstallXcode.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = InstallXcode.command; sourceTree = "<group>"; };
@@ -322,6 +324,7 @@
 				0A92AE4426F822090034B7B4 /* LaunchXcodeInstall.command */,
 				0A2FE80026FD7A1B00B18859 /* LaunchBrewInstall.command */,
 				0A2FE80226FD7A4C00B18859 /* InstallBrew.command */,
+				0A8B41152702CB8B00815E65 /* IsProcessRunning.command */,
 			);
 			path = Scripts;
 			sourceTree = "<group>";
@@ -547,6 +550,7 @@
 				D0760114247F491E00706F70 /* LaunchStrap.command in Resources */,
 				D0534CCA237E4DF00093DE67 /* fullynoded_qr.png in Resources */,
 				0A92AE3F26F75E310034B7B4 /* OpenFile.command in Resources */,
+				0A8B41162702CB8B00815E65 /* IsProcessRunning.command in Resources */,
 				D0DCD8EA236ACD5300F2D15A /* QRDisplayer.xib in Resources */,
 				D0534CC6237E4CC20093DE67 /* ok.png in Resources */,
 				D0E74F2323B6A527008B1EC5 /* CheckStandUp.command in Resources */,
