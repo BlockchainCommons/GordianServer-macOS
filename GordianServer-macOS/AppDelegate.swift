@@ -13,6 +13,66 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     public var isKilling = false
     
+    @IBAction func connectLocalFNAction(_ sender: Any) {
+        let chain = UserDefaults.standard.string(forKey: "chain")
+        var port = ""
+        switch chain {
+        case "main":
+            port = "8332"
+        case "test":
+            port = "18332"
+        case "signet":
+            port = "38332"
+        case "regtest":
+            port = "18443"
+        default:
+            break
+        }
+        
+        guard let rpcuser = UserDefaults.standard.object(forKey: "rpcuser") as? String,
+              let rpcpassword = UserDefaults.standard.object(forKey: "rpcpassword") as? String else {
+            simpleAlert(message: "Missing credentials...", info: "Connecting locally to Fully Noded requires rpc credentials.", buttonLabel: "OK")
+            return
+        }
+        
+        do {
+            let filePaths = try FileManager.default.contentsOfDirectory(atPath: "/Applications")
+            var exists = false
+            
+            for (i, filePath) in filePaths.enumerated() {
+                if filePath == "FullyNoded.app" {
+                    exists = true
+                }
+                if i + 1 == filePaths.count {
+                    if exists {
+                        DispatchQueue.main.async {
+                            guard let url = URL(string: "btcrpc://\(rpcuser):\(rpcpassword)@127.0.0.1:\(port)/?Gordian%20Server") else { return }
+                            NSWorkspace.shared.open(url)
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            let alert = NSAlert()
+                            alert.messageText = "Is Fully Noded installed?"
+                            alert.informativeText = "We can't see Fully Noded in your ~/Applications directory, please add FullyNoded.app to your applications directory and try again to automatically connect it to Gordian Server. Or click Install. Once installed you try this action again."
+                            alert.addButton(withTitle: "Install Fully Noded")
+                            alert.addButton(withTitle: "Cancel")
+                            alert.alertStyle = .informational
+                            let modalResponse = alert.runModal()
+                            if (modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn) {
+                                DispatchQueue.main.async {
+                                    guard let url = URL(string: "https://apps.apple.com/us/app/fully-noded-desktop/id1530816100?mt=12") else { return }
+                                    NSWorkspace.shared.open(url)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch {
+            simpleAlert(message: "There was an issue accessing your installed applications.", info: "\(error.localizedDescription)\n\nPlease let us know about this bug.", buttonLabel: "OK")
+        }
+    }
+    
     @IBAction func installHomebrewAction(_ sender: Any) {
         runScript(script: .installHomebrew, env: ["":""], args: []) { _ in }
     }

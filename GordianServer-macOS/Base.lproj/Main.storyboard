@@ -148,6 +148,12 @@
                                                 <action selector="quickConnectClicked:" target="Voe-Tx-rLC" id="zDn-Lx-D5C"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Connect Local - Fully Noded " id="crw-HA-iDz">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="connectLocalFNAction:" target="Voe-Tx-rLC" id="XGe-DI-vjQ"/>
+                                            </connections>
+                                        </menuItem>
                                     </items>
                                 </menu>
                             </menuItem>
