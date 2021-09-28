@@ -10,6 +10,10 @@ import Cocoa
 
 class ViewController: NSViewController, NSWindowDelegate {
     
+    @IBOutlet weak private var rpcAuthenticated: NSTextField!
+    @IBOutlet weak private var bitcoinCoreModeOutlet: NSTextField!
+    @IBOutlet weak private var rpcHostOutlet: NSTextField!
+    @IBOutlet weak private var p2pHostOutlet: NSTextField!
     @IBOutlet weak private var torRemoveAuthOutlet: NSButton!
     @IBOutlet weak private var torAddAuthOutlet: NSButton!
     @IBOutlet weak private var peerDetailsButton: NSButton!
@@ -78,7 +82,6 @@ class ViewController: NSViewController, NSWindowDelegate {
     var installingXcode = false
     var currentVersion = ""
     var peerInfo = ""
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -260,6 +263,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     @IBAction func userSelectedMainnet(_ sender: Any) {
         UserDefaults.standard.setValue("main", forKey: "chain")
         chain = "main"
+        updateTorInfo()
         setEnv()
         resetOutlets()
         checkSystem()
@@ -268,6 +272,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     @IBAction func userSelectedTestnet(_ sender: Any) {
         UserDefaults.standard.setValue("test", forKey: "chain")
         chain = "test"
+        updateTorInfo()
         setEnv()
         resetOutlets()
         checkSystem()
@@ -276,6 +281,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     @IBAction func userSelectedRegtest(_ sender: Any) {
         UserDefaults.standard.setValue("regtest", forKey: "chain")
         chain = "regtest"
+        updateTorInfo()
         setEnv()
         resetOutlets()
         checkSystem()
@@ -284,6 +290,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     @IBAction func userSelectedSignet(_ sender: Any) {
         UserDefaults.standard.setValue("signet", forKey: "chain")
         chain = "signet"
+        updateTorInfo()
         setEnv()
         resetOutlets()
         checkSystem()
@@ -731,6 +738,11 @@ class ViewController: NSViewController, NSWindowDelegate {
             
             if logItems.count > 2 {
                 self.bitcoinCoreLogOutlet.stringValue = "\(logItems[logItems.count - 2])"
+                
+                if "\(logItems[logItems.count - 2])".contains("Shutdown: done") {
+                    self.hideSpinner()
+                    self.bitcoinIsOff()
+                }
             }
         }
     }
@@ -909,7 +921,8 @@ class ViewController: NSViewController, NSWindowDelegate {
                      _ where error.contains("Loading P2P addresses…"),
                      _ where error.contains("Pruning"),
                      _ where error.contains("Rewinding"),
-                     _ where error.contains("Rescanning"):
+                     _ where error.contains("Rescanning"),
+                     _ where error.contains("Loading wallet"):
                     
                     DispatchQueue.main.async { [weak self] in
                         guard let self = self else { return }
@@ -921,8 +934,13 @@ class ViewController: NSViewController, NSWindowDelegate {
                         self.startTimer?.invalidate()
                         self.startTimer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(self.queryStartStatus), userInfo: nil, repeats: true)
                     }
+                    
+                case _ where error.contains("Could not connect to the server"):
+                    self.hideSpinner()
+                    self.bitcoinIsOff()
                 
                 default:
+                    self.hideSpinner()
                     simpleAlert(message: "Bitcoin Core Message", info: error, buttonLabel: "OK")
                 }
             }
@@ -1295,6 +1313,48 @@ class ViewController: NSViewController, NSWindowDelegate {
     private func installXcodeCLTools() {
         runScript(script: .installXcode)
     }
+    
+    private func updateTorInfo() {
+        guard let rpchostname = mgr?.rpcHostname() else {
+            return
+        }
+        
+        guard let p2phostname = mgr?.p2pHostname(chain: UserDefaults.standard.object(forKey: "chain") as? String ?? "main") else {
+            return
+        }
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.p2pHostOutlet.stringValue = p2phostname
+            self.rpcHostOutlet.stringValue = rpchostname
+            if Defaults.shared.isPrivate == 1 {
+                self.bitcoinCoreModeOutlet.stringValue = "onion only"
+            } else {
+                self.bitcoinCoreModeOutlet.stringValue = "onion & clearnet"
+            }
+            
+            let chain = UserDefaults.standard.string(forKey: "chain") ?? "main"
+            let path = "\(TorClient.sharedInstance.torPath())/host/bitcoin/rpc/\(chain)/authorized_clients/"
+            
+            do {
+                let filePaths = try FileManager.default.contentsOfDirectory(atPath: path)
+                if filePaths.count > 0 {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        
+                        self.rpcAuthenticated.stringValue = "\(filePaths.count) authenticated rpc clients"
+                    }
+                }
+            } catch {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    
+                    self.rpcAuthenticated.stringValue = "rpc host unauthenticated"
+                }
+            }
+        }
+    }
 
     // MARK: Segue Prep
 
@@ -1422,16 +1482,8 @@ extension ViewController: OnionManagerDelegate {
             self.checkForGordian()
         }
         
-        guard let hostname = mgr?.rpcHostname() else {
-            simpleAlert(message: "Tor config issue.", info: "There was an issue fetching your nodes hidden service address. Your node may not be remotely reachable.", buttonLabel: "OK")
-            return
-        }
-        
-        self.torConfigured = true
-        
-        #if DEBUG
-        print("hostname: \(hostname)")
-        #endif
+        updateTorInfo()
+        torConfigured = true
     }
     
     func torConnDifficulties() {
