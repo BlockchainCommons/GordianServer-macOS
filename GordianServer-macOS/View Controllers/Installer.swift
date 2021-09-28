@@ -405,10 +405,10 @@ class Installer: NSViewController {
         
     private func run(script: SCRIPT, env: [String:String], completion: @escaping ((String)) -> Void) {
         #if DEBUG
-        print("script: \(script.rawValue)")
+        print("script: \(script.stringValue)")
         #endif
         var logOutput = ""
-        let resource = script.rawValue
+        let resource = script.stringValue
         guard let path = Bundle.main.path(forResource: resource, ofType: "command") else {
             return
         }

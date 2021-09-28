@@ -48,6 +48,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     weak var mgr = TorClient.sharedInstance
     var autoRefreshTimer: Timer?
     var shutDownTimer: Timer?
+    var startTimer: Timer?
     var chain = UserDefaults.standard.object(forKey: "chain") as? String ?? "main"
     var rpcpassword = ""
     var rpcuser = ""
@@ -117,7 +118,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             }
             
             if self.mgr?.state == .connected {
-                self.setAutoRefreshTimer()
+                //self.setAutoRefreshTimer()
                 
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
@@ -355,6 +356,8 @@ class ViewController: NSViewController, NSWindowDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
+            self.autoRefreshTimer?.invalidate()
+            self.autoRefreshTimer = nil
             self.startMainnetOutlet.isEnabled = false
             self.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusPartiallyAvailable")
             self.networkButton.isEnabled = false
@@ -366,8 +369,6 @@ class ViewController: NSViewController, NSWindowDelegate {
             runScript(script: .startBitcoin)
         } else {
             addSpinnerDesc("stopping \(chain)...")
-            self.autoRefreshTimer?.invalidate()
-            self.autoRefreshTimer = nil
             runScript(script: .stopBitcoin)
         }
     }
@@ -654,12 +655,12 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     private func runScript(script: SCRIPT) {
         #if DEBUG
-        print("script: \(script.rawValue)")
+        print("script: \(script.stringValue)")
         #endif
         
         let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
         taskQueue.async { [weak self] in
-            let resource = script.rawValue
+            let resource = script.stringValue
             guard let path = Bundle.main.path(forResource: resource, ofType: "command") else { return }
             let stdOut = Pipe()
             let stdErr = Pipe()
@@ -760,6 +761,9 @@ class ViewController: NSViewController, NSWindowDelegate {
             
         case .isBitcoindRunning:
             parseIsBitcoindRunning(result: result)
+            
+        case .didBitcoindStart:
+            parseDidBitcoinStart(result: result)
 
         default:
             break
@@ -784,7 +788,12 @@ class ViewController: NSViewController, NSWindowDelegate {
     
     private func parseIsBitcoindRunning(result: String) {
         if result.contains("Stopped") {
+            hideSpinner()
             bitcoinIsOff()
+            if d.autoStart && isLoading {
+                self.addSpinnerDesc("starting \(self.chain)...")
+                self.runScript(script: .startBitcoin)
+            }
         } else {
             bitcoinRunning = true
             DispatchQueue.main.async { [weak self] in
@@ -822,12 +831,23 @@ class ViewController: NSViewController, NSWindowDelegate {
         showBitcoinLog()
         runScript(script: .hasBitcoinShutdownCompleted)
     }
+    
+    @objc func queryStartStatus() {
+        showBitcoinLog()
+        isBitcoinOn()
+    }
 
     private func startBitcoinParse(result: String) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
             
-            self.isBitcoinOn()
+            self.runScript(script: .didBitcoindStart)
+        }
+    }
+    
+    private func parseDidBitcoinStart(result: String) {
+        if !result.contains("Stopped") {
+            isBitcoinOn()
         }
     }
 
@@ -874,6 +894,11 @@ class ViewController: NSViewController, NSWindowDelegate {
             guard let self = self else { return }
             
             if error == nil {
+                DispatchQueue.main.async {
+                    self.startTimer?.invalidate()
+                    self.startTimer = nil
+                }
+                
                 completion((response))
                 
             } else if let error = error {
@@ -890,24 +915,15 @@ class ViewController: NSViewController, NSWindowDelegate {
                         guard let self = self else { return }
                         
                         self.mainnetSyncedLabel.stringValue = "Loading..."
-                        self.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
+                        self.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusPartiallyAvailable")
                         self.startMainnetOutlet.title = "Stop"
                         self.startMainnetOutlet.isEnabled = false
+                        self.startTimer?.invalidate()
+                        self.startTimer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(self.queryStartStatus), userInfo: nil, repeats: true)
                     }
-                    
-                case _ where error.contains("Could not connect to the server"):
-                    self.bitcoinIsOff()
-                    self.showBitcoinLog()
-                    
-                    if self.d.autoStart && self.isLoading {
-                        self.addSpinnerDesc("starting \(self.chain)...")
-                        self.runScript(script: .startBitcoin)
-                    } else {
-                        self.hideSpinner()
-                    }
-                    
+                
                 default:
-                    simpleAlert(message: "Bitcoin Core Message", info: error + "\n\nGordian Server will auto refresh every 5 seconds. Please be patient while Bitcoin Core starts as it can take time. If the app feels stuck just tap the refresh button located under the logo. You can always monitor the log to see details of what is happening in real time by clicking \"Go To\" > \"Bitcoin Core Log\".", buttonLabel: "OK")
+                    simpleAlert(message: "Bitcoin Core Message", info: error, buttonLabel: "OK")
                 }
             }
         }
@@ -995,6 +1011,8 @@ class ViewController: NSViewController, NSWindowDelegate {
                 self.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
                 self.startMainnetOutlet.title = "Stop"
                 self.startMainnetOutlet.isEnabled = true
+                self.verifyOutlet.isEnabled = true
+                self.networkButton.isEnabled = true
                 self.getPeerInfo()
             }
         }
@@ -1391,8 +1409,6 @@ extension ViewController: OnionManagerDelegate {
     }
     
     func torConnFinished() {
-        self.setAutoRefreshTimer()
-        
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             

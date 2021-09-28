@@ -135,9 +135,9 @@ class WalletsViewController: NSViewController, NSTableViewDelegate, NSTableViewD
     
     private func runScript(script: SCRIPT, env: [String:String], args: [String], completion: @escaping ((NSArray?)) -> Void) {
         #if DEBUG
-        print("script: \(script.rawValue)")
+        print("script: \(script.stringValue)")
         #endif
-        let resource = script.rawValue
+        let resource = script.stringValue
         guard let path = Bundle.main.path(forResource: resource, ofType: "command") else {
             return
         }

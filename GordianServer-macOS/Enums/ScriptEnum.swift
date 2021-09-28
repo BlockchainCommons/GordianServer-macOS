@@ -9,37 +9,106 @@
 import Foundation
 
 public enum SCRIPT: String {
-    case hasBitcoinShutdownCompleted, isBitcoindRunning = "IsProcessRunning"
-    case installHomebrew = "LaunchBrewInstall"
-    case installXcode = "LaunchXcodeInstall"
-    case openFile = "OpenFile"
-    case removeBitcoin = "RemoveBitcoin"
-    case verifyBitcoin = "Verify"
-    case checkForBitcoin = "CheckForBitcoinCore"
-    case standUp = "StandUp"
-    case standDown = "StandDown"
-    case updateBTCConf = "UpdateBTCConf"
-    case upgradeBitcoin = "UpgradeBitcoin"
-    case checkForGordian = "CheckStandUp"
-    case checkXcodeSelect = "CheckXCodeSelect"
-    case getStrapped = "Strap"
-    case launchStrap = "LaunchStrap"
-    case isBitcoinOn = "IsBitcoinOn"
-    case stopBitcoin = "StopBitcoin"
-    case checkForOldHost = "CheckForOldHost"
-    case removeOldHost = "RemoveOldHost"
-    case rpc = "RPC"
-    case deleteWallet = "DeleteWallet"
-    case installLightning = "InstallLightning"
-    case getLightningHostnames = "GetLightningHostname"
-    case isLightningInstalled = "IsLightningInstalled"
-    case isLightningRunning = "IsLightningRunning"
-    case startLightning = "StartLightning"
-    case stopLightning = "StopLightning"
-    case getLightningRpcCreds = "GetLightningRpcCreds"
-    case writeLog = "WriteLog"
-    case getLog = "GetLog"
-    case startBitcoin = "StartBitcoin"
+    case hasBitcoinShutdownCompleted
+    case isBitcoindRunning
+    case didBitcoindStart
+    case installHomebrew
+    case installXcode
+    case openFile
+    case removeBitcoin
+    case verifyBitcoin
+    case checkForBitcoin
+    case standUp
+    case standDown
+    case updateBTCConf
+    case upgradeBitcoin
+    case checkForGordian
+    case checkXcodeSelect
+    case getStrapped
+    case launchStrap
+    case isBitcoinOn
+    case stopBitcoin
+    case checkForOldHost
+    case removeOldHost
+    case rpc
+    case deleteWallet
+    case installLightning
+    case getLightningHostnames
+    case isLightningInstalled
+    case isLightningRunning
+    case startLightning
+    case stopLightning
+    case getLightningRpcCreds
+    case writeLog
+    case getLog
+    case startBitcoin
+    
+    var stringValue:String {
+        switch self {
+        case .hasBitcoinShutdownCompleted, .isBitcoindRunning, .didBitcoindStart:
+            return "IsProcessRunning"
+        case .installHomebrew:
+            return "LaunchBrewInstall"
+        case .installXcode:
+            return "LaunchXcodeInstall"
+        case .openFile:
+            return "OpenFile"
+        case .removeBitcoin:
+            return "RemoveBitcoin"
+        case .verifyBitcoin:
+            return "Verify"
+        case .checkForBitcoin:
+            return "CheckForBitcoinCore"
+        case .standUp:
+            return "StandUp"
+        case .standDown:
+            return "StandDown"
+        case .updateBTCConf:
+            return "UpdateBTCConf"
+        case .upgradeBitcoin:
+            return "UpgradeBitcoin"
+        case .checkForGordian:
+            return "CheckStandUp"
+        case .checkXcodeSelect:
+            return "CheckXCodeSelect"
+        case .getStrapped:
+            return "Strap"
+        case .launchStrap:
+            return "LaunchStrap"
+        case .isBitcoinOn:
+            return "IsBitcoinOn"
+        case .stopBitcoin:
+            return "StopBitcoin"
+        case .checkForOldHost:
+            return "CheckForOldHost"
+        case .removeOldHost:
+            return "RemoveOldHost"
+        case .rpc:
+            return "RPC"
+        case .deleteWallet:
+            return "DeleteWallet"
+        case .installLightning:
+            return "InstallLightning"
+        case .getLightningHostnames:
+            return "GetLightningHostname"
+        case .isLightningInstalled:
+            return "IsLightningInstalled"
+        case .isLightningRunning:
+            return "IsLightningRunning"
+        case .startLightning:
+            return "StartLightning"
+        case .stopLightning:
+            return "StopLightning"
+        case .getLightningRpcCreds:
+            return "GetLightningRpcCreds"
+        case .writeLog:
+            return "WriteLog"
+        case .getLog:
+            return "GetLog"
+        case .startBitcoin:
+            return "StartBitcoin"
+        }
+    }
 }
 
 public enum BTCCONF: String {

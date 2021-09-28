@@ -36,9 +36,9 @@ class Log {
     
     class func runScript(script: SCRIPT, env: [String:String], args: [String], completion: @escaping ((String?)) -> Void) {
         #if DEBUG
-        print("script: \(script.rawValue)")
+        print("script: \(script.stringValue)")
         #endif
-        let resource = script.rawValue
+        let resource = script.stringValue
         guard let path = Bundle.main.path(forResource: resource, ofType: "command") else {
             return
         }
