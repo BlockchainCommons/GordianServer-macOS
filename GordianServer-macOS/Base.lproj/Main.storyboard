@@ -606,56 +606,56 @@
                                                 </connections>
                                             </button>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Vdd-w0-AhZ">
-                                                <rect key="frame" x="90" y="228" width="72" height="16"/>
-                                                <textFieldCell key="cell" lineBreakMode="clipping" title="verification" id="ozm-OW-79F">
+                                                <rect key="frame" x="90" y="228" width="22" height="16"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="     " id="ozm-OW-79F">
                                                     <font key="font" metaFont="system"/>
                                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="E12-C7-dPa">
-                                                <rect key="frame" x="90" y="108" width="62" height="16"/>
-                                                <textFieldCell key="cell" lineBreakMode="clipping" title="peers out" id="UiY-sO-Qsr">
+                                                <rect key="frame" x="90" y="108" width="22" height="16"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="     " id="UiY-sO-Qsr">
                                                     <font key="font" metaFont="system"/>
                                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="u4k-cA-eaA">
-                                                <rect key="frame" x="90" y="204" width="44" height="16"/>
-                                                <textFieldCell key="cell" lineBreakMode="clipping" title="blocks" id="xeQ-4e-TLe">
+                                                <rect key="frame" x="90" y="204" width="22" height="16"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="     " id="xeQ-4e-TLe">
                                                     <font key="font" metaFont="system"/>
                                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ObL-6X-0iZ">
-                                                <rect key="frame" x="90" y="60" width="65" height="16"/>
-                                                <textFieldCell key="cell" lineBreakMode="clipping" title="hashrate  " id="MEV-87-hXv">
+                                                <rect key="frame" x="90" y="60" width="22" height="16"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="     " id="MEV-87-hXv">
                                                     <font key="font" metaFont="system"/>
                                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9vD-zy-WPs">
-                                                <rect key="frame" x="90" y="156" width="58" height="16"/>
-                                                <textFieldCell key="cell" lineBreakMode="clipping" title="pruning  " id="0fU-8Q-ZHB">
+                                                <rect key="frame" x="90" y="156" width="22" height="16"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="     " id="0fU-8Q-ZHB">
                                                     <font key="font" metaFont="system"/>
                                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wry-Sx-acG">
-                                                <rect key="frame" x="90" y="252" width="46" height="16"/>
-                                                <textFieldCell key="cell" lineBreakMode="clipping" title="uptime" id="agy-pK-YP2">
+                                                <rect key="frame" x="90" y="252" width="22" height="16"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="     " id="agy-pK-YP2">
                                                     <font key="font" metaFont="system"/>
                                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wvB-fS-9uo">
-                                                <rect key="frame" x="90" y="180" width="28" height="16"/>
-                                                <textFieldCell key="cell" lineBreakMode="clipping" title="size" id="EGP-Xy-DEe">
+                                                <rect key="frame" x="90" y="180" width="22" height="16"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="     " id="EGP-Xy-DEe">
                                                     <font key="font" metaFont="system"/>
                                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -782,8 +782,8 @@
                                                 </textFieldCell>
                                             </textField>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PMt-yp-b2E">
-                                                <rect key="frame" x="90" y="132" width="53" height="16"/>
-                                                <textFieldCell key="cell" lineBreakMode="clipping" title="peers in" id="bLz-2O-SuY">
+                                                <rect key="frame" x="90" y="132" width="22" height="16"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="     " id="bLz-2O-SuY">
                                                     <font key="font" metaFont="system"/>
                                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -817,8 +817,8 @@
                                                 </connections>
                                             </button>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4vj-po-NAy">
-                                                <rect key="frame" x="90" y="84" width="61" height="16"/>
-                                                <textFieldCell key="cell" lineBreakMode="clipping" title="mempool" id="cGI-Rr-I3A">
+                                                <rect key="frame" x="90" y="84" width="22" height="16"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="     " id="cGI-Rr-I3A">
                                                     <font key="font" metaFont="system"/>
                                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -873,8 +873,8 @@
                                                 </popUpButtonCell>
                                             </popUpButton>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2M3-Q6-5tc">
-                                                <rect key="frame" x="90" y="36" width="57" height="16"/>
-                                                <textFieldCell key="cell" lineBreakMode="clipping" title="difficulty" id="wBs-Pb-MPT">
+                                                <rect key="frame" x="90" y="36" width="22" height="16"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="     " id="wBs-Pb-MPT">
                                                     <font key="font" metaFont="system"/>
                                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
