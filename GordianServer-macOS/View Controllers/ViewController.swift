@@ -41,13 +41,13 @@ class ViewController: NSViewController, NSWindowDelegate {
     @IBOutlet weak private var networkButton: NSPopUpButton!
     @IBOutlet weak private var bitcoinCoreLogOutlet: NSTextField!
     
-    @IBOutlet weak var blocksOutlet: NSTextField!
-    @IBOutlet weak var hashrateOutlet: NSTextField!
-    @IBOutlet weak var pruningOutlet: NSTextField!
-    @IBOutlet weak var uptimeOutlet: NSTextField!
-    @IBOutlet weak var mempoolOutlet: NSTextField!
-    @IBOutlet weak var difficultyOutlet: NSTextField!
-    @IBOutlet weak var sizeOutlet: NSTextField!
+    @IBOutlet weak private var blocksOutlet: NSTextField!
+    @IBOutlet weak private var hashrateOutlet: NSTextField!
+    @IBOutlet weak private var pruningOutlet: NSTextField!
+    @IBOutlet weak private var uptimeOutlet: NSTextField!
+    @IBOutlet weak private var mempoolOutlet: NSTextField!
+    @IBOutlet weak private var difficultyOutlet: NSTextField!
+    @IBOutlet weak private var sizeOutlet: NSTextField!
     
     weak var mgr = TorClient.sharedInstance
     var autoRefreshTimer: Timer?
@@ -61,24 +61,19 @@ class ViewController: NSViewController, NSWindowDelegate {
     var newestVersion = ""
     var newestBinaryName = ""
     var newestPrefix = ""
-    var strapping = false
     var standingUp = false
     var bitcoinInstalled = false
     var torIsOn = false
     var bitcoinRunning = false
     var upgrading = false
     var isLoading = false
-    var torConfigured = false
     var bitcoinConfigured = false
     var ignoreExistingBitcoin = false
     var isVerifying = false
-    var regTestOn = false
     var env = [String:String]()
     let d = Defaults.shared
     var infoMessage = ""
     var headerText = ""
-    var installingTor = false
-    var updatingTor = false
     var installingXcode = false
     var currentVersion = ""
     var peerInfo = ""
@@ -132,17 +127,6 @@ class ViewController: NSViewController, NSWindowDelegate {
                     self.updateTorStatus(isOn: true)
                     self.checkForGordian()
                 }
-                
-                guard let hostname = self.mgr?.rpcHostname() else {
-                    simpleAlert(message: "Tor config issue.", info: "There was an issue fetching your nodes hidden service address. Your node may not be remotely reachable.", buttonLabel: "OK")
-                    return
-                }
-                
-                self.torConfigured = true
-                
-                #if DEBUG
-                print("hostname: \(hostname)")
-                #endif
             }
         }        
     }
@@ -625,12 +609,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
     }
     
-    
-    
     private func setDefaultBitcoinConf() {
-        //no existing settings - use default
-        
-        //Create the directory first
         let bitcoinPath = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin", isDirectory: true).path
         
         do {
@@ -1028,7 +1007,6 @@ class ViewController: NSViewController, NSWindowDelegate {
                 self.difficultyOutlet.stringValue = "\(blockchainInfo.difficulty.diffString)"
                 self.pruningOutlet.stringValue = "\(blockchainInfo.pruned)"
                 self.sizeOutlet.stringValue = "\(blockchainInfo.size_on_disk.size)"
-                
                 self.mainnetSyncedLabel.stringValue = blockchainInfo.verificationprogress.bitcoinCoreSyncStatus
                 self.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusAvailable")
                 self.startMainnetOutlet.title = "Stop"
@@ -1418,7 +1396,6 @@ class ViewController: NSViewController, NSWindowDelegate {
                 vc.standingUp = standingUp
                 vc.upgrading = upgrading
                 vc.ignoreExistingBitcoin = ignoreExistingBitcoin
-                vc.strapping = strapping
                 if !isVerifying {
                     autoRefreshTimer?.invalidate()
                     autoRefreshTimer = nil
@@ -1478,7 +1455,6 @@ extension ViewController: OnionManagerDelegate {
             
             self.taskDescription.stringValue = "Tor bootstrapping \(progress)% complete..."
             self.torRunningImage.image = NSImage.init(imageLiteralResourceName: "NSStatusPartiallyAvailable")
-            //self.updateTorStatus(isOn: false)
         }
     }
     
@@ -1497,7 +1473,6 @@ extension ViewController: OnionManagerDelegate {
         }
         
         updateTorInfo()
-        torConfigured = true
     }
     
     func torConnDifficulties() {
