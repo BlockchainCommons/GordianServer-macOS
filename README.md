@@ -80,9 +80,18 @@ Instead of downloading binaries through our Github repo, you can build *GordianS
 5. When *Xcode* launches, press the "play" button in the top left.
    - If you had to download the clone by hand from within XCode, you'll likely need to navigate to the `xcodeproj` file in the `Xcode` directory.
 
-### After Installation
+### After Installation: Quick Connect
 
-Once the app has completely installed (by either method) and once it has launched *Bitcoin Core*, it will present a *Quick Connect QR code* that can be used to securely link your full node remotely over Tor to other devices, such as the iOS application [GordianWallet](https://github.com/BlockchainCommons/GordianWallet-iOS). *Standup* allows you to run all three Bitcoin networks (`mainnet`, `testnet` and `regtest`) simultaneously via its user interface. *GordianServer-macOS* will present an independent *Quick Connect QR code* for each network so that you may remotely connect to and utilize each.
+Once the app has completely installed (by either method) and once it has launched *Bitcoin Core*, you can access a *Quick Connect QR code* that can be used to securely link your full node remotely over Tor to other devices, such as the iOS application [GordianWallet](https://github.com/BlockchainCommons/GordianWallet-iOS). Simply choose "Quick Connect > Quick Connect" from the main menu to see the QR code.
+
+*Standup* allows you to run all three Bitcoin networks (`mainnet`, `testnet` and `regtest`) simultaneously via its user interface. *GordianServer-macOS* will present an independent *Quick Connect QR code* for each network so that you may remotely connect to and utilize each.
+
+### After Installation: Startup
+
+If'd you'd like your Gordian Server to start whenever your Mac does:
+
+1. In the dock, right click on Gordian Server and choose "Options > Keep in Doc".
+2. In Gordian Server, choose settings (the gear) and make sure that "Start Bitcoin on Open" is checked.
 
 ## GPG Installation instructions (Optional)
 
