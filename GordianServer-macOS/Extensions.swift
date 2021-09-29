@@ -29,7 +29,7 @@ extension Double {
 
 extension Int {
     var size: String {
-        return "\(self/1000000000) gb"
+        return "\(Double(self)/1000000000.0) gb"
     }
     
     var diffString: String {
