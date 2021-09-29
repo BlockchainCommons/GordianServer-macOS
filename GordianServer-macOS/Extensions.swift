@@ -9,6 +9,11 @@
 import Foundation
 
 extension Double {
+    func rounded(toPlaces places:Int) -> Double {
+        let divisor = pow(10.0, Double(places))
+        return (self * divisor).rounded() / divisor
+    }
+    
     var bitcoinCoreSyncStatus: String {
         if self >= 0.9999 {
             return "100%"
@@ -29,7 +34,7 @@ extension Double {
 
 extension Int {
     var size: String {
-        return "\(Double(self)/1000000000.0) gb"
+        return "\((Double(self)/1000000000.0).rounded(toPlaces: 1)) gb"
     }
     
     var diffString: String {
