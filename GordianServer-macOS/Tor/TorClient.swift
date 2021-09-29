@@ -33,6 +33,11 @@ class TorClient: NSObject, URLSessionDelegate {
     private var controller: TorController?
     private var authDirPath = ""
     var isRefreshing = false
+    let hiddenServicePath = "/Users/\(NSUserName())/.gordian/tor/host"
+    
+    var torPath: String {
+        return "/Users/\(NSUserName())/.gordian/.tor"
+    }
     
     // The tor url session configuration.
     // Start with default config as fallback.
@@ -43,117 +48,107 @@ class TorClient: NSObject, URLSessionDelegate {
     
     // Start the tor client.
     func start(delegate: OnionManagerDelegate?) {
-        //session.delegate = self
         weak var weakDelegate = delegate
         state = .started
         
         sessionConfiguration.connectionProxyDictionary = [kCFProxyTypeKey: kCFProxyTypeSOCKS,
                                                           kCFStreamPropertySOCKSProxyHost: "localhost",
-                                                          kCFStreamPropertySOCKSProxyPort: 19050]
+                                                          kCFStreamPropertySOCKSProxyPort: 19150]
         
         session = URLSession(configuration: sessionConfiguration, delegate: self, delegateQueue: .main)
         
-        //add V3 auth keys to ClientOnionAuthDir if any exist
         createTorDirectory()
         authDirPath = createAuthDirectory()
         
-        //clearAuthKeys { [weak self] in
-            //guard let self = self else { return }
-            
-            //self.addAuthKeysToAuthDirectory {
-                
-                self.thread = nil
-                
-                self.config.options = [
-                    "DNSPort": "12345",
-                    "AutomapHostsOnResolve": "1",
-                    "SocksPort": "19050",//OnionTrafficOnly
-                    "AvoidDiskWrites": "1",
-                    "ClientOnionAuthDir": "\(self.authDirPath)",
-                    "LearnCircuitBuildTimeout": "1",
-                    "NumEntryGuards": "8",
-                    "SafeSocks": "1",
-                    "LongLivedPorts": "80,443,8334",
-                    "NumCPUs": "2",
-                    "DisableDebuggerAttachment": "1",
-                    "SafeLogging": "1",
-                    "ExcludeExitNodes": "1",
-                    "StrictNodes": "1"
-                ]
-                
-                //self.config.arguments = ["--defaults-torrc \(NSTemporaryDirectory()).torrc"]
-                self.config.cookieAuthentication = true
-                self.config.dataDirectory = URL(fileURLWithPath: self.torPath())
-                self.config.controlSocket = self.config.dataDirectory?.appendingPathComponent("cp")
-                self.thread = TorThread(configuration: self.config)
-                
-                // Initiate the controller.
-                if self.controller == nil {
-                    self.controller = TorController(socketURL: self.config.controlSocket!)
-                }
-                
-                // Start a tor thread.
-                self.thread?.start()
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    // Connect Tor controller.
+        self.thread = nil
+        
+        self.config.options = [
+            "DNSPort": "12346",
+            "AutomapHostsOnResolve": "1",
+            "SocksPort": "19150",//OnionTrafficOnly
+            "AvoidDiskWrites": "1",
+            "ClientOnionAuthDir": "\(self.authDirPath)",
+            "LearnCircuitBuildTimeout": "1",
+            "NumEntryGuards": "8",
+            "SafeSocks": "1",
+            "LongLivedPorts": "80,443,8334",
+            "NumCPUs": "2",
+            "DisableDebuggerAttachment": "1",
+            "SafeLogging": "1",
+            "ExcludeExitNodes": "1",
+            "StrictNodes": "1"
+        ]
+        
+        self.config.cookieAuthentication = true
+        self.config.dataDirectory = URL(fileURLWithPath: self.torPath)
+        self.config.controlSocket = self.config.dataDirectory?.appendingPathComponent("cp")
+        self.thread = TorThread(configuration: self.config)
+        
+        // Initiate the controller.
+        if self.controller == nil {
+            self.controller = TorController(socketURL: self.config.controlSocket!)
+        }
+        
+        // Start a tor thread.
+        self.thread?.start()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            // Connect Tor controller.
+            do {
+                if !(self.controller?.isConnected ?? false) {
                     do {
-                        if !(self.controller?.isConnected ?? false) {
-                            do {
-                                try self.controller?.connect()
-                            } catch {
-                                print("error=\(error)")
-                            }
-                        }
-                        
-                        let cookie = try Data(
-                            contentsOf: self.config.dataDirectory!.appendingPathComponent("control_auth_cookie"),
-                            options: NSData.ReadingOptions(rawValue: 0)
-                        )
-                        
-                        self.controller?.authenticate(with: cookie) { (success, error) in
-                            if let error = error {
-                                print("error = \(error.localizedDescription)")
-                                return
-                            }
-                            
-                            var progressObs: Any? = nil
-                            progressObs = self.controller?.addObserver(forStatusEvents: {
-                                (type: String, severity: String, action: String, arguments: [String : String]?) -> Bool in
-                                if arguments != nil {
-                                    if arguments!["PROGRESS"] != nil {
-                                        let progress = Int(arguments!["PROGRESS"]!)!
-                                        weakDelegate?.torConnProgress(progress)
-                                        if progress >= 100 {
-                                            self.controller?.removeObserver(progressObs)
-                                        }
-                                        return true
-                                    }
-                                }
-                                return false
-                            })
-                            
-                            var observer: Any? = nil
-                            observer = self.controller?.addObserver(forCircuitEstablished: { established in
-                                if established {
-                                    self.state = .connected
-                                    weakDelegate?.torConnFinished()
-                                    self.controller?.removeObserver(observer)
-                                    
-                                } else if self.state == .refreshing {
-                                    self.state = .connected
-                                    weakDelegate?.torConnFinished()
-                                    self.controller?.removeObserver(observer)
-                                }
-                            })
-                        }
+                        try self.controller?.connect()
                     } catch {
-                        weakDelegate?.torConnDifficulties()
-                        self.state = .none
+                        print("error=\(error)")
                     }
                 }
-            //}
-        //}
+                
+                let cookie = try Data(
+                    contentsOf: self.config.dataDirectory!.appendingPathComponent("control_auth_cookie"),
+                    options: NSData.ReadingOptions(rawValue: 0)
+                )
+                
+                self.controller?.authenticate(with: cookie) { (success, error) in
+                    if let error = error {
+                        print("error = \(error.localizedDescription)")
+                        return
+                    }
+                    
+                    var progressObs: Any? = nil
+                    progressObs = self.controller?.addObserver(forStatusEvents: {
+                        (type: String, severity: String, action: String, arguments: [String : String]?) -> Bool in
+                        if arguments != nil {
+                            if arguments!["PROGRESS"] != nil {
+                                let progress = Int(arguments!["PROGRESS"]!)!
+                                weakDelegate?.torConnProgress(progress)
+                                if progress >= 100 {
+                                    self.controller?.removeObserver(progressObs)
+                                }
+                                return true
+                            }
+                        }
+                        return false
+                    })
+                    
+                    var observer: Any? = nil
+                    observer = self.controller?.addObserver(forCircuitEstablished: { established in
+                        if established {
+                            self.state = .connected
+                            weakDelegate?.torConnFinished()
+                            self.controller?.removeObserver(observer)
+                            
+                        } else if self.state == .refreshing {
+                            self.state = .connected
+                            weakDelegate?.torConnFinished()
+                            self.controller?.removeObserver(observer)
+                        }
+                    })
+                }
+            } catch {
+                weakDelegate?.torConnDifficulties()
+                self.state = .none
+            }
+        }
     }
     
     func resign() {
@@ -161,29 +156,45 @@ class TorClient: NSObject, URLSessionDelegate {
         controller = nil
         thread?.cancel()
         thread = nil
-        //clearAuthKeys {}
         state = .stopped
     }
     
     private func createTorDirectory() {
         do {
-            try FileManager.default.createDirectory(atPath: self.torPath(),
+            try FileManager.default.createDirectory(atPath: self.torPath,
                                                     withIntermediateDirectories: true,
                                                     attributes: [FileAttributeKey.posixPermissions: 0o700])
         } catch {
             print("Directory previously created.")
         }
+        
+        let gordianPath = "/Users/\(NSUserName())/.gordian"
+        
+        do {
+            try FileManager.default.createDirectory(atPath: gordianPath,
+                                                    withIntermediateDirectories: true,
+                                                    attributes: [FileAttributeKey.posixPermissions: 0o700])
+        } catch {
+            print("\(gordianPath) directory previously created.")
+        }
+        
+        let torGordianPath = "/Users/\(NSUserName())/.gordian/tor"
+        
+        do {
+            try FileManager.default.createDirectory(atPath: torGordianPath,
+                                                    withIntermediateDirectories: true,
+                                                    attributes: [FileAttributeKey.posixPermissions: 0o700])
+        } catch {
+            print("\(torGordianPath) directory previously created.")
+        }        
+        
         addTorrc()
         createHiddenServiceDirectory()
     }
     
-    func torPath() -> String {
-        return "/Users/\(NSUserName())/Library/Caches/tor"
-    }
+    
     
     private func addTorrc() {
-        //guard let bundleId = Bundle.main.bundleIdentifier else { return }
-        
         let torrcUrl = URL(fileURLWithPath: "/Users/\(NSUserName())/.torrc")
         
         guard let torrc = Torrc.torrc.data(using: .utf8) else { return }
@@ -197,7 +208,7 @@ class TorClient: NSObject, URLSessionDelegate {
     
     private func createHiddenServiceDirectory() {
         do {
-            try FileManager.default.createDirectory(atPath: "\(torPath())/host",
+            try FileManager.default.createDirectory(atPath: hiddenServicePath,
                                                     withIntermediateDirectories: true,
                                                     attributes: [FileAttributeKey.posixPermissions: 0o700])
         } catch {
@@ -205,7 +216,7 @@ class TorClient: NSObject, URLSessionDelegate {
         }
         
         do {
-            try FileManager.default.createDirectory(atPath: "\(torPath())/host/bitcoin",
+            try FileManager.default.createDirectory(atPath: "\(hiddenServicePath)/bitcoin",
                                                     withIntermediateDirectories: true,
                                                     attributes: [FileAttributeKey.posixPermissions: 0o700])
         } catch {
@@ -213,7 +224,7 @@ class TorClient: NSObject, URLSessionDelegate {
         }
         
         do {
-            try FileManager.default.createDirectory(atPath: "\(torPath())/host/bitcoin/rpc",
+            try FileManager.default.createDirectory(atPath: "\(hiddenServicePath)/bitcoin/rpc",
                                                     withIntermediateDirectories: true,
                                                     attributes: [FileAttributeKey.posixPermissions: 0o700])
         } catch {
@@ -221,7 +232,7 @@ class TorClient: NSObject, URLSessionDelegate {
         }
         
         do {
-            try FileManager.default.createDirectory(atPath: "\(torPath())/host/bitcoin/p2p",
+            try FileManager.default.createDirectory(atPath: "\(hiddenServicePath)/bitcoin/p2p",
                                                     withIntermediateDirectories: true,
                                                     attributes: [FileAttributeKey.posixPermissions: 0o700])
         } catch {
@@ -229,7 +240,7 @@ class TorClient: NSObject, URLSessionDelegate {
         }
         
         do {
-            try FileManager.default.createDirectory(atPath: "\(torPath())/host/bitcoin/rpc/main",
+            try FileManager.default.createDirectory(atPath: "\(hiddenServicePath)/bitcoin/rpc/main",
                                                     withIntermediateDirectories: true,
                                                     attributes: [FileAttributeKey.posixPermissions: 0o700])
         } catch {
@@ -237,7 +248,7 @@ class TorClient: NSObject, URLSessionDelegate {
         }
         
         do {
-            try FileManager.default.createDirectory(atPath: "\(torPath())/host/bitcoin/p2p/main",
+            try FileManager.default.createDirectory(atPath: "\(hiddenServicePath)/bitcoin/p2p/main",
                                                     withIntermediateDirectories: true,
                                                     attributes: [FileAttributeKey.posixPermissions: 0o700])
         } catch {
@@ -245,7 +256,7 @@ class TorClient: NSObject, URLSessionDelegate {
         }
         
         do {
-            try FileManager.default.createDirectory(atPath: "\(torPath())/host/bitcoin/rpc/test",
+            try FileManager.default.createDirectory(atPath: "\(hiddenServicePath)/bitcoin/rpc/test",
                                                     withIntermediateDirectories: true,
                                                     attributes: [FileAttributeKey.posixPermissions: 0o700])
         } catch {
@@ -253,7 +264,7 @@ class TorClient: NSObject, URLSessionDelegate {
         }
         
         do {
-            try FileManager.default.createDirectory(atPath: "\(torPath())/host/bitcoin/p2p/test",
+            try FileManager.default.createDirectory(atPath: "\(hiddenServicePath)/bitcoin/p2p/test",
                                                     withIntermediateDirectories: true,
                                                     attributes: [FileAttributeKey.posixPermissions: 0o700])
         } catch {
@@ -261,7 +272,7 @@ class TorClient: NSObject, URLSessionDelegate {
         }
         
         do {
-            try FileManager.default.createDirectory(atPath: "\(torPath())/host/bitcoin/rpc/regtest",
+            try FileManager.default.createDirectory(atPath: "\(hiddenServicePath)/bitcoin/rpc/regtest",
                                                     withIntermediateDirectories: true,
                                                     attributes: [FileAttributeKey.posixPermissions: 0o700])
         } catch {
@@ -269,7 +280,7 @@ class TorClient: NSObject, URLSessionDelegate {
         }
         
         do {
-            try FileManager.default.createDirectory(atPath: "\(torPath())/host/bitcoin/rpc/signet",
+            try FileManager.default.createDirectory(atPath: "\(hiddenServicePath)/bitcoin/rpc/signet",
                                                     withIntermediateDirectories: true,
                                                     attributes: [FileAttributeKey.posixPermissions: 0o700])
         } catch {
@@ -277,7 +288,7 @@ class TorClient: NSObject, URLSessionDelegate {
         }
         
         do {
-            try FileManager.default.createDirectory(atPath: "\(torPath())/host/bitcoin/p2p/signet",
+            try FileManager.default.createDirectory(atPath: "\(hiddenServicePath)/bitcoin/p2p/signet",
                                                     withIntermediateDirectories: true,
                                                     attributes: [FileAttributeKey.posixPermissions: 0o700])
         } catch {
@@ -286,20 +297,21 @@ class TorClient: NSObject, URLSessionDelegate {
     }
     
     func rpcHostname() -> String? {
-        guard let chain = UserDefaults.standard.string(forKey: "chain") else { return nil }
-        
-        let path = URL(fileURLWithPath: "\(torPath())/host/bitcoin/rpc/\(chain)/hostname")
-        return try? String(contentsOf: path, encoding: .utf8)
+        let chain = UserDefaults.standard.string(forKey: "chain") ?? "main"
+        let path = URL(fileURLWithPath: "\(hiddenServicePath)/bitcoin/rpc/\(chain)/hostname")
+        guard let host = try? String(contentsOf: path, encoding: .utf8) else { return nil }
+        return host.replacingOccurrences(of: "\n", with: "")
     }
     
     func p2pHostname(chain: String) -> String? {
-        let path = URL(fileURLWithPath: "\(torPath())/host/bitcoin/p2p/\(chain)/hostname")
-        return try? String(contentsOf: path, encoding: .utf8)
+        let path = URL(fileURLWithPath: "\(hiddenServicePath)/bitcoin/p2p/\(chain)/hostname")
+        guard let host = try? String(contentsOf: path, encoding: .utf8) else { return nil }
+        return host.replacingOccurrences(of: "\n", with: "")
     }
     
     private func createAuthDirectory() -> String {
         // Create tor v3 auth directory if it does not yet exist
-        let authPath = URL(fileURLWithPath: self.torPath(), isDirectory: true).appendingPathComponent("onion_auth", isDirectory: true).path
+        let authPath = URL(fileURLWithPath: hiddenServicePath, isDirectory: true).appendingPathComponent("onion_auth", isDirectory: true).path
         
         do {
             try FileManager.default.createDirectory(atPath: authPath,

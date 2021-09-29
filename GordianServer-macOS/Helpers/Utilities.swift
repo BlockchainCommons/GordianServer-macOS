@@ -12,7 +12,7 @@ import Cocoa
 extension Notification.Name {
     public static let refresh = Notification.Name(rawValue: "refresh")
     public static let reloadWallets = Notification.Name(rawValue: "reloadWallets")
-    
+    public static let authAdded = Notification.Name(rawValue: "authAdded")
 }
 
 public func randomString(length: Int) -> String {

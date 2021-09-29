@@ -11,7 +11,7 @@ import Cocoa
 class WalletDetail: NSViewController {
     
     var env = [String:String]()
-    var d = Defaults()
+    var d = Defaults.shared
     var name = ""
     var window: NSWindow?
 
@@ -38,7 +38,7 @@ class WalletDetail: NSViewController {
     }
     
     func setEnv() {
-        env = ["BINARY_NAME":d.existingBinary(),"VERSION":d.existingPrefix(),"PREFIX":d.existingPrefix(),"DATADIR":d.dataDir(), "WALLET":name]
+        env = ["BINARY_NAME":d.existingBinary,"VERSION":d.existingPrefix,"PREFIX":d.existingPrefix,"DATADIR":d.dataDir, "WALLET":name]
         #if DEBUG
         print("env = \(env)")
         #endif
@@ -80,9 +80,9 @@ class WalletDetail: NSViewController {
     
     private func runScript(script: SCRIPT, env: [String:String], args: [String], completion: @escaping ((Bool)) -> Void) {
         #if DEBUG
-        print("script: \(script.rawValue)")
+        print("script: \(script.stringValue)")
         #endif
-        let resource = script.rawValue
+        let resource = script.stringValue
         guard let path = Bundle.main.path(forResource: resource, ofType: "command") else {
             return
         }

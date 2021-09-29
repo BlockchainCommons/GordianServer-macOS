@@ -10,11 +10,13 @@ import Foundation
 
 class Defaults {
     
+    static let shared = Defaults()
+    private init() {}
+    
     private func getBitcoinConf(completion: @escaping ((conf: [String]?, error: Bool)) -> Void) {
         let path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/bitcoin.conf")
         
         guard let bitcoinConf = try? String(contentsOf: path, encoding: .utf8) else {
-            print("can not get bitcoin.conf")
             completion((nil, false))
             return
         }
@@ -26,9 +28,6 @@ class Defaults {
     let ud = UserDefaults.standard
     
     func setDefaults(completion: @escaping () -> Void) {
-        if ud.object(forKey: "dataDir") == nil {
-            ud.set("/Users/\(NSUserName())/Library/Application\\ Support/Bitcoin", forKey: "dataDir")
-        }
         
         func setLocals() {
             if ud.object(forKey: "prune") == nil {
@@ -46,7 +45,8 @@ class Defaults {
         getBitcoinConf { [unowned vc = self] (conf, error) in
             var proxyOn = false
             var listenOn = false
-            var bindOn = false
+            var onlyNetOnion = false
+            var discover = false
             if !error && conf != nil {
                 if conf!.count > 0 {
                     for setting in conf! {
@@ -55,19 +55,25 @@ class Defaults {
                             let k = arr[0]
                             let existingValue = arr[1]
                             switch k {
+                            case "blocksdir":
+                                self.ud.setValue(existingValue, forKey: "blocksDir")
+                                
+                            case "discover":
+                                if existingValue == "0" {
+                                    discover = false
+                                }
+                            case "onlynet":
+                                if existingValue == "onion" {
+                                    onlyNetOnion = true
+                                }
                             case "proxy":
-                                if existingValue == "127.0.0.1:9050" {
+                                if existingValue == "127.0.0.1:19150" {
                                     proxyOn = true
                                 }
                                 
                             case "listen":
                                 if Int(existingValue) == 1 {
                                     listenOn = true
-                                }
-                                
-                            case "bindaddress":
-                                if existingValue == "127.0.0.1" {
-                                    bindOn = true
                                 }
                                 
                             case "testnet", "regtest":
@@ -97,7 +103,7 @@ class Defaults {
                         }
                     }
                     
-                    if bindOn && proxyOn && listenOn {
+                    if proxyOn && listenOn && onlyNetOnion && !discover {
                         vc.ud.set(1, forKey: "isPrivate")
                     } else {
                         vc.ud.set(0, forKey: "isPrivate")
@@ -113,46 +119,58 @@ class Defaults {
         if ud.object(forKey: "nodeLabel") == nil {
             ud.set("StandUp Node", forKey: "nodeLabel")
         }
+        
+        if ud.object(forKey: "autoStart") == nil {
+            ud.setValue(true, forKey: "autoStart")
+        }
     }
     
-    func dataDir() -> String {
+    var autoRefresh: Bool {
+        return ud.object(forKey: "autoRefresh") as? Bool ?? true
+    }
+    
+    var autoStart: Bool {
+        return ud.object(forKey: "autoStart") as? Bool ?? true
+    }
+    
+    var dataDir: String {
         return "/Users/\(NSUserName())/Library/Application Support/Bitcoin"
     }
     
-    func blocksDir() -> String {
+    var blocksDir: String {
         return ud.object(forKey: "blocksDir") as? String ?? "/Users/\(NSUserName())/Library/Application Support/Bitcoin"
     }
     
-    func isPrivate() -> Int {
+    var isPrivate: Int {
         return ud.object(forKey: "isPrivate") as? Int ?? 0
     }
     
-    func prune() -> Int {
+    var prune: Int {
         return ud.object(forKey:"prune") as? Int ?? 1000
     }
     
-    func txindex() -> Int {
+    var txindex: Int {
         return ud.object(forKey: "txindex") as? Int ?? 0
     }
     
-    func walletdisabled() -> Int {
+    var walletdisabled: Int {
         return ud.object(forKey: "disablewallet") as? Int ?? 0
     }
     
-    func setDataDir(value: String) {
-        ud.set(value, forKey: "dataDir")
-    }
+//    func setDataDir(value: String) {
+//        ud.set(value, forKey: "dataDir")
+//    }
     
-    func existingVersion() -> String {
+    var existingVersion: String {
         return ud.object(forKey: "version") as? String ?? "22.0"
     }
     
-    func existingBinary() -> String {
-        return ud.object(forKey: "macosBinary") as? String ?? "bitcoin-\(existingVersion())-osx64.tar.gz"
+    var existingBinary: String {
+        return ud.object(forKey: "macosBinary") as? String ?? "bitcoin-\(existingVersion)-osx64.tar.gz"
     }
     
-    func existingPrefix() -> String {
-        return ud.object(forKey: "binaryPrefix") as? String ?? "bitcoin-\(existingVersion())"
+    var existingPrefix: String {
+        return ud.object(forKey: "binaryPrefix") as? String ?? "bitcoin-\(existingVersion)"
     }
 
 }

@@ -21,16 +21,19 @@ class Settings: NSViewController, NSTextFieldDelegate {
     var args = [String]()
     var refreshing = Bool()
     
+    @IBOutlet weak var autoStartOutlet: NSButton!
     @IBOutlet weak var pruneValueField: NSTextField!
     @IBOutlet var directoryLabel: NSTextField!
     @IBOutlet var walletDisabled: NSButton!
     @IBOutlet var txIndexOutlet: NSButton!
     @IBOutlet var goPrivateOutlet: NSButton!
+    @IBOutlet weak var refreshButtonOutlet: NSButton!
+    @IBOutlet weak var autoRefreshOutlet: NSButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         pruneValueField.delegate = self
-        let d = Defaults()
+        let d = Defaults.shared
         d.setDefaults() { [unowned vc = self] in
             vc.getSettings()
         }
@@ -43,10 +46,57 @@ class Settings: NSViewController, NSTextFieldDelegate {
     
     // MARK: User Actions
     
+    @IBAction func autoRefreshAction(_ sender: Any) {
+        let value = autoRefreshOutlet.state
+        UserDefaults.standard.setValue((value == .on), forKey: "autoRefresh")
+        
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: .refresh, object: nil, userInfo: nil)
+        }
+    }
+    
+    @IBAction func didSelectAutoStart(_ sender: Any) {
+        let value = autoStartOutlet.state
+        UserDefaults.standard.setValue((value == .on), forKey: "autoStart")
+    }
+    
+    @IBAction func refreshHiddenServiceAction(_ sender: Any) {
+        let network = UserDefaults.standard.string(forKey: "chain") ?? "main"
+        
+        actionAlert(message: "Refresh \(network) hidden service?", info: "This refreshes your hidden service so that any clients that were connected to your node will no longer be able to connect, it's a good idea to do this if for some reason you think someone may have access to your node if for example your phone was lost or stolen.") { [weak self] (response) in
+            guard let self = self else { return }
+            
+            if response {
+                
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    
+                    self.refreshButtonOutlet.isEnabled = false
+                }
+                
+                let path = "\(TorClient.sharedInstance.hiddenServicePath)/bitcoin/rpc/\(network)/"
+                
+                do {
+                    try FileManager.default.removeItem(atPath: path)
+                        
+                    TorClient.sharedInstance.resign()
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        TorClient.sharedInstance.start(delegate: self)
+                    }
+                    
+                } catch {
+                    simpleAlert(message: "There was an issue...", info: "Your hidden service was not refreshed. Please let us know about this bug.", buttonLabel: "OK")
+                }
+            }
+        }
+    }
+    
+    
     @IBAction func goPrivate(_ sender: Any) {
         let value = goPrivateOutlet.state
         if value == .on {
-            actionAlert(message: "Go private?", info: "This sets your proxy to the local host and tors control port, binds localhost address, and sets listen to true in your bitcoin.conf, in plain english this means your node will only accept connections over the Tor network, this can make initial block download very slow, it is recommended to go private once your node is fully synced.") { [unowned vc = self] (response) in
+            actionAlert(message: "Go private?", info: "Your node will only accept connections over the Tor network, this can make initial block download very slow, it is recommended to go private once your node is fully synced.") { [unowned vc = self] (response) in
                 if response {
                     vc.privateOn()
                 } else {
@@ -66,10 +116,10 @@ class Settings: NSViewController, NSTextFieldDelegate {
     
     func privateOn() {
         var proxyExists = false
-        var debugExists = false
-        //var bindExists = false
+        var onlynetExists = false
         var listenExists = false
         var discoverExists = false
+        
         getBitcoinConf { [unowned vc = self] (conf, error) in
             if !error && conf != nil {
                 var stringConf = conf!.joined(separator: "\n")
@@ -79,46 +129,44 @@ class Settings: NSViewController, NSTextFieldDelegate {
                         let k = arr[0]
                         let existingValue = arr[1]
                         switch k {
+                        case "#onlynet", "onlynet":
+                            onlynetExists = true
+                            stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "onlynet=onion")
+                            
                         case "discover", "#discover":
                             discoverExists = true
-                            stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "discover=0")
+                            if existingValue == "1" {
+                                stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "discover=0")
+                            }
                             
-                        case "#debug":
-                            debugExists = true
-                            stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "debug=tor")
-                            
-                        case "#proxy":
+                        case "#proxy", "proxy":
                             proxyExists = true
-                            stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "proxy=127.0.0.1:19050")
+                            stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "proxy=127.0.0.1:19150")
                             
-                        case "#listen":
+                        case "#listen", "listen":
                             listenExists = true
                             stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "listen=1")
-                            
-//                        case "#bindaddress":
-//                            bindExists = true
-//                            stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "bindaddress=127.0.0.1")
                             
                         default:
                             break
                         }
                     }
                 }
+                if !onlynetExists {
+                    stringConf = "onlynet=onion\n" + stringConf
+                }
+                
                 if !discoverExists {
                     stringConf = "discover=0\n" + stringConf
                 }
-                if !debugExists {
-                    stringConf = "debug=tor\n" + stringConf
-                }
+
                 if !proxyExists {
-                    stringConf = "proxy=127.0.0.1:19050\n" + stringConf
+                    stringConf = "proxy=127.0.0.1:19150\n" + stringConf
                 }
                 if !listenExists {
                     stringConf = "listen=1\n" + stringConf
                 }
-//                if !bindExists {
-//                    stringConf = "bindaddress=127.0.0.1\n" + stringConf
-//                }
+                
                 vc.setBitcoinConf(conf: stringConf, activeOutlet: vc.goPrivateOutlet, newValue: 3, key: "")
             } else {
                 simpleAlert(message: "Error", info: "We had a problem getting your bitcoin.conf, please try again", buttonLabel: "OK")
@@ -136,25 +184,12 @@ class Settings: NSViewController, NSTextFieldDelegate {
                         let k = arr[0]
                         let existingValue = arr[1]
                         switch k {
+                        case "onlynet", "#onlynet":
+                            stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "#onlynet=onion")
                         case "discover", "#discover":
                             if existingValue == "0" {
                                 stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "discover=1")
                             }
-                            
-                        case "debug", "#debug":
-                            if existingValue == "tor" {
-                                stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "#debug=\(existingValue)")
-                            }
-
-                        case "proxy", "#proxy":
-                            stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "#proxy=\(existingValue)")
-
-                        case "listen", "#listen":
-                            stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "#listen=\(existingValue)")
-
-//                        case "bindaddress", "#bindaddress":
-//                            stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "#bindaddress=\(existingValue)")
-                            
                         default:
                             break
                         }
@@ -168,18 +203,55 @@ class Settings: NSViewController, NSTextFieldDelegate {
     }
     
     @IBAction func removeBitcoinCore(_ sender: Any) {
-        DispatchQueue.main.async { [unowned vc = self] in
-            destructiveActionAlert(message: "Danger! Master kill switch!", info: "This action PERMANENTLY, IMMEDIATELY and IRREVERSIBLY deletes ALL WALLETS, Bitcoin Core binaries, and Gordian Server Tor related files and directories!") { response in
-                if response {
-                    let d = Defaults()
-                    let env = ["DATADIR":d.dataDir()]
-                    vc.runScript(script: .removeBitcoin, env: env, args: []) { success in
-                        if success {
-                            simpleAlert(message: "Your system has been purged.", info: "", buttonLabel: "OK")
-                        } else {
-                           simpleAlert(message: "Error", info: "There was an issue deleting the directory", buttonLabel: "OK")
+        let rpc = MakeRpcCall.shared
+        var port:String!
+        let chain = UserDefaults.standard.object(forKey: "chain") as? String ?? "main"
+        let rpcuser = UserDefaults.standard.object(forKey: "rpcuser") as? String ?? ""
+        let rpcpassword = UserDefaults.standard.object(forKey: "rpcpassword") as? String ?? ""
+        switch chain {
+        case "main":
+            port = "8332"
+        case "test":
+            port = "18332"
+        case "regtest":
+            port = "18443"
+        case "signet":
+            port = "38332"
+        default:
+            break
+        }
+        rpc.command(method: "getblockchaininfo", port: port, user: rpcuser, password: rpcpassword) { [weak self] (response, error) in
+            guard let self = self else { return }
+            
+            if error == nil {
+                simpleAlert(message: "Bitcoin Core is running!", info: "You must shutdown Bitcoin Core before using this kill switch.", buttonLabel: "OK")
+            } else if let error = error {
+                switch error {
+                case _ where error.contains("Could not connect to the server"):
+                    DispatchQueue.main.async { [unowned vc = self] in
+                        destructiveActionAlert(message: "Danger! Master kill switch!", info: "This action PERMANENTLY, IMMEDIATELY and IRREVERSIBLY deletes ALL WALLETS, Bitcoin Core binaries, and Gordian Server Tor related files and directories!") { response in
+                            if response {
+                                TorClient.sharedInstance.resign()
+                                let d = Defaults.shared
+                                let env = ["DATADIR":d.dataDir]
+                                vc.runScript(script: .removeBitcoin, env: env, args: []) { success in
+                                    if success {
+                                        DispatchQueue.main.async { [weak self] in
+                                            guard let self = self else { return }
+                                            
+                                            guard let appDelegate = NSApplication.shared.delegate as? AppDelegate else { return }
+                                            appDelegate.isKilling = true
+                                            NSApp.terminate(self)
+                                        }
+                                    } else {
+                                       simpleAlert(message: "Error", info: "There was an issue deleting the directory", buttonLabel: "OK")
+                                    }
+                                }
+                            }
                         }
                     }
+                default:
+                    simpleAlert(message: "Bitcoin Core is running!", info: "You must shutdown Bitcoin Core before using this kill switch.", buttonLabel: "OK")
                 }
             }
         }
@@ -220,7 +292,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
             if result.rawValue == NSApplication.ModalResponse.OK.rawValue {
                 vc.selectedFolder = panel.urls[0]
                 DispatchQueue.main.async { [unowned vc = self] in
-                    vc.directoryLabel.stringValue = self.selectedFolder?.path ?? Defaults().blocksDir()
+                    vc.directoryLabel.stringValue = self.selectedFolder?.path ?? Defaults.shared.blocksDir
                     
                     self.getBitcoinConf { [unowned vc = self] (conf, error) in
                         if !error && conf != nil {
@@ -258,8 +330,8 @@ class Settings: NSViewController, NSTextFieldDelegate {
     }
     
     func setBitcoinConf(conf: String, activeOutlet: NSButton?, newValue: Int, key: String) {
-        let d = Defaults()
-        let env = ["CONF":conf,"DATADIR":d.dataDir()]
+        let d = Defaults.shared
+        let env = ["CONF":conf,"DATADIR":d.dataDir]
         runScript(script: .updateBTCConf, env: env, args: args) { [unowned vc = self] success in
             if success {
                 if newValue < 2 || key == "prune" {
@@ -273,8 +345,8 @@ class Settings: NSViewController, NSTextFieldDelegate {
     }
     
     func setBlocksDir(conf: String, newValue: String) {
-        let d = Defaults()
-        let env = ["CONF":conf,"DATADIR":d.dataDir()]
+        let d = Defaults.shared
+        let env = ["CONF":conf,"DATADIR":d.dataDir]
         runScript(script: .updateBTCConf, env: env, args: args) { [weak self] success in
             guard let self = self else { return }
             
@@ -387,19 +459,33 @@ class Settings: NSViewController, NSTextFieldDelegate {
     }
     
     func getSettings() {
-        let d = Defaults()
-        let pruneValue = d.prune()
-        setState(int: d.txindex(), outlet: txIndexOutlet)
-        setState(int: d.walletdisabled(), outlet: walletDisabled)
-        setState(int: d.isPrivate(), outlet: goPrivateOutlet)
+        let d = Defaults.shared
+        let pruneValue = d.prune
+        setState(int: d.txindex, outlet: txIndexOutlet)
+        setState(int: d.walletdisabled, outlet: walletDisabled)
+        setState(int: d.isPrivate, outlet: goPrivateOutlet)
+        
+        if d.autoStart {
+            setState(int: 1, outlet: autoStartOutlet)
+        } else {
+            setState(int: 0, outlet: autoStartOutlet)
+        }
+        
+        if d.autoRefresh {
+            setState(int: 1, outlet: autoRefreshOutlet)
+        } else {
+            setState(int: 0, outlet: autoRefreshOutlet)
+        }
+        
         if ud.object(forKey: "dataDir") != nil {
             DispatchQueue.main.async { [unowned vc = self] in
-                vc.directoryLabel.stringValue = d.blocksDir()
+                vc.directoryLabel.stringValue = d.blocksDir
             }
         }
         DispatchQueue.main.async { [weak self] in
             self?.pruneValueField.stringValue = "\(pruneValue)"
         }
+        
     }
     
     func getSetting(key: BTCCONF, button: NSButton, def: Int) {
@@ -430,9 +516,9 @@ class Settings: NSViewController, NSTextFieldDelegate {
     
     private func runScript(script: SCRIPT, env: [String:String], args: [String], completion: @escaping ((Bool)) -> Void) {
         #if DEBUG
-        print("script: \(script.rawValue)")
+        print("script: \(script.stringValue)")
         #endif
-        let resource = script.rawValue
+        let resource = script.stringValue
         guard let path = Bundle.main.path(forResource: resource, ofType: "command") else {
             return
         }
@@ -512,5 +598,22 @@ class Settings: NSViewController, NSTextFieldDelegate {
             break
         }
     }
+}
+
+extension Settings: OnionManagerDelegate {
     
+    func torConnProgress(_ progress: Int) {}
+    
+    func torConnFinished() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.refreshButtonOutlet.isEnabled = true
+            simpleAlert(message: "Hidden Service refreshed ✓", info: "You will need to reconnect any client apps as they will no longer have access.", buttonLabel: "OK")
+        }
+    }
+    
+    func torConnDifficulties() {
+        simpleAlert(message: "Tor connection issue.", info: "We are having trouble restarting Tor. Your hidden service will not refresh until Tor reboots successfully.", buttonLabel: "OK")
+    }
 }
