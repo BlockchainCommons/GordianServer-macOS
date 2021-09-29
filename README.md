@@ -80,11 +80,22 @@ Instead of downloading binaries through our Github repo, you can build *GordianS
 5. When *Xcode* launches, press the "play" button in the top left.
    - If you had to download the clone by hand from within XCode, you'll likely need to navigate to the `xcodeproj` file in the `Xcode` directory.
 
+### Warning: Old Installations
+
+If you had an installation of Gordian Server prior to 1.0.0 it may not be fully compatible with your 1.0.0 setup. In this case, watch for any problems, particularly with Tor setup, with Bitcoin Core setup, and with RPC connections. If any such errors occur, you should ask Gordian Server to reinstall Bitcoin:
+
+1. Use your wallet (such as Gordian Wallet or Fully Noded) to backup any private keys or to sweep funds off of Server addresses. _If you do not do this, your funds will be lost._
+2. Shutdown your current network by clicking "Stop". Wait for it to finish.
+3. Remove Bitcoin by going to "Settings" (the Gear) and choosing "KILL ALL".
+4. Restart Gordian Server, and agree to install the newest Bitcoin.
+
+This process will remove and reinstall Bitcoin, which will make sure any old, incompatible configuration files are removed and recreated.
+
 ### After Installation: Quick Connect
 
-Once the app has completely installed (by either method) and once it has launched *Bitcoin Core*, you can access a *Quick Connect QR code* that can be used to securely link your full node remotely over Tor to other devices, such as the iOS application [GordianWallet](https://github.com/BlockchainCommons/GordianWallet-iOS). Simply choose "Quick Connect > Quick Connect" from the main menu to see the QR code.
+Once the app has completely installed (by either method) and once it has launched *Bitcoin Core*, you can access a *Quick Connect QR code* that can be used to securely link your full node remotely over Tor to other devices, such as the iOS application [GordianWallet](https://github.com/BlockchainCommons/GordianWallet-iOS) or [Fully Noded](https://fullynoded.app/). Simply choose "Quick Connect > Quick Connect" from the main menu to see the QR code.
 
-*Standup* allows you to run all three Bitcoin networks (`mainnet`, `testnet` and `regtest`) simultaneously via its user interface. *GordianServer-macOS* will present an independent *Quick Connect QR code* for each network so that you may remotely connect to and utilize each.
+Gordian Server allows you to run all three Bitcoin networks (`mainnet`, `testnet` and `regtest`) simultaneously via its user interface. It will present an independent *Quick Connect QR code* for each network so that you may remotely connect to and utilize each.
 
 ### After Installation: Startup
 
