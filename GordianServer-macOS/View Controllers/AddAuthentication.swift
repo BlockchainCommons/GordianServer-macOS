@@ -71,7 +71,7 @@ class AddAuthentication: NSViewController, NSWindowDelegate {
         let filename = randomString(length: 10)
         let pubkey = self.textInput.stringValue.data(using: .utf8)
         let chain = UserDefaults.standard.string(forKey: "chain") ?? "main"
-        let path = "\(TorClient.sharedInstance.torPath())/host/bitcoin/\(chain)/authorized_clients/"
+        let path = "\(TorClient.sharedInstance.hiddenServicePath)/bitcoin/rpc/\(chain)/authorized_clients/"
         
         do {
             try FileManager.default.createDirectory(atPath: path,
@@ -89,7 +89,36 @@ class AddAuthentication: NSViewController, NSWindowDelegate {
         }
         
         if retrievedPubkey == self.textInput.stringValue {
-            simpleAlert(message: "Authentication added ✓", info: "\(self.textInput.stringValue) was saved to \("\(path)\(filename).auth")", buttonLabel: "OK")
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: .authAdded, object: nil, userInfo: nil)
+                let alert = NSAlert()
+                alert.messageText = "Authentication added ✓"
+                alert.informativeText = "\(self.textInput.stringValue) was saved to \("\(path)\(filename).auth")"
+                alert.addButton(withTitle: "Add more")
+                alert.addButton(withTitle: "Done")
+                alert.alertStyle = .informational
+                let modalResponse = alert.runModal()
+                if modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        
+                        self.textInput.stringValue = ""
+                    }
+                }
+                
+                if modalResponse == NSApplication.ModalResponse.alertSecondButtonReturn {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        
+                        TorClient.sharedInstance.resign()
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                            TorClient.sharedInstance.start(delegate: nil)
+                            self.window?.performClose(nil)
+                        }
+                    }
+                }
+            }
         } else {
             simpleAlert(message: "Auth key error.", info: "Something went wrong and your auth key was not saved correctly. Please reach out and let us know about this bug.", buttonLabel: "OK")
         }

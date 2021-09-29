@@ -35,6 +35,10 @@ class TorClient: NSObject, URLSessionDelegate {
     var isRefreshing = false
     let hiddenServicePath = "/Users/\(NSUserName())/.gordian/tor/host"
     
+    var torPath: String {
+        return "/Users/\(NSUserName())/.gordian/.tor"
+    }
+    
     // The tor url session configuration.
     // Start with default config as fallback.
     private lazy var sessionConfiguration: URLSessionConfiguration = .default
@@ -76,7 +80,7 @@ class TorClient: NSObject, URLSessionDelegate {
         ]
         
         self.config.cookieAuthentication = true
-        self.config.dataDirectory = URL(fileURLWithPath: self.torPath())
+        self.config.dataDirectory = URL(fileURLWithPath: self.torPath)
         self.config.controlSocket = self.config.dataDirectory?.appendingPathComponent("cp")
         self.thread = TorThread(configuration: self.config)
         
@@ -157,7 +161,7 @@ class TorClient: NSObject, URLSessionDelegate {
     
     private func createTorDirectory() {
         do {
-            try FileManager.default.createDirectory(atPath: self.torPath(),
+            try FileManager.default.createDirectory(atPath: self.torPath,
                                                     withIntermediateDirectories: true,
                                                     attributes: [FileAttributeKey.posixPermissions: 0o700])
         } catch {
@@ -182,18 +186,13 @@ class TorClient: NSObject, URLSessionDelegate {
                                                     attributes: [FileAttributeKey.posixPermissions: 0o700])
         } catch {
             print("\(torGordianPath) directory previously created.")
-        }
-        
-        
+        }        
         
         addTorrc()
         createHiddenServiceDirectory()
     }
     
-    func torPath() -> String {
-        //return "/Users/\(NSUserName())/Library/Caches/tor"
-        return "/Users/\(NSUserName())/.gordian/.tor"
-    }
+    
     
     private func addTorrc() {
         let torrcUrl = URL(fileURLWithPath: "/Users/\(NSUserName())/.torrc")
@@ -298,8 +297,7 @@ class TorClient: NSObject, URLSessionDelegate {
     }
     
     func rpcHostname() -> String? {
-        guard let chain = UserDefaults.standard.string(forKey: "chain") else { return nil }
-        
+        let chain = UserDefaults.standard.string(forKey: "chain") ?? "main"
         let path = URL(fileURLWithPath: "\(hiddenServicePath)/bitcoin/rpc/\(chain)/hostname")
         guard let host = try? String(contentsOf: path, encoding: .utf8) else { return nil }
         return host.replacingOccurrences(of: "\n", with: "")

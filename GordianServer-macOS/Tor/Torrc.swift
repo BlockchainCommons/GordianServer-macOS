@@ -49,7 +49,7 @@ class Torrc {
     ## Send all messages of level 'notice' or higher to /usr/local/var/log/tor/notices.log
     Log notice file /Users/\(NSUserName())/.gordian/tor/notices.log
     ## Send every possible message to /usr/local/var/log/tor/debug.log
-    #Log debug file \(TorClient.sharedInstance.torPath())/debug.log
+    #Log debug file \(TorClient.sharedInstance.torPath)/debug.log
     ## Use the system log instead of Tor's logfiles
     #Log notice syslog
     ## To send all messages to stderr:
@@ -81,31 +81,31 @@ class Torrc {
     ## HiddenServicePort x y:z says to redirect requests on port x to the
     ## address y:z.
     
-    HiddenServiceDir /Users/\(NSUserName())/.gordian/tor/host/bitcoin/rpc/main/
+    HiddenServiceDir \(TorClient.sharedInstance.hiddenServicePath)/bitcoin/rpc/main/
     HiddenServiceVersion 3
     HiddenServicePort 8332 127.0.0.1:8332
     
-    HiddenServiceDir /Users/\(NSUserName())/.gordian/tor/host/bitcoin/p2p/main/
+    HiddenServiceDir \(TorClient.sharedInstance.hiddenServicePath)/bitcoin/p2p/main/
     HiddenServiceVersion 3
     HiddenServicePort 8333 127.0.0.1:8334
     
-    HiddenServiceDir /Users/\(NSUserName())/.gordian/tor/host/bitcoin/rpc/test/
+    HiddenServiceDir \(TorClient.sharedInstance.hiddenServicePath)/bitcoin/rpc/test/
     HiddenServiceVersion 3
     HiddenServicePort 18332 127.0.0.1:18332
     
-    HiddenServiceDir /Users/\(NSUserName())/.gordian/tor/host/bitcoin/p2p/test/
+    HiddenServiceDir \(TorClient.sharedInstance.hiddenServicePath)/bitcoin/p2p/test/
     HiddenServiceVersion 3
     HiddenServicePort 18333 127.0.0.1:8334
     
-    HiddenServiceDir /Users/\(NSUserName())/.gordian/tor/host/bitcoin/rpc/regtest/
+    HiddenServiceDir \(TorClient.sharedInstance.hiddenServicePath)/bitcoin/rpc/regtest/
     HiddenServiceVersion 3
     HiddenServicePort 18443 127.0.0.1:18443
     
-    HiddenServiceDir /Users/\(NSUserName())/.gordian/tor/host/bitcoin/rpc/signet/
+    HiddenServiceDir \(TorClient.sharedInstance.hiddenServicePath)/bitcoin/rpc/signet/
     HiddenServiceVersion 3
     HiddenServicePort 38332 127.0.0.1:38332
     
-    HiddenServiceDir /Users/\(NSUserName())/.gordian/tor/host/bitcoin/p2p/signet/
+    HiddenServiceDir \(TorClient.sharedInstance.hiddenServicePath)/bitcoin/p2p/signet/
     HiddenServiceVersion 3
     HiddenServicePort 38333 127.0.0.1:8334
     

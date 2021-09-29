@@ -88,6 +88,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         isLoading = true
         peerDetailsButton.alphaValue = 0
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNow), name: .refresh, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(authAdded), name: .authAdded, object: nil)
         
         d.setDefaults { [weak self] in
             guard let self = self else { return }
@@ -329,7 +330,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         
         actionAlert(message: "Remove \(chain) network authentication keys?", info: "Removing your authentication keys means anyone who gets your quick connect QR will be able to access your \(chain) network Bitcoin Core wallets. Are you sure you want to remove all authentication keys?") { response in
             if response {
-                let path = "\(TorClient.sharedInstance.torPath())/host/bitcoin/\(chain)/authorized_clients/"
+                let path = "\(TorClient.sharedInstance.hiddenServicePath)/bitcoin/rpc/\(chain)/authorized_clients/"
                 
                 do {
                     let filePaths = try FileManager.default.contentsOfDirectory(atPath: path)
@@ -337,6 +338,10 @@ class ViewController: NSViewController, NSWindowDelegate {
                         try FileManager.default.removeItem(atPath: path + filePath)
                         
                         if i + 1 == filePaths.count {
+                            self.mgr?.resign()
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                self.mgr?.start(delegate: self)
+                            }
                             simpleAlert(message: "Success", info: "Authorized clients files removed, your \(chain) network Bitcoin Core rpc hidden services are no longer authenticated!", buttonLabel: "OK")
                         }
                     }
@@ -1314,6 +1319,10 @@ class ViewController: NSViewController, NSWindowDelegate {
         runScript(script: .installXcode)
     }
     
+    @objc func authAdded() {
+        updateTorInfo()
+    }
+    
     private func updateTorInfo() {
         guard let rpchostname = mgr?.rpcHostname() else {
             return
@@ -1335,7 +1344,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             }
             
             let chain = UserDefaults.standard.string(forKey: "chain") ?? "main"
-            let path = "\(TorClient.sharedInstance.torPath())/host/bitcoin/rpc/\(chain)/authorized_clients/"
+            let path = "\(TorClient.sharedInstance.hiddenServicePath)/bitcoin/rpc/\(chain)/authorized_clients/"
             
             do {
                 let filePaths = try FileManager.default.contentsOfDirectory(atPath: path)
@@ -1344,6 +1353,12 @@ class ViewController: NSViewController, NSWindowDelegate {
                         guard let self = self else { return }
                         
                         self.rpcAuthenticated.stringValue = "\(filePaths.count) authenticated rpc clients"
+                    }
+                } else {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        
+                        self.rpcAuthenticated.stringValue = "rpc host unauthenticated"
                     }
                 }
             } catch {

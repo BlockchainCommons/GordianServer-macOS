@@ -74,7 +74,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
                     self.refreshButtonOutlet.isEnabled = false
                 }
                 
-                let path = "\(TorClient.sharedInstance.torPath())/host/bitcoin/rpc/\(network)/"
+                let path = "\(TorClient.sharedInstance.hiddenServicePath)/bitcoin/rpc/\(network)/"
                 
                 do {
                     try FileManager.default.removeItem(atPath: path)
