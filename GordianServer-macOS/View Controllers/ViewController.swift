@@ -122,8 +122,6 @@ class ViewController: NSViewController, NSWindowDelegate {
             }
             
             if self.mgr?.state == .connected {
-                //self.setAutoRefreshTimer()
-                
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     
@@ -1024,6 +1022,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 
+                self.bitcoinRunning = true
                 let blockchainInfo = BlockchainInfo(response)
                 self.blocksOutlet.stringValue = "\(blockchainInfo.blocks)"
                 self.difficultyOutlet.stringValue = "\(blockchainInfo.difficulty.diffString)"
