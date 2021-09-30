@@ -595,6 +595,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             let path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/bitcoin.conf")
             
             guard let conf = try? String(contentsOf: path, encoding: .utf8) else {
+                self.hideSpinner()
                 actionAlert(message: "Missing bitcoin.conf file.",
                             info: "You need a bitcoin.conf file for Gordian Server to function. Would you like to add the default bitcoin.conf?") { [weak self] response in
                     guard let self = self else { return }

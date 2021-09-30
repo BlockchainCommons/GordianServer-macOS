@@ -316,7 +316,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidBecomeActive(_ notification: Notification) {
 //        let storyboard = NSStoryboard(name: "Main", bundle: nil)
 //        let mainConsole = storyboard.instantiateController(withIdentifier: "Console") as! ViewController
-//        mainConsole.setTimer()
+//        mainConsole.setAutoRefreshTimer()
     }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
