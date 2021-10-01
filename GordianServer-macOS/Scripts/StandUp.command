@@ -6,6 +6,21 @@
 #  Created by Peter on 07/11/19.
 #  Copyright © 2019 Blockchain Commons, LLC
 
+GPG_PATH=""
+
+if [[ $(command -v /opt/homebrew/bin/gpg) != "" ]]; then
+    GPG_PATH="/opt/homebrew/bin/gpg"
+elif [[ $(command -v /usr/local/bin/gpg) != "" ]]; then
+    GPG_PATH="/usr/local/bin/gpg"
+elif [[ $(command -v /usr/local/bin/brew/gpg) != "" ]]; then
+    GPG_PATH="/usr/local/bin/brew/gpg"
+elif [[ $(command -v /usr/local/MacGPG2/bin/gpg) != "" ]]; then
+    GPG_PATH="/usr/local/MacGPG2/bin/gpg"
+else
+    echo "GPG NOT INSTALLED, UNABLE TO VERIFY SIGNATURES!"
+    echo "Click the Supported Apps menu item and GPG Suite to install GPG. Or install homebrew and run `brew install gnupg`."
+fi
+
 function setUpGordianDir () {
     if ! [ -d ~/.gordian ]; then
         mkdir ~/.gordian
@@ -54,7 +69,7 @@ function installBitcoin () {
 }
 
 function verifySigs() {
-  if [[ $(command -v /usr/local/bin/gpg) == "" ]]; then
+  if [[ $GPG_PATH == "" ]]; then
     echo "GPG NOT INSTALLED, UNABLE TO VERIFY SIGNAURES!"
     echo "To install GPG click Supported Apps in the menu and GPG Suite, signature verification can be done later."
     curl https://raw.githubusercontent.com/bitcoin/bitcoin/master/contrib/builder-keys/keys.txt -o ~/.gordian/BitcoinCore/keys.txt
@@ -68,8 +83,8 @@ function verifySigs() {
     # Verifying Bitcoin: Signature
     echo "Verifying Bitcoin."
 
-    export SHASIG=`sudo -u $(whoami) /usr/local/bin/gpg --verify ~/.gordian/BitcoinCore/SHA256SUMS.asc ~/.gordian/BitcoinCore/SHA256SUMS 2>&1 | grep "Good signature"`
-    export SHACOUNT=`sudo -u $(whoami) /usr/local/bin/gpg --verify ~/.gordian/BitcoinCore/SHA256SUMS.asc ~/.gordian/BitcoinCore/SHA256SUMS 2>&1 | grep "Good signature" | wc -l`
+    export SHASIG=`sudo -u $(whoami) $GPG_PATH --verify ~/.gordian/BitcoinCore/SHA256SUMS.asc ~/.gordian/BitcoinCore/SHA256SUMS 2>&1 | grep "Good signature"`
+    export SHACOUNT=`sudo -u $(whoami) $GPG_PATH --verify ~/.gordian/BitcoinCore/SHA256SUMS.asc ~/.gordian/BitcoinCore/SHA256SUMS 2>&1 | grep "Good signature" | wc -l`
   
     echo "SHASIG: $SHASIG"
 

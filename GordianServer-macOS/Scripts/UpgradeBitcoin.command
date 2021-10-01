@@ -5,6 +5,21 @@
 #
 #  Created by Peter on 19/11/19.
 #  Copyright © 2019 Blockchain Commons, LLC
+GPG_PATH=""
+
+if [[ $(command -v /opt/homebrew/bin/gpg) != "" ]]; then
+    GPG_PATH="/opt/homebrew/bin/gpg"
+elif [[ $(command -v /usr/local/bin/gpg) != "" ]]; then
+    GPG_PATH="/usr/local/bin/gpg"
+elif [[ $(command -v /usr/local/bin/brew/gpg) != "" ]]; then
+    GPG_PATH="/usr/local/bin/brew/gpg"
+elif [[ $(command -v /usr/local/MacGPG2/bin/gpg) != "" ]]; then
+    GPG_PATH="/usr/local/MacGPG2/bin/gpg"
+else
+    echo "GPG NOT INSTALLED, UNABLE TO VERIFY SIGNATURES!"
+    echo "Click the Supported Apps menu item and GPG Suite to install GPG. Or install homebrew and run `brew install gnupg`."
+fi
+
 echo "Updating to $VERSION"
 echo "Removing ~/.gordian/BitcoinCore"
 rm -R ~/.gordian/BitcoinCore
@@ -52,8 +67,8 @@ function verifySigs() {
 
   echo "Verifying Bitcoin."
 
-  export SHASIG=`sudo -u $(whoami) /usr/local/bin/gpg --verify ~/.gordian/BitcoinCore/SHA256SUMS.asc ~/.gordian/BitcoinCore/SHA256SUMS 2>&1 | grep "Good signature"`
-  export SHACOUNT=`sudo -u $(whoami) /usr/local/bin/gpg --verify ~/.gordian/BitcoinCore/SHA256SUMS.asc ~/.gordian/BitcoinCore/SHA256SUMS 2>&1 | grep "Good signature" | wc -l`
+  export SHASIG=`sudo -u $(whoami) $GPG_PATH --verify ~/.gordian/BitcoinCore/SHA256SUMS.asc ~/.gordian/BitcoinCore/SHA256SUMS 2>&1 | grep "Good signature"`
+  export SHACOUNT=`sudo -u $(whoami) $GPG_PATH --verify ~/.gordian/BitcoinCore/SHA256SUMS.asc ~/.gordian/BitcoinCore/SHA256SUMS 2>&1 | grep "Good signature" | wc -l`
   
   echo "SHASIG: $SHASIG"
 
