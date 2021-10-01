@@ -153,7 +153,7 @@ class Installer: NSViewController {
         var userExists = false
         var passwordExists = false
         var proxyExists = false
-        var debugExists = false
+        var onlynetExists = false
         var discoverExists = false
         var listenExists = false
         var externalIpExists = false
@@ -168,6 +168,9 @@ class Installer: NSViewController {
                             let existingValue = arr[1]
                             
                             switch k {
+                            case "onlynet", "#onlynet":
+                                onlynetExists = true
+                                
                             case "externalip":
                                 externalIpExists = true
                                 
@@ -200,10 +203,7 @@ class Installer: NSViewController {
                             case "listen", "#listen":
                                 listenExists = true
                                 
-                            case "debug", "#debug":
-                                debugExists = true
-                                
-                            default:
+                           default:
                                 break
                             }
                         }
@@ -224,10 +224,6 @@ class Installer: NSViewController {
                         vc.standUpConf = "rpcuser=\(randomString(length: 10))\nrpcpassword=\(randomString(length: 32))\n" + conf!.joined(separator: "\n")
                     }
                     
-                    if !debugExists {
-                        vc.standUpConf = "debug=tor\n" + vc.standUpConf
-                    }
-                    
                     if !proxyExists {
                         vc.standUpConf = "proxy=127.0.0.1:19050\n" + vc.standUpConf
                     }
@@ -240,10 +236,14 @@ class Installer: NSViewController {
                         vc.standUpConf = "discover=1" + vc.standUpConf
                     }
                     
+                    if !onlynetExists {
+                        vc.standUpConf = "#onlynet=onion" + vc.standUpConf
+                    }
+                    
                     if !externalIpExists {
                         vc.standUpConf = "externalip=\(TorClient.sharedInstance.p2pHostname(chain: "main") ?? "")"
                     }
-                    
+                                        
                     vc.getURLs()
                                         
                 } else {
