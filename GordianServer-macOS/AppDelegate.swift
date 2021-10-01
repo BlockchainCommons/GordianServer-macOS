@@ -308,16 +308,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationDidResignActive(_ notification: Notification) {
-        let storyboard = NSStoryboard(name: "Main", bundle: nil)
-        let mainConsole = storyboard.instantiateController(withIdentifier: "Console") as! ViewController
-        mainConsole.autoRefreshTimer?.invalidate()
-        mainConsole.autoRefreshTimer = nil
+        print("applicationDidResignActive")
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: .disableRefresh, object: nil)
+        }
     }
     
     func applicationDidBecomeActive(_ notification: Notification) {
-//        let storyboard = NSStoryboard(name: "Main", bundle: nil)
-//        let mainConsole = storyboard.instantiateController(withIdentifier: "Console") as! ViewController
-//        mainConsole.setAutoRefreshTimer()
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: .enableRefresh, object: nil)
+        }
     }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {

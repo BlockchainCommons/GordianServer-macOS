@@ -84,6 +84,8 @@ class ViewController: NSViewController, NSWindowDelegate {
         peerDetailsButton.alphaValue = 0
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNow), name: .refresh, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(authAdded), name: .authAdded, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(disableRefresh), name: .disableRefresh, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(enableRefresh), name: .enableRefresh, object: nil)
         
         d.setDefaults { [weak self] in
             guard let self = self else { return }
@@ -101,9 +103,14 @@ class ViewController: NSViewController, NSWindowDelegate {
     override func viewWillDisappear() {
         autoRefreshTimer?.invalidate()
         autoRefreshTimer = nil
+        startTimer?.invalidate()
+        startTimer = nil
+        shutDownTimer?.invalidate()
+        shutDownTimer = nil
     }
 
     override func viewDidAppear() {
+        print("viewDidAppear")
         var frame = self.view.window!.frame
         let initialSize = NSSize(width: 544, height: 568)
         frame.size = initialSize
@@ -111,12 +118,29 @@ class ViewController: NSViewController, NSWindowDelegate {
         
         d.setDefaults {}
         
-        if isLoading {
+        if self.mgr?.state != .started && self.mgr?.state != .connected  {
+            self.mgr?.start(delegate: self)
+        }
+        
+        if self.mgr?.state == .connected {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                
+                self.torIsOn = true
+                self.torVersionOutlet.stringValue = "v0.4.4.6"
+                self.startTorOutlet.title = "Stop"
+                self.startTorOutlet.isEnabled = true
+                self.updateTorStatus(isOn: true)
+                self.checkForGordian()
+            }
+        }
+    }
+    
+    @objc func enableRefresh() {
+        if !isLoading {
             if self.mgr?.state != .started && self.mgr?.state != .connected  {
                 self.mgr?.start(delegate: self)
-            }
-            
-            if self.mgr?.state == .connected {
+            } else if self.mgr?.state == .connected {
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     
@@ -128,7 +152,20 @@ class ViewController: NSViewController, NSWindowDelegate {
                     self.checkForGordian()
                 }
             }
-        }        
+        }
+    }
+        
+    @objc func disableRefresh() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.autoRefreshTimer?.invalidate()
+            self.autoRefreshTimer = nil
+            self.startTimer?.invalidate()
+            self.startTimer = nil
+            self.shutDownTimer?.invalidate()
+            self.shutDownTimer = nil
+        }
     }
     
     func windowShouldClose(_ sender: NSWindow) -> Bool {
@@ -404,6 +441,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                                     
                                     self.upgrading = true
                                     self.autoRefreshTimer?.invalidate()
+                                    self.autoRefreshTimer = nil
                                     self.performSegue(withIdentifier: "goInstall", sender: self)
                                 }
                             }
@@ -1261,6 +1299,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                         
                         self.standingUp = true
                         self.autoRefreshTimer?.invalidate()
+                        self.autoRefreshTimer = nil
                         self.performSegue(withIdentifier: "goInstall", sender: self)
                     }
                 }
@@ -1377,6 +1416,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                             guard let self = self else { return }
                             
                             self.autoRefreshTimer?.invalidate()
+                            self.autoRefreshTimer = nil
                             self.installXcodeCLTools()
                         }
                     }
@@ -1420,6 +1460,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                             
                             self.standingUp = true
                             self.autoRefreshTimer?.invalidate()
+                            self.autoRefreshTimer = nil
                             self.performSegue(withIdentifier: "goInstall", sender: vc)
                         }
                     }
