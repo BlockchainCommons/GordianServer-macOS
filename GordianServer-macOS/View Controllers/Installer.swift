@@ -309,7 +309,6 @@ class Installer: NSViewController {
                 DispatchQueue.main.async { [weak self] in
                     if self != nil {
                         self?.hideSpinner()
-                        self?.setLog(content: log)
                     }
                 }
             }
@@ -427,12 +426,14 @@ class Installer: NSViewController {
             guard let output = String(data: data, encoding: .utf8) else { return }
                         
             if vc.showLog {
-                DispatchQueue.main.async { [unowned vc = self] in
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    
                     let prevOutput = vc.consoleOutput.string
                     let nextOutput = prevOutput + output
-                    vc.consoleOutput.string = nextOutput
+                    self.consoleOutput.string = nextOutput
                     logOutput = nextOutput
-                    vc.consoleOutput.scrollToEndOfDocument(vc)
+                    self.consoleOutput.scrollToEndOfDocument(vc)
                 }
             }
             
