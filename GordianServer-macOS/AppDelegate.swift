@@ -311,6 +311,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let storyboard = NSStoryboard(name: "Main", bundle: nil)
         let mainConsole = storyboard.instantiateController(withIdentifier: "Console") as! ViewController
         mainConsole.autoRefreshTimer?.invalidate()
+        mainConsole.autoRefreshTimer = nil
     }
     
     func applicationDidBecomeActive(_ notification: Notification) {
