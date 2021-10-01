@@ -80,9 +80,75 @@ Instead of downloading binaries through our Github repo, you can build *GordianS
 5. When *Xcode* launches, press the "play" button in the top left.
    - If you had to download the clone by hand from within XCode, you'll likely need to navigate to the `xcodeproj` file in the `Xcode` directory.
 
-### After Installation
+### Warning: Old Installations
 
-Once the app has completely installed (by either method) and once it has launched *Bitcoin Core*, it will present a *Quick Connect QR code* that can be used to securely link your full node remotely over Tor to other devices, such as the iOS application [GordianWallet](https://github.com/BlockchainCommons/GordianWallet-iOS). *Standup* allows you to run all three Bitcoin networks (`mainnet`, `testnet` and `regtest`) simultaneously via its user interface. *GordianServer-macOS* will present an independent *Quick Connect QR code* for each network so that you may remotely connect to and utilize each.
+If you had an installation of Gordian Server prior to 1.0.0 it may not be fully compatible with your 1.0.0 setup. In this case, watch for any problems, particularly with Tor setup, with Bitcoin Core setup, and with RPC connections. If any such errors occur, you should ask Gordian Server to reinstall Bitcoin:
+
+1. Use your wallet (such as Gordian Wallet or Fully Noded) to backup any private keys or to sweep funds off of Server addresses. _If you do not do this, your funds will be lost._
+2. Shutdown your current network by clicking "Stop". Wait for it to finish.
+3. Remove Bitcoin by going to "Settings" (the Gear) and choosing "KILL ALL".
+4. Restart Gordian Server, and agree to install the newest Bitcoin.
+
+This process will remove and reinstall Bitcoin, which will make sure any old, incompatible configuration files are removed and recreated.
+
+### After Installation: Quick Connect
+
+Once the app has completely installed (by either method) and once it has launched *Bitcoin Core*, you can access a *Quick Connect QR code* that can be used to securely link your full node remotely over Tor to other devices, such as the iOS application [GordianWallet](https://github.com/BlockchainCommons/GordianWallet-iOS) or [Fully Noded](https://fullynoded.app/). Simply choose "Quick Connect > Quick Connect" from the main menu to see the QR code.
+
+Gordian Server allows you to run all three Bitcoin networks (`mainnet`, `testnet` and `regtest`) simultaneously via its user interface. It will present an independent *Quick Connect QR code* for each network so that you may remotely connect to and utilize each.
+
+### After Installation: Startup
+
+If'd you'd like your Gordian Server to start whenever your Mac does:
+
+1. In the dock, right click on Gordian Server and choose "Options > Keep in Doc".
+2. In Gordian Server, choose settings (the gear) and make sure that "Start Bitcoin on Open" is checked.
+
+## GPG Installation instructions (Optional)
+
+If you are planning to use Gordian Server for an operational installation, you will want to maximize your security by checking the GPG signatures of the Bitcoin server as it's installed. This requires a bit of additional work that must be done before you startup Gordian Server for the first time (whether you installed from DMG or compiled the source code).
+
+1. Install [GPG for the Mac](https://gpgtools.org/)
+   - Click on the "Download" link
+   - Open the DMG
+   - Double-click "Install"
+   - Choose to "Continue" inside the "Inside GPG Suite" and click through additional pages
+ 
+GPG Mail, which comes with the suite, is not required for Gordian Server Installation
+
+### Checking Signatures
+
+Now, when you install Gordian Server, the console will log an elongated process of finding and installing keys related to signatures. Don't worry that many are "skipped". The object is simply to collect enough public keys that you feel comfortable with the result.
+
+When the public-key acquisition is complete, you should see a listing of good signatures. If more than a few are found you should feel comfortable:
+```
+SIG VERIFICATION SUCCESS:       12 GOOD SIGNATURES FOUND.
+gpg: Good signature from ".0xB10C <0xb10c@gmail.com>" [unknown]
+gpg: Good signature from "Andrew Chow (Official New Key) <achow101@gmail.com>" [unknown]
+gpg: Good signature from "Ben Carman <benthecarman@live.com>" [unknown]
+gpg: Good signature from "Antoine Poinsot <darosior@protonmail.com>" [unknown]
+gpg: Good signature from "Duncan Dean <duncangleeddean@gmail.com>" [unknown]
+gpg: Good signature from "Stephan Oeste (it) <it@oeste.de>" [unknown]
+gpg: Good signature from "Michael Ford (bitcoin-otc) <fanquake@gmail.com>" [unknown]
+gpg: Good signature from "Oliver Gugger <gugger@gmail.com>" [unknown]
+gpg: Good signature from "Hennadii Stepanov (hebasto) <hebasto@gmail.com>" [unknown]
+gpg: Good signature from "Jon Atack <jon@atack.com>" [unknown]
+gpg: Good signature from "Wladimir J. van der Laan <laanwj@visucore.com>" [unknown]
+gpg: Good signature from "Will Clark <will8clark@gmail.com>" [unknown]
+```
+The console will disappear after installation is done, so if you didn't see the final info, you can revisit it at "File > Gordian Server Log". Scroll to the bottom.
+
+### Checking Checksums
+
+Besides checking the signatures on Bitcoin Core, it's also helpful to check the checksums to make sure they matched.  This will appear in your Gordian Log prior to the signature check:
+```
+Checking sha256 checksums bitcoin-22.0-osx64.tar.gz against provided SHA256SUMS
+See two hashes (they should match):
+2744d199c3343b2d94faffdfb2c94d75a630ba27301a70e47b0ad30a7e0155e9
+2744d199c3343b2d94faffdfb2c94d75a630ba27301a70e47b0ad30a7e0155e9
+Hashes match
+```
+If you do _not_ install GPG, then you can still verify your checksums, but the signatures will not be checked.
 
 ## Financial Support
 
