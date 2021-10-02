@@ -110,7 +110,6 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     override func viewDidAppear() {
-        print("viewDidAppear")
         var frame = self.view.window!.frame
         let initialSize = NSSize(width: 544, height: 568)
         frame.size = initialSize
@@ -170,22 +169,38 @@ class ViewController: NSViewController, NSWindowDelegate {
     
     func windowShouldClose(_ sender: NSWindow) -> Bool {
         let alert = NSAlert()
-        alert.messageText = "Quit Tor and Bitcoin Core?"
-        alert.informativeText = "Closing this window does not automatically quit Tor or Bitcoin Core."
+        if bitcoinRunning {
+            alert.messageText = "Quit Tor and Bitcoin Core?"
+            alert.informativeText = "Closing this window does not automatically quit Tor or Bitcoin Core."
+        } else {
+            alert.messageText = "Quit Tor?"
+            alert.informativeText = "Closing this window does not automatically quit Tor."
+        }
         alert.addButton(withTitle: "Quit")
         alert.addButton(withTitle: "Leave Running")
         alert.addButton(withTitle: "Cancel")
         alert.alertStyle = .warning
         let modalResponse = alert.runModal()
-        if (modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn) {
-            self.runScript(script: .stopBitcoin)
+        switch modalResponse {
+        case .alertFirstButtonReturn:
+            if bitcoinRunning {
+                self.runScript(script: .stopBitcoin)
+            }
             self.mgr?.resign()
+            
+            DispatchQueue.main.async {
+                guard let appDelegate = NSApplication.shared.delegate as? AppDelegate else { return }
+                appDelegate.isKilling = true
+                NSApp.terminate(self)
+            }
+            
+            return true
+            
+        case .alertSecondButtonReturn:
             isLoading = true
             return true
-        } else if modalResponse == NSApplication.ModalResponse.alertSecondButtonReturn {
-            isLoading = true
-            return true
-        } else {
+            
+        default:
             return false
         }
     }
@@ -809,6 +824,8 @@ class ViewController: NSViewController, NSWindowDelegate {
             
             self.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
             self.bitcoinRunning = false
+            guard let appDelegate = NSApplication.shared.delegate as? AppDelegate else { return }
+            appDelegate.bitcoinRunning = false
             self.startMainnetOutlet.title = "Start"
             self.startMainnetOutlet.isEnabled = true
             self.networkButton.isEnabled = true
@@ -820,6 +837,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     //MARK: Script Result Parsers
     
     private func parseIsBitcoindRunning(result: String) {
+        print("parseIsBitcoindRunning")
         if result.contains("Stopped") {
             hideSpinner()
             bitcoinIsOff()
@@ -833,6 +851,8 @@ class ViewController: NSViewController, NSWindowDelegate {
                 guard let self = self else { return }
                 
                 self.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusPartiallyAvailable")
+                guard let appDelegate = NSApplication.shared.delegate as? AppDelegate else { return }
+                appDelegate.bitcoinRunning = true
             }
             getBlockchainInfo()
         }
@@ -1041,6 +1061,8 @@ class ViewController: NSViewController, NSWindowDelegate {
                 guard let self = self else { return }
                 
                 self.bitcoinRunning = true
+                guard let appDelegate = NSApplication.shared.delegate as? AppDelegate else { return }
+                appDelegate.bitcoinRunning = true
                 let blockchainInfo = BlockchainInfo(response)
                 self.blocksOutlet.stringValue = "\(blockchainInfo.blocks)"
                 self.difficultyOutlet.stringValue = "\(blockchainInfo.difficulty.diffString)"
@@ -1206,6 +1228,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     func hideSpinner() {
+        print("hideSpinner")
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             

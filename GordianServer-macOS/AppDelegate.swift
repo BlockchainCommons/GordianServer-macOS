@@ -12,6 +12,7 @@ import Cocoa
 class AppDelegate: NSObject, NSApplicationDelegate {
     
     public var isKilling = false
+    public var bitcoinRunning = false
     
     @IBAction func connectLocalFNAction(_ sender: Any) {
         let chain = UserDefaults.standard.string(forKey: "chain")
@@ -168,7 +169,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
-        if !isKilling {
+        if !isKilling && bitcoinRunning {
             let alert = NSAlert()
             alert.messageText = "Quit Bitcoin Core?"
             alert.informativeText = "Quitting the app does not stop Bitcoin Core automatically. Tor automatically quits so your node will not be remotely reachable.\n\nIf you opt to quit Bitcoin Core only the active network will be stopped, if you want to close all networks do that with the Stop button before quitting the app."
@@ -308,7 +309,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationDidResignActive(_ notification: Notification) {
-        print("applicationDidResignActive")
         DispatchQueue.main.async {
             NotificationCenter.default.post(name: .disableRefresh, object: nil)
         }
