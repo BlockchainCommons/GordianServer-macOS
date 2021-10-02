@@ -11,56 +11,23 @@ import Foundation
 class Log {
         
     class func writeToLog(content: String) {
-        getLog { existingLog in
-            var log = ""
-            
-            if existingLog != nil {
-                log += existingLog!
-            }
-            
-            log += "\n\n\(NSDate())\n\n" + content
-            
-            let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
-            
-            taskQueue.async {                
-                self.runScript(script: .writeLog, env: ["LOG": log], args: []) { _ in }
-            }
-        }
-    }
-    
-    class func getLog(completion: @escaping (String?) -> Void) {
-        runScript(script: .getLog, env: [:], args: []) { log in
-            completion((log))
-        }
-    }
-    
-    class func runScript(script: SCRIPT, env: [String:String], args: [String], completion: @escaping ((String?)) -> Void) {
-        #if DEBUG
-        print("script: \(script.stringValue)")
-        #endif
-        let resource = script.stringValue
-        guard let path = Bundle.main.path(forResource: resource, ofType: "command") else {
+        guard let log = URL(string: "/Users/\(NSUserName())/.gordian/gordian.log") else {
+            print("unable to get log")
             return
         }
-        let stdOut = Pipe()
-        let task = Process()
-        task.launchPath = path
-        task.environment = env
-        task.arguments = args
-        task.standardOutput = stdOut
-        task.launch()
-        task.waitUntilExit()
-        let data = stdOut.fileHandleForReading.readDataToEndOfFile()
-        var result = ""
-        if let output = String(data: data, encoding: .utf8) {
-            #if DEBUG
-            print("result: \(output)")
-            #endif
-            result += output
-            completion(result)
-        } else {
-            completion(nil)
+        
+        do {
+            let handle = try FileHandle(forWritingTo: log)
+            handle.seekToEndOfFile()
+            handle.write(content.data(using: .utf8)!)
+            handle.closeFile()
+        } catch {
+            print(error.localizedDescription)
+            do {
+                try content.data(using: .utf8)?.write(to: log)
+            } catch {
+                print(error.localizedDescription)
+            }
         }
     }
-    
 }

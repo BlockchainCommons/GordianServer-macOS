@@ -81,12 +81,16 @@ class Installer: NSViewController {
         if seeLog {
             spinner.alphaValue = 0
             seeLog = false
-            getLog { (log) in
-                guard let log = log else { return }
-                
-                DispatchQueue.main.async { [unowned vc = self] in
-                    vc.consoleOutput.string = log
+            let log = URL(fileURLWithPath: "/Users/\(NSUserName())/.gordian/gordian.log")
+            do {
+                let text = try String(contentsOf: log, encoding: .utf8)
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    
+                    self.consoleOutput.string = text
                 }
+            } catch {
+                simpleAlert(message: "Log does not exist.", info: "We were unable to fetch the log.", buttonLabel: "OK")
             }
             
         } else if peerInfo != "" {
@@ -359,9 +363,9 @@ class Installer: NSViewController {
         Log.writeToLog(content: content)
     }
     
-    func getLog(completion: @escaping (String?) -> Void) {
-        Log.getLog(completion: completion)
-    }
+//    func getLog(completion: @escaping (String?) -> Void) {
+//        Log.getLog(completion: completion)
+//    }
     
     func getExisistingRPCCreds(completion: @escaping ((user: String, password: String)) -> Void) {
         var user = ""
