@@ -829,9 +829,8 @@
                                                     <action selector="startMainnetAction:" target="XfG-lQ-9wD" id="V5W-bQ-tSU"/>
                                                 </connections>
                                             </button>
-                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YTp-pd-6SJ">
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YTp-pd-6SJ">
                                                 <rect key="frame" x="161" y="132" width="15" height="15"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="info.circle" catalog="system" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="88A-d6-LCi">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
@@ -923,6 +922,7 @@
                                             <constraint firstItem="ObL-6X-0iZ" firstAttribute="centerY" secondItem="1xF-ag-xSh" secondAttribute="centerY" id="Dff-Za-cU4"/>
                                             <constraint firstItem="Yw2-0Q-Vew" firstAttribute="leading" secondItem="i70-xH-6Bd" secondAttribute="leading" constant="21" id="Ery-ZT-ZTh"/>
                                             <constraint firstItem="y6q-T1-byM" firstAttribute="centerX" secondItem="i70-xH-6Bd" secondAttribute="centerX" id="FHJ-6Q-qxv"/>
+                                            <constraint firstItem="YTp-pd-6SJ" firstAttribute="centerY" secondItem="PMt-yp-b2E" secondAttribute="centerY" id="Hrf-pw-soX"/>
                                             <constraint firstItem="IBs-yd-qdH" firstAttribute="top" secondItem="i70-xH-6Bd" secondAttribute="top" constant="8" id="J54-Oo-D7v"/>
                                             <constraint firstItem="4vj-po-NAy" firstAttribute="centerY" secondItem="gK4-q5-qCp" secondAttribute="centerY" id="Luo-NY-nQl"/>
                                             <constraint firstAttribute="width" constant="196" id="Mfq-ia-bZ2"/>
@@ -944,6 +944,7 @@
                                             <constraint firstAttribute="height" constant="441" id="cby-zg-pXg"/>
                                             <constraint firstItem="qPC-DO-huD" firstAttribute="top" secondItem="Yw2-0Q-Vew" secondAttribute="bottom" constant="8" symbolic="YES" id="dUe-f7-jK1"/>
                                             <constraint firstItem="wvB-fS-9uo" firstAttribute="leading" secondItem="wry-Sx-acG" secondAttribute="leading" id="dhr-WN-eQh"/>
+                                            <constraint firstAttribute="trailing" secondItem="YTp-pd-6SJ" secondAttribute="trailing" constant="20" symbolic="YES" id="e28-lD-fvA"/>
                                             <constraint firstItem="wry-Sx-acG" firstAttribute="leading" secondItem="7yr-ry-ECs" secondAttribute="trailing" constant="19" id="eHd-ID-3ZY"/>
                                             <constraint firstItem="twO-63-MCl" firstAttribute="top" secondItem="L8k-j2-T7d" secondAttribute="bottom" constant="10" id="ew5-xq-HUa"/>
                                             <constraint firstItem="cUK-ht-9da" firstAttribute="leading" secondItem="i70-xH-6Bd" secondAttribute="leading" constant="21" id="f5A-8j-Ucr"/>
@@ -2197,7 +2198,7 @@ Gw
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="Mv4-Eu-EeQ"/>
-        <segue reference="Yel-Hw-wBk"/>
+        <segue reference="cqP-Ve-rOY"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="NSActionTemplate" width="15" height="15"/>
