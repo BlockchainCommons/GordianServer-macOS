@@ -840,10 +840,11 @@ class ViewController: NSViewController, NSWindowDelegate {
         print("parseIsBitcoindRunning")
         if result.contains("Stopped") {
             hideSpinner()
-            bitcoinIsOff()
             if d.autoStart && isLoading {
                 self.addSpinnerDesc("starting \(self.chain)...")
                 self.runScript(script: .startBitcoin)
+            } else {
+                bitcoinIsOff()
             }
         } else {
             bitcoinRunning = true
