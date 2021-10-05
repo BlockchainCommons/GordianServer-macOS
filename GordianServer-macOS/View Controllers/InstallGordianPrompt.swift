@@ -67,7 +67,6 @@ class InstallGordianPrompt: NSViewController, NSWindowDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
-            
             self.headerOutlet.stringValue = "Install Bitcoin Core v\(self.version)?"
         }
     }
@@ -124,6 +123,16 @@ class InstallGordianPrompt: NSViewController, NSWindowDelegate {
             }
             
             self.bodyOutlet.stringValue = bodyText
+        }
+    }
+    
+    override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
+        if let vc = segue.destinationController as? Settings {
+            vc.doneBlock = { [weak self] response in
+                guard let self = self else { return }
+                
+                self.setBodyText()
+            }
         }
     }
     

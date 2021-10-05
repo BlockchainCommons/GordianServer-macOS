@@ -218,7 +218,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func quitBitcoin() {
         let chain = UserDefaults.standard.string(forKey: "chain") ?? "main"
-        runScript(script: .stopBitcoin, env: ["CHAIN":chain, "PREFIX":Defaults.shared.existingPrefix], args: []) { _ in
+        runScript(script: .stopBitcoin, env: ["CHAIN":chain, "PREFIX":Defaults.shared.existingPrefix, "DATADIR":Defaults.shared.dataDir], args: []) { _ in
             TorClient.sharedInstance.resign()
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                 NSApplication.shared.reply(toApplicationShouldTerminate: true)

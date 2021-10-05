@@ -16,6 +16,7 @@ class MakeRpcCall {
     func command(method: String, port: String, user: String, password: String, completion: @escaping ((result: Any?, error: String?)) -> Void) {
         let nodeIp = "127.0.0.1:\(port)"
         let stringUrl = "http://\(user):\(password)@\(nodeIp)"
+        print("stringUrl: \(stringUrl)")
         guard let url = URL(string: stringUrl) else {
             completion((nil, "Error converting the url."))
             return

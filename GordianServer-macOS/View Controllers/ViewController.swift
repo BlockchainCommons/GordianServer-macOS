@@ -118,6 +118,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         self.view.window?.setFrame(frame, display: true)
         
         d.setDefaults {}
+        setEnv()
         
         if self.mgr?.state != .started && self.mgr?.state != .connected  {
             self.mgr?.start(delegate: self)
@@ -219,6 +220,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         var myWindow: NSWindow? = nil
         let storyboard = NSStoryboard(name: "Main", bundle: nil)
         let settings = storyboard.instantiateController(withIdentifier: "Settings") as! Settings
+        settings.bitcoinRunning = self.bitcoinRunning
         myWindow = NSWindow(contentViewController: settings)
         NSApp.activate(ignoringOtherApps: true)
         myWindow?.makeKeyAndOrderFront(self)
@@ -245,6 +247,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         d.setDefaults { [weak self] in
             guard let self = self else { return }
             
+            self.setEnv()
             self.checkForGordian()
         }
     }
@@ -578,7 +581,6 @@ class ViewController: NSViewController, NSWindowDelegate {
             self.taskDescription.stringValue = "checking for Bitcoin data directory..."
             
             let path = URL(fileURLWithPath: "\(Defaults.shared.dataDir)/bitcoin.conf")
-            print("path: \(path)")
             
             guard let conf = try? String(contentsOf: path, encoding: .utf8) else {
                 self.hideSpinner()
@@ -684,13 +686,13 @@ class ViewController: NSViewController, NSWindowDelegate {
         
         switch chain {
         case "main":
-            path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/debug.log")
+            path = URL(fileURLWithPath: "\(Defaults.shared.dataDir)/debug.log")
         case "test":
-            path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/testnet3/debug.log")
+            path = URL(fileURLWithPath: "\(Defaults.shared.dataDir)/testnet3/debug.log")
         case "regtest":
-            path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/regtest/debug.log")
+            path = URL(fileURLWithPath: "\(Defaults.shared.dataDir)/regtest/debug.log")
         case "signet":
-            path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/signet/debug.log")
+            path = URL(fileURLWithPath: "\(Defaults.shared.dataDir)/signet/debug.log")
         default:
             break
         }
