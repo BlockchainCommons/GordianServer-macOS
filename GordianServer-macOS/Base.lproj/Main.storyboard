@@ -413,6 +413,31 @@
                                     </items>
                                 </menu>
                             </menuItem>
+                            <menuItem title="Support" id="y2s-Wq-4ex" userLabel="Support">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Support" id="BKe-OI-YeM">
+                                    <items>
+                                        <menuItem title="Report Bugs" id="8fg-kd-q14" userLabel="Report Bugs">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="reportBugsClicked:" target="Voe-Tx-rLC" id="AYj-Ap-GDS"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Request Features" id="Ebi-CW-aGf" userLabel="Request Features">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="requestFeaturesClicked:" target="Voe-Tx-rLC" id="Z0T-cQ-oVc"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Sponsor Blockchain Commons" id="DQ9-Mo-Dw8" userLabel="Sponsor Blockchain Commons">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="sponsorBlockchainCommonsClicked:" target="Voe-Tx-rLC" id="3bY-rh-0ic"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
                         </items>
                     </menu>
                     <connections>

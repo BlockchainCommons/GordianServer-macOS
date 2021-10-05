@@ -14,6 +14,27 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     public var isKilling = false
     public var bitcoinRunning = false
     
+    @IBAction func reportBugsClicked(_ sender: Any) {
+        DispatchQueue.main.async {
+            guard let url = URL(string: "https://github.com/BlockchainCommons/Gordian/discussions/categories/bug-reports") else { return }
+            NSWorkspace.shared.open(url)
+        }
+    }
+    
+    @IBAction func requestFeaturesClicked(_ sender: Any) {
+        DispatchQueue.main.async {
+            guard let url = URL(string: "https://github.com/BlockchainCommons/Gordian/discussions/categories/feature-requests") else { return }
+            NSWorkspace.shared.open(url)
+        }
+    }
+    
+    @IBAction func sponsorBlockchainCommonsClicked(_ sender: Any) {
+        DispatchQueue.main.async {
+            guard let url = URL(string: "https://github.com/sponsors/BlockchainCommons") else { return }
+            NSWorkspace.shared.open(url)
+        }
+    }
+    
     @IBAction func connectLocalFNAction(_ sender: Any) {
         let chain = UserDefaults.standard.string(forKey: "chain")
         var port = ""
