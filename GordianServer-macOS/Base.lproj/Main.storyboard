@@ -458,7 +458,7 @@
         <scene sceneID="R2V-B0-nI4">
             <objects>
                 <windowController storyboardIdentifier="MainWindow" id="B8D-0N-5wS" sceneMemberID="viewController">
-                    <window key="window" title="Gordian Server v1.0.1" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
+                    <window key="window" title="Gordian Server v1.0.0" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES"/>
                         <windowPositionMask key="initialPositionMask" topStrut="YES"/>
                         <rect key="contentRect" x="226" y="275" width="436" height="480"/>
@@ -1650,7 +1650,7 @@
                                 </constraints>
                                 <textFieldCell key="cell" selectable="YES" id="rQK-zf-RCa">
                                     <font key="font" usesAppearanceFont="YES"/>
-                                    <mutableString key="title">Gordian Server will download Bitcoin Core from bitcoincore.org/bin  A directory will be created at ~/.gordian which holds the newly downloaded Bitcoin Core binaries as well as the SHA256SUMS signatures and pgp keys so that the signatures can be verified before being installed.  Gordian Server integrates its own Tor and you may also find the related Tor directories and files in ~/.gordian with the exception of the torrc file which can be found at ~/.torrc  Gordian Server will check for an existing node in the default data directory ~/Library/Application Support/Bitcoin. You may specify a custom data directory below (advanced users only).  You may also specify a custom blocks directory where the blockchain will be stored. By default this will also be located in the default data directory.</mutableString>
+                                    <string key="title">Gordian Server will download Bitcoin Core from bitcoincore.org/bin  A directory will be created at ~/.gordian which holds the newly downloaded Bitcoin Core binaries as well as the SHA256SUMS signatures and pgp keys so that the signatures can be verified before being installed.  Gordian Server integrates its own Tor and you may also find the related Tor directories and files in ~/.gordian with the exception of the torrc file which can be found at ~/.torrc  Gordian Server will check for an existing node in the default data directory ~/Library/Application Support/Bitcoin. You may specify a custom data directory below (advanced users only).  You may also specify a custom blocks directory where the blockchain will be stored. By default this will also be located in the default data directory.</string>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>

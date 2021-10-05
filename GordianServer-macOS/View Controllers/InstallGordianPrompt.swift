@@ -85,7 +85,7 @@ class InstallGordianPrompt: NSViewController, NSWindowDelegate {
             var bodyText = """
                             Gordian Server will download Bitcoin Core from \(self.macosURL)
                             
-                            A directory will be created at ~/.gordian which holds the Bitcoin Core binaries, pgp keys for the Bitcoin Core developers along with their singatures so they can be verified before installation.
+                            A directory will be created at ~/.gordian which holds the Bitcoin Core binaries, pgp keys for the Bitcoin Core developers along with their signatures so they can be verified before installation.
                             
                             Tor is integrated into the app so as to not interfere with other apps which utilize Tor. Tor files can be found in ~/.gordian apart from the torrc file which will be located at ~/.torrc
                             

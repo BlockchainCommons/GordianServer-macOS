@@ -224,6 +224,9 @@ class Settings: NSViewController, NSTextFieldDelegate {
                                     
                                     guard let appDelegate = NSApplication.shared.delegate as? AppDelegate else { return }
                                     appDelegate.isKilling = true
+                                    let domain = Bundle.main.bundleIdentifier!
+                                    UserDefaults.standard.removePersistentDomain(forName: domain)
+                                    UserDefaults.standard.synchronize()
                                     NSApp.terminate(self)
                                 }
                             } else {
@@ -516,16 +519,12 @@ class Settings: NSViewController, NSTextFieldDelegate {
             setState(int: 0, outlet: autoRefreshOutlet)
         }
         
-        if ud.object(forKey: "blocksDir") != nil {
-            DispatchQueue.main.async { [unowned vc = self] in
-                vc.blocksDirOutlet.stringValue = d.blocksDir
-            }
+        DispatchQueue.main.async { [unowned vc = self] in
+            vc.blocksDirOutlet.stringValue = d.blocksDir
         }
         
-        if ud.object(forKey: "dataDir") != nil {
-            DispatchQueue.main.async { [unowned vc = self] in
-                vc.dataDirOutlet.stringValue = d.dataDir
-            }
+        DispatchQueue.main.async { [unowned vc = self] in
+            vc.dataDirOutlet.stringValue = d.dataDir
         }
         
         DispatchQueue.main.async { [weak self] in
