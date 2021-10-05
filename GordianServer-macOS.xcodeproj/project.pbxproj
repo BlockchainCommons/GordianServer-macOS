@@ -25,6 +25,7 @@
 		0AD5BAB826F568820091A075 /* Tor.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0AD5BAB626F568820091A075 /* Tor.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0AD5BABB26F572330091A075 /* TorClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD5BABA26F572330091A075 /* TorClient.swift */; };
 		0AD5BABD26F572CB0091A075 /* Torrc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD5BABC26F572CB0091A075 /* Torrc.swift */; };
+		0AF145A3270C04C300BD0327 /* InstallGordianPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF145A2270C04C300BD0327 /* InstallGordianPrompt.swift */; };
 		D01B610824877301005D3090 /* MakeRPCCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01B610724877301005D3090 /* MakeRPCCall.swift */; };
 		D01B610A2487873F005D3090 /* AddAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01B61092487873F005D3090 /* AddAuthentication.swift */; };
 		D0211A4E250493CB00F7517A /* WalletDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0211A4D250493CB00F7517A /* WalletDetail.swift */; };
@@ -141,6 +142,7 @@
 		0AD5BAB626F568820091A075 /* Tor.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = Tor.xcframework; sourceTree = "<group>"; };
 		0AD5BABA26F572330091A075 /* TorClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TorClient.swift; sourceTree = "<group>"; };
 		0AD5BABC26F572CB0091A075 /* Torrc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Torrc.swift; sourceTree = "<group>"; };
+		0AF145A2270C04C300BD0327 /* InstallGordianPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallGordianPrompt.swift; sourceTree = "<group>"; };
 		D01B610724877301005D3090 /* MakeRPCCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeRPCCall.swift; sourceTree = "<group>"; };
 		D01B61092487873F005D3090 /* AddAuthentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAuthentication.swift; sourceTree = "<group>"; };
 		D0211A4D250493CB00F7517A /* WalletDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletDetail.swift; sourceTree = "<group>"; };
@@ -282,6 +284,7 @@
 				D0C9439525009D0A00DF7339 /* WalletsViewController.swift */,
 				D0211A4D250493CB00F7517A /* WalletDetail.swift */,
 				0AD5BAAB26F1D0AC0091A075 /* InstallerPrompt.swift */,
+				0AF145A2270C04C300BD0327 /* InstallGordianPrompt.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -615,6 +618,7 @@
 				D0BCB335236A6D22000D8FDE /* ViewController.swift in Sources */,
 				0A92AE4726F9D2A10034B7B4 /* BlockchainInfo.swift in Sources */,
 				0AD5BABB26F572330091A075 /* TorClient.swift in Sources */,
+				0AF145A3270C04C300BD0327 /* InstallGordianPrompt.swift in Sources */,
 				0AD5BAA026EF2FA50091A075 /* Extensions.swift in Sources */,
 				D0DCD8E6236ACC9E00F2D15A /* ScriptEnum.swift in Sources */,
 				D0BCB333236A6D22000D8FDE /* AppDelegate.swift in Sources */,

@@ -21,9 +21,10 @@ class Settings: NSViewController, NSTextFieldDelegate {
     var args = [String]()
     var refreshing = Bool()
     
+    @IBOutlet weak var blocksDirOutlet: NSTextField!
+    @IBOutlet weak var dataDirOutlet: NSTextField!
     @IBOutlet weak var autoStartOutlet: NSButton!
     @IBOutlet weak var pruneValueField: NSTextField!
-    @IBOutlet var directoryLabel: NSTextField!
     @IBOutlet var walletDisabled: NSButton!
     @IBOutlet var txIndexOutlet: NSButton!
     @IBOutlet var goPrivateOutlet: NSButton!
@@ -282,6 +283,26 @@ class Settings: NSViewController, NSTextFieldDelegate {
         }
     }
     
+    @IBAction func chooseDataDirAction(_ sender: Any) {
+        guard let window = view.window else { return }
+        let panel = NSOpenPanel()
+        panel.canChooseFiles = false
+        panel.canChooseDirectories = true
+        panel.allowsMultipleSelection = false
+        panel.beginSheetModal(for: window) { [unowned vc = self] (result) in
+            if result.rawValue == NSApplication.ModalResponse.OK.rawValue {
+                vc.selectedFolder = panel.urls[0]
+                DispatchQueue.main.async { [unowned vc = self] in
+                    vc.dataDirOutlet.stringValue = self.selectedFolder?.path ?? Defaults.shared.dataDir
+                    
+                    vc.ud.set(vc.dataDirOutlet.stringValue, forKey: "dataDir")
+                    vc.getSettings()
+                }
+            }
+        }
+    }
+    
+    
     @IBAction func chooseDirectory(_ sender: Any) {
         guard let window = view.window else { return }
         let panel = NSOpenPanel()
@@ -292,7 +313,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
             if result.rawValue == NSApplication.ModalResponse.OK.rawValue {
                 vc.selectedFolder = panel.urls[0]
                 DispatchQueue.main.async { [unowned vc = self] in
-                    vc.directoryLabel.stringValue = self.selectedFolder?.path ?? Defaults.shared.blocksDir
+                    vc.blocksDirOutlet.stringValue = self.selectedFolder?.path ?? Defaults.shared.blocksDir
                     
                     self.getBitcoinConf { [unowned vc = self] (conf, error) in
                         if !error && conf != nil {
@@ -301,20 +322,20 @@ class Settings: NSViewController, NSTextFieldDelegate {
                                 for item in conf! {
                                     if item.hasPrefix("blocksdir=") {
                                         let existingValue = item.replacingOccurrences(of: "blocksdir=", with: "")
-                                        stringConf = stringConf.replacingOccurrences(of: "blocksdir=\(existingValue)", with: "blocksdir=\(vc.directoryLabel.stringValue)")
+                                        stringConf = stringConf.replacingOccurrences(of: "blocksdir=\(existingValue)", with: "blocksdir=\(vc.blocksDirOutlet.stringValue)")
                                         /// Remove appended newline before saving.
                                         stringConf.removeLast()
-                                        self.setBlocksDir(conf: stringConf, newValue: vc.directoryLabel.stringValue)
+                                        self.setBlocksDir(conf: stringConf, newValue: vc.blocksDirOutlet.stringValue)
                                         break
                                     }
                                 }
                             } else {
-                                stringConf = "blocksdir=\(vc.directoryLabel.stringValue)\n\(stringConf)"
+                                stringConf = "blocksdir=\(vc.blocksDirOutlet.stringValue)\n\(stringConf)"
                                 stringConf.removeLast()
-                                self.setBlocksDir(conf: stringConf, newValue: vc.directoryLabel.stringValue)
+                                self.setBlocksDir(conf: stringConf, newValue: vc.blocksDirOutlet.stringValue)
                             }
                         } else {
-                            vc.ud.set(vc.directoryLabel.stringValue, forKey: "blocksDir")
+                            vc.ud.set(vc.blocksDirOutlet.stringValue, forKey: "blocksDir")
                             vc.getSettings()
                         }
                     }
@@ -423,10 +444,9 @@ class Settings: NSViewController, NSTextFieldDelegate {
     }
     
     func getBitcoinConf(completion: @escaping ((conf: [String]?, error: Bool)) -> Void) {
-        let path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/bitcoin.conf")
+        let path = URL(fileURLWithPath: "\(Defaults.shared.dataDir)/bitcoin.conf")
         
         guard let bitcoinConf = try? String(contentsOf: path, encoding: .utf8) else {
-            print("can not get bitcoin.conf")
             return
         }
 
@@ -477,11 +497,18 @@ class Settings: NSViewController, NSTextFieldDelegate {
             setState(int: 0, outlet: autoRefreshOutlet)
         }
         
-        if ud.object(forKey: "dataDir") != nil {
+        if ud.object(forKey: "blocksDir") != nil {
             DispatchQueue.main.async { [unowned vc = self] in
-                vc.directoryLabel.stringValue = d.blocksDir
+                vc.blocksDirOutlet.stringValue = d.blocksDir
             }
         }
+        
+        if ud.object(forKey: "dataDir") != nil {
+            DispatchQueue.main.async { [unowned vc = self] in
+                vc.dataDirOutlet.stringValue = d.dataDir
+            }
+        }
+        
         DispatchQueue.main.async { [weak self] in
             self?.pruneValueField.stringValue = "\(pruneValue)"
         }

@@ -15,8 +15,8 @@ class BitcoinConf {
         let prune = d.prune
         let txindex = d.txindex
         let walletDisabled = d.walletdisabled
-        let rpcpassword = randomString(length: 32)
-        let rpcuser = randomString(length: 10)
+        let rpcpassword = UserDefaults.standard.object(forKey: "rpcpassword") as? String ?? randomString(length: 32)
+        let rpcuser = UserDefaults.standard.object(forKey: "rpcuser") as? String ?? randomString(length: 10)
         
         return """
         disablewallet=\(walletDisabled)

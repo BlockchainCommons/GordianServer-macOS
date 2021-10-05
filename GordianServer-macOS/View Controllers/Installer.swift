@@ -125,15 +125,6 @@ class Installer: NSViewController {
             getURLs()
             
         }
-            
-//        } else if installLightning {
-//            DispatchQueue.main.async { [unowned vc = self] in
-//                vc.spinner.startAnimation(vc)
-//            }
-//            desc = "Installing Lightning..."
-//            //installLightningAction()
-//            checkExistingConf()
-//        }
         
         DispatchQueue.main.async { [unowned vc = self] in
             vc.spinnerDescription.stringValue = desc
@@ -363,18 +354,13 @@ class Installer: NSViewController {
         Log.writeToLog(content: content)
     }
     
-//    func getLog(completion: @escaping (String?) -> Void) {
-//        Log.getLog(completion: completion)
-//    }
-    
     func getExisistingRPCCreds(completion: @escaping ((user: String, password: String)) -> Void) {
         var user = ""
         var password = ""
         
-        let path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/bitcoin.conf")
+        let path = URL(fileURLWithPath: "\(Defaults.shared.dataDir)/bitcoin.conf")
         
         guard let bitcoinConf = try? String(contentsOf: path, encoding: .utf8) else {
-            print("can not get bitcoin.conf")
             completion(("", ""))
             return
         }
@@ -394,10 +380,9 @@ class Installer: NSViewController {
     }
     
     func getBitcoinConf(completion: @escaping ((conf: [String]?, error: Bool)) -> Void) {
-        let path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/bitcoin.conf")
+        let path = URL(fileURLWithPath: "\(Defaults.shared.dataDir)/bitcoin.conf")
         
         guard let bitcoinConf = try? String(contentsOf: path, encoding: .utf8) else {
-            print("can not get bitcoin.conf")
             completion((nil, false))
             return
         }

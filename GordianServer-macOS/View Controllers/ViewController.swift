@@ -50,6 +50,8 @@ class ViewController: NSViewController, NSWindowDelegate {
     @IBOutlet weak private var sizeOutlet: NSTextField!
     
     weak var mgr = TorClient.sharedInstance
+    var version = ""
+    var macosURL = ""
     var autoRefreshTimer: Timer?
     var shutDownTimer: Timer?
     var startTimer: Timer?
@@ -496,83 +498,13 @@ class ViewController: NSViewController, NSWindowDelegate {
 
             } else {
                 self.hideSpinner()
-                let version = dict!["version"] as! String
-
-                // Installing from scratch, however user may have gone into settings and changed some things so we need to check for that.
-                func standup() {
-                    let pruned = self.d.prune
-                    let txindex = self.d.txindex
-                    let directory = self.d.dataDir
-                    let pruneInGb = Double(pruned) / 954.0
-                    let rounded = Double(round(100 * pruneInGb) / 100)
-
-                    self.infoMessage = """
-                    Gordian Server will install and configure a pruned (\(rounded)gb) Bitcoin Core node.
-
-                    You can always edit settings via File > Settings.
-
-                    If your node is already running you will need to restart it for the new settings to take effect.
-
-                    Gordian Server will create the following directory: /Users/\(NSUserName())/.gordian/BitcoinCore
-
-                    It will create or add missing rpc credentials to the bitcoin.conf in \(directory).
-                    """
-
-                    if pruned == 0 || pruned == 1 {
-                        self.infoMessage = """
-                        GordianServer will install and configure Bitcoin Core node.
-
-                        You have set pruning to \(pruned), you can always edit the pruning amount in settings.
-
-                        You can always edit settings via File > Settings.
-
-                        GordianServer will create the following directory: /Users/\(NSUserName())/.gordian/BitcoinCore
-
-                        It will create or add missing rpc credentials to the bitcoin.conf in \(directory).
-                        """
-                    }
-
-                    if txindex == 1 {
-                        self.infoMessage = """
-                        Gordian Server will install and configure a fully indexed Bitcoin Core node.
-
-                        You can always edit settings via File > Settings.
-
-                        Gordian Server will create the following directory: /Users/\(NSUserName())/.gordian/BitcoinCore
-
-                        It will create or add missing rpc credentials to the bitcoin.conf in \(directory).
-                        """
-                    }
+                self.version = dict!["version"] as! String
+                self.macosURL = dict!["macosURL"] as! String
+                
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     
-                    self.headerText = "Install Bitcoin Core v\(version)?"
-                    self.ignoreExistingBitcoin = false
-                    
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
-                        
-                        self.performSegue(withIdentifier: "segueToInstallPrompt", sender: self)
-                    }
-                }
-
-                // Bitcoind and possibly tor are already installed
-                if self.bitcoinInstalled {
-
-                    self.headerText = "Install Bitcoin Core v\(version)?"
-
-                    self.infoMessage = """
-                    Selecting yes will tell Gordian Server to download, verify and install a fresh Bitcoin Core v\(version) installation in ~/.gordian/BitcoinCore, Gordian Server will not overwrite your existing node.
-
-                    Your existing bitcoin.conf file will be checked for rpc username and password, if none exist Gordian Server will create them for you, all other bitcoin.conf settings will remain in place.
-                    """
-                    
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
-                        
-                        self.ignoreExistingBitcoin = true
-                        self.performSegue(withIdentifier: "segueToInstallPrompt", sender: self)
-                    }
-                } else {
-                    standup()
+                    self.performSegue(withIdentifier: "segueToInstallBitcoinCore", sender: self)
                 }
             }
         }
@@ -643,9 +575,10 @@ class ViewController: NSViewController, NSWindowDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
-            self.taskDescription.stringValue = "checking for default Bitcoin data directory..."
+            self.taskDescription.stringValue = "checking for Bitcoin data directory..."
             
-            let path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/bitcoin.conf")
+            let path = URL(fileURLWithPath: "\(Defaults.shared.dataDir)/bitcoin.conf")
+            print("path: \(path)")
             
             guard let conf = try? String(contentsOf: path, encoding: .utf8) else {
                 self.hideSpinner()
@@ -664,7 +597,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
     
     private func setDefaultBitcoinConf() {
-        let bitcoinPath = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin", isDirectory: true).path
+        let bitcoinPath = URL(fileURLWithPath: Defaults.shared.dataDir, isDirectory: true).path
         
         do {
             try FileManager.default.createDirectory(atPath: bitcoinPath,
@@ -675,7 +608,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
         
         
-        let bitcoinConfUrl = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/bitcoin.conf")
+        let bitcoinConfUrl = URL(fileURLWithPath: "\(Defaults.shared.dataDir)/bitcoin.conf")
         
         guard let bitcoinConf = BitcoinConf.bitcoinConf().data(using: .utf8) else { return }
         
@@ -837,7 +770,6 @@ class ViewController: NSViewController, NSWindowDelegate {
     //MARK: Script Result Parsers
     
     private func parseIsBitcoindRunning(result: String) {
-        print("parseIsBitcoindRunning")
         if result.contains("Stopped") {
             hideSpinner()
             if d.autoStart && isLoading {
@@ -1416,6 +1348,24 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
         switch segue.identifier {
+        case "segueToInstallBitcoinCore":
+            if let vc = segue.destinationController as? InstallGordianPrompt {
+                vc.version = self.version
+                vc.macosURL = self.macosURL
+                
+                vc.doneBlock = { response in
+                    if response {
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
+                            
+                            self.standingUp = true
+                            self.autoRefreshTimer?.invalidate()
+                            self.autoRefreshTimer = nil
+                            self.performSegue(withIdentifier: "goInstall", sender: vc)
+                        }
+                    }
+                }
+            }
         case "showInfo":
             if let vc = segue.destinationController as? Installer {
                 vc.peerInfo = self.peerInfo
