@@ -612,7 +612,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         
         let bitcoinConfUrl = URL(fileURLWithPath: "\(Defaults.shared.dataDir)/bitcoin.conf")
         
-        guard let bitcoinConf = BitcoinConf.bitcoinConf().data(using: .utf8) else { return }
+        guard let bitcoinConf = BitcoinConf.bitcoinConf()?.data(using: .utf8) else { return }
         
         do {
             try bitcoinConf.write(to: bitcoinConfUrl)

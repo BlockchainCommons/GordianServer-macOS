@@ -294,7 +294,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
                         let bitcoinConfUrl = URL(fileURLWithPath: "\(vc.dataDirOutlet.stringValue)/bitcoin.conf")
                         
                         guard let _ = try? String(contentsOf: bitcoinConfUrl, encoding: .utf8) else {
-                            guard let bitcoinConf = BitcoinConf.bitcoinConf().data(using: .utf8) else { return }
+                            guard let bitcoinConf = BitcoinConf.bitcoinConf()?.data(using: .utf8) else { return }
                             
                             do {
                                 try bitcoinConf.write(to: bitcoinConfUrl)
