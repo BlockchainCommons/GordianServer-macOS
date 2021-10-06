@@ -81,12 +81,16 @@ class Installer: NSViewController {
         if seeLog {
             spinner.alphaValue = 0
             seeLog = false
-            getLog { (log) in
-                guard let log = log else { return }
-                
-                DispatchQueue.main.async { [unowned vc = self] in
-                    vc.consoleOutput.string = log
+            let log = URL(fileURLWithPath: "/Users/\(NSUserName())/.gordian/gordian.log")
+            do {
+                let text = try String(contentsOf: log, encoding: .utf8)
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    
+                    self.consoleOutput.string = text
                 }
+            } catch {
+                simpleAlert(message: "Log does not exist.", info: "We were unable to fetch the log.", buttonLabel: "OK")
             }
             
         } else if peerInfo != "" {
@@ -121,15 +125,6 @@ class Installer: NSViewController {
             getURLs()
             
         }
-            
-//        } else if installLightning {
-//            DispatchQueue.main.async { [unowned vc = self] in
-//                vc.spinner.startAnimation(vc)
-//            }
-//            desc = "Installing Lightning..."
-//            //installLightningAction()
-//            checkExistingConf()
-//        }
         
         DispatchQueue.main.async { [unowned vc = self] in
             vc.spinnerDescription.stringValue = desc
@@ -153,7 +148,7 @@ class Installer: NSViewController {
         var userExists = false
         var passwordExists = false
         var proxyExists = false
-        var debugExists = false
+        var onlynetExists = false
         var discoverExists = false
         var listenExists = false
         var externalIpExists = false
@@ -168,6 +163,9 @@ class Installer: NSViewController {
                             let existingValue = arr[1]
                             
                             switch k {
+                            case "onlynet", "#onlynet":
+                                onlynetExists = true
+                                
                             case "externalip":
                                 externalIpExists = true
                                 
@@ -200,10 +198,7 @@ class Installer: NSViewController {
                             case "listen", "#listen":
                                 listenExists = true
                                 
-                            case "debug", "#debug":
-                                debugExists = true
-                                
-                            default:
+                           default:
                                 break
                             }
                         }
@@ -224,10 +219,6 @@ class Installer: NSViewController {
                         vc.standUpConf = "rpcuser=\(randomString(length: 10))\nrpcpassword=\(randomString(length: 32))\n" + conf!.joined(separator: "\n")
                     }
                     
-                    if !debugExists {
-                        vc.standUpConf = "debug=tor\n" + vc.standUpConf
-                    }
-                    
                     if !proxyExists {
                         vc.standUpConf = "proxy=127.0.0.1:19050\n" + vc.standUpConf
                     }
@@ -240,10 +231,14 @@ class Installer: NSViewController {
                         vc.standUpConf = "discover=1" + vc.standUpConf
                     }
                     
+                    if !onlynetExists {
+                        vc.standUpConf = "#onlynet=onion" + vc.standUpConf
+                    }
+                    
                     if !externalIpExists {
                         vc.standUpConf = "externalip=\(TorClient.sharedInstance.p2pHostname(chain: "main") ?? "")"
                     }
-                    
+                                        
                     vc.getURLs()
                                         
                 } else {
@@ -309,7 +304,6 @@ class Installer: NSViewController {
                 DispatchQueue.main.async { [weak self] in
                     if self != nil {
                         self?.hideSpinner()
-                        self?.setLog(content: log)
                     }
                 }
             }
@@ -360,18 +354,13 @@ class Installer: NSViewController {
         Log.writeToLog(content: content)
     }
     
-    func getLog(completion: @escaping (String?) -> Void) {
-        Log.getLog(completion: completion)
-    }
-    
     func getExisistingRPCCreds(completion: @escaping ((user: String, password: String)) -> Void) {
         var user = ""
         var password = ""
         
-        let path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/bitcoin.conf")
+        let path = URL(fileURLWithPath: "\(Defaults.shared.dataDir)/bitcoin.conf")
         
         guard let bitcoinConf = try? String(contentsOf: path, encoding: .utf8) else {
-            print("can not get bitcoin.conf")
             completion(("", ""))
             return
         }
@@ -391,10 +380,9 @@ class Installer: NSViewController {
     }
     
     func getBitcoinConf(completion: @escaping ((conf: [String]?, error: Bool)) -> Void) {
-        let path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/bitcoin.conf")
+        let path = URL(fileURLWithPath: "\(Defaults.shared.dataDir)/bitcoin.conf")
         
         guard let bitcoinConf = try? String(contentsOf: path, encoding: .utf8) else {
-            print("can not get bitcoin.conf")
             completion((nil, false))
             return
         }
@@ -427,12 +415,14 @@ class Installer: NSViewController {
             guard let output = String(data: data, encoding: .utf8) else { return }
                         
             if vc.showLog {
-                DispatchQueue.main.async { [unowned vc = self] in
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    
                     let prevOutput = vc.consoleOutput.string
                     let nextOutput = prevOutput + output
-                    vc.consoleOutput.string = nextOutput
+                    self.consoleOutput.string = nextOutput
                     logOutput = nextOutput
-                    vc.consoleOutput.scrollToEndOfDocument(vc)
+                    self.consoleOutput.scrollToEndOfDocument(vc)
                 }
             }
             

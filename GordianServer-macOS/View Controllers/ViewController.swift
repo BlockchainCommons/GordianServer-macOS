@@ -50,6 +50,8 @@ class ViewController: NSViewController, NSWindowDelegate {
     @IBOutlet weak private var sizeOutlet: NSTextField!
     
     weak var mgr = TorClient.sharedInstance
+    var version = ""
+    var macosURL = ""
     var autoRefreshTimer: Timer?
     var shutDownTimer: Timer?
     var startTimer: Timer?
@@ -84,6 +86,8 @@ class ViewController: NSViewController, NSWindowDelegate {
         peerDetailsButton.alphaValue = 0
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNow), name: .refresh, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(authAdded), name: .authAdded, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(disableRefresh), name: .disableRefresh, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(enableRefresh), name: .enableRefresh, object: nil)
         
         d.setDefaults { [weak self] in
             guard let self = self else { return }
@@ -101,6 +105,10 @@ class ViewController: NSViewController, NSWindowDelegate {
     override func viewWillDisappear() {
         autoRefreshTimer?.invalidate()
         autoRefreshTimer = nil
+        startTimer?.invalidate()
+        startTimer = nil
+        shutDownTimer?.invalidate()
+        shutDownTimer = nil
     }
 
     override func viewDidAppear() {
@@ -110,13 +118,31 @@ class ViewController: NSViewController, NSWindowDelegate {
         self.view.window?.setFrame(frame, display: true)
         
         d.setDefaults {}
+        setEnv()
         
-        if isLoading {
+        if self.mgr?.state != .started && self.mgr?.state != .connected  {
+            self.mgr?.start(delegate: self)
+        }
+        
+        if self.mgr?.state == .connected {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                
+                self.torIsOn = true
+                self.torVersionOutlet.stringValue = "v0.4.4.6"
+                self.startTorOutlet.title = "Stop"
+                self.startTorOutlet.isEnabled = true
+                self.updateTorStatus(isOn: true)
+                self.checkForGordian()
+            }
+        }
+    }
+    
+    @objc func enableRefresh() {
+        if !isLoading {
             if self.mgr?.state != .started && self.mgr?.state != .connected  {
                 self.mgr?.start(delegate: self)
-            }
-            
-            if self.mgr?.state == .connected {
+            } else if self.mgr?.state == .connected {
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     
@@ -128,27 +154,56 @@ class ViewController: NSViewController, NSWindowDelegate {
                     self.checkForGordian()
                 }
             }
-        }        
+        }
+    }
+        
+    @objc func disableRefresh() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.autoRefreshTimer?.invalidate()
+            self.autoRefreshTimer = nil
+            self.startTimer?.invalidate()
+            self.startTimer = nil
+            self.shutDownTimer?.invalidate()
+            self.shutDownTimer = nil
+        }
     }
     
     func windowShouldClose(_ sender: NSWindow) -> Bool {
         let alert = NSAlert()
-        alert.messageText = "Quit Tor and Bitcoin Core?"
-        alert.informativeText = "Closing this window does not automatically quit Tor or Bitcoin Core."
+        if bitcoinRunning {
+            alert.messageText = "Quit Tor and Bitcoin Core?"
+            alert.informativeText = "Closing this window does not automatically quit Tor or Bitcoin Core."
+        } else {
+            alert.messageText = "Quit Tor?"
+            alert.informativeText = "Closing this window does not automatically quit Tor."
+        }
         alert.addButton(withTitle: "Quit")
         alert.addButton(withTitle: "Leave Running")
         alert.addButton(withTitle: "Cancel")
         alert.alertStyle = .warning
         let modalResponse = alert.runModal()
-        if (modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn) {
-            self.runScript(script: .stopBitcoin)
+        switch modalResponse {
+        case .alertFirstButtonReturn:
+            if bitcoinRunning {
+                self.runScript(script: .stopBitcoin)
+            }
             self.mgr?.resign()
+            
+            DispatchQueue.main.async {
+                guard let appDelegate = NSApplication.shared.delegate as? AppDelegate else { return }
+                appDelegate.isKilling = true
+                NSApp.terminate(self)
+            }
+            
+            return true
+            
+        case .alertSecondButtonReturn:
             isLoading = true
             return true
-        } else if modalResponse == NSApplication.ModalResponse.alertSecondButtonReturn {
-            isLoading = true
-            return true
-        } else {
+            
+        default:
             return false
         }
     }
@@ -165,6 +220,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         var myWindow: NSWindow? = nil
         let storyboard = NSStoryboard(name: "Main", bundle: nil)
         let settings = storyboard.instantiateController(withIdentifier: "Settings") as! Settings
+        settings.bitcoinRunning = self.bitcoinRunning
         myWindow = NSWindow(contentViewController: settings)
         NSApp.activate(ignoringOtherApps: true)
         myWindow?.makeKeyAndOrderFront(self)
@@ -191,6 +247,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         d.setDefaults { [weak self] in
             guard let self = self else { return }
             
+            self.setEnv()
             self.checkForGordian()
         }
     }
@@ -404,6 +461,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                                     
                                     self.upgrading = true
                                     self.autoRefreshTimer?.invalidate()
+                                    self.autoRefreshTimer = nil
                                     self.performSegue(withIdentifier: "goInstall", sender: self)
                                 }
                             }
@@ -443,83 +501,13 @@ class ViewController: NSViewController, NSWindowDelegate {
 
             } else {
                 self.hideSpinner()
-                let version = dict!["version"] as! String
-
-                // Installing from scratch, however user may have gone into settings and changed some things so we need to check for that.
-                func standup() {
-                    let pruned = self.d.prune
-                    let txindex = self.d.txindex
-                    let directory = self.d.dataDir
-                    let pruneInGb = Double(pruned) / 954.0
-                    let rounded = Double(round(100 * pruneInGb) / 100)
-
-                    self.infoMessage = """
-                    Gordian Server will install and configure a pruned (\(rounded)gb) Bitcoin Core node.
-
-                    You can always edit settings via File > Settings.
-
-                    If your node is already running you will need to restart it for the new settings to take effect.
-
-                    Gordian Server will create the following directory: /Users/\(NSUserName())/.gordian/BitcoinCore
-
-                    It will create or add missing rpc credentials to the bitcoin.conf in \(directory).
-                    """
-
-                    if pruned == 0 || pruned == 1 {
-                        self.infoMessage = """
-                        GordianServer will install and configure Bitcoin Core node.
-
-                        You have set pruning to \(pruned), you can always edit the pruning amount in settings.
-
-                        You can always edit settings via File > Settings.
-
-                        GordianServer will create the following directory: /Users/\(NSUserName())/.gordian/BitcoinCore
-
-                        It will create or add missing rpc credentials to the bitcoin.conf in \(directory).
-                        """
-                    }
-
-                    if txindex == 1 {
-                        self.infoMessage = """
-                        Gordian Server will install and configure a fully indexed Bitcoin Core node.
-
-                        You can always edit settings via File > Settings.
-
-                        Gordian Server will create the following directory: /Users/\(NSUserName())/.gordian/BitcoinCore
-
-                        It will create or add missing rpc credentials to the bitcoin.conf in \(directory).
-                        """
-                    }
+                self.version = dict!["version"] as! String
+                self.macosURL = dict!["macosURL"] as! String
+                
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     
-                    self.headerText = "Install Bitcoin Core v\(version)?"
-                    self.ignoreExistingBitcoin = false
-                    
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
-                        
-                        self.performSegue(withIdentifier: "segueToInstallPrompt", sender: self)
-                    }
-                }
-
-                // Bitcoind and possibly tor are already installed
-                if self.bitcoinInstalled {
-
-                    self.headerText = "Install Bitcoin Core v\(version)?"
-
-                    self.infoMessage = """
-                    Selecting yes will tell Gordian Server to download, verify and install a fresh Bitcoin Core v\(version) installation in ~/.gordian/BitcoinCore, Gordian Server will not overwrite your existing node.
-
-                    Your existing bitcoin.conf file will be checked for rpc username and password, if none exist Gordian Server will create them for you, all other bitcoin.conf settings will remain in place.
-                    """
-                    
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
-                        
-                        self.ignoreExistingBitcoin = true
-                        self.performSegue(withIdentifier: "segueToInstallPrompt", sender: self)
-                    }
-                } else {
-                    standup()
+                    self.performSegue(withIdentifier: "segueToInstallBitcoinCore", sender: self)
                 }
             }
         }
@@ -590,11 +578,12 @@ class ViewController: NSViewController, NSWindowDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
-            self.taskDescription.stringValue = "checking for default Bitcoin data directory..."
+            self.taskDescription.stringValue = "checking for Bitcoin data directory..."
             
-            let path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/bitcoin.conf")
+            let path = URL(fileURLWithPath: "\(Defaults.shared.dataDir)/bitcoin.conf")
             
             guard let conf = try? String(contentsOf: path, encoding: .utf8) else {
+                self.hideSpinner()
                 actionAlert(message: "Missing bitcoin.conf file.",
                             info: "You need a bitcoin.conf file for Gordian Server to function. Would you like to add the default bitcoin.conf?") { [weak self] response in
                     guard let self = self else { return }
@@ -610,7 +599,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
     
     private func setDefaultBitcoinConf() {
-        let bitcoinPath = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin", isDirectory: true).path
+        let bitcoinPath = URL(fileURLWithPath: Defaults.shared.dataDir, isDirectory: true).path
         
         do {
             try FileManager.default.createDirectory(atPath: bitcoinPath,
@@ -621,7 +610,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
         
         
-        let bitcoinConfUrl = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/bitcoin.conf")
+        let bitcoinConfUrl = URL(fileURLWithPath: "\(Defaults.shared.dataDir)/bitcoin.conf")
         
         guard let bitcoinConf = BitcoinConf.bitcoinConf().data(using: .utf8) else { return }
         
@@ -697,13 +686,13 @@ class ViewController: NSViewController, NSWindowDelegate {
         
         switch chain {
         case "main":
-            path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/debug.log")
+            path = URL(fileURLWithPath: "\(Defaults.shared.dataDir)/debug.log")
         case "test":
-            path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/testnet3/debug.log")
+            path = URL(fileURLWithPath: "\(Defaults.shared.dataDir)/testnet3/debug.log")
         case "regtest":
-            path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/regtest/debug.log")
+            path = URL(fileURLWithPath: "\(Defaults.shared.dataDir)/regtest/debug.log")
         case "signet":
-            path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/signet/debug.log")
+            path = URL(fileURLWithPath: "\(Defaults.shared.dataDir)/signet/debug.log")
         default:
             break
         }
@@ -770,6 +759,8 @@ class ViewController: NSViewController, NSWindowDelegate {
             
             self.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusUnavailable")
             self.bitcoinRunning = false
+            guard let appDelegate = NSApplication.shared.delegate as? AppDelegate else { return }
+            appDelegate.bitcoinRunning = false
             self.startMainnetOutlet.title = "Start"
             self.startMainnetOutlet.isEnabled = true
             self.networkButton.isEnabled = true
@@ -783,10 +774,11 @@ class ViewController: NSViewController, NSWindowDelegate {
     private func parseIsBitcoindRunning(result: String) {
         if result.contains("Stopped") {
             hideSpinner()
-            bitcoinIsOff()
             if d.autoStart && isLoading {
                 self.addSpinnerDesc("starting \(self.chain)...")
                 self.runScript(script: .startBitcoin)
+            } else {
+                bitcoinIsOff()
             }
         } else {
             bitcoinRunning = true
@@ -794,6 +786,8 @@ class ViewController: NSViewController, NSWindowDelegate {
                 guard let self = self else { return }
                 
                 self.bitcoinIsOnHeaderImage.image = NSImage(imageLiteralResourceName: "NSStatusPartiallyAvailable")
+                guard let appDelegate = NSApplication.shared.delegate as? AppDelegate else { return }
+                appDelegate.bitcoinRunning = true
             }
             getBlockchainInfo()
         }
@@ -1002,6 +996,8 @@ class ViewController: NSViewController, NSWindowDelegate {
                 guard let self = self else { return }
                 
                 self.bitcoinRunning = true
+                guard let appDelegate = NSApplication.shared.delegate as? AppDelegate else { return }
+                appDelegate.bitcoinRunning = true
                 let blockchainInfo = BlockchainInfo(response)
                 self.blocksOutlet.stringValue = "\(blockchainInfo.blocks)"
                 self.difficultyOutlet.stringValue = "\(blockchainInfo.difficulty.diffString)"
@@ -1167,6 +1163,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     func hideSpinner() {
+        print("hideSpinner")
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
@@ -1260,6 +1257,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                         
                         self.standingUp = true
                         self.autoRefreshTimer?.invalidate()
+                        self.autoRefreshTimer = nil
                         self.performSegue(withIdentifier: "goInstall", sender: self)
                     }
                 }
@@ -1352,6 +1350,24 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
         switch segue.identifier {
+        case "segueToInstallBitcoinCore":
+            if let vc = segue.destinationController as? InstallGordianPrompt {
+                vc.version = self.version
+                vc.macosURL = self.macosURL
+                
+                vc.doneBlock = { response in
+                    if response {
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
+                            
+                            self.standingUp = true
+                            self.autoRefreshTimer?.invalidate()
+                            self.autoRefreshTimer = nil
+                            self.performSegue(withIdentifier: "goInstall", sender: vc)
+                        }
+                    }
+                }
+            }
         case "showInfo":
             if let vc = segue.destinationController as? Installer {
                 vc.peerInfo = self.peerInfo
@@ -1376,6 +1392,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                             guard let self = self else { return }
                             
                             self.autoRefreshTimer?.invalidate()
+                            self.autoRefreshTimer = nil
                             self.installXcodeCLTools()
                         }
                     }
@@ -1419,6 +1436,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                             
                             self.standingUp = true
                             self.autoRefreshTimer?.invalidate()
+                            self.autoRefreshTimer = nil
                             self.performSegue(withIdentifier: "goInstall", sender: vc)
                         }
                     }

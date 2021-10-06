@@ -14,7 +14,7 @@ class Defaults {
     private init() {}
     
     private func getBitcoinConf(completion: @escaping ((conf: [String]?, error: Bool)) -> Void) {
-        let path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/bitcoin.conf")
+        let path = URL(fileURLWithPath: dataDir + "/bitcoin.conf")
         
         guard let bitcoinConf = try? String(contentsOf: path, encoding: .utf8) else {
             completion((nil, false))
@@ -134,7 +134,14 @@ class Defaults {
     }
     
     var dataDir: String {
-        return "/Users/\(NSUserName())/Library/Application Support/Bitcoin"
+        // Remove escaping character from path for backwards compatibility
+        if ud.object(forKey: "dataDir") as? String == "/Users/\(NSUserName())/Library/Application\\ Support/Bitcoin" {
+            let correctPath = "/Users/\(NSUserName())/Library/Application Support/Bitcoin"
+            ud.setValue(correctPath, forKey: "dataDir")
+            return correctPath
+        } else {
+            return ud.object(forKey: "dataDir") as? String ?? "/Users/\(NSUserName())/Library/Application Support/Bitcoin"
+        }
     }
     
     var blocksDir: String {
@@ -156,10 +163,6 @@ class Defaults {
     var walletdisabled: Int {
         return ud.object(forKey: "disablewallet") as? Int ?? 0
     }
-    
-//    func setDataDir(value: String) {
-//        ud.set(value, forKey: "dataDir")
-//    }
     
     var existingVersion: String {
         return ud.object(forKey: "version") as? String ?? "22.0"

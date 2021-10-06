@@ -39,8 +39,6 @@ public enum SCRIPT: String {
     case startLightning
     case stopLightning
     case getLightningRpcCreds
-    case writeLog
-    case getLog
     case startBitcoin
     
     var stringValue:String {
@@ -101,10 +99,6 @@ public enum SCRIPT: String {
             return "StopLightning"
         case .getLightningRpcCreds:
             return "GetLightningRpcCreds"
-        case .writeLog:
-            return "WriteLog"
-        case .getLog:
-            return "GetLog"
         case .startBitcoin:
             return "StartBitcoin"
         }
