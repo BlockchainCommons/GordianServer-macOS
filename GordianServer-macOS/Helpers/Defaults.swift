@@ -76,7 +76,7 @@ class Defaults {
                                     listenOn = true
                                 }
                                 
-                            case "testnet", "regtest":
+                            case "testnet", "regtest", "signet":
                                 if Int(existingValue) == 1 {
                                     // MARK: TODO - throw an error as specifying a network in the conf file is incompatible with Standup
                                 }
@@ -117,7 +117,7 @@ class Defaults {
         }
         
         if ud.object(forKey: "nodeLabel") == nil {
-            ud.set("StandUp Node", forKey: "nodeLabel")
+            ud.set("Gordian Server", forKey: "nodeLabel")
         }
         
         if ud.object(forKey: "autoStart") == nil {

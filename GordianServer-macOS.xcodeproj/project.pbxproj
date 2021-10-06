@@ -12,6 +12,8 @@
 		0A532755270DC5CB00A7130F /* PythonKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0A532754270DC5CB00A7130F /* PythonKit */; };
 		0A532757270DC5E700A7130F /* Python.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A532756270DC5E700A7130F /* Python.framework */; };
 		0A532758270DC5E700A7130F /* Python.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0A532756270DC5E700A7130F /* Python.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		0A53275A270DC79600A7130F /* rpcauth.py in Resources */ = {isa = PBXBuildFile; fileRef = 0A532759270DC79600A7130F /* rpcauth.py */; };
+		0A53275C270DC80600A7130F /* RPCAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A53275B270DC80600A7130F /* RPCAuth.swift */; };
 		0A8B41162702CB8B00815E65 /* IsProcessRunning.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A8B41152702CB8B00815E65 /* IsProcessRunning.command */; };
 		0A92AE3F26F75E310034B7B4 /* OpenFile.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A92AE3E26F75E310034B7B4 /* OpenFile.command */; };
 		0A92AE4126F761260034B7B4 /* StartBitcoin.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A92AE4026F761260034B7B4 /* StartBitcoin.command */; };
@@ -131,6 +133,8 @@
 		0A2FE80026FD7A1B00B18859 /* LaunchBrewInstall.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = LaunchBrewInstall.command; sourceTree = "<group>"; };
 		0A2FE80226FD7A4C00B18859 /* InstallBrew.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = InstallBrew.command; sourceTree = "<group>"; };
 		0A532756270DC5E700A7130F /* Python.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Python.framework; path = ../../../../../Library/Frameworks/Python.framework; sourceTree = "<group>"; };
+		0A532759270DC79600A7130F /* rpcauth.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = rpcauth.py; sourceTree = "<group>"; };
+		0A53275B270DC80600A7130F /* RPCAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPCAuth.swift; sourceTree = "<group>"; };
 		0A8B41152702CB8B00815E65 /* IsProcessRunning.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = IsProcessRunning.command; sourceTree = "<group>"; };
 		0A92AE3E26F75E310034B7B4 /* OpenFile.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = OpenFile.command; sourceTree = "<group>"; };
 		0A92AE4026F761260034B7B4 /* StartBitcoin.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = StartBitcoin.command; sourceTree = "<group>"; };
@@ -390,6 +394,7 @@
 				0AD5BABE26F578230091A075 /* Tor */,
 				0A92AE4826F9D2A80034B7B4 /* Structs */,
 				0A92AE5326F9D9CF0034B7B4 /* Bitcoin */,
+				0A532759270DC79600A7130F /* rpcauth.py */,
 			);
 			path = "GordianServer-macOS";
 			sourceTree = "<group>";
@@ -428,6 +433,7 @@
 				D0B9278B2385045400956651 /* Log.swift */,
 				D08210362389058B00E21EDC /* Defaults.swift */,
 				D01B610724877301005D3090 /* MakeRPCCall.swift */,
+				0A53275B270DC80600A7130F /* RPCAuth.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -561,6 +567,7 @@
 				D0534CCA237E4DF00093DE67 /* fullynoded_qr.png in Resources */,
 				0A92AE3F26F75E310034B7B4 /* OpenFile.command in Resources */,
 				0A8B41162702CB8B00815E65 /* IsProcessRunning.command in Resources */,
+				0A53275A270DC79600A7130F /* rpcauth.py in Resources */,
 				D0DCD8EA236ACD5300F2D15A /* QRDisplayer.xib in Resources */,
 				D0534CC6237E4CC20093DE67 /* ok.png in Resources */,
 				D0E74F2323B6A527008B1EC5 /* CheckStandUp.command in Resources */,
@@ -631,6 +638,7 @@
 				0A92AE5026F9D7E10034B7B4 /* RPCWhitelist.swift in Sources */,
 				D0BCB335236A6D22000D8FDE /* ViewController.swift in Sources */,
 				0A92AE4726F9D2A10034B7B4 /* BlockchainInfo.swift in Sources */,
+				0A53275C270DC80600A7130F /* RPCAuth.swift in Sources */,
 				0AD5BABB26F572330091A075 /* TorClient.swift in Sources */,
 				0AF145A3270C04C300BD0327 /* InstallGordianPrompt.swift in Sources */,
 				0AD5BAA026EF2FA50091A075 /* Extensions.swift in Sources */,

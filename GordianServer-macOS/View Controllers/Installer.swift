@@ -145,8 +145,8 @@ class Installer: NSViewController {
     }
     
     func checkExistingConf() {
-        var userExists = false
-        var passwordExists = false
+        //var userExists = false
+        //var passwordExists = false
         var proxyExists = false
         var onlynetExists = false
         var discoverExists = false
@@ -175,21 +175,21 @@ class Installer: NSViewController {
                             case "blocksdir":
                                 UserDefaults.standard.setValue(existingValue, forKey: "blockDir")
                                 
-                            case "rpcuser":
-                                if existingValue != "" {
-                                    userExists = true
-                                    vc.rpcuser = existingValue
-                                }
-                                
-                            case "rpcpassword":
-                                if existingValue != "" {
-                                    passwordExists = true
-                                    vc.rpcpassword = existingValue
-                                }
+//                            case "rpcuser":
+//                                if existingValue != "" {
+//                                    userExists = true
+//                                    vc.rpcuser = existingValue
+//                                }
+//
+//                            case "rpcpassword":
+//                                if existingValue != "" {
+//                                    passwordExists = true
+//                                    vc.rpcpassword = existingValue
+//                                }
                                 
                             case "testnet", "regtest", "signet":
                                 if existingValue != "" {
-                                    simpleAlert(message: "Incompatible bitcoin.conf setting!", info: "GordianServer allows you to run multiple networks simultaneously, we do this by specifying which chain we want to launch as a command line argument. Specifying a network in your bitcoin.conf is not compatible with this approach, please remove the line in your conf file which specifies a network.", buttonLabel: "OK")
+                                    simpleAlert(message: "Incompatible bitcoin.conf setting!", info: "Gordian Server allows you to run multiple networks simultaneously, we do this by specifying which chain we want to launch as a command line argument. Specifying a network in your bitcoin.conf is not compatible with this approach, please remove the line in your conf file which specifies a network.", buttonLabel: "OK")
                                 }
                                 
                             case "proxy", "#proxy":
@@ -204,20 +204,17 @@ class Installer: NSViewController {
                         }
                     }
                     
-                    if userExists && passwordExists {
-                        // just use exisiting conf as is
-                        vc.standUpConf = conf!.joined(separator: "\n")
-                        
-                    } else if userExists && !passwordExists {
-                        vc.standUpConf = "rpcpassword=\(randomString(length: 32))\n" + conf!.joined(separator: "\n")
-                        
-                    } else if passwordExists && !userExists {
-                        vc.standUpConf = "rpcuser=\(randomString(length: 10))\n" + conf!.joined(separator: "\n")
-                        
-                    } else {
-                        // add rpcuser and rpcpassword
-                        vc.standUpConf = "rpcuser=\(randomString(length: 10))\nrpcpassword=\(randomString(length: 32))\n" + conf!.joined(separator: "\n")
+                    let rpcAuthCreds = RPCAuth.generateRpcAuth(user: "GordianServer")
+                    
+                    guard let rpcauth = rpcAuthCreds.rpcauth, let rpcpassword = rpcAuthCreds.rpcpassword else {
+                        simpleAlert(message: "Error", info: "Unable to create rpcauth credentials.", buttonLabel: "OK")
+                        return
                     }
+                    
+                    UserDefaults.setValue(rpcpassword, forKey: "rpcpassword")
+                    UserDefaults.setValue("GordianServer", forKey: "rpcuser")
+                    
+                    vc.standUpConf = rpcauth + "\n" + "rpcwhitelist=GordianServer:\(rpcWhiteList)" + conf!.joined(separator: "\n")
                     
                     if !proxyExists {
                         vc.standUpConf = "proxy=127.0.0.1:19050\n" + vc.standUpConf
@@ -251,8 +248,12 @@ class Installer: NSViewController {
     }
     
     private func setDefaultBitcoinConf() {
-        //no existing settings - use default
-        standUpConf = BitcoinConf.bitcoinConf()
+        guard let defaultConf = BitcoinConf.bitcoinConf() else {
+            simpleAlert(message: "Error", info: "Unable to create the default bitcoin.conf", buttonLabel: "OK")
+            return
+        }
+        
+        standUpConf = defaultConf
         getURLs()
     }
     
@@ -352,31 +353,6 @@ class Installer: NSViewController {
     
     func setLog(content: String) {
         Log.writeToLog(content: content)
-    }
-    
-    func getExisistingRPCCreds(completion: @escaping ((user: String, password: String)) -> Void) {
-        var user = ""
-        var password = ""
-        
-        let path = URL(fileURLWithPath: "\(Defaults.shared.dataDir)/bitcoin.conf")
-        
-        guard let bitcoinConf = try? String(contentsOf: path, encoding: .utf8) else {
-            completion(("", ""))
-            return
-        }
-        
-        let conf = bitcoinConf.components(separatedBy: "\n")
-        for item in conf {
-            if item.contains("rpcuser") {
-                let arr = item.components(separatedBy: "rpcuser=")
-                user = arr[1]
-            }
-            if item.contains("rpcpassword") {
-                let arr = item.components(separatedBy: "rpcpassword=")
-                password = arr[1]
-            }
-            completion((user: user, password: password))
-        }
     }
     
     func getBitcoinConf(completion: @escaping ((conf: [String]?, error: Bool)) -> Void) {
