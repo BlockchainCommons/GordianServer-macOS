@@ -134,7 +134,14 @@ class Defaults {
     }
     
     var dataDir: String {
-        return ud.object(forKey: "dataDir") as? String ?? "/Users/\(NSUserName())/Library/Application Support/Bitcoin"
+        // Remove escaping character from path for backwards compatibility
+        if ud.object(forKey: "dataDir") as? String == "/Users/\(NSUserName())/Library/Application\\ Support/Bitcoin" {
+            let correctPath = "/Users/\(NSUserName())/Library/Application Support/Bitcoin"
+            ud.setValue(correctPath, forKey: "dataDir")
+            return correctPath
+        } else {
+            return ud.object(forKey: "dataDir") as? String ?? "/Users/\(NSUserName())/Library/Application Support/Bitcoin"
+        }
     }
     
     var blocksDir: String {
