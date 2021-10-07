@@ -26,15 +26,15 @@ function verifySigs() {
   curl https://raw.githubusercontent.com/bitcoin/bitcoin/master/contrib/builder-keys/keys.txt -o ~/.gordian/BitcoinCore/keys.txt
 
   if [[ $(command -v /opt/homebrew/bin/gpg) != "" ]]; then
-    sh -c 'while read fingerprint keyholder_name; do /opt/homebrew/bin/gpg --keyserver hkps://keys.openpgp.org --recv-keys ${fingerprint}; done < ~/.gordian/BitcoinCore/keys.txt'
+    sudo -u $(whoami) sh -c 'while read fingerprint keyholder_name; do sudo -u $(whoami) /opt/homebrew/bin/gpg --keyserver hkps://keys.openpgp.org --recv-keys ${fingerprint}; done < ~/.gordian/BitcoinCore/keys.txt'
   elif [[ $(command -v /usr/local/bin/gpg) != "" ]]; then
-    sh -c 'while read fingerprint keyholder_name; do /usr/local/bin/gpg --keyserver hkps://keys.openpgp.org --recv-keys ${fingerprint}; done < ~/.gordian/BitcoinCore/keys.txt'
+    sudo -u $(whoami) sh -c 'while read fingerprint keyholder_name; do sudo -u $(whoami) /usr/local/bin/gpg --keyserver hkps://keys.openpgp.org --recv-keys ${fingerprint}; done < ~/.gordian/BitcoinCore/keys.txt'
   elif [[ $(command -v /usr/local/bin/brew/gpg) != "" ]]; then
-    sh -c 'while read fingerprint keyholder_name; do /usr/local/bin/brew/gpg --keyserver hkps://keys.openpgp.org --recv-keys ${fingerprint}; done < ~/.gordian/BitcoinCore/keys.txt'
+    sudo -u $(whoami) sh -c 'while read fingerprint keyholder_name; do sudo -u $(whoami) /usr/local/bin/brew/gpg --keyserver hkps://keys.openpgp.org --recv-keys ${fingerprint}; done < ~/.gordian/BitcoinCore/keys.txt'
   elif [[ $(command -v /usr/local/MacGPG2/bin/gpg) != "" ]]; then
-    sh -c 'while read fingerprint keyholder_name; do /usr/local/MacGPG2/bin/gpg --keyserver hkps://keys.openpgp.org --recv-keys ${fingerprint}; done < ~/.gordian/BitcoinCore/keys.txt'
+    sudo -u $(whoami) sh -c 'while read fingerprint keyholder_name; do sudo -u $(whoami) /usr/local/MacGPG2/bin/gpg --keyserver hkps://keys.openpgp.org --recv-keys ${fingerprint}; done < ~/.gordian/BitcoinCore/keys.txt'
   else
-    sh -c 'while read fingerprint keyholder_name; do gpg --keyserver hkps://keys.openpgp.org --recv-keys ${fingerprint}; done < ~/.gordian/BitcoinCore/keys.txt'
+    sudo -u $(whoami) sh -c 'while read fingerprint keyholder_name; do gpg --keyserver hkps://keys.openpgp.org --recv-keys ${fingerprint}; done < ~/.gordian/BitcoinCore/keys.txt'
   fi
 
   # Verifying Bitcoin: Signature
