@@ -8,11 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		0A2DDC30270F2AE300E19F14 /* FXRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2DDC2F270F2AE300E19F14 /* FXRate.swift */; };
+		0A2DDC32270F332900E19F14 /* Python.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A2DDC31270F332900E19F14 /* Python.framework */; };
 		0A2FE80126FD7A1B00B18859 /* LaunchBrewInstall.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A2FE80026FD7A1B00B18859 /* LaunchBrewInstall.command */; };
 		0A2FE80326FD7A4C00B18859 /* InstallBrew.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A2FE80226FD7A4C00B18859 /* InstallBrew.command */; };
 		0A532755270DC5CB00A7130F /* PythonKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0A532754270DC5CB00A7130F /* PythonKit */; };
-		0A532757270DC5E700A7130F /* Python.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A532756270DC5E700A7130F /* Python.framework */; };
-		0A532758270DC5E700A7130F /* Python.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0A532756270DC5E700A7130F /* Python.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		0A53275A270DC79600A7130F /* rpcauth.py in Resources */ = {isa = PBXBuildFile; fileRef = 0A532759270DC79600A7130F /* rpcauth.py */; };
 		0A53275C270DC80600A7130F /* RPCAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A53275B270DC80600A7130F /* RPCAuth.swift */; };
 		0A8B41162702CB8B00815E65 /* IsProcessRunning.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A8B41152702CB8B00815E65 /* IsProcessRunning.command */; };
@@ -121,7 +120,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				0A532758270DC5E700A7130F /* Python.framework in Embed Frameworks */,
 				0AD5BAB826F568820091A075 /* Tor.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -131,6 +129,7 @@
 
 /* Begin PBXFileReference section */
 		0A2DDC2F270F2AE300E19F14 /* FXRate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FXRate.swift; sourceTree = "<group>"; };
+		0A2DDC31270F332900E19F14 /* Python.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Python.framework; path = ../../../../../opt/homebrew/Frameworks/Python.framework; sourceTree = "<group>"; };
 		0A2FE80026FD7A1B00B18859 /* LaunchBrewInstall.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = LaunchBrewInstall.command; sourceTree = "<group>"; };
 		0A2FE80226FD7A4C00B18859 /* InstallBrew.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = InstallBrew.command; sourceTree = "<group>"; };
 		0A532756270DC5E700A7130F /* Python.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Python.framework; path = ../../../../../Library/Frameworks/Python.framework; sourceTree = "<group>"; };
@@ -223,7 +222,7 @@
 			files = (
 				0AD5BAB726F568820091A075 /* Tor.xcframework in Frameworks */,
 				0A532755270DC5CB00A7130F /* PythonKit in Frameworks */,
-				0A532757270DC5E700A7130F /* Python.framework in Frameworks */,
+				0A2DDC32270F332900E19F14 /* Python.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,6 +266,7 @@
 			isa = PBXGroup;
 			children = (
 				0A532756270DC5E700A7130F /* Python.framework */,
+				0A2DDC31270F332900E19F14 /* Python.framework */,
 				0A92AE6A26FB20AF0034B7B4 /* ServiceManagement.framework */,
 				0AD5BAB626F568820091A075 /* Tor.xcframework */,
 			);
@@ -821,6 +821,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+					/opt/homebrew/Frameworks,
 				);
 				INFOPLIST_FILE = "GordianServer-macOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -850,6 +851,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+					/opt/homebrew/Frameworks,
 				);
 				INFOPLIST_FILE = "GordianServer-macOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
