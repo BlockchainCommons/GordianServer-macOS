@@ -145,7 +145,7 @@ class Defaults {
     }
     
     var blocksDir: String {
-        return ud.object(forKey: "blocksDir") as? String ?? "/Users/\(NSUserName())/Library/Application Support/Bitcoin"
+        return ud.object(forKey: "blocksDir") as? String ?? dataDir
     }
     
     var isPrivate: Int {
