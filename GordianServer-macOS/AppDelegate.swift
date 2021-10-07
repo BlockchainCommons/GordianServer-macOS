@@ -11,8 +11,8 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
     
-    public var isKilling = false
-    public var bitcoinRunning = false
+    var isKilling = false
+    var bitcoinRunning = false
     
     @IBAction func reportBugsClicked(_ sender: Any) {
         DispatchQueue.main.async {
@@ -217,13 +217,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func quitBitcoin() {
+        // MARK: TODO - don't use script for bitcoin-cli
         let chain = UserDefaults.standard.string(forKey: "chain") ?? "main"
-        runScript(script: .stopBitcoin, env: ["CHAIN":chain, "PREFIX":Defaults.shared.existingPrefix, "DATADIR":Defaults.shared.dataDir], args: []) { _ in
+        //runScript(script: .stopBitcoin, env: ["CHAIN":chain, "PREFIX":Defaults.shared.existingPrefix, "DATADIR":Defaults.shared.dataDir], args: []) { _ in
             TorClient.sharedInstance.resign()
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                 NSApplication.shared.reply(toApplicationShouldTerminate: true)
             }
-        }
+        //}
     }
     
     @IBAction func gordianLogClicked(_ sender: Any) {

@@ -70,7 +70,7 @@ function installBitcoin () {
 
 function verifySigs() {
   if [[ $GPG_PATH == "" ]]; then
-    echo "GPG NOT INSTALLED, UNABLE TO VERIFY SIGNAURES!"
+    echo "GPG NOT INSTALLED, UNABLE TO VERIFY SIGNATURES!"
     echo "To install GPG click Supported Apps in the menu and GPG Suite, signature verification can be done later."
     curl https://raw.githubusercontent.com/bitcoin/bitcoin/master/contrib/builder-keys/keys.txt -o ~/.gordian/BitcoinCore/keys.txt
     echo "Unpacking $BINARY_NAME"

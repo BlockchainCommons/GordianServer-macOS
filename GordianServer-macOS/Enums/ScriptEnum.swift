@@ -27,7 +27,6 @@ public enum SCRIPT: String {
     case getStrapped
     case launchStrap
     case isBitcoinOn
-    case stopBitcoin
     case checkForOldHost
     case removeOldHost
     case rpc
@@ -75,8 +74,6 @@ public enum SCRIPT: String {
             return "LaunchStrap"
         case .isBitcoinOn:
             return "IsBitcoinOn"
-        case .stopBitcoin:
-            return "StopBitcoin"
         case .checkForOldHost:
             return "CheckForOldHost"
         case .removeOldHost:

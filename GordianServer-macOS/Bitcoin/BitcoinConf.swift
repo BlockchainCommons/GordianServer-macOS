@@ -39,7 +39,7 @@ class BitcoinConf {
         proxy=127.0.0.1:19150
         listen=1
         discover=1
-        rpcauth=\(rpcauth)
+        \(rpcauth)
         rpcwhitelist=\(rpcuser):\(rpcWhiteList)
         [main]
         externalip=\(TorClient.sharedInstance.p2pHostname(chain: "main") ?? "")

@@ -1291,8 +1291,18 @@
                                     <action selector="refreshAction:" target="XfG-lQ-9wD" id="lAe-FJ-8wJ"/>
                                 </connections>
                             </button>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="uZq-Qh-jGf">
+                                <rect key="frame" x="70" y="513" width="15" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="   " id="L9e-PV-DTo">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="nxx-XH-rol" firstAttribute="top" secondItem="uZq-Qh-jGf" secondAttribute="bottom" constant="8" symbolic="YES" id="0yP-t1-82n"/>
+                            <constraint firstItem="nxx-XH-rol" firstAttribute="leading" secondItem="uZq-Qh-jGf" secondAttribute="leading" id="239-fT-1hc"/>
                             <constraint firstItem="qja-rn-gD6" firstAttribute="leading" secondItem="nxx-XH-rol" secondAttribute="leading" id="3UD-3m-1IC"/>
                             <constraint firstItem="K4o-Sf-dSl" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="13" id="6w1-WR-098"/>
                             <constraint firstItem="nxx-XH-rol" firstAttribute="centerY" secondItem="m2S-Jp-Qdl" secondAttribute="centerY" id="9iF-dC-I79"/>
@@ -1322,6 +1332,7 @@
                         <outlet property="bitcoinIsOnHeaderImage" destination="IZe-rf-ugH" id="Ncd-MN-zJ5"/>
                         <outlet property="blocksOutlet" destination="u4k-cA-eaA" id="uJ9-63-CBJ"/>
                         <outlet property="difficultyOutlet" destination="2M3-Q6-5tc" id="exO-G7-Fya"/>
+                        <outlet property="fxRateOutlet" destination="uZq-Qh-jGf" id="QTV-aG-1IT"/>
                         <outlet property="hashrateOutlet" destination="ObL-6X-0iZ" id="0B1-1z-zCg"/>
                         <outlet property="icon" destination="zZj-w8-TgT" id="mC2-fU-qbF"/>
                         <outlet property="mainnetIncomingPeersLabel" destination="PMt-yp-b2E" id="qSk-0Q-URx"/>

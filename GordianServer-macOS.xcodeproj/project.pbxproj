@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A2DDC30270F2AE300E19F14 /* FXRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2DDC2F270F2AE300E19F14 /* FXRate.swift */; };
 		0A2FE80126FD7A1B00B18859 /* LaunchBrewInstall.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A2FE80026FD7A1B00B18859 /* LaunchBrewInstall.command */; };
 		0A2FE80326FD7A4C00B18859 /* InstallBrew.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A2FE80226FD7A4C00B18859 /* InstallBrew.command */; };
 		0A532755270DC5CB00A7130F /* PythonKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0A532754270DC5CB00A7130F /* PythonKit */; };
@@ -56,7 +57,6 @@
 		D0B9277123837AB400956651 /* UrlRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B9277023837AB400956651 /* UrlRequest.swift */; };
 		D0B927782383E59700956651 /* UpgradeBitcoin.command in Resources */ = {isa = PBXBuildFile; fileRef = D0B927772383E59700956651 /* UpgradeBitcoin.command */; };
 		D0B9277A2383F8D400956651 /* CheckForBitcoinCore.command in Resources */ = {isa = PBXBuildFile; fileRef = D0B927792383F8D400956651 /* CheckForBitcoinCore.command */; };
-		D0B9277E2383FCD000956651 /* StopBitcoin.command in Resources */ = {isa = PBXBuildFile; fileRef = D0B9277D2383FCD000956651 /* StopBitcoin.command */; };
 		D0B9278A2384E54900956651 /* RemoveBitcoin.command in Resources */ = {isa = PBXBuildFile; fileRef = D0B927892384E54900956651 /* RemoveBitcoin.command */; };
 		D0B9278C2385045400956651 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B9278B2385045400956651 /* Log.swift */; };
 		D0BCB333236A6D22000D8FDE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BCB332236A6D22000D8FDE /* AppDelegate.swift */; };
@@ -130,6 +130,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0A2DDC2F270F2AE300E19F14 /* FXRate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FXRate.swift; sourceTree = "<group>"; };
 		0A2FE80026FD7A1B00B18859 /* LaunchBrewInstall.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = LaunchBrewInstall.command; sourceTree = "<group>"; };
 		0A2FE80226FD7A4C00B18859 /* InstallBrew.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = InstallBrew.command; sourceTree = "<group>"; };
 		0A532756270DC5E700A7130F /* Python.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Python.framework; path = ../../../../../Library/Frameworks/Python.framework; sourceTree = "<group>"; };
@@ -177,7 +178,6 @@
 		D0B9277023837AB400956651 /* UrlRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlRequest.swift; sourceTree = "<group>"; };
 		D0B927772383E59700956651 /* UpgradeBitcoin.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = UpgradeBitcoin.command; sourceTree = "<group>"; };
 		D0B927792383F8D400956651 /* CheckForBitcoinCore.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = CheckForBitcoinCore.command; sourceTree = "<group>"; };
-		D0B9277D2383FCD000956651 /* StopBitcoin.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = StopBitcoin.command; sourceTree = "<group>"; };
 		D0B927892384E54900956651 /* RemoveBitcoin.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = RemoveBitcoin.command; sourceTree = "<group>"; };
 		D0B9278B2385045400956651 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		D0BCB32F236A6D22000D8FDE /* GordianServer-macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "GordianServer-macOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -310,7 +310,6 @@
 				D049E89F237BFF9E00294E70 /* UpdateBTCConf.command */,
 				D0B927772383E59700956651 /* UpgradeBitcoin.command */,
 				D0B927792383F8D400956651 /* CheckForBitcoinCore.command */,
-				D0B9277D2383FCD000956651 /* StopBitcoin.command */,
 				D0B927892384E54900956651 /* RemoveBitcoin.command */,
 				D0E74F2223B6A527008B1EC5 /* CheckStandUp.command */,
 				D0760105247DFEF200706F70 /* Strap.command */,
@@ -434,6 +433,7 @@
 				D08210362389058B00E21EDC /* Defaults.swift */,
 				D01B610724877301005D3090 /* MakeRPCCall.swift */,
 				0A53275B270DC80600A7130F /* RPCAuth.swift */,
+				0A2DDC2F270F2AE300E19F14 /* FXRate.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -584,7 +584,6 @@
 				D049E89E237BD09200294E70 /* StandDown.command in Resources */,
 				0A2FE80126FD7A1B00B18859 /* LaunchBrewInstall.command in Resources */,
 				0A2FE80326FD7A4C00B18859 /* InstallBrew.command in Resources */,
-				D0B9277E2383FCD000956651 /* StopBitcoin.command in Resources */,
 				D0C9439E2500C5AA00DF7339 /* RPC.command in Resources */,
 				0A92AE4526F822090034B7B4 /* LaunchXcodeInstall.command in Resources */,
 				D0DACF5425145EB300846590 /* GetLightningRpcCreds.command in Resources */,
@@ -646,6 +645,7 @@
 				D0BCB333236A6D22000D8FDE /* AppDelegate.swift in Sources */,
 				D0B9277123837AB400956651 /* UrlRequest.swift in Sources */,
 				D0C9439625009D0A00DF7339 /* WalletsViewController.swift in Sources */,
+				0A2DDC30270F2AE300E19F14 /* FXRate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

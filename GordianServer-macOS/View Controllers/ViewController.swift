@@ -10,6 +10,7 @@ import Cocoa
 
 class ViewController: NSViewController, NSWindowDelegate {
     
+    @IBOutlet weak private var fxRateOutlet: NSTextField!
     @IBOutlet weak private var rpcAuthenticated: NSTextField!
     @IBOutlet weak private var bitcoinCoreModeOutlet: NSTextField!
     @IBOutlet weak private var rpcHostOutlet: NSTextField!
@@ -187,7 +188,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         switch modalResponse {
         case .alertFirstButtonReturn:
             if bitcoinRunning {
-                self.runScript(script: .stopBitcoin)
+                self.stopBitcoin()
             }
             self.mgr?.resign()
             
@@ -355,6 +356,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
+            self.startMainnetOutlet.isEnabled = false
             self.taskDescription.stringValue = "checking system..."
             self.spinner.startAnimation(self)
             self.spinner.alphaValue = 1
@@ -362,6 +364,18 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
         
         checkForGordian()
+    }
+    
+    private func getFxRate() {
+        FXRate.sharedInstance.getFxRate { fxRate in
+            guard let fxRate = fxRate else { return }
+            
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                
+                self.fxRateOutlet.stringValue = "$\(Int(fxRate).withCommas) / btc"
+            }
+        }
     }
 
     @IBAction func removeAuthAction(_ sender: Any) {
@@ -420,7 +434,18 @@ class ViewController: NSViewController, NSWindowDelegate {
             runScript(script: .startBitcoin)
         } else {
             addSpinnerDesc("stopping \(chain)...")
-            runScript(script: .stopBitcoin)
+            stopBitcoin()
+        }
+    }
+    
+    private func stopBitcoin() {
+        command(command: "stop") { [weak self] result in
+            guard let self = self else { return }
+            
+            guard let result = result as? String else { return }
+            
+            self.showBitcoinLog()
+            self.stopBitcoinParse(result: result)
         }
     }
 
@@ -626,6 +651,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
+            self.getFxRate()
             self.taskDescription.stringValue = "checking for ~/.gordian/BitcoinCore directory..."
             self.runScript(script: .checkForGordian)
         }
@@ -663,15 +689,6 @@ class ViewController: NSViewController, NSWindowDelegate {
             if let errorOutput = String(data: errData, encoding: .utf8) {
                 #if DEBUG
                 print("error: \(errorOutput)")
-                if errorOutput != "" && !errorOutput.contains("Pruning blockstore") && !errorOutput.contains("not connect to the server") && !errorOutput.contains("block") && !errorOutput.contains("Loading P2P addresses")  {
-                    if errorOutput.contains("Cannot obtain a lock on data directory") {
-                        simpleAlert(message: "Shutdown in progress...", info: "Please be patient while Bitcoin Core shuts down, you will see \"Shutdown: done\" in the log output below when it has completely stopped.", buttonLabel: "OK")
-                    } else {
-                        simpleAlert(message: "Error", info: errorOutput, buttonLabel: "OK")
-                    }
-                    
-                }
-                
                 #endif
                 result += errorOutput
             }
@@ -725,9 +742,9 @@ class ViewController: NSViewController, NSWindowDelegate {
         case .checkForGordian:
             checkGordianParser(result: result)
             
-        case .stopBitcoin:
-            showBitcoinLog()
-            stopBitcoinParse(result: result)
+//        case .stopBitcoin:
+//            showBitcoinLog()
+//            stopBitcoinParse(result: result)
             
         case .startBitcoin:
             showBitcoinLog()
@@ -878,7 +895,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         default:
             break
         }
-        rpc.command(method: command, port: port, user: rpcuser, password: rpcpassword) { [weak self] (response, error) in
+        rpc.command(method: command, port: port) { [weak self] (response, error) in
             guard let self = self else { return }
             
             if error == nil {
@@ -948,35 +965,24 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     func checkForRPCCredentials(response: String) {
         let bitcoinConf = response.components(separatedBy: "\n")
+        var gordianServerUserExists = false
         for item in bitcoinConf {
-            if item.contains("rpcuser") {
-                let arr = item.components(separatedBy: "rpcuser=")
-                rpcuser = arr[1]
-                UserDefaults.standard.setValue(rpcuser, forKey: "rpcuser")
+            if item.contains("rpcauth") && item.contains("rpcauth=GordianServer:") {
+                gordianServerUserExists = true
             }
-            if item.contains("rpcpassword") {
-                let arr = item.components(separatedBy: "rpcpassword=")
-                rpcpassword = arr[1]
-                UserDefaults.standard.setValue(rpcpassword, forKey: "rpcpassword")
-            }
+            
             if item.contains("testnet=1") || item.contains("testnet=0") || item.contains("regtest=1") || item.contains("regtest=0") || item.contains("signet=1") || item.contains("signet=0") {
                 simpleAlert(message: "Incompatible bitcoin.conf setting! Standup will not function properly.", info: "GordianServer allows you to run multiple networks simultaneously, we do this by specifying which chain we want to launch as a command line argument. Specifying a network in your bitcoin.conf is incompatible with this approach, please remove the line in your conf file which specifies a network to use GordianServer.", buttonLabel: "OK")
             }
         }
-        if rpcpassword != "" && rpcuser != "" {
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                
-                self.bitcoinConfigured = true
-            }
+        
+        if gordianServerUserExists {
+            bitcoinConfigured = true
             checkBitcoindVersion()
         } else {
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                
-                self.hideSpinner()
-                self.bitcoinConfigured = false
-            }
+            hideSpinner()
+            bitcoinConfigured = false
+            // prompt to add
         }
     }
     
