@@ -1354,6 +1354,8 @@ class ViewController: NSViewController, NSWindowDelegate {
             if let vc = segue.destinationController as? InstallGordianPrompt {
                 vc.version = self.version
                 vc.macosURL = self.macosURL
+                self.autoRefreshTimer?.invalidate()
+                self.autoRefreshTimer = nil
                 
                 vc.doneBlock = { response in
                     if response {
