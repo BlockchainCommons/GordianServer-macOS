@@ -356,7 +356,6 @@ class ViewController: NSViewController, NSWindowDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
-            self.startMainnetOutlet.isEnabled = false
             self.taskDescription.stringValue = "checking system..."
             self.spinner.startAnimation(self)
             self.spinner.alphaValue = 1
@@ -651,8 +650,11 @@ class ViewController: NSViewController, NSWindowDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
+            self.startMainnetOutlet.isEnabled = false
+            self.networkButton.isEnabled = false
             self.getFxRate()
             self.taskDescription.stringValue = "checking for ~/.gordian/BitcoinCore directory..."
+            // Don't need a script for this...
             self.runScript(script: .checkForGordian)
         }
     }
