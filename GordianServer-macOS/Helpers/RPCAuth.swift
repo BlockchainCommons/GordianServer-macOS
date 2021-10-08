@@ -32,6 +32,8 @@ class RPCAuth {
         } catch {
             print("an error happened while creating the file: \(error.localizedDescription)")
         }
+        
+        print("python version: \(Python.version)")
 
         let sys = Python.import("sys")
         sys.path.append(directory)
