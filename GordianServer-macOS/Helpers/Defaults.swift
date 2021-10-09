@@ -39,89 +39,93 @@ class Defaults {
             if ud.object(forKey: "walletdisabled") == nil {
                 ud.set(0, forKey: "walletdisabled")
             }
+            if ud.object(forKey: "nodeLabel") == nil {
+                ud.set("StandUp Node", forKey: "nodeLabel")
+            }
+            if ud.object(forKey: "autoStart") == nil {
+                ud.setValue(true, forKey: "autoStart")
+            }
             completion()
         }
         
-        getBitcoinConf { [unowned vc = self] (conf, error) in
+        getBitcoinConf { [weak self] (conf, error) in
+            guard let self = self else { return }
+            
             var proxyOn = false
             var listenOn = false
             var onlyNetOnion = false
             var discover = false
-            if !error && conf != nil {
-                if conf!.count > 0 {
-                    for setting in conf! {
-                        if setting.contains("=") && !setting.contains("#") {
-                            let arr = setting.components(separatedBy: "=")
-                            let k = arr[0]
-                            let existingValue = arr[1]
-                            switch k {
-                            case "blocksdir":
-                                self.ud.setValue(existingValue, forKey: "blocksDir")
-                                
-                            case "discover":
-                                if existingValue == "0" {
-                                    discover = false
-                                }
-                            case "onlynet":
-                                if existingValue == "onion" {
-                                    onlyNetOnion = true
-                                }
-                            case "proxy":
-                                if existingValue == "127.0.0.1:19150" {
-                                    proxyOn = true
-                                }
-                                
-                            case "listen":
-                                if Int(existingValue) == 1 {
-                                    listenOn = true
-                                }
-                                
-                            case "testnet", "regtest":
-                                if Int(existingValue) == 1 {
-                                    // MARK: TODO - throw an error as specifying a network in the conf file is incompatible with Standup
-                                }
-                                
-                            case "prune":
-                                vc.ud.set(Int(existingValue), forKey: "prune")
-                                if Int(existingValue) == 1 {
-                                    vc.ud.set(0, forKey: "txindex")
-                                }
-                                
-                            case "disablewallet":
-                                vc.ud.set(Int(existingValue), forKey: "disablewallet")
-                                
-                            case "txindex":
-                                vc.ud.set(Int(existingValue), forKey: "txindex")
-                                if Int(existingValue) == 1 {
-                                    vc.ud.set(0, forKey: "prune")
-                                }
-                                
-                            default:
-                                break
-                                
-                            }
-                        }
-                    }
-                    
-                    if proxyOn && listenOn && onlyNetOnion && !discover {
-                        vc.ud.set(1, forKey: "isPrivate")
-                    } else {
-                        vc.ud.set(0, forKey: "isPrivate")
-                    }
-                    setLocals()
-                }
-                
-            } else {
+            
+            guard !error, let conf = conf, conf.count > 0 else {
                 setLocals()
+                return
             }
-        }
-        
-        if ud.object(forKey: "nodeLabel") == nil {
-            ud.set("StandUp Node", forKey: "nodeLabel")
-        }
-        
-        if ud.object(forKey: "autoStart") == nil {
-            ud.setValue(true, forKey: "autoStart")
+            
+            for setting in conf {
+                if setting.contains("=") && !setting.contains("#") {
+                    let arr = setting.components(separatedBy: "=")
+                    let k = arr[0]
+                    let existingValue = arr[1]
+                    switch k {
+                    case "rpcuser":
+                        self.ud.setValue(existingValue, forKey: "rpcuser")
+                        
+                    case "rpcpassword":
+                        self.ud.setValue(existingValue, forKey: "rpcpassword")
+                        
+                    case "blocksdir":
+                        self.ud.setValue(existingValue, forKey: "blocksDir")
+                        
+                    case "discover":
+                        if existingValue == "0" {
+                            discover = false
+                        }
+                    case "onlynet":
+                        if existingValue == "onion" {
+                            onlyNetOnion = true
+                        }
+                    case "proxy":
+                        if existingValue == "127.0.0.1:19150" {
+                            proxyOn = true
+                        }
+                        
+                    case "listen":
+                        if Int(existingValue) == 1 {
+                            listenOn = true
+                        }
+                        
+                    case "testnet", "regtest", "signet":
+                        if Int(existingValue) == 1 {
+                            // MARK: TODO - throw an error as specifying a network in the conf file is incompatible with Standup
+                        }
+                        
+                    case "prune":
+                        self.ud.set(Int(existingValue), forKey: "prune")
+                        if Int(existingValue) == 1 {
+                            self.ud.set(0, forKey: "txindex")
+                        }
+                        
+                    case "disablewallet":
+                        self.ud.set(Int(existingValue), forKey: "disablewallet")
+                        
+                    case "txindex":
+                        self.ud.set(Int(existingValue), forKey: "txindex")
+                        if Int(existingValue) == 1 {
+                            self.ud.set(0, forKey: "prune")
+                        }
+                        
+                    default:
+                        break
+                    }
+                }
+            }
+            
+            if proxyOn && listenOn && onlyNetOnion && !discover {
+                self.ud.set(1, forKey: "isPrivate")
+            } else {
+                self.ud.set(0, forKey: "isPrivate")
+            }
+            setLocals()
         }
     }
     

@@ -584,8 +584,11 @@ class ViewController: NSViewController, NSWindowDelegate {
             
             guard let conf = try? String(contentsOf: path, encoding: .utf8) else {
                 self.hideSpinner()
-                actionAlert(message: "Missing bitcoin.conf file.",
-                            info: "You need a bitcoin.conf file for Gordian Server to function. Would you like to add the default bitcoin.conf?") { [weak self] response in
+                
+                let message = "Missing bitcoin.conf file."
+                let info = "You need a bitcoin.conf file for Gordian Server to function. Would you like to add the default bitcoin.conf?"
+                
+                actionAlert(message: message, info: info) { [weak self] response in
                     guard let self = self else { return }
                     
                     if response {
@@ -976,6 +979,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                 
                 self.hideSpinner()
                 self.bitcoinConfigured = false
+                simpleAlert(message: "RPC credentials missing...", info: "Something strange has happened and your rpc credentials disappeared. To fix this stop Bitcoin Core, then select the Bitcoin menu item > Bitcoin Core Config and add two lines to the config:\n\nrpcpassword=astrongpassword\nrpcuser=username\n\nSave the file and try again.", buttonLabel: "OK")
             }
         }
     }
