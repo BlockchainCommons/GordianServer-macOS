@@ -96,6 +96,12 @@ class ViewController: NSViewController, NSWindowDelegate {
             self.setEnv()
             self.setScene()
         }
+        
+        let filePath = Bundle.main.resourcePath//Bundle.main.url(forResource: "Python", withExtension: "framework")!.absoluteString
+        
+        print("filePath: \(filePath)")
+        
+        
     }
 
     override func viewWillAppear() {

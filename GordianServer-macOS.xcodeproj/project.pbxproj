@@ -8,10 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		0A2DDC30270F2AE300E19F14 /* FXRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2DDC2F270F2AE300E19F14 /* FXRate.swift */; };
-		0A2DDC39270FF48F00E19F14 /* Python.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A2DDC34270FF2D400E19F14 /* Python.framework */; };
+		0A2DDC432710093800E19F14 /* PythonKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0A2DDC422710093800E19F14 /* PythonKit */; };
+		0A2DDC4527100A0D00E19F14 /* Python.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A2DDC4427100A0D00E19F14 /* Python.framework */; };
 		0A2FE80126FD7A1B00B18859 /* LaunchBrewInstall.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A2FE80026FD7A1B00B18859 /* LaunchBrewInstall.command */; };
 		0A2FE80326FD7A4C00B18859 /* InstallBrew.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A2FE80226FD7A4C00B18859 /* InstallBrew.command */; };
-		0A532755270DC5CB00A7130F /* PythonKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0A532754270DC5CB00A7130F /* PythonKit */; };
 		0A53275A270DC79600A7130F /* rpcauth.py in Resources */ = {isa = PBXBuildFile; fileRef = 0A532759270DC79600A7130F /* rpcauth.py */; };
 		0A53275C270DC80600A7130F /* RPCAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A53275B270DC80600A7130F /* RPCAuth.swift */; };
 		0A8B41162702CB8B00815E65 /* IsProcessRunning.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A8B41152702CB8B00815E65 /* IsProcessRunning.command */; };
@@ -129,7 +129,7 @@
 
 /* Begin PBXFileReference section */
 		0A2DDC2F270F2AE300E19F14 /* FXRate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FXRate.swift; sourceTree = "<group>"; };
-		0A2DDC34270FF2D400E19F14 /* Python.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Python.framework; sourceTree = "<group>"; };
+		0A2DDC4427100A0D00E19F14 /* Python.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Python.framework; path = ../../../../../opt/homebrew/Frameworks/Python.framework; sourceTree = "<group>"; };
 		0A2FE80026FD7A1B00B18859 /* LaunchBrewInstall.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = LaunchBrewInstall.command; sourceTree = "<group>"; };
 		0A2FE80226FD7A4C00B18859 /* InstallBrew.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = InstallBrew.command; sourceTree = "<group>"; };
 		0A532759270DC79600A7130F /* rpcauth.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = rpcauth.py; sourceTree = "<group>"; };
@@ -220,8 +220,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				0AD5BAB726F568820091A075 /* Tor.xcframework in Frameworks */,
-				0A532755270DC5CB00A7130F /* PythonKit in Frameworks */,
-				0A2DDC39270FF48F00E19F14 /* Python.framework in Frameworks */,
+				0A2DDC432710093800E19F14 /* PythonKit in Frameworks */,
+				0A2DDC4527100A0D00E19F14 /* Python.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,7 +264,7 @@
 		0AD5BAB526F568820091A075 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				0A2DDC34270FF2D400E19F14 /* Python.framework */,
+				0A2DDC4427100A0D00E19F14 /* Python.framework */,
 				0A92AE6A26FB20AF0034B7B4 /* ServiceManagement.framework */,
 				0AD5BAB626F568820091A075 /* Tor.xcframework */,
 			);
@@ -455,7 +455,7 @@
 			);
 			name = "GordianServer-macOS";
 			packageProductDependencies = (
-				0A532754270DC5CB00A7130F /* PythonKit */,
+				0A2DDC422710093800E19F14 /* PythonKit */,
 			);
 			productName = StandUp;
 			productReference = D0BCB32F236A6D22000D8FDE /* GordianServer-macOS.app */;
@@ -530,7 +530,7 @@
 			);
 			mainGroup = D0BCB326236A6D22000D8FDE;
 			packageReferences = (
-				0A532753270DC5CB00A7130F /* XCRemoteSwiftPackageReference "PythonKit" */,
+				0A2DDC412710093800E19F14 /* XCRemoteSwiftPackageReference "PythonKit" */,
 			);
 			productRefGroup = D0BCB330236A6D22000D8FDE /* Products */;
 			projectDirPath = "";
@@ -821,6 +821,7 @@
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 					/opt/homebrew/Frameworks,
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/GordianServer-macOS",
 				);
 				INFOPLIST_FILE = "GordianServer-macOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -852,6 +853,7 @@
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 					/opt/homebrew/Frameworks,
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/GordianServer-macOS",
 				);
 				INFOPLIST_FILE = "GordianServer-macOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -993,9 +995,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		0A532753270DC5CB00A7130F /* XCRemoteSwiftPackageReference "PythonKit" */ = {
+		0A2DDC412710093800E19F14 /* XCRemoteSwiftPackageReference "PythonKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/pvieito/PythonKit.git";
+			repositoryURL = "https://github.com/pvieito/PythonKit";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 0.1.0;
@@ -1004,9 +1006,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		0A532754270DC5CB00A7130F /* PythonKit */ = {
+		0A2DDC422710093800E19F14 /* PythonKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 0A532753270DC5CB00A7130F /* XCRemoteSwiftPackageReference "PythonKit" */;
+			package = 0A2DDC412710093800E19F14 /* XCRemoteSwiftPackageReference "PythonKit" */;
 			productName = PythonKit;
 		};
 /* End XCSwiftPackageProductDependency section */
