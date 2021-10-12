@@ -12,6 +12,28 @@ import Cocoa
 class AppDelegate: NSObject, NSApplicationDelegate {
     
     public var isKilling = false
+    public var bitcoinRunning = false
+    
+    @IBAction func reportBugsClicked(_ sender: Any) {
+        DispatchQueue.main.async {
+            guard let url = URL(string: "https://github.com/BlockchainCommons/Gordian/discussions/categories/bug-reports") else { return }
+            NSWorkspace.shared.open(url)
+        }
+    }
+    
+    @IBAction func requestFeaturesClicked(_ sender: Any) {
+        DispatchQueue.main.async {
+            guard let url = URL(string: "https://github.com/BlockchainCommons/Gordian/discussions/categories/feature-requests") else { return }
+            NSWorkspace.shared.open(url)
+        }
+    }
+    
+    @IBAction func sponsorBlockchainCommonsClicked(_ sender: Any) {
+        DispatchQueue.main.async {
+            guard let url = URL(string: "https://github.com/sponsors/BlockchainCommons") else { return }
+            NSWorkspace.shared.open(url)
+        }
+    }
     
     @IBAction func connectLocalFNAction(_ sender: Any) {
         let chain = UserDefaults.standard.string(forKey: "chain")
@@ -168,7 +190,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
-        if !isKilling {
+        if !isKilling && bitcoinRunning {
             let alert = NSAlert()
             alert.messageText = "Quit Bitcoin Core?"
             alert.informativeText = "Quitting the app does not stop Bitcoin Core automatically. Tor automatically quits so your node will not be remotely reachable.\n\nIf you opt to quit Bitcoin Core only the active network will be stopped, if you want to close all networks do that with the Stop button before quitting the app."
@@ -196,7 +218,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func quitBitcoin() {
         let chain = UserDefaults.standard.string(forKey: "chain") ?? "main"
-        runScript(script: .stopBitcoin, env: ["CHAIN":chain, "PREFIX":Defaults.shared.existingPrefix], args: []) { _ in
+        runScript(script: .stopBitcoin, env: ["CHAIN":chain, "PREFIX":Defaults.shared.existingPrefix, "DATADIR":Defaults.shared.dataDir], args: []) { _ in
             TorClient.sharedInstance.resign()
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                 NSApplication.shared.reply(toApplicationShouldTerminate: true)
@@ -308,15 +330,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationDidResignActive(_ notification: Notification) {
-        let storyboard = NSStoryboard(name: "Main", bundle: nil)
-        let mainConsole = storyboard.instantiateController(withIdentifier: "Console") as! ViewController
-        mainConsole.autoRefreshTimer?.invalidate()
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: .disableRefresh, object: nil)
+        }
     }
     
     func applicationDidBecomeActive(_ notification: Notification) {
-//        let storyboard = NSStoryboard(name: "Main", bundle: nil)
-//        let mainConsole = storyboard.instantiateController(withIdentifier: "Console") as! ViewController
-//        mainConsole.setTimer()
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: .enableRefresh, object: nil)
+        }
     }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {

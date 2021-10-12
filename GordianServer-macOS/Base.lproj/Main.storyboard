@@ -413,6 +413,31 @@
                                     </items>
                                 </menu>
                             </menuItem>
+                            <menuItem title="Support" id="y2s-Wq-4ex" userLabel="Support">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Support" id="BKe-OI-YeM">
+                                    <items>
+                                        <menuItem title="Report Bugs" id="8fg-kd-q14" userLabel="Report Bugs">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="reportBugsClicked:" target="Voe-Tx-rLC" id="AYj-Ap-GDS"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Request Features" id="Ebi-CW-aGf" userLabel="Request Features">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="requestFeaturesClicked:" target="Voe-Tx-rLC" id="Z0T-cQ-oVc"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Sponsor Blockchain Commons" id="DQ9-Mo-Dw8" userLabel="Sponsor Blockchain Commons">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="sponsorBlockchainCommonsClicked:" target="Voe-Tx-rLC" id="3bY-rh-0ic"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
                         </items>
                     </menu>
                     <connections>
@@ -804,9 +829,8 @@
                                                     <action selector="startMainnetAction:" target="XfG-lQ-9wD" id="V5W-bQ-tSU"/>
                                                 </connections>
                                             </button>
-                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YTp-pd-6SJ">
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YTp-pd-6SJ">
                                                 <rect key="frame" x="161" y="132" width="15" height="15"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="info.circle" catalog="system" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="88A-d6-LCi">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
@@ -898,6 +922,7 @@
                                             <constraint firstItem="ObL-6X-0iZ" firstAttribute="centerY" secondItem="1xF-ag-xSh" secondAttribute="centerY" id="Dff-Za-cU4"/>
                                             <constraint firstItem="Yw2-0Q-Vew" firstAttribute="leading" secondItem="i70-xH-6Bd" secondAttribute="leading" constant="21" id="Ery-ZT-ZTh"/>
                                             <constraint firstItem="y6q-T1-byM" firstAttribute="centerX" secondItem="i70-xH-6Bd" secondAttribute="centerX" id="FHJ-6Q-qxv"/>
+                                            <constraint firstItem="YTp-pd-6SJ" firstAttribute="centerY" secondItem="PMt-yp-b2E" secondAttribute="centerY" id="Hrf-pw-soX"/>
                                             <constraint firstItem="IBs-yd-qdH" firstAttribute="top" secondItem="i70-xH-6Bd" secondAttribute="top" constant="8" id="J54-Oo-D7v"/>
                                             <constraint firstItem="4vj-po-NAy" firstAttribute="centerY" secondItem="gK4-q5-qCp" secondAttribute="centerY" id="Luo-NY-nQl"/>
                                             <constraint firstAttribute="width" constant="196" id="Mfq-ia-bZ2"/>
@@ -919,6 +944,7 @@
                                             <constraint firstAttribute="height" constant="441" id="cby-zg-pXg"/>
                                             <constraint firstItem="qPC-DO-huD" firstAttribute="top" secondItem="Yw2-0Q-Vew" secondAttribute="bottom" constant="8" symbolic="YES" id="dUe-f7-jK1"/>
                                             <constraint firstItem="wvB-fS-9uo" firstAttribute="leading" secondItem="wry-Sx-acG" secondAttribute="leading" id="dhr-WN-eQh"/>
+                                            <constraint firstAttribute="trailing" secondItem="YTp-pd-6SJ" secondAttribute="trailing" constant="20" symbolic="YES" id="e28-lD-fvA"/>
                                             <constraint firstItem="wry-Sx-acG" firstAttribute="leading" secondItem="7yr-ry-ECs" secondAttribute="trailing" constant="19" id="eHd-ID-3ZY"/>
                                             <constraint firstItem="twO-63-MCl" firstAttribute="top" secondItem="L8k-j2-T7d" secondAttribute="bottom" constant="10" id="ew5-xq-HUa"/>
                                             <constraint firstItem="cUK-ht-9da" firstAttribute="leading" secondItem="i70-xH-6Bd" secondAttribute="leading" constant="21" id="f5A-8j-Ucr"/>
@@ -1332,6 +1358,7 @@
                         <segue destination="4YR-eD-8jP" kind="show" identifier="segueToHelp" id="g0J-5Z-aqE"/>
                         <segue destination="4YR-eD-8jP" kind="show" identifier="segueToInstallXcode" id="Mv4-Eu-EeQ"/>
                         <segue destination="lGs-ue-8Wa" kind="show" identifier="showInfo" id="nGq-Ho-dU1"/>
+                        <segue destination="Vbd-He-Cg1" kind="show" identifier="segueToInstallBitcoinCore" id="WQd-kb-kEw"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -1609,16 +1636,103 @@
             </objects>
             <point key="canvasLocation" x="1268" y="532.5"/>
         </scene>
+        <!--Install Gordian Prompt-->
+        <scene sceneID="If9-WU-JzU">
+            <objects>
+                <viewController id="Vbd-He-Cg1" customClass="InstallGordianPrompt" customModule="GordianServer_macOS" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="iQe-q3-48T">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="680"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="0d7-o5-fy4">
+                                <rect key="frame" x="18" y="48" width="414" height="585"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="585" id="D7M-kN-mLU"/>
+                                </constraints>
+                                <textFieldCell key="cell" selectable="YES" id="rQK-zf-RCa">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <string key="title">Gordian Server will download Bitcoin Core from bitcoincore.org/bin  A directory will be created at ~/.gordian which holds the newly downloaded Bitcoin Core binaries as well as the SHA256SUMS signatures and pgp keys so that the signatures can be verified before being installed.  Gordian Server integrates its own Tor and you may also find the related Tor directories and files in ~/.gordian with the exception of the torrc file which can be found at ~/.torrc  Gordian Server will check for an existing node in the default data directory ~/Library/Application Support/Bitcoin. You may specify a custom data directory below (advanced users only).  You may also specify a custom blocks directory where the blockchain will be stored. By default this will also be located in the default data directory.</string>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="EzB-3J-lbW">
+                                <rect key="frame" x="190" y="13" width="148" height="32"/>
+                                <buttonCell key="cell" type="push" title="Advanced Settings" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kPD-0u-0ul">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="settingsAction:" target="Vbd-He-Cg1" id="VuL-Dq-csJ"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pPM-Lv-9dy">
+                                <rect key="frame" x="13" y="13" width="76" height="32"/>
+                                <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1l0-7e-4wW">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="cancelAction:" target="Vbd-He-Cg1" id="Fke-Of-Wm0"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="V45-vB-xhm">
+                                <rect key="frame" x="336" y="13" width="101" height="32"/>
+                                <buttonCell key="cell" type="push" title="Install Now" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="5Iv-D7-hfy">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="installAction:" target="Vbd-He-Cg1" id="1Yv-SJ-Ry1"/>
+                                </connections>
+                            </button>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RQc-wC-cyc">
+                                <rect key="frame" x="18" y="641" width="205" height="19"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Install Bitcoin Core v22.0.0?" id="YEd-zc-fMM">
+                                    <font key="font" metaFont="system" size="16"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="EzB-3J-lbW" secondAttribute="bottom" constant="20" symbolic="YES" id="6AN-by-IHI"/>
+                            <constraint firstAttribute="trailing" secondItem="0d7-o5-fy4" secondAttribute="trailing" constant="20" symbolic="YES" id="7ga-pX-1c0"/>
+                            <constraint firstItem="pPM-Lv-9dy" firstAttribute="leading" secondItem="iQe-q3-48T" secondAttribute="leading" constant="20" symbolic="YES" id="8hR-b3-GGL"/>
+                            <constraint firstItem="0d7-o5-fy4" firstAttribute="top" secondItem="RQc-wC-cyc" secondAttribute="bottom" constant="8" id="IWR-Mg-fgQ"/>
+                            <constraint firstItem="0d7-o5-fy4" firstAttribute="leading" secondItem="iQe-q3-48T" secondAttribute="leading" constant="20" symbolic="YES" id="M6i-Iw-zmT"/>
+                            <constraint firstAttribute="bottom" secondItem="V45-vB-xhm" secondAttribute="bottom" constant="20" symbolic="YES" id="Sed-qY-mDL"/>
+                            <constraint firstItem="RQc-wC-cyc" firstAttribute="top" secondItem="iQe-q3-48T" secondAttribute="top" constant="20" symbolic="YES" id="XwT-h3-9l9"/>
+                            <constraint firstItem="V45-vB-xhm" firstAttribute="leading" secondItem="EzB-3J-lbW" secondAttribute="trailing" constant="12" symbolic="YES" id="jf8-ow-qy6"/>
+                            <constraint firstAttribute="trailing" secondItem="V45-vB-xhm" secondAttribute="trailing" constant="20" symbolic="YES" id="joG-Xf-joJ"/>
+                            <constraint firstItem="EzB-3J-lbW" firstAttribute="top" secondItem="0d7-o5-fy4" secondAttribute="bottom" constant="8" symbolic="YES" id="kka-Iv-BCT"/>
+                            <constraint firstAttribute="bottom" secondItem="pPM-Lv-9dy" secondAttribute="bottom" constant="20" symbolic="YES" id="l0Z-tL-X01"/>
+                            <constraint firstItem="RQc-wC-cyc" firstAttribute="leading" secondItem="iQe-q3-48T" secondAttribute="leading" constant="22" id="s6Q-f6-0Z4"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="bodyOutlet" destination="0d7-o5-fy4" id="91c-UM-inm"/>
+                        <outlet property="headerOutlet" destination="RQc-wC-cyc" id="Gmk-ck-9dh"/>
+                        <segue destination="mY6-pf-cJ7" kind="show" identifier="segueToAdvancedSettings" id="ChJ-rH-Ung"/>
+                    </connections>
+                </viewController>
+                <customObject id="VwR-kT-cBR" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1452" y="1078"/>
+        </scene>
         <!--segueToWallets-->
         <scene sceneID="TTy-Zr-KGm">
             <objects>
                 <viewController title="segueToWallets" storyboardIdentifier="Settings" id="mY6-pf-cJ7" customClass="Settings" customModule="GordianServer_macOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="NdO-VV-y8O">
-                        <rect key="frame" x="0.0" y="0.0" width="418" height="270"/>
+                        <rect key="frame" x="0.0" y="0.0" width="418" height="331"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="10" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ipZ-DW-tbb">
-                                <rect key="frame" x="20" y="73" width="150" height="177"/>
+                                <rect key="frame" x="20" y="134" width="150" height="177"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="U4W-f9-hMb">
                                         <rect key="frame" x="-2" y="161" width="109" height="16"/>
@@ -1735,14 +1849,40 @@
                                     <real value="3.4028234663852886e+38"/>
                                 </customSpacing>
                             </stackView>
-                            <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="32" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xSB-qy-29Y">
-                                <rect key="frame" x="309" y="22" width="0.0" height="0.0"/>
+                            <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="6" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="v7g-hi-JHl">
+                                <rect key="frame" x="20" y="66" width="281" height="38"/>
+                                <subviews>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="an3-Sh-0Bs">
+                                        <rect key="frame" x="-2" y="22" width="92" height="16"/>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Data Directory" id="WPo-kb-EaR">
+                                            <font key="font" usesAppearanceFont="YES"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HcW-Qw-X0U">
+                                        <rect key="frame" x="-2" y="0.0" width="285" height="16"/>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" title="/Users/You/Library/Application Support/Bitcoin" id="hBT-Zj-yb7">
+                                            <font key="font" metaFont="message"/>
+                                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" red="0.2352643311" green="0.2353112996" blue="0.2352613509" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </textFieldCell>
+                                    </textField>
+                                </subviews>
+                                <visibilityPriorities>
+                                    <integer value="1000"/>
+                                    <integer value="1000"/>
+                                </visibilityPriorities>
+                                <customSpacing>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
+                                </customSpacing>
                             </stackView>
                             <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iWM-Px-J16">
-                                <rect key="frame" x="276" y="190" width="96" height="60"/>
+                                <rect key="frame" x="276" y="270" width="96" height="41"/>
                                 <subviews>
                                     <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="5" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o4N-yv-dtg">
-                                        <rect key="frame" x="0.0" y="19" width="96" height="41"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="96" height="41"/>
                                         <subviews>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1fo-RR-AkI">
                                                 <rect key="frame" x="-2" y="25" width="70" height="16"/>
@@ -1791,7 +1931,7 @@
                                 </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0hJ-Zx-TIQ">
-                                <rect key="frame" x="274" y="166" width="103" height="16"/>
+                                <rect key="frame" x="274" y="246" width="103" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Hidden Services" id="GEN-Up-cXX">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1799,7 +1939,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YhO-yq-OFb">
-                                <rect key="frame" x="269" y="131" width="110" height="32"/>
+                                <rect key="frame" x="269" y="211" width="110" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="96" id="uOD-UW-fS7"/>
                                 </constraints>
@@ -1811,21 +1951,33 @@
                                     <action selector="refreshHiddenServiceAction:" target="mY6-pf-cJ7" id="SgL-6b-L4L"/>
                                 </connections>
                             </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kUd-D3-U56">
+                                <rect key="frame" x="326" y="77" width="79" height="32"/>
+                                <buttonCell key="cell" type="push" title="choose" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="D3q-oW-k6F">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="chooseDataDirAction:" target="mY6-pf-cJ7" id="pY1-1e-zZq"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="S1V-El-KRh" firstAttribute="top" secondItem="YhO-yq-OFb" secondAttribute="bottom" constant="80" id="8w1-di-6JD"/>
                             <constraint firstItem="0hJ-Zx-TIQ" firstAttribute="leading" secondItem="iWM-Px-J16" secondAttribute="leading" id="CH6-8J-vUk"/>
+                            <constraint firstAttribute="trailing" secondItem="kUd-D3-U56" secondAttribute="trailing" constant="20" symbolic="YES" id="DDL-hg-zbM"/>
                             <constraint firstItem="YhO-yq-OFb" firstAttribute="top" secondItem="0hJ-Zx-TIQ" secondAttribute="bottom" constant="8" id="Lb0-Yy-8T8"/>
                             <constraint firstItem="RMs-re-3OB" firstAttribute="leading" secondItem="NdO-VV-y8O" secondAttribute="leading" constant="20" id="Mxe-ef-HcS"/>
                             <constraint firstItem="0hJ-Zx-TIQ" firstAttribute="top" secondItem="iWM-Px-J16" secondAttribute="bottom" constant="8" symbolic="YES" id="Nyv-Zj-48r"/>
                             <constraint firstItem="S1V-El-KRh" firstAttribute="top" secondItem="RMs-re-3OB" secondAttribute="top" id="OLh-se-dGE"/>
                             <constraint firstItem="iWM-Px-J16" firstAttribute="top" secondItem="NdO-VV-y8O" secondAttribute="top" constant="20" id="Trs-RF-r2c"/>
                             <constraint firstAttribute="trailing" secondItem="S1V-El-KRh" secondAttribute="trailing" constant="20" symbolic="YES" id="VKM-C7-JM9"/>
+                            <constraint firstItem="v7g-hi-JHl" firstAttribute="leading" secondItem="NdO-VV-y8O" secondAttribute="leading" constant="20" symbolic="YES" id="VoG-9N-f74"/>
                             <constraint firstItem="YhO-yq-OFb" firstAttribute="leading" secondItem="0hJ-Zx-TIQ" secondAttribute="leading" id="b9n-wc-9tB"/>
                             <constraint firstItem="ipZ-DW-tbb" firstAttribute="leading" secondItem="NdO-VV-y8O" secondAttribute="leading" constant="20" id="cSL-dM-ycq"/>
+                            <constraint firstItem="RMs-re-3OB" firstAttribute="top" secondItem="v7g-hi-JHl" secondAttribute="bottom" constant="8" symbolic="YES" id="ct3-kP-d9m"/>
                             <constraint firstAttribute="bottom" secondItem="RMs-re-3OB" secondAttribute="bottom" constant="20" id="gDn-tm-Os4"/>
-                            <constraint firstAttribute="bottom" secondItem="xSB-qy-29Y" secondAttribute="bottom" constant="22" id="mL0-WK-AfB"/>
-                            <constraint firstItem="xSB-qy-29Y" firstAttribute="leading" secondItem="RMs-re-3OB" secondAttribute="trailing" constant="8" id="oUZ-RR-WAf"/>
+                            <constraint firstItem="v7g-hi-JHl" firstAttribute="top" secondItem="ipZ-DW-tbb" secondAttribute="bottom" constant="30" id="oPq-er-dXM"/>
+                            <constraint firstItem="kUd-D3-U56" firstAttribute="top" secondItem="v7g-hi-JHl" secondAttribute="top" id="paI-jt-YxF"/>
                             <constraint firstItem="ipZ-DW-tbb" firstAttribute="top" secondItem="NdO-VV-y8O" secondAttribute="top" constant="20" id="wYl-HA-ly6"/>
                             <constraint firstItem="iWM-Px-J16" firstAttribute="leading" secondItem="ipZ-DW-tbb" secondAttribute="trailing" constant="106" id="z9Z-yl-oPj"/>
                         </constraints>
@@ -1833,7 +1985,8 @@
                     <connections>
                         <outlet property="autoRefreshOutlet" destination="uU7-em-Vpb" id="mGY-bQ-iYw"/>
                         <outlet property="autoStartOutlet" destination="B0p-hM-5Na" id="Cyc-K3-H99"/>
-                        <outlet property="directoryLabel" destination="0cQ-HR-WIM" id="QAr-Tz-hyK"/>
+                        <outlet property="blocksDirOutlet" destination="0cQ-HR-WIM" id="rcB-3a-Pz1"/>
+                        <outlet property="dataDirOutlet" destination="HcW-Qw-X0U" id="LiP-AT-f7W"/>
                         <outlet property="goPrivateOutlet" destination="e28-lY-Luw" id="10A-GQ-gto"/>
                         <outlet property="pruneValueField" destination="m7e-xa-P8l" id="GzF-Mg-QB0"/>
                         <outlet property="refreshButtonOutlet" destination="YhO-yq-OFb" id="YgQ-Ub-ZHQ"/>
@@ -1845,7 +1998,7 @@
                 </viewController>
                 <customObject id="UGA-2H-5l6" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="781" y="765"/>
+            <point key="canvasLocation" x="781" y="795.5"/>
         </scene>
         <!--Add Authentication-->
         <scene sceneID="GLN-ED-BZ5">
@@ -2045,7 +2198,7 @@ Gw
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="Mv4-Eu-EeQ"/>
-        <segue reference="nGq-Ho-dU1"/>
+        <segue reference="cqP-Ve-rOY"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="NSActionTemplate" width="15" height="15"/>

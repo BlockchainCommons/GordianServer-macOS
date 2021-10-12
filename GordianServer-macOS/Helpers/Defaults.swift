@@ -14,7 +14,7 @@ class Defaults {
     private init() {}
     
     private func getBitcoinConf(completion: @escaping ((conf: [String]?, error: Bool)) -> Void) {
-        let path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/bitcoin.conf")
+        let path = URL(fileURLWithPath: dataDir + "/bitcoin.conf")
         
         guard let bitcoinConf = try? String(contentsOf: path, encoding: .utf8) else {
             completion((nil, false))
@@ -39,89 +39,93 @@ class Defaults {
             if ud.object(forKey: "walletdisabled") == nil {
                 ud.set(0, forKey: "walletdisabled")
             }
+            if ud.object(forKey: "nodeLabel") == nil {
+                ud.set("StandUp Node", forKey: "nodeLabel")
+            }
+            if ud.object(forKey: "autoStart") == nil {
+                ud.setValue(true, forKey: "autoStart")
+            }
             completion()
         }
         
-        getBitcoinConf { [unowned vc = self] (conf, error) in
+        getBitcoinConf { [weak self] (conf, error) in
+            guard let self = self else { return }
+            
             var proxyOn = false
             var listenOn = false
             var onlyNetOnion = false
             var discover = false
-            if !error && conf != nil {
-                if conf!.count > 0 {
-                    for setting in conf! {
-                        if setting.contains("=") && !setting.contains("#") {
-                            let arr = setting.components(separatedBy: "=")
-                            let k = arr[0]
-                            let existingValue = arr[1]
-                            switch k {
-                            case "blocksdir":
-                                self.ud.setValue(existingValue, forKey: "blocksDir")
-                                
-                            case "discover":
-                                if existingValue == "0" {
-                                    discover = false
-                                }
-                            case "onlynet":
-                                if existingValue == "onion" {
-                                    onlyNetOnion = true
-                                }
-                            case "proxy":
-                                if existingValue == "127.0.0.1:19150" {
-                                    proxyOn = true
-                                }
-                                
-                            case "listen":
-                                if Int(existingValue) == 1 {
-                                    listenOn = true
-                                }
-                                
-                            case "testnet", "regtest":
-                                if Int(existingValue) == 1 {
-                                    // MARK: TODO - throw an error as specifying a network in the conf file is incompatible with Standup
-                                }
-                                
-                            case "prune":
-                                vc.ud.set(Int(existingValue), forKey: "prune")
-                                if Int(existingValue) == 1 {
-                                    vc.ud.set(0, forKey: "txindex")
-                                }
-                                
-                            case "disablewallet":
-                                vc.ud.set(Int(existingValue), forKey: "disablewallet")
-                                
-                            case "txindex":
-                                vc.ud.set(Int(existingValue), forKey: "txindex")
-                                if Int(existingValue) == 1 {
-                                    vc.ud.set(0, forKey: "prune")
-                                }
-                                
-                            default:
-                                break
-                                
-                            }
-                        }
-                    }
-                    
-                    if proxyOn && listenOn && onlyNetOnion && !discover {
-                        vc.ud.set(1, forKey: "isPrivate")
-                    } else {
-                        vc.ud.set(0, forKey: "isPrivate")
-                    }
-                    setLocals()
-                }
-                
-            } else {
+            
+            guard !error, let conf = conf, conf.count > 0 else {
                 setLocals()
+                return
             }
-        }
-        
-        if ud.object(forKey: "nodeLabel") == nil {
-            ud.set("StandUp Node", forKey: "nodeLabel")
-        }
-        
-        if ud.object(forKey: "autoStart") == nil {
-            ud.setValue(true, forKey: "autoStart")
+            
+            for setting in conf {
+                if setting.contains("=") && !setting.contains("#") {
+                    let arr = setting.components(separatedBy: "=")
+                    let k = arr[0]
+                    let existingValue = arr[1]
+                    switch k {
+                    case "rpcuser":
+                        self.ud.setValue(existingValue, forKey: "rpcuser")
+                        
+                    case "rpcpassword":
+                        self.ud.setValue(existingValue, forKey: "rpcpassword")
+                        
+                    case "blocksdir":
+                        self.ud.setValue(existingValue, forKey: "blocksDir")
+                        
+                    case "discover":
+                        if existingValue == "0" {
+                            discover = false
+                        }
+                    case "onlynet":
+                        if existingValue == "onion" {
+                            onlyNetOnion = true
+                        }
+                    case "proxy":
+                        if existingValue == "127.0.0.1:19150" {
+                            proxyOn = true
+                        }
+                        
+                    case "listen":
+                        if Int(existingValue) == 1 {
+                            listenOn = true
+                        }
+                        
+                    case "testnet", "regtest", "signet":
+                        if Int(existingValue) == 1 {
+                            // MARK: TODO - throw an error as specifying a network in the conf file is incompatible with Standup
+                        }
+                        
+                    case "prune":
+                        self.ud.set(Int(existingValue), forKey: "prune")
+                        if Int(existingValue) == 1 {
+                            self.ud.set(0, forKey: "txindex")
+                        }
+                        
+                    case "disablewallet":
+                        self.ud.set(Int(existingValue), forKey: "disablewallet")
+                        
+                    case "txindex":
+                        self.ud.set(Int(existingValue), forKey: "txindex")
+                        if Int(existingValue) == 1 {
+                            self.ud.set(0, forKey: "prune")
+                        }
+                        
+                    default:
+                        break
+                    }
+                }
+            }
+            
+            if proxyOn && listenOn && onlyNetOnion && !discover {
+                self.ud.set(1, forKey: "isPrivate")
+            } else {
+                self.ud.set(0, forKey: "isPrivate")
+            }
+            setLocals()
         }
     }
     
@@ -134,11 +138,18 @@ class Defaults {
     }
     
     var dataDir: String {
-        return "/Users/\(NSUserName())/Library/Application Support/Bitcoin"
+        // Remove escaping character from path for backwards compatibility
+        if ud.object(forKey: "dataDir") as? String == "/Users/\(NSUserName())/Library/Application\\ Support/Bitcoin" {
+            let correctPath = "/Users/\(NSUserName())/Library/Application Support/Bitcoin"
+            ud.setValue(correctPath, forKey: "dataDir")
+            return correctPath
+        } else {
+            return ud.object(forKey: "dataDir") as? String ?? "/Users/\(NSUserName())/Library/Application Support/Bitcoin"
+        }
     }
     
     var blocksDir: String {
-        return ud.object(forKey: "blocksDir") as? String ?? "/Users/\(NSUserName())/Library/Application Support/Bitcoin"
+        return ud.object(forKey: "blocksDir") as? String ?? dataDir
     }
     
     var isPrivate: Int {
@@ -156,10 +167,6 @@ class Defaults {
     var walletdisabled: Int {
         return ud.object(forKey: "disablewallet") as? Int ?? 0
     }
-    
-//    func setDataDir(value: String) {
-//        ud.set(value, forKey: "dataDir")
-//    }
     
     var existingVersion: String {
         return ud.object(forKey: "version") as? String ?? "22.0"

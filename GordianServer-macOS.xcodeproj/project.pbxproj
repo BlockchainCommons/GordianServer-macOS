@@ -25,6 +25,7 @@
 		0AD5BAB826F568820091A075 /* Tor.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0AD5BAB626F568820091A075 /* Tor.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0AD5BABB26F572330091A075 /* TorClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD5BABA26F572330091A075 /* TorClient.swift */; };
 		0AD5BABD26F572CB0091A075 /* Torrc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD5BABC26F572CB0091A075 /* Torrc.swift */; };
+		0AF145A3270C04C300BD0327 /* InstallGordianPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF145A2270C04C300BD0327 /* InstallGordianPrompt.swift */; };
 		D01B610824877301005D3090 /* MakeRPCCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01B610724877301005D3090 /* MakeRPCCall.swift */; };
 		D01B610A2487873F005D3090 /* AddAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01B61092487873F005D3090 /* AddAuthentication.swift */; };
 		D0211A4E250493CB00F7517A /* WalletDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0211A4D250493CB00F7517A /* WalletDetail.swift */; };
@@ -32,8 +33,6 @@
 		D042FAB8250B521B00E99D9B /* GetLightningHostname.command in Resources */ = {isa = PBXBuildFile; fileRef = D042FAB7250B521B00E99D9B /* GetLightningHostname.command */; };
 		D049E89E237BD09200294E70 /* StandDown.command in Resources */ = {isa = PBXBuildFile; fileRef = D049E89D237BD09200294E70 /* StandDown.command */; };
 		D049E8A0237BFF9E00294E70 /* UpdateBTCConf.command in Resources */ = {isa = PBXBuildFile; fileRef = D049E89F237BFF9E00294E70 /* UpdateBTCConf.command */; };
-		D04D4988252C668500D7383E /* WriteLog.command in Resources */ = {isa = PBXBuildFile; fileRef = D04D4987252C668500D7383E /* WriteLog.command */; };
-		D04D498A252C676200D7383E /* GetLog.command in Resources */ = {isa = PBXBuildFile; fileRef = D04D4989252C676200D7383E /* GetLog.command */; };
 		D0534CC6237E4CC20093DE67 /* ok.png in Resources */ = {isa = PBXBuildFile; fileRef = D0534CC5237E4CC20093DE67 /* ok.png */; };
 		D0534CC8237E4CE70093DE67 /* paste.png in Resources */ = {isa = PBXBuildFile; fileRef = D0534CC7237E4CE70093DE67 /* paste.png */; };
 		D0534CCA237E4DF00093DE67 /* fullynoded_qr.png in Resources */ = {isa = PBXBuildFile; fileRef = D0534CC9237E4DF00093DE67 /* fullynoded_qr.png */; };
@@ -143,6 +142,7 @@
 		0AD5BAB626F568820091A075 /* Tor.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = Tor.xcframework; sourceTree = "<group>"; };
 		0AD5BABA26F572330091A075 /* TorClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TorClient.swift; sourceTree = "<group>"; };
 		0AD5BABC26F572CB0091A075 /* Torrc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Torrc.swift; sourceTree = "<group>"; };
+		0AF145A2270C04C300BD0327 /* InstallGordianPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallGordianPrompt.swift; sourceTree = "<group>"; };
 		D01B610724877301005D3090 /* MakeRPCCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeRPCCall.swift; sourceTree = "<group>"; };
 		D01B61092487873F005D3090 /* AddAuthentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAuthentication.swift; sourceTree = "<group>"; };
 		D0211A4D250493CB00F7517A /* WalletDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletDetail.swift; sourceTree = "<group>"; };
@@ -150,8 +150,6 @@
 		D042FAB7250B521B00E99D9B /* GetLightningHostname.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = GetLightningHostname.command; sourceTree = "<group>"; };
 		D049E89D237BD09200294E70 /* StandDown.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = StandDown.command; sourceTree = "<group>"; };
 		D049E89F237BFF9E00294E70 /* UpdateBTCConf.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = UpdateBTCConf.command; sourceTree = "<group>"; };
-		D04D4987252C668500D7383E /* WriteLog.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = WriteLog.command; sourceTree = "<group>"; };
-		D04D4989252C676200D7383E /* GetLog.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = GetLog.command; sourceTree = "<group>"; };
 		D0534CC5237E4CC20093DE67 /* ok.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ok.png; sourceTree = "<group>"; };
 		D0534CC7237E4CE70093DE67 /* paste.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = paste.png; sourceTree = "<group>"; };
 		D0534CC9237E4DF00093DE67 /* fullynoded_qr.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fullynoded_qr.png; sourceTree = "<group>"; };
@@ -286,6 +284,7 @@
 				D0C9439525009D0A00DF7339 /* WalletsViewController.swift */,
 				D0211A4D250493CB00F7517A /* WalletDetail.swift */,
 				0AD5BAAB26F1D0AC0091A075 /* InstallerPrompt.swift */,
+				0AF145A2270C04C300BD0327 /* InstallGordianPrompt.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -316,8 +315,6 @@
 				D0DACF4B25131F2F00846590 /* StartLightning.command */,
 				D0DACF4D25132E0C00846590 /* StopLightning.command */,
 				D0DACF5325145EB300846590 /* GetLightningRpcCreds.command */,
-				D04D4987252C668500D7383E /* WriteLog.command */,
-				D04D4989252C676200D7383E /* GetLog.command */,
 				0A92AE3E26F75E310034B7B4 /* OpenFile.command */,
 				0A92AE4026F761260034B7B4 /* StartBitcoin.command */,
 				0A92AE4226F81F490034B7B4 /* InstallXcode.command */,
@@ -536,7 +533,6 @@
 				D0B36C452373E521004B2D63 /* Verify.command in Resources */,
 				0A92AE4126F761260034B7B4 /* StartBitcoin.command in Resources */,
 				D0A3B6F123739FCF00253635 /* StandUp.command in Resources */,
-				D04D4988252C668500D7383E /* WriteLog.command in Resources */,
 				D0B9278A2384E54900956651 /* RemoveBitcoin.command in Resources */,
 				D0EB531A237E4E9F002212F8 /* fullynoded_tap_pubkey.png in Resources */,
 				D0EB5319237E4E9F002212F8 /* fullynoded_generate.png in Resources */,
@@ -558,7 +554,6 @@
 				D0DACF4C25131F2F00846590 /* StartLightning.command in Resources */,
 				D0821040238AA76000E21EDC /* tor_logo_redesign copy.png in Resources */,
 				D0211A50250497C100F7517A /* DeleteWallet.command in Resources */,
-				D04D498A252C676200D7383E /* GetLog.command in Resources */,
 				D0821041238AA76000E21EDC /* btccore-copy.png in Resources */,
 				D0760110247E084200706F70 /* CheckXCodeSelect.command in Resources */,
 				D049E8A0237BFF9E00294E70 /* UpdateBTCConf.command in Resources */,
@@ -623,6 +618,7 @@
 				D0BCB335236A6D22000D8FDE /* ViewController.swift in Sources */,
 				0A92AE4726F9D2A10034B7B4 /* BlockchainInfo.swift in Sources */,
 				0AD5BABB26F572330091A075 /* TorClient.swift in Sources */,
+				0AF145A3270C04C300BD0327 /* InstallGordianPrompt.swift in Sources */,
 				0AD5BAA026EF2FA50091A075 /* Extensions.swift in Sources */,
 				D0DCD8E6236ACC9E00F2D15A /* ScriptEnum.swift in Sources */,
 				D0BCB333236A6D22000D8FDE /* AppDelegate.swift in Sources */,
@@ -797,7 +793,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1.1.0;
+				CURRENT_PROJECT_VERSION = 1.0.0;
 				DEVELOPMENT_TEAM = 8JHDU5M9KD;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "GordianServer-macOS/Info.plist";
@@ -806,7 +802,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.dentonllc.gordianserver;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -822,7 +818,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1.1.0;
+				CURRENT_PROJECT_VERSION = 1.0.0;
 				DEVELOPMENT_TEAM = 8JHDU5M9KD;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "GordianServer-macOS/Info.plist";
@@ -831,7 +827,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.dentonllc.gordianserver;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

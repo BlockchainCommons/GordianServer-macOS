@@ -10,6 +10,7 @@ import Cocoa
 
 class Settings: NSViewController, NSTextFieldDelegate {
     
+    var bitcoinRunning = false
     var window: NSWindow?
     var filesList: [URL] = []
     var showInvisibles = false
@@ -20,10 +21,12 @@ class Settings: NSViewController, NSTextFieldDelegate {
     var standingDown = Bool()
     var args = [String]()
     var refreshing = Bool()
+    var doneBlock: ((Bool) -> Void)?
     
+    @IBOutlet weak var blocksDirOutlet: NSTextField!
+    @IBOutlet weak var dataDirOutlet: NSTextField!
     @IBOutlet weak var autoStartOutlet: NSButton!
     @IBOutlet weak var pruneValueField: NSTextField!
-    @IBOutlet var directoryLabel: NSTextField!
     @IBOutlet var walletDisabled: NSButton!
     @IBOutlet var txIndexOutlet: NSButton!
     @IBOutlet var goPrivateOutlet: NSButton!
@@ -42,6 +45,10 @@ class Settings: NSViewController, NSTextFieldDelegate {
     override func viewDidAppear() {
         window = self.view.window!
         self.view.window?.title = "Settings"
+    }
+    
+    override func viewWillDisappear() {
+        doneBlock?(true)
     }
     
     // MARK: User Actions
@@ -203,57 +210,34 @@ class Settings: NSViewController, NSTextFieldDelegate {
     }
     
     @IBAction func removeBitcoinCore(_ sender: Any) {
-        let rpc = MakeRpcCall.shared
-        var port:String!
-        let chain = UserDefaults.standard.object(forKey: "chain") as? String ?? "main"
-        let rpcuser = UserDefaults.standard.object(forKey: "rpcuser") as? String ?? ""
-        let rpcpassword = UserDefaults.standard.object(forKey: "rpcpassword") as? String ?? ""
-        switch chain {
-        case "main":
-            port = "8332"
-        case "test":
-            port = "18332"
-        case "regtest":
-            port = "18443"
-        case "signet":
-            port = "38332"
-        default:
-            break
-        }
-        rpc.command(method: "getblockchaininfo", port: port, user: rpcuser, password: rpcpassword) { [weak self] (response, error) in
-            guard let self = self else { return }
-            
-            if error == nil {
-                simpleAlert(message: "Bitcoin Core is running!", info: "You must shutdown Bitcoin Core before using this kill switch.", buttonLabel: "OK")
-            } else if let error = error {
-                switch error {
-                case _ where error.contains("Could not connect to the server"):
-                    DispatchQueue.main.async { [unowned vc = self] in
-                        destructiveActionAlert(message: "Danger! Master kill switch!", info: "This action PERMANENTLY, IMMEDIATELY and IRREVERSIBLY deletes ALL WALLETS, Bitcoin Core binaries, and Gordian Server Tor related files and directories!") { response in
-                            if response {
-                                TorClient.sharedInstance.resign()
-                                let d = Defaults.shared
-                                let env = ["DATADIR":d.dataDir]
-                                vc.runScript(script: .removeBitcoin, env: env, args: []) { success in
-                                    if success {
-                                        DispatchQueue.main.async { [weak self] in
-                                            guard let self = self else { return }
-                                            
-                                            guard let appDelegate = NSApplication.shared.delegate as? AppDelegate else { return }
-                                            appDelegate.isKilling = true
-                                            NSApp.terminate(self)
-                                        }
-                                    } else {
-                                       simpleAlert(message: "Error", info: "There was an issue deleting the directory", buttonLabel: "OK")
-                                    }
+        if !bitcoinRunning {
+            DispatchQueue.main.async { [unowned vc = self] in
+                destructiveActionAlert(message: "Danger! Master kill switch!", info: "This action PERMANENTLY, IMMEDIATELY and IRREVERSIBLY deletes ALL WALLETS, Bitcoin Core binaries, and Gordian Server Tor related files and directories!") { response in
+                    if response {
+                        TorClient.sharedInstance.resign()
+                        let d = Defaults.shared
+                        let env = ["DATADIR":d.dataDir]
+                        vc.runScript(script: .removeBitcoin, env: env, args: []) { success in
+                            if success {
+                                DispatchQueue.main.async { [weak self] in
+                                    guard let self = self else { return }
+                                    
+                                    guard let appDelegate = NSApplication.shared.delegate as? AppDelegate else { return }
+                                    appDelegate.isKilling = true
+                                    let domain = Bundle.main.bundleIdentifier!
+                                    UserDefaults.standard.removePersistentDomain(forName: domain)
+                                    UserDefaults.standard.synchronize()
+                                    NSApp.terminate(self)
                                 }
+                            } else {
+                               simpleAlert(message: "Error", info: "There was an issue deleting the directory", buttonLabel: "OK")
                             }
                         }
                     }
-                default:
-                    simpleAlert(message: "Bitcoin Core is running!", info: "You must shutdown Bitcoin Core before using this kill switch.", buttonLabel: "OK")
                 }
             }
+        } else {
+            simpleAlert(message: "Bitcoin Core is running!", info: "You must shutdown Bitcoin Core before using this kill switch.", buttonLabel: "OK")
         }
     }
     
@@ -282,45 +266,104 @@ class Settings: NSViewController, NSTextFieldDelegate {
         }
     }
     
-    @IBAction func chooseDirectory(_ sender: Any) {
-        guard let window = view.window else { return }
-        let panel = NSOpenPanel()
-        panel.canChooseFiles = false
-        panel.canChooseDirectories = true
-        panel.allowsMultipleSelection = false
-        panel.beginSheetModal(for: window) { [unowned vc = self] (result) in
-            if result.rawValue == NSApplication.ModalResponse.OK.rawValue {
-                vc.selectedFolder = panel.urls[0]
-                DispatchQueue.main.async { [unowned vc = self] in
-                    vc.directoryLabel.stringValue = self.selectedFolder?.path ?? Defaults.shared.blocksDir
-                    
-                    self.getBitcoinConf { [unowned vc = self] (conf, error) in
-                        if !error && conf != nil {
-                            var stringConf = conf!.joined(separator: "\n")
-                            if stringConf.contains("blocksdir=") {
-                                for item in conf! {
-                                    if item.hasPrefix("blocksdir=") {
-                                        let existingValue = item.replacingOccurrences(of: "blocksdir=", with: "")
-                                        stringConf = stringConf.replacingOccurrences(of: "blocksdir=\(existingValue)", with: "blocksdir=\(vc.directoryLabel.stringValue)")
-                                        /// Remove appended newline before saving.
-                                        stringConf.removeLast()
-                                        self.setBlocksDir(conf: stringConf, newValue: vc.directoryLabel.stringValue)
-                                        break
-                                    }
+    @IBAction func chooseDataDirAction(_ sender: Any) {
+        if !bitcoinRunning {
+            guard let window = view.window else { return }
+            let panel = NSOpenPanel()
+            panel.canChooseFiles = false
+            panel.canChooseDirectories = true
+            panel.allowsMultipleSelection = false
+            panel.beginSheetModal(for: window) { [unowned vc = self] (result) in
+                if result.rawValue == NSApplication.ModalResponse.OK.rawValue {
+                    vc.selectedFolder = panel.urls[0]
+                    DispatchQueue.main.async { [unowned vc = self] in
+                        vc.dataDirOutlet.stringValue = self.selectedFolder?.path ?? Defaults.shared.dataDir
+                        
+                        vc.ud.set(vc.dataDirOutlet.stringValue, forKey: "dataDir")
+                        
+                        let bitcoinPath = URL(fileURLWithPath: vc.dataDirOutlet.stringValue, isDirectory: true).path
+                        
+                        do {
+                            try FileManager.default.createDirectory(atPath: bitcoinPath,
+                                                                    withIntermediateDirectories: true,
+                                                                    attributes: [FileAttributeKey.posixPermissions: 0o700])
+                        } catch {
+                            print("Bitcoin directory previously created.")
+                        }
+                        
+                        let bitcoinConfUrl = URL(fileURLWithPath: "\(vc.dataDirOutlet.stringValue)/bitcoin.conf")
+                        
+                        guard let _ = try? String(contentsOf: bitcoinConfUrl, encoding: .utf8) else {
+                            guard let bitcoinConf = BitcoinConf.bitcoinConf().data(using: .utf8) else { return }
+                            
+                            do {
+                                try bitcoinConf.write(to: bitcoinConfUrl)
+                                simpleAlert(message: "bitcoin.conf created ✓", info: "", buttonLabel: "OK")
+                                Defaults.shared.setDefaults {
+                                    vc.getSettings()
                                 }
-                            } else {
-                                stringConf = "blocksdir=\(vc.directoryLabel.stringValue)\n\(stringConf)"
-                                stringConf.removeLast()
-                                self.setBlocksDir(conf: stringConf, newValue: vc.directoryLabel.stringValue)
+                            } catch {
+                                simpleAlert(message: "There was an issue...", info: "Unable to create the bitcoin.conf, please let us know about this bug.", buttonLabel: "OK")
                             }
-                        } else {
-                            vc.ud.set(vc.directoryLabel.stringValue, forKey: "blocksDir")
+                            return
+                        }
+                        Defaults.shared.setDefaults {
                             vc.getSettings()
+                            NotificationCenter.default.post(name: .refresh, object: nil)
                         }
                     }
                 }
             }
+        } else {
+            simpleAlert(message: "Bitcoin Core is running!", info: "You must shutdown Bitcoin Core before editing the data directory.", buttonLabel: "OK")
         }
+    }
+    
+    
+    @IBAction func chooseDirectory(_ sender: Any) {
+        if !bitcoinRunning {
+            guard let window = view.window else { return }
+            let panel = NSOpenPanel()
+            panel.canChooseFiles = false
+            panel.canChooseDirectories = true
+            panel.allowsMultipleSelection = false
+            panel.beginSheetModal(for: window) { [unowned vc = self] (result) in
+                if result.rawValue == NSApplication.ModalResponse.OK.rawValue {
+                    vc.selectedFolder = panel.urls[0]
+                    DispatchQueue.main.async { [unowned vc = self] in
+                        vc.blocksDirOutlet.stringValue = self.selectedFolder?.path ?? Defaults.shared.blocksDir
+                        
+                        self.getBitcoinConf { [unowned vc = self] (conf, error) in
+                            if !error && conf != nil {
+                                var stringConf = conf!.joined(separator: "\n")
+                                if stringConf.contains("blocksdir=") {
+                                    for item in conf! {
+                                        if item.hasPrefix("blocksdir=") {
+                                            let existingValue = item.replacingOccurrences(of: "blocksdir=", with: "")
+                                            stringConf = stringConf.replacingOccurrences(of: "blocksdir=\(existingValue)", with: "blocksdir=\(vc.blocksDirOutlet.stringValue)")
+                                            /// Remove appended newline before saving.
+                                            stringConf.removeLast()
+                                            self.setBlocksDir(conf: stringConf, newValue: vc.blocksDirOutlet.stringValue)
+                                            break
+                                        }
+                                    }
+                                } else {
+                                    stringConf = "blocksdir=\(vc.blocksDirOutlet.stringValue)\n\(stringConf)"
+                                    stringConf.removeLast()
+                                    self.setBlocksDir(conf: stringConf, newValue: vc.blocksDirOutlet.stringValue)
+                                }
+                            } else {
+                                vc.ud.set(vc.blocksDirOutlet.stringValue, forKey: "blocksDir")
+                                vc.getSettings()
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            simpleAlert(message: "Bitcoin Core is running!", info: "You must shutdown Bitcoin Core before editing the blocks directory.", buttonLabel: "OK")
+        }
+        
     }
     
     // MARK: Action Logic
@@ -423,10 +466,9 @@ class Settings: NSViewController, NSTextFieldDelegate {
     }
     
     func getBitcoinConf(completion: @escaping ((conf: [String]?, error: Bool)) -> Void) {
-        let path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/bitcoin.conf")
+        let path = URL(fileURLWithPath: "\(Defaults.shared.dataDir)/bitcoin.conf")
         
         guard let bitcoinConf = try? String(contentsOf: path, encoding: .utf8) else {
-            print("can not get bitcoin.conf")
             return
         }
 
@@ -477,11 +519,14 @@ class Settings: NSViewController, NSTextFieldDelegate {
             setState(int: 0, outlet: autoRefreshOutlet)
         }
         
-        if ud.object(forKey: "dataDir") != nil {
-            DispatchQueue.main.async { [unowned vc = self] in
-                vc.directoryLabel.stringValue = d.blocksDir
-            }
+        DispatchQueue.main.async { [unowned vc = self] in
+            vc.blocksDirOutlet.stringValue = d.blocksDir
         }
+        
+        DispatchQueue.main.async { [unowned vc = self] in
+            vc.dataDirOutlet.stringValue = d.dataDir
+        }
+        
         DispatchQueue.main.async { [weak self] in
             self?.pruneValueField.stringValue = "\(pruneValue)"
         }

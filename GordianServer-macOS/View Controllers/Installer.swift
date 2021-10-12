@@ -81,12 +81,16 @@ class Installer: NSViewController {
         if seeLog {
             spinner.alphaValue = 0
             seeLog = false
-            getLog { (log) in
-                guard let log = log else { return }
-                
-                DispatchQueue.main.async { [unowned vc = self] in
-                    vc.consoleOutput.string = log
+            let log = URL(fileURLWithPath: "/Users/\(NSUserName())/.gordian/gordian.log")
+            do {
+                let text = try String(contentsOf: log, encoding: .utf8)
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    
+                    self.consoleOutput.string = text
                 }
+            } catch {
+                simpleAlert(message: "Log does not exist.", info: "We were unable to fetch the log.", buttonLabel: "OK")
             }
             
         } else if peerInfo != "" {
@@ -121,15 +125,6 @@ class Installer: NSViewController {
             getURLs()
             
         }
-            
-//        } else if installLightning {
-//            DispatchQueue.main.async { [unowned vc = self] in
-//                vc.spinner.startAnimation(vc)
-//            }
-//            desc = "Installing Lightning..."
-//            //installLightningAction()
-//            checkExistingConf()
-//        }
         
         DispatchQueue.main.async { [unowned vc = self] in
             vc.spinnerDescription.stringValue = desc
@@ -153,105 +148,106 @@ class Installer: NSViewController {
         var userExists = false
         var passwordExists = false
         var proxyExists = false
-        var debugExists = false
+        var onlynetExists = false
         var discoverExists = false
         var listenExists = false
         var externalIpExists = false
         
-        getBitcoinConf { [unowned vc = self] (conf, error) in
-            if !error && conf != nil {
-                if conf!.count > 0 {
-                    for setting in conf! {
-                        if setting.contains("=") {
-                            let arr = setting.components(separatedBy: "=")
-                            let k = arr[0]
-                            let existingValue = arr[1]
-                            
-                            switch k {
-                            case "externalip":
-                                externalIpExists = true
-                                
-                            case "discover", "#discover":
-                                discoverExists = true
-                                
-                            case "blocksdir":
-                                UserDefaults.standard.setValue(existingValue, forKey: "blockDir")
-                                
-                            case "rpcuser":
-                                if existingValue != "" {
-                                    userExists = true
-                                    vc.rpcuser = existingValue
-                                }
-                                
-                            case "rpcpassword":
-                                if existingValue != "" {
-                                    passwordExists = true
-                                    vc.rpcpassword = existingValue
-                                }
-                                
-                            case "testnet", "regtest", "signet":
-                                if existingValue != "" {
-                                    simpleAlert(message: "Incompatible bitcoin.conf setting!", info: "GordianServer allows you to run multiple networks simultaneously, we do this by specifying which chain we want to launch as a command line argument. Specifying a network in your bitcoin.conf is not compatible with this approach, please remove the line in your conf file which specifies a network.", buttonLabel: "OK")
-                                }
-                                
-                            case "proxy", "#proxy":
-                                proxyExists = true
-                                
-                            case "listen", "#listen":
-                                listenExists = true
-                                
-                            case "debug", "#debug":
-                                debugExists = true
-                                
-                            default:
-                                break
-                            }
-                        }
-                    }
-                    
-                    if userExists && passwordExists {
-                        // just use exisiting conf as is
-                        vc.standUpConf = conf!.joined(separator: "\n")
-                        
-                    } else if userExists && !passwordExists {
-                        vc.standUpConf = "rpcpassword=\(randomString(length: 32))\n" + conf!.joined(separator: "\n")
-                        
-                    } else if passwordExists && !userExists {
-                        vc.standUpConf = "rpcuser=\(randomString(length: 10))\n" + conf!.joined(separator: "\n")
-                        
-                    } else {
-                        // add rpcuser and rpcpassword
-                        vc.standUpConf = "rpcuser=\(randomString(length: 10))\nrpcpassword=\(randomString(length: 32))\n" + conf!.joined(separator: "\n")
-                    }
-                    
-                    if !debugExists {
-                        vc.standUpConf = "debug=tor\n" + vc.standUpConf
-                    }
-                    
-                    if !proxyExists {
-                        vc.standUpConf = "proxy=127.0.0.1:19050\n" + vc.standUpConf
-                    }
-                    
-                    if !listenExists {
-                        vc.standUpConf = "listen=1\n" + vc.standUpConf
-                    }
-                    
-                    if !discoverExists {
-                        vc.standUpConf = "discover=1" + vc.standUpConf
-                    }
-                    
-                    if !externalIpExists {
-                        vc.standUpConf = "externalip=\(TorClient.sharedInstance.p2pHostname(chain: "main") ?? "")"
-                    }
-                    
-                    vc.getURLs()
-                                        
-                } else {
-                    vc.setDefaultBitcoinConf()
-                }
-            } else {
-                vc.setDefaultBitcoinConf()
+        getBitcoinConf { [weak self] (conf, error) in
+            guard let self = self else { return }
+            
+            guard let conf = conf, !error, conf.count > 0 else {
+                self.setDefaultBitcoinConf()
+                return
             }
+            
+            for setting in conf {
+                if setting.contains("=") {
+                    let arr = setting.components(separatedBy: "=")
+                    let k = arr[0]
+                    let existingValue = arr[1]
+                    
+                    switch k {
+                    case "onlynet", "#onlynet":
+                        onlynetExists = true
+                        
+                    case "externalip":
+                        externalIpExists = true
+                        
+                    case "discover", "#discover":
+                        discoverExists = true
+                        
+                    case "blocksdir":
+                        UserDefaults.standard.setValue(existingValue, forKey: "blockDir")
+                        
+                    case "rpcuser":
+                        if existingValue != "" {
+                            userExists = true
+                            self.rpcuser = existingValue
+                        }
+                        
+                    case "rpcpassword":
+                        if existingValue != "" {
+                            passwordExists = true
+                            self.rpcpassword = existingValue
+                        }
+                        
+                    case "testnet", "regtest", "signet":
+                        if existingValue != "" {
+                            simpleAlert(message: "Incompatible bitcoin.conf setting!", info: "GordianServer allows you to run multiple networks simultaneously, we do this by specifying which chain we want to launch as a command line argument. Specifying a network in your bitcoin.conf is not compatible with this approach, please remove the line in your conf file which specifies a network.", buttonLabel: "OK")
+                        }
+                        
+                    case "proxy", "#proxy":
+                        proxyExists = true
+                        
+                    case "listen", "#listen":
+                        listenExists = true
+                        
+                    default:
+                        break
+                    }
+                }
+            }
+            
+            let newrpcpassword = randomString(length: 32)
+            let newrpcuser = randomString(length: 10)
+            
+            self.standUpConf = conf.joined(separator: "\n")
+            
+            if !passwordExists {
+                self.standUpConf = "rpcpassword=\(newrpcpassword)\n" + conf.joined(separator: "\n")
+                self.rpcpassword = newrpcpassword
+            }
+            
+            if !userExists {
+                self.standUpConf = "rpcuser=\(newrpcuser)\n" + conf.joined(separator: "\n")
+                self.rpcuser = newrpcuser
+            }
+            
+            if !proxyExists {
+                self.standUpConf = "proxy=127.0.0.1:19050\n" + conf.joined(separator: "\n")
+            }
+            
+            if !listenExists {
+                self.standUpConf = "listen=1\n" + conf.joined(separator: "\n")
+            }
+            
+            if !discoverExists {
+                self.standUpConf = "discover=1\n" + conf.joined(separator: "\n")
+            }
+            
+            if !onlynetExists {
+                self.standUpConf = "#onlynet=onion\n" + conf.joined(separator: "\n")
+            }
+            
+            if !externalIpExists {
+                self.standUpConf = "externalip=\(TorClient.sharedInstance.p2pHostname(chain: "main") ?? "")\n" + conf.joined(separator: "\n")
+            }
+                        
+            self.ud.setValue(self.rpcuser, forKey: "rpcuser")
+            self.ud.setValue(self.rpcpassword, forKey: "rpcpassword")
+            
+            self.getURLs()
         }
     }
     
@@ -309,7 +305,6 @@ class Installer: NSViewController {
                 DispatchQueue.main.async { [weak self] in
                     if self != nil {
                         self?.hideSpinner()
-                        self?.setLog(content: log)
                     }
                 }
             }
@@ -360,18 +355,13 @@ class Installer: NSViewController {
         Log.writeToLog(content: content)
     }
     
-    func getLog(completion: @escaping (String?) -> Void) {
-        Log.getLog(completion: completion)
-    }
-    
     func getExisistingRPCCreds(completion: @escaping ((user: String, password: String)) -> Void) {
         var user = ""
         var password = ""
         
-        let path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/bitcoin.conf")
+        let path = URL(fileURLWithPath: "\(Defaults.shared.dataDir)/bitcoin.conf")
         
         guard let bitcoinConf = try? String(contentsOf: path, encoding: .utf8) else {
-            print("can not get bitcoin.conf")
             completion(("", ""))
             return
         }
@@ -391,10 +381,9 @@ class Installer: NSViewController {
     }
     
     func getBitcoinConf(completion: @escaping ((conf: [String]?, error: Bool)) -> Void) {
-        let path = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Application Support/Bitcoin/bitcoin.conf")
+        let path = URL(fileURLWithPath: "\(Defaults.shared.dataDir)/bitcoin.conf")
         
         guard let bitcoinConf = try? String(contentsOf: path, encoding: .utf8) else {
-            print("can not get bitcoin.conf")
             completion((nil, false))
             return
         }
@@ -427,12 +416,14 @@ class Installer: NSViewController {
             guard let output = String(data: data, encoding: .utf8) else { return }
                         
             if vc.showLog {
-                DispatchQueue.main.async { [unowned vc = self] in
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    
                     let prevOutput = vc.consoleOutput.string
                     let nextOutput = prevOutput + output
-                    vc.consoleOutput.string = nextOutput
+                    self.consoleOutput.string = nextOutput
                     logOutput = nextOutput
-                    vc.consoleOutput.scrollToEndOfDocument(vc)
+                    self.consoleOutput.scrollToEndOfDocument(vc)
                 }
             }
             
