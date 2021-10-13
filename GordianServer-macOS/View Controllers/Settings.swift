@@ -103,7 +103,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
     @IBAction func goPrivate(_ sender: Any) {
         let value = goPrivateOutlet.state
         if value == .on {
-            actionAlert(message: "Go private?", info: "Your node will only accept connections over the Tor network, this can make initial block download very slow, it is recommended to go private once your node is fully synced.") { [unowned vc = self] (response) in
+            actionAlert(message: "Go private?", info: "Your node will only accept connections over the Tor network, this can make initial block download very slow, it is recommended to go private once your node is fully synced.") { [unowned vc = self] response in
                 if response {
                     vc.privateOn()
                 } else {
@@ -142,8 +142,8 @@ class Settings: NSViewController, NSTextFieldDelegate {
                             
                         case "discover", "#discover":
                             discoverExists = true
-                            if existingValue == "1" {
-                                stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "discover=0")
+                            if existingValue == "0" {
+                                stringConf = stringConf.replacingOccurrences(of: "\(k + "=" + existingValue)", with: "discover=1")
                             }
                             
                         case "#proxy", "proxy":
@@ -164,7 +164,7 @@ class Settings: NSViewController, NSTextFieldDelegate {
                 }
                 
                 if !discoverExists {
-                    stringConf = "discover=0\n" + stringConf
+                    stringConf = "discover=1\n" + stringConf
                 }
 
                 if !proxyExists {

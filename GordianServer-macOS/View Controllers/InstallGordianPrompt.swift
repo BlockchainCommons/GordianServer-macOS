@@ -117,7 +117,7 @@ class InstallGordianPrompt: NSViewController, NSWindowDelegate {
                 
                 bodyText += """
                     
-                    ⚠️ You have an existing Bitcoin Core configuration file in \(directory). Gordian Server will check it for rpc credentials and add any if they are missing, no other settings will be altered.
+                    ⚠️ You have an existing Bitcoin Core configuration file in \(directory). Gordian Server will check it for rpc credentials and add them if they are missing along with Tor related settings, existing settings will not be edited.
                     """
                
             }

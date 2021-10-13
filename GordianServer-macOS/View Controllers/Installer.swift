@@ -153,97 +153,85 @@ class Installer: NSViewController {
         var listenExists = false
         var externalIpExists = false
         
-        getBitcoinConf { [unowned vc = self] (conf, error) in
-            if !error && conf != nil {
-                if conf!.count > 0 {
-                    for setting in conf! {
-                        if setting.contains("=") {
-                            let arr = setting.components(separatedBy: "=")
-                            let k = arr[0]
-                            let existingValue = arr[1]
-                            
-                            switch k {
-                            case "onlynet", "#onlynet":
-                                onlynetExists = true
-                                
-                            case "externalip":
-                                externalIpExists = true
-                                
-                            case "discover", "#discover":
-                                discoverExists = true
-                                
-                            case "blocksdir":
-                                UserDefaults.standard.setValue(existingValue, forKey: "blockDir")
-                                
-//                            case "rpcuser":
-//                                if existingValue != "" {
-//                                    userExists = true
-//                                    vc.rpcuser = existingValue
-//                                }
-//
-//                            case "rpcpassword":
-//                                if existingValue != "" {
-//                                    passwordExists = true
-//                                    vc.rpcpassword = existingValue
-//                                }
-                                
-                            case "testnet", "regtest", "signet":
-                                if existingValue != "" {
-                                    simpleAlert(message: "Incompatible bitcoin.conf setting!", info: "Gordian Server allows you to run multiple networks simultaneously, we do this by specifying which chain we want to launch as a command line argument. Specifying a network in your bitcoin.conf is not compatible with this approach, please remove the line in your conf file which specifies a network.", buttonLabel: "OK")
-                                }
-                                
-                            case "proxy", "#proxy":
-                                proxyExists = true
-                                
-                            case "listen", "#listen":
-                                listenExists = true
-                                
-                           default:
-                                break
-                            }
-                        }
-                    }
-                    
-                    let rpcAuthCreds = RPCAuth.generateRpcAuth(user: "GordianServer")
-                    
-                    guard let rpcauth = rpcAuthCreds.rpcauth, let rpcpassword = rpcAuthCreds.rpcpassword else {
-                        simpleAlert(message: "Error", info: "Unable to create rpcauth credentials.", buttonLabel: "OK")
-                        return
-                    }
-                    
-                    UserDefaults.setValue(rpcpassword, forKey: "rpcpassword")
-                    UserDefaults.setValue("GordianServer", forKey: "rpcuser")
-                    
-                    vc.standUpConf = rpcauth + "\n" + "rpcwhitelist=GordianServer:\(rpcWhiteList)" + conf!.joined(separator: "\n")
-                    
-                    if !proxyExists {
-                        vc.standUpConf = "proxy=127.0.0.1:19050\n" + vc.standUpConf
-                    }
-                    
-                    if !listenExists {
-                        vc.standUpConf = "listen=1\n" + vc.standUpConf
-                    }
-                    
-                    if !discoverExists {
-                        vc.standUpConf = "discover=1" + vc.standUpConf
-                    }
-                    
-                    if !onlynetExists {
-                        vc.standUpConf = "#onlynet=onion" + vc.standUpConf
-                    }
-                    
-                    if !externalIpExists {
-                        vc.standUpConf = "externalip=\(TorClient.sharedInstance.p2pHostname(chain: "main") ?? "")"
-                    }
-                                        
-                    vc.getURLs()
-                                        
-                } else {
-                    vc.setDefaultBitcoinConf()
-                }
-            } else {
-                vc.setDefaultBitcoinConf()
+        getBitcoinConf { [weak self] (conf, error) in
+            guard let self = self else { return }
+            
+            guard let conf = conf, !error, conf.count > 0 else {
+                self.setDefaultBitcoinConf()
+                return
             }
+            
+            for setting in conf {
+                if setting.contains("=") {
+                    let arr = setting.components(separatedBy: "=")
+                    let k = arr[0]
+                    let existingValue = arr[1]
+                    
+                    switch k {
+                    case "onlynet", "#onlynet":
+                        onlynetExists = true
+                        
+                    case "externalip":
+                        externalIpExists = true
+                        
+                    case "discover", "#discover":
+                        discoverExists = true
+                        
+                    case "blocksdir":
+                        UserDefaults.standard.setValue(existingValue, forKey: "blockDir")
+                        
+                    case "testnet", "regtest", "signet":
+                        if existingValue != "" {
+                            simpleAlert(message: "Incompatible bitcoin.conf setting!", info: "GordianServer allows you to run multiple networks simultaneously, we do this by specifying which chain we want to launch as a command line argument. Specifying a network in your bitcoin.conf is not compatible with this approach, please remove the line in your conf file which specifies a network.", buttonLabel: "OK")
+                        }
+                        
+                    case "proxy", "#proxy":
+                        proxyExists = true
+                        
+                    case "listen", "#listen":
+                        listenExists = true
+                        
+                    default:
+                        break
+                    }
+                }
+            }
+            
+            self.standUpConf = conf.joined(separator: "\n")
+            
+            let rpcAuthCreds = RPCAuth.generateRpcAuth(user: "GordianServer")
+            
+            guard let rpcauth = rpcAuthCreds.rpcauth, let rpcpassword = rpcAuthCreds.rpcpassword else {
+                simpleAlert(message: "Error", info: "Unable to create rpcauth credentials.", buttonLabel: "OK")
+                return
+            }
+            
+            UserDefaults.setValue(rpcpassword, forKey: "rpcpassword")
+            UserDefaults.setValue("GordianServer", forKey: "rpcuser")
+            
+            self.standUpConf = rpcauth + "\n" + "rpcwhitelist=GordianServer:\(rpcWhiteList)" + conf.joined(separator: "\n")
+            
+            if !proxyExists {
+                self.standUpConf = "proxy=127.0.0.1:19050\n" + conf.joined(separator: "\n")
+            }
+            
+            if !listenExists {
+                self.standUpConf = "listen=1\n" + conf.joined(separator: "\n")
+            }
+            
+            if !discoverExists {
+                self.standUpConf = "discover=1\n" + conf.joined(separator: "\n")
+            }
+            
+            if !onlynetExists {
+                self.standUpConf = "#onlynet=onion\n" + conf.joined(separator: "\n")
+            }
+            
+            if !externalIpExists {
+                self.standUpConf = "externalip=\(TorClient.sharedInstance.p2pHostname(chain: "main") ?? "")\n" + conf.joined(separator: "\n")
+            }
+            
+            self.getURLs()
         }
     }
     

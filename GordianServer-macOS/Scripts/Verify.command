@@ -66,5 +66,3 @@ else
     echo "No ~/.gordian/BitcoinCore directory, click Install then try again."
     exit 1
 fi
-
-
