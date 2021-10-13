@@ -1005,15 +1005,12 @@ class ViewController: NSViewController, NSWindowDelegate {
                     return
                 }
                 
-                UserDefaults.setValue(rpcpassword, forKey: "rpcpassword")
-                UserDefaults.setValue("GordianServer", forKey: "rpcuser")
+                UserDefaults.standard.setValue(rpcpassword, forKey: "rpcpassword")
+                UserDefaults.standard.setValue("GordianServer", forKey: "rpcuser")
                 
-                let updatedConf = rpcauth + "\n" + "rpcwhitelist=GordianServer:\(rpcWhiteList)" + bitcoinConf.joined(separator: "\n")
+                let updatedConf = rpcauth + "\n" + "rpcwhitelist=GordianServer:\(rpcWhiteList)\n" + bitcoinConf.joined(separator: "\n")
                 
-                guard let bitcoinConfPath = URL(string: self.d.dataDir + "/bitcoin.conf") else {
-                    simpleAlert(message: "There was an issue...", info: "Could not get bitcoin.conf url.", buttonLabel: "OK")
-                    return
-                }
+                let bitcoinConfPath = URL(fileURLWithPath: self.d.dataDir + "/bitcoin.conf")
                 
                 do {
                     try updatedConf.data(using: .utf8)?.write(to: bitcoinConfPath)

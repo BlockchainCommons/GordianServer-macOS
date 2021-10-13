@@ -67,12 +67,6 @@ class Defaults {
                     let k = arr[0]
                     let existingValue = arr[1]
                     switch k {
-                    case "rpcuser":
-                        self.ud.setValue(existingValue, forKey: "rpcuser")
-                        
-                    case "rpcpassword":
-                        self.ud.setValue(existingValue, forKey: "rpcpassword")
-                        
                     case "blocksdir":
                         self.ud.setValue(existingValue, forKey: "blocksDir")
                         
