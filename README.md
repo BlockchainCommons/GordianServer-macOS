@@ -61,8 +61,6 @@ You must meet minimum OS and space requirements to install *GordianServer-macOS*
 - Click to download `GordianServer-macOS-v0.1.0.0.dmg`
 - Open the DMG and drag the app to the Applications folder. That's it!
 
-`GordianServer-macOS-v0.1.5.dmg` has been pgp signed, the pgp signature can be viewed. It is on the [same release page](./releases/tag/v0.1.5) and named `GordianServer-macOS-v0.1.5.dmg.asc`
-
 ### Build Mac App from source using Xcode
 
 Instead of downloading binaries through our Github repo, you can build *GordianServer-macOS* by hand using Apple's *Xcode*.
