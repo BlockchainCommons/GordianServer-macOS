@@ -145,8 +145,6 @@ class Installer: NSViewController {
     }
     
     func checkExistingConf() {
-        //var userExists = false
-        //var passwordExists = false
         var proxyExists = false
         var onlynetExists = false
         var discoverExists = false

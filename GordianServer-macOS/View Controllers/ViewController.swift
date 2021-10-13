@@ -70,7 +70,6 @@ class ViewController: NSViewController, NSWindowDelegate {
     var bitcoinRunning = false
     var upgrading = false
     var isLoading = false
-    var bitcoinConfigured = false
     var ignoreExistingBitcoin = false
     var isVerifying = false
     var env = [String:String]()
@@ -977,6 +976,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     func checkForRPCCredentials(response: String) {
         let bitcoinConf = response.components(separatedBy: "\n")
         var gordianServerUserExists = false
+        
         for item in bitcoinConf {
             if item.contains("rpcauth") && item.contains("rpcauth=GordianServer:") {
                 gordianServerUserExists = true
@@ -988,12 +988,40 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
         
         if gordianServerUserExists {
-            bitcoinConfigured = true
             checkBitcoindVersion()
         } else {
             hideSpinner()
-            bitcoinConfigured = false
-            // prompt to add
+            
+            actionAlert(message: "Add rpc authentication for Gordian Server?", info: "Gordian Server uses rpcauth to communicate to Bitcoin Core. It looks like the Gordian Server user is missing from your Bitcoin Core configuration file. Click Yes to add rpc authentication for Gordian Server. If your node is running you will need to quit Bitcoin Core for the changes to take effect.") { [weak self] response in
+                
+                guard let self = self else { return }
+                
+                guard response else { return }
+                
+                let rpcAuthCreds = RPCAuth.generateRpcAuth(user: "GordianServer")
+                
+                guard let rpcauth = rpcAuthCreds.rpcauth, let rpcpassword = rpcAuthCreds.rpcpassword else {
+                    simpleAlert(message: "Error", info: "Unable to create rpcauth credentials.", buttonLabel: "OK")
+                    return
+                }
+                
+                UserDefaults.setValue(rpcpassword, forKey: "rpcpassword")
+                UserDefaults.setValue("GordianServer", forKey: "rpcuser")
+                
+                let updatedConf = rpcauth + "\n" + "rpcwhitelist=GordianServer:\(rpcWhiteList)" + bitcoinConf.joined(separator: "\n")
+                
+                guard let bitcoinConfPath = URL(string: self.d.dataDir + "/bitcoin.conf") else {
+                    simpleAlert(message: "There was an issue...", info: "Could not get bitcoin.conf url.", buttonLabel: "OK")
+                    return
+                }
+                
+                do {
+                    try updatedConf.data(using: .utf8)?.write(to: bitcoinConfPath)
+                    self.checkBitcoindVersion()
+                } catch {
+                    simpleAlert(message: "There was an issue...", info: "Could not edit bitcoin.conf: \(error.localizedDescription)", buttonLabel: "OK")
+                }
+            }
         }
     }
     
