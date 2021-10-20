@@ -25,7 +25,7 @@ function checkPermissions() {
     mkdir  /Users/$(whoami)/.gnupg
   fi
   
-  if [[ ! -f /Users/$(whoami)/crls.d ]]; then
+  if [[ ! -f /Users/$(whoami)/.gnupg/crls.d ]]; then
     touch /Users/$(whoami)/.gnupg/crls.d
   fi
 
