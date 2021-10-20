@@ -23,10 +23,12 @@ function checkPermissions() {
 
   if [[ ! -d /Users/$(whoami)/.gnupg ]]; then
     mkdir  /Users/$(whoami)/.gnupg
+    chmod 700 /Users/$(whoami)/.gnupg
   fi
   
-  if [[ ! -f /Users/$(whoami)/.gnupg/crls.d ]]; then
-    touch /Users/$(whoami)/.gnupg/crls.d
+  if [[ ! -d /Users/$(whoami)/.gnupg/crls.d ]]; then
+    mkdir /Users/$(whoami)/.gnupg/crls.d
+    chmod 700 /Users/$(whoami)/.gnupg/crls.d
   fi
 
   GNUPG_PERMISSIONS=$(ls -ld /Users/$(whoami)/.gnupg)
