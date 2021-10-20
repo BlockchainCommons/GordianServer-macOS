@@ -106,13 +106,17 @@ If'd you'd like your Gordian Server to start whenever your Mac does:
 
 If you are planning to use Gordian Server for an operational installation, you will want to maximize your security by checking the GPG signatures of the Bitcoin server as it's installed. This requires a bit of additional work that must be done before you startup Gordian Server for the first time (whether you installed from DMG or compiled the source code).
 
-1. Install [GPG for the Mac](https://gpgtools.org/)
-   - Click on the "Download" link
-   - Open the DMG
-   - Double-click "Install"
-   - Choose to "Continue" inside the "Inside GPG Suite" and click through additional pages
- 
-GPG Mail, which comes with the suite, is not required for Gordian Server Installation
+We suggest using homebrew to install gpg.
+
+1. If you haven't already, install Homebrew:
+```
+$ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+Afterward, use it to install GPG:
+```
+$ brew install gpg pinentry-mac
+```
+If you prefer not to use the command line, you can install [GPG Suite](https://gpgtools.org/), but it nags about the installation of a GPG Mail program, so we prefer the cleaner install of Homebrew.
 
 ### Checking Signatures
 

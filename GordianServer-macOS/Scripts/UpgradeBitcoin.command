@@ -17,7 +17,7 @@ elif [[ $(command -v /usr/local/MacGPG2/bin/gpg) != "" ]]; then
     GPG_PATH="/usr/local/MacGPG2/bin/gpg"
 else
     echo "GPG NOT INSTALLED, UNABLE TO VERIFY SIGNATURES!"
-    echo "Click the Supported Apps menu item and GPG Suite to install GPG. Or install homebrew and run `brew install gnupg`."
+    echo "Click the Supported Apps menu item and GPG Suite to install GPG. Or install homebrew and run `brew install gpg pinentry-mac`."
 fi
 
 echo "Updating to $VERSION"
