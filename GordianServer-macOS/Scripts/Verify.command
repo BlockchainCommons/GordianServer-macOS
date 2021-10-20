@@ -17,6 +17,7 @@ elif [[ $(command -v /usr/local/bin/brew/gpg) != "" ]]; then
 elif [[ $(command -v /usr/local/MacGPG2/bin/gpg) != "" ]]; then
     GPG_PATH="/usr/local/MacGPG2/bin/gpg"
 fi
+export GPG_PATH
 
 function checkPermissions() {
   GNUPG_PERMISSIONS=$(ls -ld /Users/$(whoami)/.gnupg)
