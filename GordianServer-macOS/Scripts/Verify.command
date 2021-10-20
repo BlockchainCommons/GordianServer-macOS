@@ -20,6 +20,15 @@ fi
 export GPG_PATH
 
 function checkPermissions() {
+
+  if [[ ! -d /Users/$(whoami)/.gnupg ]]; then
+    mkdir  /Users/$(whoami)/.gnupg
+  fi
+  
+  if [[ ! -f /Users/$(whoami)/crls.d ]]; then
+    touch /Users/$(whoami)/.gnupg/crls.d
+  fi
+
   GNUPG_PERMISSIONS=$(ls -ld /Users/$(whoami)/.gnupg)
   CRLSD_PERMISSIONS=$(ls -ld /Users/$(whoami)/.gnupg/crls.d)
     
