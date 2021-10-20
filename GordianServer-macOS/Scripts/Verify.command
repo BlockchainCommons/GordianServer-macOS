@@ -53,7 +53,7 @@ function checkForGnupg() {
   if [[ $GPG_PATH == "" ]]; then
     echo "GPG is not installed, ensure you have brew installed by clicking Supported Apps in the menu bar > Homebrew"
     echo "Once Homebrew installation completes open a terminal and run:"
-    echo "brew install gpg2 pinentry-mac"
+    echo "brew install gpg pinentry-mac"
     exit 1
   else
     checkPermissions
