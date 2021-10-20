@@ -41,7 +41,7 @@ function checkPermissions() {
 function verifySigs() {
   curl https://raw.githubusercontent.com/bitcoin/bitcoin/master/contrib/builder-keys/keys.txt -o ~/.gordian/BitcoinCore/keys.txt
   
-  sh -c 'while read fingerprint keyholder_name; do sudo -u $(whoami) $(GPG_PATH) --keyserver hkps://keys.openpgp.org --recv-keys ${fingerprint}; done < ~/.gordian/BitcoinCore/keys.txt'
+  sh -c 'while read fingerprint keyholder_name; do sudo -u $(whoami) $GPG_PATH --keyserver hkps://keys.openpgp.org --recv-keys ${fingerprint}; done < ~/.gordian/BitcoinCore/keys.txt'
 
   echo "Verifying Bitcoin Core signatures... (this can take a few moments)"
 
