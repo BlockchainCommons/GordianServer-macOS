@@ -67,11 +67,9 @@ class ViewController: NSViewController, NSWindowDelegate {
     var bitcoinInstalled = false
     var torIsOn = false
     var bitcoinRunning = false
-    var upgrading = false
     var isLoading = false
     var bitcoinConfigured = false
     var ignoreExistingBitcoin = false
-    var isVerifying = false
     var env = [String:String]()
     let d = Defaults.shared
     var infoMessage = ""
@@ -282,9 +280,10 @@ class ViewController: NSViewController, NSWindowDelegate {
                                     DispatchQueue.main.async { [weak self] in
                                         guard let self = self else { return }
                                         
-                                        self.upgrading = true
                                         self.autoRefreshTimer?.invalidate()
-                                        self.performSegue(withIdentifier: "goInstall", sender: self)
+                                        self.autoRefreshTimer = nil
+                                        self.isLoading = false
+                                        InstallBitcoinCore.checkExistingConf()
                                     }
                                 }
                             }
@@ -450,20 +449,22 @@ class ViewController: NSViewController, NSWindowDelegate {
         } else {
             DispatchQueue.main.async {
                 FetchLatestRelease.get { (dict, err) in
-                    if err != nil {
+                    guard let dict = dict else {
                         simpleAlert(message: "Error", info: "Error fetching latest release: \(err ?? "unknown error")", buttonLabel: "OK")
-                    } else {
-                        let version = dict!["version"] as! String
-                        actionAlert(message: "Upgrade to Bitcoin Core \(version)?", info: "") { (response) in
-                            if response {
-                                DispatchQueue.main.async { [weak self] in
-                                    guard let self = self else { return }
-                                    
-                                    self.upgrading = true
-                                    self.autoRefreshTimer?.invalidate()
-                                    self.autoRefreshTimer = nil
-                                    self.performSegue(withIdentifier: "goInstall", sender: self)
-                                }
+                        return
+                    }
+                    
+                    let version = dict["version"] as! String
+                    
+                    actionAlert(message: "Upgrade to Bitcoin Core \(version)?", info: "") { response in
+                        if response {
+                            DispatchQueue.main.async { [weak self] in
+                                guard let self = self else { return }
+                                
+                                self.autoRefreshTimer?.invalidate()
+                                self.autoRefreshTimer = nil
+                                self.isLoading = false
+                                InstallBitcoinCore.checkExistingConf()
                             }
                         }
                     }
@@ -475,12 +476,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     //MARK: User Action Installers, Starters and Configurators
 
     @IBAction func verifyAction(_ sender: Any) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            
-            self.isVerifying = true
-            self.performSegue(withIdentifier: "goInstall", sender: self)
-        }
+        runScript(script: .launchVerifier)
     }
 
     private func installNow() {
@@ -1103,6 +1099,11 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     func parseBitcoindVersionResponse(result: String) {
         if result.contains("Bitcoin Core Daemon version") || result.contains("Bitcoin Core version") {
+            let tempPath = "/Users/\(NSUserName())/.gordian/installBitcoin.sh"
+            if FileManager.default.fileExists(atPath: tempPath) {
+                try? FileManager.default.removeItem(atPath: tempPath)
+            }
+            
             let arr = result.components(separatedBy: "Copyright (C)")
             currentVersion = (arr[0]).replacingOccurrences(of: "Bitcoin Core Daemon version ", with: "")
             currentVersion = currentVersion.replacingOccurrences(of: "Bitcoin Core version ", with: "")
@@ -1167,7 +1168,6 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     func hideSpinner() {
-        print("hideSpinner")
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
@@ -1212,7 +1212,6 @@ class ViewController: NSViewController, NSWindowDelegate {
             self.startMainnetOutlet.isEnabled = false
             self.torRemoveAuthOutlet.isEnabled = false
             self.torAddAuthOutlet.isEnabled = false
-            //self.torRunningImage.alphaValue = 0
             self.bitcoinCoreWindow.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)
             self.torWindow.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)
             self.torAuthWindow.backgroundColor = #colorLiteral(red: 0.2548701465, green: 0.2549202442, blue: 0.2548669279, alpha: 1)
@@ -1252,23 +1251,6 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
     }
 
-    func showstandUpAlert(message: String, info: String) {
-        DispatchQueue.main.async {
-            actionAlert(message: message, info: info) { (response) in
-                if response {
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
-                        
-                        self.standingUp = true
-                        self.autoRefreshTimer?.invalidate()
-                        self.autoRefreshTimer = nil
-                        self.performSegue(withIdentifier: "goInstall", sender: self)
-                    }
-                }
-            }
-        }
-    }
-
     func setLog(content: String) {
         Log.writeToLog(content: content)
     }
@@ -1277,20 +1259,18 @@ class ViewController: NSViewController, NSWindowDelegate {
         FetchLatestRelease.get { [weak self] (dict, error) in
             guard let self = self else { return }
             
-            if dict != nil {
-                if let version = dict!["version"] as? String,
-                    let binaryName = dict!["macosBinary"] as? String,
-                    let prefix = dict!["binaryPrefix"] as? String {
-                    self.newestPrefix = prefix
-                    self.newestVersion = version
-                    self.newestBinaryName = binaryName
-                    completion((true, nil))
-                } else {
-                    completion((false, error))
-                }
-            } else {
-                completion((false, error))
-            }
+            guard let dict = dict,
+                  let version = dict["version"] as? String,
+                  let binaryName = dict["macosBinary"] as? String,
+                  let prefix = dict["binaryPrefix"] as? String else {
+                      completion((false, error))
+                      return
+                  }
+            
+            self.newestPrefix = prefix
+            self.newestVersion = version
+            self.newestBinaryName = binaryName
+            completion((true, nil))
         }
     }
 
@@ -1349,7 +1329,9 @@ class ViewController: NSViewController, NSWindowDelegate {
             }
         }
     }
-
+    
+    
+    
     // MARK: Segue Prep
 
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
@@ -1366,10 +1348,8 @@ class ViewController: NSViewController, NSWindowDelegate {
                         DispatchQueue.main.async { [weak self] in
                             guard let self = self else { return }
                             
-                            self.standingUp = true
-                            self.autoRefreshTimer?.invalidate()
-                            self.autoRefreshTimer = nil
-                            self.performSegue(withIdentifier: "goInstall", sender: vc)
+                            self.isLoading = false
+                            InstallBitcoinCore.checkExistingConf()
                         }
                     }
                 }
@@ -1413,40 +1393,9 @@ class ViewController: NSViewController, NSWindowDelegate {
                 vc.rpcuser = rpcuser
             }
 
-        case "goInstall":
-            if let vc = segue.destinationController as? Installer {
-                vc.isVerifying = self.isVerifying
-                vc.standingUp = standingUp
-                vc.upgrading = upgrading
-                vc.ignoreExistingBitcoin = ignoreExistingBitcoin
-                if !isVerifying {
-                    autoRefreshTimer?.invalidate()
-                    autoRefreshTimer = nil
-                }
-            }
-
         case "segueToWallets":
             if let vc = segue.destinationController as? WalletsViewController {
                 vc.chain = chain
-            }
-            
-        case "segueToInstallPrompt":
-            if let vc = segue.destinationController as? InstallerPrompt {
-                vc.text = infoMessage
-                vc.headerText = headerText
-                
-                vc.doneBlock = { response in
-                    if response {
-                        DispatchQueue.main.async { [weak self] in
-                            guard let self = self else { return }
-                            
-                            self.standingUp = true
-                            self.autoRefreshTimer?.invalidate()
-                            self.autoRefreshTimer = nil
-                            self.performSegue(withIdentifier: "goInstall", sender: vc)
-                        }
-                    }
-                }
             }
 
         default:

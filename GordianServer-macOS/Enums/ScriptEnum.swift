@@ -9,6 +9,8 @@
 import Foundation
 
 public enum SCRIPT: String {
+    case launchVerifier
+    case launchInstaller
     case hasBitcoinShutdownCompleted
     case isBitcoindRunning
     case didBitcoindStart
@@ -20,8 +22,6 @@ public enum SCRIPT: String {
     case checkForBitcoin
     case standUp
     case standDown
-    case updateBTCConf
-    case upgradeBitcoin
     case checkForGordian
     case checkXcodeSelect
     case getStrapped
@@ -43,6 +43,10 @@ public enum SCRIPT: String {
     
     var stringValue:String {
         switch self {
+        case .launchVerifier:
+            return "LaunchVerifier"
+        case .launchInstaller:
+            return "LaunchInstaller"
         case .hasBitcoinShutdownCompleted, .isBitcoindRunning, .didBitcoindStart:
             return "IsProcessRunning"
         case .installHomebrew:
@@ -61,10 +65,6 @@ public enum SCRIPT: String {
             return "StandUp"
         case .standDown:
             return "StandDown"
-        case .updateBTCConf:
-            return "UpdateBTCConf"
-        case .upgradeBitcoin:
-            return "UpgradeBitcoin"
         case .checkForGordian:
             return "CheckStandUp"
         case .checkXcodeSelect:
