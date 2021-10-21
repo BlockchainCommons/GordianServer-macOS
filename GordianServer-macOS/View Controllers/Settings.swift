@@ -373,34 +373,24 @@ class Settings: NSViewController, NSTextFieldDelegate {
     }
     
     func setBitcoinConf(conf: String, activeOutlet: NSButton?, newValue: Int, key: String) {
-        let d = Defaults.shared
-        let env = ["CONF":conf,"DATADIR":d.dataDir]
-        runScript(script: .updateBTCConf, env: env, args: args) { [unowned vc = self] success in
-            if success {
-                if newValue < 2 || key == "prune" {
-                    vc.ud.set(newValue, forKey: key)
-                }
-                simpleAlert(message: "Success", info: "bitcoin.conf updated", buttonLabel: "OK")
-            } else {
-                simpleAlert(message: "Error Updating bitcoin.conf", info: "", buttonLabel: "OK")
+        if BitcoinConf.setBitcoinConf(conf) {
+            if newValue < 2 || key == "prune" {
+                ud.set(newValue, forKey: key)
             }
+            simpleAlert(message: "Success", info: "bitcoin.conf updated", buttonLabel: "OK")
+        } else {
+            simpleAlert(message: "Error Updating bitcoin.conf", info: "", buttonLabel: "OK")
         }
     }
     
     func setBlocksDir(conf: String, newValue: String) {
-        let d = Defaults.shared
-        let env = ["CONF":conf,"DATADIR":d.dataDir]
-        runScript(script: .updateBTCConf, env: env, args: args) { [weak self] success in
-            guard let self = self else { return }
-            
-            if success {
-                self.ud.set(newValue, forKey: "blocksDir")
-                simpleAlert(message: "Success", info: "bitcoin.conf updated", buttonLabel: "OK")
-            } else {
-                simpleAlert(message: "Error Updating bitcoin.conf", info: "", buttonLabel: "OK")
-            }
-            self.getSettings()
+        if BitcoinConf.setBitcoinConf(conf) {
+            self.ud.set(newValue, forKey: "blocksDir")
+            simpleAlert(message: "Success", info: "bitcoin.conf updated", buttonLabel: "OK")
+        } else {
+            simpleAlert(message: "Error Updating bitcoin.conf", info: "", buttonLabel: "OK")
         }
+        self.getSettings()
     }
     
     func revert(outlet: NSButton?) {
@@ -636,7 +626,6 @@ class Settings: NSViewController, NSTextFieldDelegate {
             if let vc = segue.destinationController as? Installer {
                 vc.refreshing = refreshing
                 vc.seeLog = seeLog
-                vc.standingDown = standingDown
             }
             
         default:

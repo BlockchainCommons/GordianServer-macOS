@@ -143,9 +143,7 @@ class InstallBitcoinCore {
     }
     
     class func setBitcoinConf(_ bitcoinConf: String) {
-        createDirectory(Defaults.shared.dataDir)
-        
-        if writeFile("\(Defaults.shared.dataDir)/bitcoin.conf", bitcoinConf) {
+        if BitcoinConf.setBitcoinConf(bitcoinConf) {
             setGordianDirectory()
         } else {
             simpleAlert(message: "There was an issue...", info: "Unable to create the bitcoin.conf, please let us know about this bug.", buttonLabel: "OK")
@@ -196,11 +194,10 @@ class InstallBitcoinCore {
     
     class func standUp(binaryName: String, macosURL: String, shaURL: String, version: String, prefix: String, sigsUrl: String) {
         let env = ["BINARY_NAME":binaryName, "MACOS_URL":macosURL, "SHA_URL":shaURL, "VERSION":version, "PREFIX":prefix, "SIGS_URL": sigsUrl]
-         let ud = UserDefaults.standard
-         ud.set(prefix, forKey: "binaryPrefix")
-         ud.set(binaryName, forKey: "macosBinary")
-         ud.set(version, forKey: "version")
-         
+        let ud = UserDefaults.standard
+        ud.set(prefix, forKey: "binaryPrefix")
+        ud.set(binaryName, forKey: "macosBinary")
+        ud.set(version, forKey: "version")
         runScript(script: .launchInstaller, env: env)
     }
     

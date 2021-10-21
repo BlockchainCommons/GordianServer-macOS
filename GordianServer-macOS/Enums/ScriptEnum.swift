@@ -22,8 +22,6 @@ public enum SCRIPT: String {
     case checkForBitcoin
     case standUp
     case standDown
-    case updateBTCConf
-    case upgradeBitcoin
     case checkForGordian
     case checkXcodeSelect
     case getStrapped
@@ -67,10 +65,6 @@ public enum SCRIPT: String {
             return "StandUp"
         case .standDown:
             return "StandDown"
-        case .updateBTCConf:
-            return "UpdateBTCConf"
-        case .upgradeBitcoin:
-            return "UpgradeBitcoin"
         case .checkForGordian:
             return "CheckStandUp"
         case .checkXcodeSelect:
