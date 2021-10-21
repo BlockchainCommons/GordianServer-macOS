@@ -6,22 +6,13 @@
 #  Created by Peter on 07/11/19.
 #  Copyright © 2019 Blockchain Commons, LLC
 
-function setUpGordianDir() {
-    if ! [ -d ~/.gordian ]; then
-        mkdir ~/.gordian
-    fi
-    
-    if test -f ~/.gordian/gordian.log; then
-        echo "~/.gordian/gordian.log exists."
-    else
-        touch ~/.gordian/gordian.log
-    fi
-}
+BINARY_NAME="bitcoin-22.0-osx64.tar.gz"
+MACOS_URL="https://bitcoincore.org/bin/bitcoin-core-22.0/bitcoin-22.0-osx64.tar.gz"
+SHA_URL="https://bitcoincore.org/bin/bitcoin-core-22.0/SHA256SUMS"
+SIGS_URL="https://bitcoincore.org/bin/bitcoin-core-22.0/SHA256SUMS.asc"
+VERSION="22.0"
 
 function installBitcoin() {
-  echo "Creating ~/.gordian/BitcoinCore..."
-  mkdir ~/.gordian/BitcoinCore
-
   echo "Downloading $SHA_URL"
   curl $SHA_URL -o ~/.gordian/BitcoinCore/SHA256SUMS -s
   echo "Saved to ~/.gordian/BitcoinCore/SHA256SUMS"
@@ -57,6 +48,7 @@ function unpackTarball() {
       echo "Hashes match"
       echo "Unpacking $BINARY_NAME"
       tar -zxvf $BINARY_NAME
+      echo "Installation complete, you can close this terminal."
       exit 1
     else
       echo "Hashes do not match! Terminating..."
@@ -64,5 +56,4 @@ function unpackTarball() {
     fi
 }
 
-setUpGordianDir
 installBitcoin

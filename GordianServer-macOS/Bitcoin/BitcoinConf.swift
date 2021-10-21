@@ -60,6 +60,18 @@ class BitcoinConf {
         /// Converts devices ram to gb, divides it by two and converts that to mebibytes. That way we use half the RAM for IBD cache as a reasonable default.
         return Int(((Double(ProcessInfo.processInfo.physicalMemory) / 1073741824.0) / 2.0) * 954.0)
     }
+    
+    static func getBitcoinConf(completion: @escaping ((conf: [String]?, error: Bool)) -> Void) {
+        let path = URL(fileURLWithPath: "\(Defaults.shared.dataDir)/bitcoin.conf")
+        
+        guard let bitcoinConf = try? String(contentsOf: path, encoding: .utf8) else {
+            completion((nil, false))
+            return
+        }
+        
+        let conf = bitcoinConf.components(separatedBy: "\n")
+        completion((conf, false))
+    }
 }
 
 

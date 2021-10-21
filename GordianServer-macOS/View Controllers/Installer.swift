@@ -22,7 +22,6 @@ class Installer: NSViewController {
     var standingDown = Bool()
     var upgrading = Bool()
     var showLog = Bool()
-    var standUpConf = ""
     var refreshing = Bool()
     var ignoreExistingBitcoin = Bool()
     var rpcuser = ""
@@ -53,7 +52,6 @@ class Installer: NSViewController {
     func getURLs() {
         showSpinner(description: "Fetching latest Bitcoin Core version and URL's...")
         FetchLatestRelease.get { (dict, error) in
-            
             if error != nil {
                 self.hideSpinner()
                 simpleAlert(message: "Error", info: "There was an error fetching the latest Bitcoin Core version number and related URL's, please check your internet connection and try again", buttonLabel: "OK")
@@ -212,42 +210,42 @@ class Installer: NSViewController {
             let newrpcpassword = randomString(length: 32)
             let newrpcuser = randomString(length: 10)
             
-            self.standUpConf = conf.joined(separator: "\n")
+            var bitcoinConf = conf.joined(separator: "\n")
             
             if !passwordExists {
-                self.standUpConf = "rpcpassword=\(newrpcpassword)\n" + conf.joined(separator: "\n")
+                bitcoinConf = "rpcpassword=\(newrpcpassword)\n" + bitcoinConf
                 self.rpcpassword = newrpcpassword
             }
             
             if !userExists {
-                self.standUpConf = "rpcuser=\(newrpcuser)\n" + conf.joined(separator: "\n")
+                bitcoinConf = "rpcuser=\(newrpcuser)\n" + bitcoinConf
                 self.rpcuser = newrpcuser
             }
             
             if !proxyExists {
-                self.standUpConf = "proxy=127.0.0.1:19050\n" + conf.joined(separator: "\n")
+                bitcoinConf = "proxy=127.0.0.1:19050\n" + bitcoinConf
             }
             
             if !listenExists {
-                self.standUpConf = "listen=1\n" + conf.joined(separator: "\n")
+                bitcoinConf = "listen=1\n" + bitcoinConf
             }
             
             if !discoverExists {
-                self.standUpConf = "discover=1\n" + conf.joined(separator: "\n")
+                bitcoinConf = "discover=1\n" + bitcoinConf
             }
             
             if !onlynetExists {
-                self.standUpConf = "#onlynet=onion\n" + conf.joined(separator: "\n")
+                bitcoinConf = "#onlynet=onion\n" + bitcoinConf
             }
             
             if !externalIpExists {
-                self.standUpConf = "externalip=\(TorClient.sharedInstance.p2pHostname(chain: "main") ?? "")\n" + conf.joined(separator: "\n")
+                bitcoinConf = "externalip=\(TorClient.sharedInstance.p2pHostname(chain: "main") ?? "")\n" + bitcoinConf
             }
                         
             self.ud.setValue(self.rpcuser, forKey: "rpcuser")
             self.ud.setValue(self.rpcpassword, forKey: "rpcpassword")
             
-            self.setBitcoinConf(self.standUpConf)
+            self.setBitcoinConf(bitcoinConf)
             
             self.getURLs()
         }
@@ -300,7 +298,7 @@ class Installer: NSViewController {
         }
         let d = Defaults.shared
         showLog = true
-        let env = ["BINARY_NAME":binaryName, "MACOS_URL":macosURL, "SHA_URL":shaURL, "VERSION":version, "PREFIX":prefix, "CONF":standUpConf, "DATADIR":d.dataDir, "IGNORE_EXISTING_BITCOIN":ignore, "SIGS_URL": sigsUrl]
+        let env = ["BINARY_NAME":binaryName, "MACOS_URL":macosURL, "SHA_URL":shaURL, "VERSION":version, "PREFIX":prefix, "DATADIR":d.dataDir, "IGNORE_EXISTING_BITCOIN":ignore, "SIGS_URL": sigsUrl]
         let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
         taskQueue.async { [weak self] in
             self?.run(script: .standUp, env: env) { log in

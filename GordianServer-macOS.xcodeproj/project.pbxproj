@@ -19,6 +19,7 @@
 		0A92AE4E26F9D6730034B7B4 /* MiningInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A92AE4D26F9D6730034B7B4 /* MiningInfo.swift */; };
 		0A92AE5026F9D7E10034B7B4 /* RPCWhitelist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A92AE4F26F9D7E10034B7B4 /* RPCWhitelist.swift */; };
 		0A92AE5226F9D8490034B7B4 /* BitcoinConf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A92AE5126F9D8490034B7B4 /* BitcoinConf.swift */; };
+		0AC7A5CF272147650015CD9E /* LaunchInstaller.command in Resources */ = {isa = PBXBuildFile; fileRef = 0AC7A5CE272147650015CD9E /* LaunchInstaller.command */; };
 		0AD5BAA026EF2FA50091A075 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD5BA9F26EF2FA50091A075 /* Extensions.swift */; };
 		0AD5BAAC26F1D0AC0091A075 /* InstallerPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD5BAAB26F1D0AC0091A075 /* InstallerPrompt.swift */; };
 		0AD5BAB726F568820091A075 /* Tor.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AD5BAB626F568820091A075 /* Tor.xcframework */; };
@@ -137,6 +138,7 @@
 		0A92AE4F26F9D7E10034B7B4 /* RPCWhitelist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPCWhitelist.swift; sourceTree = "<group>"; };
 		0A92AE5126F9D8490034B7B4 /* BitcoinConf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinConf.swift; sourceTree = "<group>"; };
 		0A92AE6A26FB20AF0034B7B4 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
+		0AC7A5CE272147650015CD9E /* LaunchInstaller.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = LaunchInstaller.command; sourceTree = "<group>"; };
 		0AD5BA9F26EF2FA50091A075 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		0AD5BAAB26F1D0AC0091A075 /* InstallerPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallerPrompt.swift; sourceTree = "<group>"; };
 		0AD5BAB626F568820091A075 /* Tor.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = Tor.xcframework; sourceTree = "<group>"; };
@@ -322,6 +324,7 @@
 				0A2FE80026FD7A1B00B18859 /* LaunchBrewInstall.command */,
 				0A2FE80226FD7A4C00B18859 /* InstallBrew.command */,
 				0A8B41152702CB8B00815E65 /* IsProcessRunning.command */,
+				0AC7A5CE272147650015CD9E /* LaunchInstaller.command */,
 			);
 			path = Scripts;
 			sourceTree = "<group>";
@@ -560,6 +563,7 @@
 				D0F613EC2489278B0057CC93 /* CheckForOldHost.command in Resources */,
 				D0DCD8812508BAF100243916 /* InstallLightning.command in Resources */,
 				D042FAB8250B521B00E99D9B /* GetLightningHostname.command in Resources */,
+				0AC7A5CF272147650015CD9E /* LaunchInstaller.command in Resources */,
 				D049E89E237BD09200294E70 /* StandDown.command in Resources */,
 				0A2FE80126FD7A1B00B18859 /* LaunchBrewInstall.command in Resources */,
 				0A2FE80326FD7A4C00B18859 /* InstallBrew.command in Resources */,
@@ -794,7 +798,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1.0.0;
-				DEVELOPMENT_TEAM = YZHG975W3A;
+				DEVELOPMENT_TEAM = 8JHDU5M9KD;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "GordianServer-macOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -819,7 +823,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1.0.0;
-				DEVELOPMENT_TEAM = YZHG975W3A;
+				DEVELOPMENT_TEAM = 8JHDU5M9KD;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "GordianServer-macOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
