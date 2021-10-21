@@ -6,11 +6,11 @@
 #  Created by Peter on 07/11/19.
 #  Copyright © 2019 Blockchain Commons, LLC
 
-BINARY_NAME="bitcoin-22.0-osx64.tar.gz"
-MACOS_URL="https://bitcoincore.org/bin/bitcoin-core-22.0/bitcoin-22.0-osx64.tar.gz"
-SHA_URL="https://bitcoincore.org/bin/bitcoin-core-22.0/SHA256SUMS"
-SIGS_URL="https://bitcoincore.org/bin/bitcoin-core-22.0/SHA256SUMS.asc"
-VERSION="22.0"
+BINARY_NAME=$1
+MACOS_URL=$2
+SHA_URL=$3
+SIGS_URL=$4
+VERSION=$5
 
 function installBitcoin() {
   echo "Downloading $SHA_URL"

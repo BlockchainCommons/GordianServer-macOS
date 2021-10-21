@@ -725,9 +725,6 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     func parseScriptResult(script: SCRIPT, result: String) {
         switch script {
-        case .launchInstaller:
-            Log.writeToLog(content: result)
-            
         case .checkForGordian:
             checkGordianParser(result: result)
             
@@ -1170,7 +1167,6 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     func hideSpinner() {
-        print("hideSpinner")
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
@@ -1215,7 +1211,6 @@ class ViewController: NSViewController, NSWindowDelegate {
             self.startMainnetOutlet.isEnabled = false
             self.torRemoveAuthOutlet.isEnabled = false
             self.torAddAuthOutlet.isEnabled = false
-            //self.torRunningImage.alphaValue = 0
             self.bitcoinCoreWindow.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)
             self.torWindow.backgroundColor = #colorLiteral(red: 0.1605761051, green: 0.1642630696, blue: 0.1891490221, alpha: 1)
             self.torAuthWindow.backgroundColor = #colorLiteral(red: 0.2548701465, green: 0.2549202442, blue: 0.2548669279, alpha: 1)
@@ -1255,23 +1250,6 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
     }
 
-//    func showstandUpAlert(message: String, info: String) {
-//        DispatchQueue.main.async {
-//            actionAlert(message: message, info: info) { (response) in
-//                if response {
-//                    DispatchQueue.main.async { [weak self] in
-//                        guard let self = self else { return }
-//
-//                        self.standingUp = true
-//                        self.autoRefreshTimer?.invalidate()
-//                        self.autoRefreshTimer = nil
-//                        self.performSegue(withIdentifier: "goInstall", sender: self)
-//                    }
-//                }
-//            }
-//        }
-//    }
-
     func setLog(content: String) {
         Log.writeToLog(content: content)
     }
@@ -1280,20 +1258,18 @@ class ViewController: NSViewController, NSWindowDelegate {
         FetchLatestRelease.get { [weak self] (dict, error) in
             guard let self = self else { return }
             
-            if dict != nil {
-                if let version = dict!["version"] as? String,
-                    let binaryName = dict!["macosBinary"] as? String,
-                    let prefix = dict!["binaryPrefix"] as? String {
-                    self.newestPrefix = prefix
-                    self.newestVersion = version
-                    self.newestBinaryName = binaryName
-                    completion((true, nil))
-                } else {
-                    completion((false, error))
-                }
-            } else {
-                completion((false, error))
-            }
+            guard let dict = dict,
+                  let version = dict["version"] as? String,
+                  let binaryName = dict["macosBinary"] as? String,
+                  let prefix = dict["binaryPrefix"] as? String else {
+                      completion((false, error))
+                      return
+                  }
+            
+            self.newestPrefix = prefix
+            self.newestVersion = version
+            self.newestBinaryName = binaryName
+            completion((true, nil))
         }
     }
 
@@ -1353,166 +1329,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
     }
     
-    func checkExistingConf() {
-        var userExists = false
-        var passwordExists = false
-        var proxyExists = false
-        var onlynetExists = false
-        var discoverExists = false
-        var listenExists = false
-        var externalIpExists = false
-        
-        BitcoinConf.getBitcoinConf { [weak self] (conf, error) in
-            guard let self = self else { return }
-            
-            guard let conf = conf, !error, conf.count > 0 else {
-                self.setBitcoinConf(BitcoinConf.bitcoinConf())
-                return
-            }
-            
-            for setting in conf {
-                if setting.contains("=") {
-                    let arr = setting.components(separatedBy: "=")
-                    let k = arr[0]
-                    let existingValue = arr[1]
-                    
-                    switch k {
-                    case "onlynet", "#onlynet":
-                        onlynetExists = true
-                        
-                    case "externalip":
-                        externalIpExists = true
-                        
-                    case "discover", "#discover":
-                        discoverExists = true
-                        
-                    case "blocksdir":
-                        UserDefaults.standard.setValue(existingValue, forKey: "blockDir")
-                        
-                    case "rpcuser":
-                        if existingValue != "" {
-                            userExists = true
-                            self.rpcuser = existingValue
-                        }
-                        
-                    case "rpcpassword":
-                        if existingValue != "" {
-                            passwordExists = true
-                            self.rpcpassword = existingValue
-                        }
-                        
-                    case "testnet", "regtest", "signet":
-                        if existingValue != "" {
-                            simpleAlert(message: "Incompatible bitcoin.conf setting!", info: "GordianServer allows you to run multiple networks simultaneously, we do this by specifying which chain we want to launch as a command line argument. Specifying a network in your bitcoin.conf is not compatible with this approach, please remove the line in your conf file which specifies a network.", buttonLabel: "OK")
-                        }
-                        
-                    case "proxy", "#proxy":
-                        proxyExists = true
-                        
-                    case "listen", "#listen":
-                        listenExists = true
-                        
-                    default:
-                        break
-                    }
-                }
-            }
-            
-            let newrpcpassword = randomString(length: 32)
-            let newrpcuser = randomString(length: 10)
-            
-            var bitcoinConf = conf.joined(separator: "\n")
-            
-            if !passwordExists {
-                bitcoinConf = "rpcpassword=\(newrpcpassword)\n" + bitcoinConf
-                self.rpcpassword = newrpcpassword
-            }
-            
-            if !userExists {
-                bitcoinConf = "rpcuser=\(newrpcuser)\n" + bitcoinConf
-                self.rpcuser = newrpcuser
-            }
-            
-            if !proxyExists {
-                bitcoinConf = "proxy=127.0.0.1:19050\n" + bitcoinConf
-            }
-            
-            if !listenExists {
-                bitcoinConf = "listen=1\n" + bitcoinConf
-            }
-            
-            if !discoverExists {
-                bitcoinConf = "discover=1\n" + bitcoinConf
-            }
-            
-            if !onlynetExists {
-                bitcoinConf = "#onlynet=onion\n" + bitcoinConf
-            }
-            
-            if !externalIpExists {
-                bitcoinConf = "externalip=\(TorClient.sharedInstance.p2pHostname(chain: "main") ?? "")\n" + bitcoinConf
-            }
-                        
-            UserDefaults.standard.setValue(self.rpcuser, forKey: "rpcuser")
-            UserDefaults.standard.setValue(self.rpcpassword, forKey: "rpcpassword")
-            
-            self.setBitcoinConf(bitcoinConf)            
-        }
-    }
     
-    private func createDirectory(_ path: String) {
-        let directory = URL(fileURLWithPath: path, isDirectory: true).path
-        
-        do {
-            try FileManager.default.createDirectory(atPath: directory,
-                                                    withIntermediateDirectories: true,
-                                                    attributes: [FileAttributeKey.posixPermissions: 0o700])
-        } catch {
-            print("\(path) previously created.")
-        }
-    }
-    
-    private func writeFile(_ path: String, _ fileContents: String) -> Bool {
-        let filePath = URL(fileURLWithPath: path)
-        
-        guard let file = fileContents.data(using: .utf8) else {
-            simpleAlert(message: "There was an issue...", info: "Unable to convert the bitcoin.conf to data.", buttonLabel: "OK")
-            return false
-        }
-        
-        do {
-            try file.write(to: filePath)
-            return true
-        } catch {
-            return false
-        }
-    }
-    
-    private func setBitcoinConf(_ bitcoinConf: String) {
-        createDirectory(Defaults.shared.dataDir)
-        
-        if writeFile("\(Defaults.shared.dataDir)/bitcoin.conf", bitcoinConf) {
-            setGordianDirectory()
-        } else {
-            simpleAlert(message: "There was an issue...", info: "Unable to create the bitcoin.conf, please let us know about this bug.", buttonLabel: "OK")
-        }
-    }
-    
-    private func setGordianDirectory() {
-        createDirectory("/Users/\(NSUserName())/.gordian")
-        
-        if writeFile("/Users/\(NSUserName())/.gordian/gordian.log", "") {
-            createBitcoinCoreDirectory()
-        } else {
-            simpleAlert(message: "There was an issue...", info: "Unable to create the gordian.log, please let us know about this bug.", buttonLabel: "OK")
-        }
-    }
-    
-    private func createBitcoinCoreDirectory() {
-        createDirectory("/Users/\(NSUserName())/.gordian/BitcoinCore")
-        self.isLoading = false
-        self.runScript(script: .launchInstaller)
-    }
     
     // MARK: Segue Prep
 
@@ -1529,8 +1346,9 @@ class ViewController: NSViewController, NSWindowDelegate {
                     if response {
                         DispatchQueue.main.async { [weak self] in
                             guard let self = self else { return }
-
-                            self.checkExistingConf()
+                            
+                            self.isLoading = false
+                            InstallBitcoinCore.checkExistingConf()
                         }
                     }
                 }
@@ -1589,26 +1407,6 @@ class ViewController: NSViewController, NSWindowDelegate {
         case "segueToWallets":
             if let vc = segue.destinationController as? WalletsViewController {
                 vc.chain = chain
-            }
-            
-        case "segueToInstallPrompt":
-            if let vc = segue.destinationController as? InstallerPrompt {
-                vc.text = infoMessage
-                vc.headerText = headerText
-                
-                vc.doneBlock = { response in
-                    if response {
-                        DispatchQueue.main.async { [weak self] in
-                            guard let self = self else { return }
-                            
-                            //self.standingUp = true
-                            self.autoRefreshTimer?.invalidate()
-                            self.autoRefreshTimer = nil
-                            self.checkExistingConf()
-                            //self.performSegue(withIdentifier: "goInstall", sender: vc)
-                        }
-                    }
-                }
             }
 
         default:
