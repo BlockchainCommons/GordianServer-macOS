@@ -157,7 +157,7 @@ class Installer: NSViewController {
             guard let self = self else { return }
             
             guard let conf = conf, !error, conf.count > 0 else {
-                self.setDefaultBitcoinConf()
+                self.setBitcoinConf(BitcoinConf.bitcoinConf())
                 return
             }
             
@@ -247,14 +247,37 @@ class Installer: NSViewController {
             self.ud.setValue(self.rpcuser, forKey: "rpcuser")
             self.ud.setValue(self.rpcpassword, forKey: "rpcpassword")
             
+            self.setBitcoinConf(self.standUpConf)
+            
             self.getURLs()
         }
     }
     
-    private func setDefaultBitcoinConf() {
-        //no existing settings - use default
-        standUpConf = BitcoinConf.bitcoinConf()
-        getURLs()
+    private func setBitcoinConf(_ bitcoinConf: String) {
+        let bitcoinPath = URL(fileURLWithPath: Defaults.shared.dataDir, isDirectory: true).path
+        
+        do {
+            try FileManager.default.createDirectory(atPath: bitcoinPath,
+                                                    withIntermediateDirectories: true,
+                                                    attributes: [FileAttributeKey.posixPermissions: 0o700])
+        } catch {
+            print("Bitcoin directory previously created.")
+        }
+        
+        
+        let bitcoinConfUrl = URL(fileURLWithPath: "\(Defaults.shared.dataDir)/bitcoin.conf")
+        
+        guard let bitcoinConf = bitcoinConf.data(using: .utf8) else {
+            simpleAlert(message: "There was an issue...", info: "Unable to convert the bitcoin.conf to data.", buttonLabel: "OK")
+            return
+        }
+        
+        do {
+            try bitcoinConf.write(to: bitcoinConfUrl)
+            getURLs()
+        } catch {
+            simpleAlert(message: "There was an issue...", info: "Unable to create the bitcoin.conf, please let us know about this bug.", buttonLabel: "OK")
+        }
     }
     
     func standDown() {

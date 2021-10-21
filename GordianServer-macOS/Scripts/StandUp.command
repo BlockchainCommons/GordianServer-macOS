@@ -43,34 +43,25 @@ function installBitcoin() {
   echo $EXPECTED_SHA
   
   if [ "$ACTUAL_SHA" != "" ]; then
-    if [ "$ACTUAL_SHA" == "$EXPECTED_SHA" ]; then
-      echo "Hashes match"
-      echo "Unpacking $BINARY_NAME"
-      tar -zxvf $BINARY_NAME
-      configureBitcoin
-    else
-      echo "Hashes do not match! Terminating..."
-      exit 1
-    fi
+    export ACTUAL_SHA
+    export EXPECTED_SHA
+    unpackTarball
   else
     echo "No hash exists, Bitcoin Core download failed..."
     exit 1
   fi
 }
 
-function configureBitcoin() {
-  echo "Creating the following bitcoin.conf at: "$DATADIR"/bitcoin.conf:"
-  echo "$CONF"
-
-  if [ -d "$DATADIR" ]; then
-    cd "$DATADIR"
-  else
-    mkdir "$DATADIR"
-    cd "$DATADIR"
-  fi
-
-  echo "$CONF" > bitcoin.conf
-  exit 1
+function unpackTarball() {
+    if [ "$ACTUAL_SHA" == "$EXPECTED_SHA" ]; then
+      echo "Hashes match"
+      echo "Unpacking $BINARY_NAME"
+      tar -zxvf $BINARY_NAME
+      exit 1
+    else
+      echo "Hashes do not match! Terminating..."
+      exit 1
+    fi
 }
 
 setUpGordianDir
