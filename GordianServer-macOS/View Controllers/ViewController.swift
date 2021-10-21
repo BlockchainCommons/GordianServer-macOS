@@ -67,11 +67,9 @@ class ViewController: NSViewController, NSWindowDelegate {
     var bitcoinInstalled = false
     var torIsOn = false
     var bitcoinRunning = false
-    var upgrading = false
     var isLoading = false
     var bitcoinConfigured = false
     var ignoreExistingBitcoin = false
-    var isVerifying = false
     var env = [String:String]()
     let d = Defaults.shared
     var infoMessage = ""
@@ -282,9 +280,10 @@ class ViewController: NSViewController, NSWindowDelegate {
                                     DispatchQueue.main.async { [weak self] in
                                         guard let self = self else { return }
                                         
-                                        self.upgrading = true
                                         self.autoRefreshTimer?.invalidate()
-                                        self.performSegue(withIdentifier: "goInstall", sender: self)
+                                        self.autoRefreshTimer = nil
+                                        self.isLoading = false
+                                        InstallBitcoinCore.checkExistingConf()
                                     }
                                 }
                             }
@@ -450,20 +449,22 @@ class ViewController: NSViewController, NSWindowDelegate {
         } else {
             DispatchQueue.main.async {
                 FetchLatestRelease.get { (dict, err) in
-                    if err != nil {
+                    guard let dict = dict else {
                         simpleAlert(message: "Error", info: "Error fetching latest release: \(err ?? "unknown error")", buttonLabel: "OK")
-                    } else {
-                        let version = dict!["version"] as! String
-                        actionAlert(message: "Upgrade to Bitcoin Core \(version)?", info: "") { (response) in
-                            if response {
-                                DispatchQueue.main.async { [weak self] in
-                                    guard let self = self else { return }
-                                    
-                                    self.upgrading = true
-                                    self.autoRefreshTimer?.invalidate()
-                                    self.autoRefreshTimer = nil
-                                    self.performSegue(withIdentifier: "goInstall", sender: self)
-                                }
+                        return
+                    }
+                    
+                    let version = dict["version"] as! String
+                    
+                    actionAlert(message: "Upgrade to Bitcoin Core \(version)?", info: "") { response in
+                        if response {
+                            DispatchQueue.main.async { [weak self] in
+                                guard let self = self else { return }
+                                
+                                self.autoRefreshTimer?.invalidate()
+                                self.autoRefreshTimer = nil
+                                self.isLoading = false
+                                InstallBitcoinCore.checkExistingConf()
                             }
                         }
                     }
@@ -475,12 +476,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     //MARK: User Action Installers, Starters and Configurators
 
     @IBAction func verifyAction(_ sender: Any) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            
-            self.isVerifying = true
-            self.performSegue(withIdentifier: "goInstall", sender: self)
-        }
+        runScript(script: .launchVerifier)
     }
 
     private func installNow() {
@@ -1103,6 +1099,11 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     func parseBitcoindVersionResponse(result: String) {
         if result.contains("Bitcoin Core Daemon version") || result.contains("Bitcoin Core version") {
+            let tempPath = "/Users/\(NSUserName())/.gordian/installBitcoin.sh"
+            if FileManager.default.fileExists(atPath: tempPath) {
+                try? FileManager.default.removeItem(atPath: tempPath)
+            }
+            
             let arr = result.components(separatedBy: "Copyright (C)")
             currentVersion = (arr[0]).replacingOccurrences(of: "Bitcoin Core Daemon version ", with: "")
             currentVersion = currentVersion.replacingOccurrences(of: "Bitcoin Core version ", with: "")
@@ -1390,18 +1391,6 @@ class ViewController: NSViewController, NSWindowDelegate {
                 vc.network = network
                 vc.rpcpassword = rpcpassword
                 vc.rpcuser = rpcuser
-            }
-
-        case "goInstall":
-            if let vc = segue.destinationController as? Installer {
-                vc.isVerifying = self.isVerifying
-                vc.standingUp = standingUp
-                vc.upgrading = upgrading
-                vc.ignoreExistingBitcoin = ignoreExistingBitcoin
-                if !isVerifying {
-                    autoRefreshTimer?.invalidate()
-                    autoRefreshTimer = nil
-                }
             }
 
         case "segueToWallets":

@@ -9,6 +9,7 @@
 import Foundation
 
 public enum SCRIPT: String {
+    case launchVerifier
     case launchInstaller
     case hasBitcoinShutdownCompleted
     case isBitcoindRunning
@@ -44,6 +45,8 @@ public enum SCRIPT: String {
     
     var stringValue:String {
         switch self {
+        case .launchVerifier:
+            return "LaunchVerifier"
         case .launchInstaller:
             return "LaunchInstaller"
         case .hasBitcoinShutdownCompleted, .isBitcoindRunning, .didBitcoindStart:

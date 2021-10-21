@@ -163,8 +163,17 @@ class InstallBitcoinCore {
     }
     
     class func createBitcoinCoreDirectory() {
-        createDirectory("/Users/\(NSUserName())/.gordian/BitcoinCore")
-        getURLs()
+        let path = "/Users/\(NSUserName())/.gordian/BitcoinCore"
+        do {
+            let fileManager = FileManager.default
+            if fileManager.fileExists(atPath: path) {
+                try fileManager.removeItem(atPath: path)
+            }
+            createDirectory(path)
+            getURLs()
+        } catch {
+            simpleAlert(message: "Something went wrong...", info: "When checking for the \(path) folder we got an error: \(error.localizedDescription)", buttonLabel: "OK")
+        }
     }
     
     class func getURLs() {
