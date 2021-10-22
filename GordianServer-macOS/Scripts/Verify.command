@@ -6,9 +6,31 @@
 #  Created by Peter on 07/11/19.
 #  Copyright © 2019 Blockchain Commons, LLC
 
-GPG_PATH="$(command -v gpg)"
+GPG_PATH=""
+
+if [[ $(command -v /opt/homebrew/bin/gpg) != "" ]]; then
+    GPG_PATH="/opt/homebrew/bin/gpg"
+elif [[ $(command -v /usr/local/bin/gpg) != "" ]]; then
+    GPG_PATH="/usr/local/bin/gpg"
+elif [[ $(command -v /usr/local/bin/brew/gpg) != "" ]]; then
+    GPG_PATH="/usr/local/bin/brew/gpg"
+elif [[ $(command -v /usr/local/MacGPG2/bin/gpg) != "" ]]; then
+    GPG_PATH="/usr/local/MacGPG2/bin/gpg"
+fi
+export GPG_PATH
 
 function checkPermissions() {
+
+  if [[ ! -d /Users/$(whoami)/.gnupg ]]; then
+    mkdir  /Users/$(whoami)/.gnupg
+    chmod 700 /Users/$(whoami)/.gnupg
+  fi
+  
+  if [[ ! -d /Users/$(whoami)/.gnupg/crls.d ]]; then
+    mkdir /Users/$(whoami)/.gnupg/crls.d
+    chmod 700 /Users/$(whoami)/.gnupg/crls.d
+  fi
+
   GNUPG_PERMISSIONS=$(ls -ld /Users/$(whoami)/.gnupg)
   CRLSD_PERMISSIONS=$(ls -ld /Users/$(whoami)/.gnupg/crls.d)
     
@@ -31,7 +53,7 @@ function checkPermissions() {
 function verifySigs() {
   curl https://raw.githubusercontent.com/bitcoin/bitcoin/master/contrib/builder-keys/keys.txt -o ~/.gordian/BitcoinCore/keys.txt
   
-  sh -c 'while read fingerprint keyholder_name; do sudo -u $(whoami) $(command -v gpg) --keyserver hkps://keys.openpgp.org --recv-keys ${fingerprint}; done < ~/.gordian/BitcoinCore/keys.txt'
+  sh -c 'while read fingerprint keyholder_name; do sudo -u $(whoami) $GPG_PATH --keyserver hkps://keys.openpgp.org --recv-keys ${fingerprint}; done < ~/.gordian/BitcoinCore/keys.txt'
 
   echo "Verifying Bitcoin Core signatures... (this can take a few moments)"
 
@@ -53,7 +75,7 @@ function checkForGnupg() {
   if [[ $GPG_PATH == "" ]]; then
     echo "GPG is not installed, ensure you have brew installed by clicking Supported Apps in the menu bar > Homebrew"
     echo "Once Homebrew installation completes open a terminal and run:"
-    echo "brew install gpg2 pinentry-mac"
+    echo "brew install gpg pinentry-mac"
     exit 1
   else
     checkPermissions

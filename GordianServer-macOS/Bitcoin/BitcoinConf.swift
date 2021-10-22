@@ -67,6 +67,52 @@ class BitcoinConf {
         /// Converts devices ram to gb, divides it by two and converts that to mebibytes. That way we use half the RAM for IBD cache as a reasonable default.
         return Int(((Double(ProcessInfo.processInfo.physicalMemory) / 1073741824.0) / 2.0) * 954.0)
     }
+    
+    static func getBitcoinConf(completion: @escaping ((conf: [String]?, error: Bool)) -> Void) {
+        let path = URL(fileURLWithPath: "\(Defaults.shared.dataDir)/bitcoin.conf")
+        
+        guard let bitcoinConf = try? String(contentsOf: path, encoding: .utf8) else {
+            completion((nil, false))
+            return
+        }
+        
+        let conf = bitcoinConf.components(separatedBy: "\n")
+        completion((conf, false))
+    }
+    
+    class func writeFile(_ path: String, _ fileContents: String) -> Bool {
+        let filePath = URL(fileURLWithPath: path)
+        
+        guard let file = fileContents.data(using: .utf8) else {
+            simpleAlert(message: "There was an issue...", info: "Unable to convert the bitcoin.conf to data.", buttonLabel: "OK")
+            return false
+        }
+        
+        do {
+            try file.write(to: filePath)
+            return true
+        } catch {
+            return false
+        }
+    }
+    
+    class func setBitcoinConf(_ bitcoinConf: String) -> Bool {
+        createDirectory(Defaults.shared.dataDir)
+        
+        return writeFile("\(Defaults.shared.dataDir)/bitcoin.conf", bitcoinConf)
+    }
+    
+    class func createDirectory(_ path: String) {
+        let directory = URL(fileURLWithPath: path, isDirectory: true).path
+        
+        do {
+            try FileManager.default.createDirectory(atPath: directory,
+                                                    withIntermediateDirectories: true,
+                                                    attributes: [FileAttributeKey.posixPermissions: 0o700])
+        } catch {
+            print("\(path) previously created.")
+        }
+    }
 }
 
 

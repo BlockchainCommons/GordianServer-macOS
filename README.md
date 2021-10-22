@@ -48,7 +48,7 @@ Blockchain Commons apps do not phone home and do not run ads. Some are available
 
 ## Prerequisites
 
-- macOS 10.10 Yosemite (not yet tested on versions older then Mojave but it should work)
+- macOS 10.15.7 Catalina or better (if you'd like to support ensuring it works back to at least Mojave, let us know!)
 - ~320 GB of free space for a full mainnet node with txindex; or ~30 GB for a full testnet3 node; or substantially less if the full node is pruned.
 - In order to install *Bitcoin Core* and *Tor* on your behalf, *GordianServer-macOS* uses *Brew* and *XCode Command Line Tools*, these will be automatically downloaded and installed for you within the app using a popular well reviewed open sourced script called *Strap*, you can read more about *Strap* [here](https://github.com/MikeMcQuaid/strap/blob/master/README.md). In addition to installing *Brew* and *XCode Command Line Tools*, *Strap* also sets up your Macbook for best security practices; including full disc encryption with *FileVault*, enables *macOS Firewall* and disables *Java* for better security among others.
 
@@ -56,12 +56,10 @@ Blockchain Commons apps do not phone home and do not run ads. Some are available
 
 You must meet minimum OS and space requirements to install *GordianServer-macOS* on your Mac, as described below.     
 
-- minimum macOS 10.10 Yosemite (not yet tested on versions older then Mojave but it should work)
-- Navigate to [Tagged release page v0.1.5](https://github.com/BlockchainCommons/GordianServer-macOS/releases/tag/v0.1.5)
-- Click to download `GordianServer-macOS-v0.1.5.dmg`
-- Double click the downloaded `GordianServer-macOS-v0.1.5.dmg` file. That's it.
-
-`GordianServer-macOS-v0.1.5.dmg` has been pgp signed, the pgp signature can be viewed. It is on the [same release page](./releases/tag/v0.1.5) and named `GordianServer-macOS-v0.1.5.dmg.asc`
+- minimum macOS 10.15.7 Catalina
+- Navigate to [Tagged release v1.0.0](https://github.com/BlockchainCommons/GordianServer-macOS/releases/tag/v1.0.0)
+- Click to download `GordianServer-macOS-v0.1.0.0.dmg`
+- Open the DMG and drag the app to the Applications folder. That's it!
 
 ### Build Mac App from source using Xcode
 
@@ -108,13 +106,17 @@ If'd you'd like your Gordian Server to start whenever your Mac does:
 
 If you are planning to use Gordian Server for an operational installation, you will want to maximize your security by checking the GPG signatures of the Bitcoin server as it's installed. This requires a bit of additional work that must be done before you startup Gordian Server for the first time (whether you installed from DMG or compiled the source code).
 
-1. Install [GPG for the Mac](https://gpgtools.org/)
-   - Click on the "Download" link
-   - Open the DMG
-   - Double-click "Install"
-   - Choose to "Continue" inside the "Inside GPG Suite" and click through additional pages
- 
-GPG Mail, which comes with the suite, is not required for Gordian Server Installation
+We suggest using homebrew to install gpg.
+
+1. If you haven't already, install Homebrew:
+```
+$ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+Afterward, use it to install GPG:
+```
+$ brew install gpg pinentry-mac
+```
+If you prefer not to use the command line, you can install [GPG Suite](https://gpgtools.org/), but it nags about the installation of a GPG Mail program, so we prefer the cleaner install of Homebrew.
 
 ### Checking Signatures
 

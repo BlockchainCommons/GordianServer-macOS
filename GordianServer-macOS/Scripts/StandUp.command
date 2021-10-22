@@ -5,23 +5,13 @@
 #
 #  Created by Peter on 07/11/19.
 #  Copyright © 2019 Blockchain Commons, LLC
-
-function setUpGordianDir() {
-    if ! [ -d ~/.gordian ]; then
-        mkdir ~/.gordian
-    fi
-    
-    if test -f ~/.gordian/gordian.log; then
-        echo "~/.gordian/gordian.log exists."
-    else
-        touch ~/.gordian/gordian.log
-    fi
-}
+BINARY_NAME=$1
+MACOS_URL=$2
+SHA_URL=$3
+SIGS_URL=$4
+VERSION=$5
 
 function installBitcoin() {
-  echo "Creating ~/.gordian/BitcoinCore..."
-  mkdir ~/.gordian/BitcoinCore
-
   echo "Downloading $SHA_URL"
   curl $SHA_URL -o ~/.gordian/BitcoinCore/SHA256SUMS -s
   echo "Saved to ~/.gordian/BitcoinCore/SHA256SUMS"
@@ -43,35 +33,26 @@ function installBitcoin() {
   echo $EXPECTED_SHA
   
   if [ "$ACTUAL_SHA" != "" ]; then
-    if [ "$ACTUAL_SHA" == "$EXPECTED_SHA" ]; then
-      echo "Hashes match"
-      echo "Unpacking $BINARY_NAME"
-      tar -zxvf $BINARY_NAME
-      configureBitcoin
-    else
-      echo "Hashes do not match! Terminating..."
-      exit 1
-    fi
+    export ACTUAL_SHA
+    export EXPECTED_SHA
+    unpackTarball
   else
     echo "No hash exists, Bitcoin Core download failed..."
     exit 1
   fi
 }
 
-function configureBitcoin() {
-  echo "Creating the following bitcoin.conf at: "$DATADIR"/bitcoin.conf:"
-  echo "$CONF"
-
-  if [ -d "$DATADIR" ]; then
-    cd "$DATADIR"
+function unpackTarball() {
+  if [ "$ACTUAL_SHA" == "$EXPECTED_SHA" ]; then
+    echo "Hashes match"
+    echo "Unpacking $BINARY_NAME"
+    tar -zxvf $BINARY_NAME
+    echo "Installation complete, you can close this terminal."
+    exit 1
   else
-    mkdir "$DATADIR"
-    cd "$DATADIR"
+    echo "Hashes do not match! Terminating..."
+    exit 1
   fi
-
-  echo "$CONF" > bitcoin.conf
-  exit 1
 }
 
-setUpGordianDir
 installBitcoin
