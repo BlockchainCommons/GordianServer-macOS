@@ -10,16 +10,12 @@ import Cocoa
 
 class Installer: NSViewController {
     
-    @IBOutlet var spinner: NSProgressIndicator!
-    @IBOutlet var spinnerDescription: NSTextField!
     @IBOutlet var consoleOutput: NSTextView!
     
     var window: NSWindow?
     let ud = UserDefaults.standard
     var seeLog = Bool()
     var showLog = Bool()
-    var refreshing = Bool()
-    var ignoreExistingBitcoin = Bool()
     var peerInfo = ""
 
     override func viewDidLoad() {
@@ -33,18 +29,8 @@ class Installer: NSViewController {
         filterAction()
     }
     
-    func showSpinner(description: String) {
-        DispatchQueue.main.async { [unowned vc = self] in
-            vc.spinner.alphaValue = 1
-            vc.spinnerDescription.stringValue = description
-            vc.spinner.startAnimation(vc)
-            vc.spinnerDescription.alphaValue = 1
-        }
-    }
-        
     func filterAction() {
         if seeLog {
-            spinner.alphaValue = 0
             seeLog = false
             let log = URL(fileURLWithPath: "/Users/\(NSUserName())/.gordian/gordian.log")
             do {
@@ -64,30 +50,8 @@ class Installer: NSViewController {
                 
                 self.consoleOutput.string = self.peerInfo
                 self.window?.title = "Peer Info"
-                self.hideSpinner()
             }
             
-        }
-    }
-    
-    func goBack() {
-        DispatchQueue.main.async { [unowned vc = self] in
-            vc.hideSpinner()
-            if let presenter = vc.presentingViewController as? ViewController {
-                presenter.standingUp = false
-                presenter.isBitcoinOn()
-            }
-            DispatchQueue.main.async { [unowned vc = self] in
-                vc.window?.performClose(nil)
-            }
-        }
-    }
-    
-    func hideSpinner() {
-        DispatchQueue.main.async { [unowned vc = self] in
-            vc.spinner.alphaValue = 0
-            vc.spinnerDescription.stringValue = ""
-            vc.spinner.stopAnimation(vc)
         }
     }
     
@@ -97,7 +61,6 @@ class Installer: NSViewController {
         consoleOutput.textColor = NSColor.green
         consoleOutput.isEditable = false
         consoleOutput.isSelectable = true
-        spinnerDescription.stringValue = ""
     }
 
 }

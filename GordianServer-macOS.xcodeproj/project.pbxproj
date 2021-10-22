@@ -146,7 +146,6 @@
 		0A92AE4D26F9D6730034B7B4 /* MiningInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiningInfo.swift; sourceTree = "<group>"; };
 		0A92AE4F26F9D7E10034B7B4 /* RPCWhitelist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPCWhitelist.swift; sourceTree = "<group>"; };
 		0A92AE5126F9D8490034B7B4 /* BitcoinConf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinConf.swift; sourceTree = "<group>"; };
-		0A92AE6A26FB20AF0034B7B4 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
 		0AC7A5CE272147650015CD9E /* LaunchInstaller.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = LaunchInstaller.command; sourceTree = "<group>"; };
 		0AC7A5D027218ABB0015CD9E /* InstallBitcoinCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallBitcoinCore.swift; sourceTree = "<group>"; };
 		0AC7A5D22721991F0015CD9E /* LaunchVerifier.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = LaunchVerifier.command; sourceTree = "<group>"; };
@@ -431,7 +430,6 @@
 				D0B9277023837AB400956651 /* UrlRequest.swift */,
 				D0B9278B2385045400956651 /* Log.swift */,
 				D08210362389058B00E21EDC /* Defaults.swift */,
-				D01B610724877301005D3090 /* MakeRPCCall.swift */,
 				0A53275B270DC80600A7130F /* RPCAuth.swift */,
 				0A2DDC2F270F2AE300E19F14 /* FXRate.swift */,
 			);

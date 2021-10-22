@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19162"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -484,18 +484,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="630" height="358"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gNz-4D-azF">
-                                <rect key="frame" x="20" y="20" width="590" height="292"/>
-                                <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="nzI-tT-yPL">
-                                    <rect key="frame" x="0.0" y="0.0" width="590" height="292"/>
+                            <scrollView ambiguous="YES" borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gNz-4D-azF">
+                                <rect key="frame" x="20" y="20" width="590" height="308"/>
+                                <clipView key="contentView" ambiguous="YES" drawsBackground="NO" copiesOnScroll="NO" id="nzI-tT-yPL">
+                                    <rect key="frame" x="0.0" y="0.0" width="590" height="308"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <textView editable="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" smartInsertDelete="YES" id="UEh-pS-LId">
-                                            <rect key="frame" x="0.0" y="0.0" width="590" height="292"/>
+                                        <textView ambiguous="YES" editable="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" smartInsertDelete="YES" id="UEh-pS-LId">
+                                            <rect key="frame" x="0.0" y="0.0" width="590" height="308"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            <size key="minSize" width="590" height="292"/>
+                                            <size key="minSize" width="590" height="308"/>
                                             <size key="maxSize" width="799" height="10000000"/>
                                             <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                         </textView>
@@ -506,51 +506,19 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="mxG-bN-jUe">
-                                    <rect key="frame" x="574" y="0.0" width="16" height="292"/>
+                                    <rect key="frame" x="574" y="0.0" width="16" height="308"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
-                            <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hf7-vY-SP2">
-                                <rect key="frame" x="291" y="322" width="49" height="16"/>
-                                <subviews>
-                                    <progressIndicator wantsLayer="YES" maxValue="100" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="45m-n7-hT3">
-                                        <rect key="frame" x="0.0" y="0.0" width="16" height="16"/>
-                                    </progressIndicator>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nXI-VP-ngn">
-                                        <rect key="frame" x="22" y="2" width="29" height="12"/>
-                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="jeb-s9-3my">
-                                            <font key="font" size="10" name="HelveticaNeue"/>
-                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                        </textFieldCell>
-                                    </textField>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="nXI-VP-ngn" firstAttribute="centerY" secondItem="hf7-vY-SP2" secondAttribute="centerY" id="acF-Sx-2Ad"/>
-                                </constraints>
-                                <visibilityPriorities>
-                                    <integer value="1000"/>
-                                    <integer value="1000"/>
-                                </visibilityPriorities>
-                                <customSpacing>
-                                    <real value="3.4028234663852886e+38"/>
-                                    <real value="3.4028234663852886e+38"/>
-                                </customSpacing>
-                            </stackView>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="hf7-vY-SP2" firstAttribute="top" secondItem="DRV-Un-Dox" secondAttribute="top" constant="20" id="Iyj-ok-p2d"/>
                             <constraint firstAttribute="trailing" secondItem="gNz-4D-azF" secondAttribute="trailing" constant="20" id="JkV-8I-fTx"/>
                             <constraint firstAttribute="bottom" secondItem="gNz-4D-azF" secondAttribute="bottom" constant="20" id="O0G-1S-3gJ"/>
-                            <constraint firstItem="hf7-vY-SP2" firstAttribute="centerX" secondItem="DRV-Un-Dox" secondAttribute="centerX" id="fyn-5A-AJQ"/>
                             <constraint firstItem="gNz-4D-azF" firstAttribute="leading" secondItem="DRV-Un-Dox" secondAttribute="leading" constant="20" id="uNs-px-muv"/>
-                            <constraint firstItem="gNz-4D-azF" firstAttribute="top" secondItem="hf7-vY-SP2" secondAttribute="bottom" constant="10" id="yNZ-0t-bC6"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="consoleOutput" destination="UEh-pS-LId" id="DcW-q1-X9R"/>
-                        <outlet property="spinner" destination="45m-n7-hT3" id="u72-NM-4eU"/>
-                        <outlet property="spinnerDescription" destination="nXI-VP-ngn" id="wfk-Hx-B8b"/>
                     </connections>
                 </viewController>
                 <customObject id="ph1-VM-33Z" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

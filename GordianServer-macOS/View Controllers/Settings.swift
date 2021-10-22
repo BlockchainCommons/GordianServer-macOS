@@ -624,7 +624,6 @@ class Settings: NSViewController, NSTextFieldDelegate {
         switch segue.identifier {
         case "seeLog":
             if let vc = segue.destinationController as? Installer {
-                vc.refreshing = refreshing
                 vc.seeLog = seeLog
             }
             

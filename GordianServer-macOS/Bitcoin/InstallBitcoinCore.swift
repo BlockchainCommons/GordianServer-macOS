@@ -20,7 +20,11 @@ class InstallBitcoinCore {
         
         BitcoinConf.getBitcoinConf { (conf, error) in            
             guard let conf = conf, !error, conf.count > 0 else {
-                self.setBitcoinConf(BitcoinConf.bitcoinConf())
+                if let defaultConf = BitcoinConf.bitcoinConf() {
+                    self.setBitcoinConf(defaultConf)
+                } else {
+                    simpleAlert(message: "Something went wrong...", info: "Unable to create the default bitcoin.conf, please let us know about this bug.", buttonLabel: "OK")
+                }
                 return
             }
             

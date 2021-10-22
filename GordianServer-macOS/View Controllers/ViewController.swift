@@ -64,7 +64,6 @@ class ViewController: NSViewController, NSWindowDelegate {
     var newestVersion = ""
     var newestBinaryName = ""
     var newestPrefix = ""
-    var standingUp = false
     var bitcoinInstalled = false
     var torIsOn = false
     var bitcoinRunning = false
@@ -80,6 +79,7 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        UserDefaults.standard.setValue("xxx", forKey: "rpcpassword")
         isLoading = true
         peerDetailsButton.alphaValue = 0
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNow), name: .refresh, object: nil)
@@ -93,12 +93,6 @@ class ViewController: NSViewController, NSWindowDelegate {
             self.setEnv()
             self.setScene()
         }
-        
-        let filePath = Bundle.main.resourcePath//Bundle.main.url(forResource: "Python", withExtension: "framework")!.absoluteString
-        
-        print("filePath: \(filePath)")
-        
-        
     }
 
     override func viewWillAppear() {
@@ -748,10 +742,6 @@ class ViewController: NSViewController, NSWindowDelegate {
         case .checkForGordian:
             checkGordianParser(result: result)
             
-//        case .stopBitcoin:
-//            showBitcoinLog()
-//            stopBitcoinParse(result: result)
-            
         case .startBitcoin:
             showBitcoinLog()
             startBitcoinParse(result: result)
@@ -937,6 +927,51 @@ class ViewController: NSViewController, NSWindowDelegate {
                 case _ where error.contains("Could not connect to the server"):
                     self.hideSpinner()
                     self.bitcoinIsOff()
+                    
+                case _ where error.contains("Looks like your rpc credentials are incorrect"):
+                    self.hideSpinner()
+                    
+                    actionAlert(message: "RPC credentials not valid!\n\nRefresh rpc authentication for Gordian Server?", info: "Gordian Server uses rpcauth to communicate to Bitcoin Core. It looks like the Gordian Server user's authentication needs to be refreshed. Click Yes to delete the existing Gordian Server rpc authentication, you will then be automatically prompted to add new credentials. If your node is running you will need to quit Bitcoin Core for the changes to take effect.") { [weak self] response in
+                        
+                        guard let self = self else { return }
+                        
+                        guard response else { return }
+                        
+                        BitcoinConf.getBitcoinConf { (conf, error) in
+                            guard let existingConf = conf else {
+                                simpleAlert(message: "No existing bitcoin.conf", info: "Please refresh the app to automatically add a defualt bitcoin.conf", buttonLabel: "OK")
+                                return
+                            }
+                            
+                            var updatedConf = existingConf
+                            
+                            for (i, setting) in updatedConf.enumerated() {
+                                if setting.hasPrefix("rpcauth=GordianServer:") {
+                                    updatedConf.remove(at: i)
+                                }
+                            }
+                            
+                            for (i, setting) in updatedConf.enumerated() {
+                                if setting.hasPrefix("rpcwhitelist=GordianServer:") {
+                                    updatedConf.remove(at: i)
+                                }
+                            }
+                            
+                            let bitcoinConf = updatedConf.joined(separator: "\n")
+                            
+                            let bitcoinConfPath = URL(fileURLWithPath: self.d.dataDir + "/bitcoin.conf")
+                            
+                            do {
+                                try bitcoinConf.data(using: .utf8)?.write(to: bitcoinConfPath)
+                            } catch {
+                                simpleAlert(message: "There was an issue...", info: "Could not edit bitcoin.conf: \(error.localizedDescription)", buttonLabel: "OK")
+                            }
+                        }
+                        
+                        if self.bitcoinRunning {
+                            simpleAlert(message: "Bitcoin Core is still running...", info: "Use Activity Monitor to search for bitcoind, then quit it. Once bitcoind has stopped you can refresh Gordian Server for the changes to take effect.", buttonLabel: "OK")
+                        }
+                    }
                 
                 default:
                     self.hideSpinner()
