@@ -211,27 +211,31 @@ class Settings: NSViewController, NSTextFieldDelegate {
     
     @IBAction func removeBitcoinCore(_ sender: Any) {
         if !bitcoinRunning {
-            DispatchQueue.main.async { [unowned vc = self] in
-                destructiveActionAlert(message: "Danger! Master kill switch!", info: "This action PERMANENTLY, IMMEDIATELY and IRREVERSIBLY deletes ALL WALLETS, Bitcoin Core binaries, and Gordian Server Tor related files and directories!") { response in
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                
+                destructiveActionAlert(message: "Danger! Master kill switch!", info: "This action PERMANENTLY, IMMEDIATELY and IRREVERSIBLY deletes ALL WALLETS, Bitcoin Core binaries, and Gordian Server Tor related files and directories!") { [weak self] response in
+                    guard let self = self else { return }
+                    
                     if response {
                         TorClient.sharedInstance.resign()
-                        let d = Defaults.shared
-                        let env = ["DATADIR":d.dataDir]
-                        vc.runScript(script: .removeBitcoin, env: env, args: []) { success in
-                            if success {
-                                DispatchQueue.main.async { [weak self] in
-                                    guard let self = self else { return }
-                                    
-                                    guard let appDelegate = NSApplication.shared.delegate as? AppDelegate else { return }
-                                    appDelegate.isKilling = true
-                                    let domain = Bundle.main.bundleIdentifier!
-                                    UserDefaults.standard.removePersistentDomain(forName: domain)
-                                    UserDefaults.standard.synchronize()
-                                    NSApp.terminate(self)
-                                }
-                            } else {
-                               simpleAlert(message: "Error", info: "There was an issue deleting the directory", buttonLabel: "OK")
+                        
+                        if self.deleteFile("/Users/\(NSUserName())/.torrc"),
+                           self.deleteFile("/Users/\(NSUserName())/.gordian"),
+                           self.deleteFile(Defaults.shared.dataDir) {
+                            
+                            DispatchQueue.main.async { [weak self] in
+                                guard let self = self else { return }
+                                
+                                guard let appDelegate = NSApplication.shared.delegate as? AppDelegate else { return }
+                                appDelegate.isKilling = true
+                                let domain = Bundle.main.bundleIdentifier!
+                                UserDefaults.standard.removePersistentDomain(forName: domain)
+                                UserDefaults.standard.synchronize()
+                                NSApp.terminate(self)
                             }
+                        } else {
+                            simpleAlert(message: "Error", info: "There was an issue deleting the directory.", buttonLabel: "OK")
                         }
                     }
                 }
@@ -239,6 +243,10 @@ class Settings: NSViewController, NSTextFieldDelegate {
         } else {
             simpleAlert(message: "Bitcoin Core is running!", info: "You must shutdown Bitcoin Core before using this kill switch.", buttonLabel: "OK")
         }
+    }
+    
+    private func deleteFile(_ path: String) -> Bool {        
+        return (try? FileManager.default.removeItem(atPath: path)) != nil
     }
     
     @IBAction func didSetWalletDisabled(_ sender: Any) {

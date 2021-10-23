@@ -68,7 +68,6 @@ class ViewController: NSViewController, NSWindowDelegate {
     var torIsOn = false
     var bitcoinRunning = false
     var isLoading = false
-    var ignoreExistingBitcoin = false
     var env = [String:String]()
     let d = Defaults.shared
     var infoMessage = ""
@@ -76,10 +75,10 @@ class ViewController: NSViewController, NSWindowDelegate {
     var installingXcode = false
     var currentVersion = ""
     var peerInfo = ""
+    var isPromptingForInstall = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        UserDefaults.standard.setValue("xxx", forKey: "rpcpassword")
         isLoading = true
         peerDetailsButton.alphaValue = 0
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNow), name: .refresh, object: nil)
@@ -503,30 +502,34 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     private func installNow() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            
-            self.autoRefreshTimer?.invalidate()
-            self.autoRefreshTimer = nil
-        }
-        
-        startSpinner(description: "Fetching latest Bitcoin Core version...")
-        FetchLatestRelease.get { [weak self] (dict, error) in
-            guard let self = self else { return }
-            
-            if error != nil {
-                self.hideSpinner()
-                simpleAlert(message: "Error", info: error ?? "We had an error fetching the latest version of Bitcoin Core, please check your internet connection and try again", buttonLabel: "OK")
-
-            } else {
-                self.hideSpinner()
-                self.version = dict!["version"] as! String
-                self.macosURL = dict!["macosURL"] as! String
+        if !isPromptingForInstall {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
+                self.autoRefreshTimer?.invalidate()
+                self.autoRefreshTimer = nil
+            }
+            
+            startSpinner(description: "Fetching latest Bitcoin Core version...")
+            
+            FetchLatestRelease.get { [weak self] (dict, error) in
+                guard let self = self else { return }
+                
+                if error != nil {
+                    self.hideSpinner()
+                    simpleAlert(message: "Error", info: error ?? "We had an error fetching the latest version of Bitcoin Core, please check your internet connection and try again", buttonLabel: "OK")
+
+                } else {
+                    self.hideSpinner()
+                    self.version = dict!["version"] as! String
+                    self.macosURL = dict!["macosURL"] as! String
+                    self.isPromptingForInstall = true
                     
-                    self.performSegue(withIdentifier: "segueToInstallBitcoinCore", sender: self)
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        
+                        self.performSegue(withIdentifier: "segueToInstallBitcoinCore", sender: self)
+                    }
                 }
             }
         }
@@ -651,9 +654,20 @@ class ViewController: NSViewController, NSWindowDelegate {
             self.startMainnetOutlet.isEnabled = false
             self.networkButton.isEnabled = false
             self.getFxRate()
-            self.taskDescription.stringValue = "checking for ~/.gordian/BitcoinCore directory..."
-            // Don't need a script for this...
-            self.runScript(script: .checkForGordian)
+            self.taskDescription.stringValue = "checking for bitcoind..."
+            
+            guard let binaryPrefix = UserDefaults.standard.object(forKey: "binaryPrefix") as? String,
+                  FileManager.default.fileExists(atPath: "/Users/\(NSUserName())/.gordian/BitcoinCore/\(binaryPrefix)/bin/bitcoind") else {
+                      self.checkForXcodeSelect()
+                      return
+                  }
+            
+            if self.isPromptingForInstall {
+                simpleAlert(message: "Bitcoin Core Installed ✓", info: "You can click the Start button to get your node up and running.", buttonLabel: "OK")
+                self.isPromptingForInstall = false
+            }
+            
+            self.checkBitcoinConfForRPCCredentials()
         }
     }
 
@@ -739,8 +753,8 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     func parseScriptResult(script: SCRIPT, result: String) {
         switch script {
-        case .checkForGordian:
-            checkGordianParser(result: result)
+//        case .checkForGordian:
+//            checkGordianParser(result: result)
             
         case .startBitcoin:
             showBitcoinLog()
@@ -868,13 +882,13 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
     }
 
-    func checkGordianParser(result: String) {
-        if result.contains("False") {
-            checkForXcodeSelect()
-        } else {
-            checkBitcoinConfForRPCCredentials()
-        }
-    }
+//    func checkGordianParser(result: String) {
+//        if result.contains("False") {
+//            checkForXcodeSelect()
+//        } else {
+//            checkBitcoinConfForRPCCredentials()
+//        }
+//    }
 
     private func command(command: String, completion: @escaping ((Any?)) -> Void) {
         let rpc = MakeRpcCall.shared
@@ -1304,6 +1318,12 @@ class ViewController: NSViewController, NSWindowDelegate {
             self.mainnetSyncedLabel.stringValue = ""
             self.mainnetIncomingPeersLabel.stringValue = ""
             self.mainnetOutgoingPeersLabel.stringValue = ""
+            
+            if Defaults.shared.isPrivate == 1 {
+                self.bitcoinCoreModeOutlet.stringValue = "onion only"
+            } else {
+                self.bitcoinCoreModeOutlet.stringValue = "onion & clearnet"
+            }
         }
     }
     
@@ -1339,7 +1359,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                       completion((false, error))
                       return
                   }
-            
+                        
             self.newestPrefix = prefix
             self.newestVersion = version
             self.newestBinaryName = binaryName
@@ -1369,11 +1389,6 @@ class ViewController: NSViewController, NSWindowDelegate {
             
             self.p2pHostOutlet.stringValue = p2phostname
             self.rpcHostOutlet.stringValue = rpchostname
-            if Defaults.shared.isPrivate == 1 {
-                self.bitcoinCoreModeOutlet.stringValue = "onion only"
-            } else {
-                self.bitcoinCoreModeOutlet.stringValue = "onion & clearnet"
-            }
             
             let chain = UserDefaults.standard.string(forKey: "chain") ?? "main"
             let path = "\(TorClient.sharedInstance.hiddenServicePath)/bitcoin/rpc/\(chain)/authorized_clients/"
@@ -1421,6 +1436,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                         DispatchQueue.main.async { [weak self] in
                             guard let self = self else { return }
                             
+                            self.hideSpinner()
                             self.isLoading = false
                             InstallBitcoinCore.checkExistingConf()
                         }

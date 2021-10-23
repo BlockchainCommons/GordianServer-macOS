@@ -17,27 +17,14 @@ public enum SCRIPT: String {
     case installHomebrew
     case installXcode
     case openFile
-    case removeBitcoin
     case verifyBitcoin
     case checkForBitcoin
     case standUp
-    case standDown
-    case checkForGordian
     case checkXcodeSelect
     case getStrapped
     case launchStrap
     case isBitcoinOn
-    case checkForOldHost
-    case removeOldHost
-    case rpc
     case deleteWallet
-    case installLightning
-    case getLightningHostnames
-    case isLightningInstalled
-    case isLightningRunning
-    case startLightning
-    case stopLightning
-    case getLightningRpcCreds
     case startBitcoin
     
     var stringValue:String {
@@ -54,18 +41,12 @@ public enum SCRIPT: String {
             return "LaunchXcodeInstall"
         case .openFile:
             return "OpenFile"
-        case .removeBitcoin:
-            return "RemoveBitcoin"
         case .verifyBitcoin:
             return "Verify"
         case .checkForBitcoin:
             return "CheckForBitcoinCore"
         case .standUp:
             return "StandUp"
-        case .standDown:
-            return "StandDown"
-        case .checkForGordian:
-            return "CheckStandUp"
         case .checkXcodeSelect:
             return "CheckXCodeSelect"
         case .getStrapped:
@@ -74,28 +55,8 @@ public enum SCRIPT: String {
             return "LaunchStrap"
         case .isBitcoinOn:
             return "IsBitcoinOn"
-        case .checkForOldHost:
-            return "CheckForOldHost"
-        case .removeOldHost:
-            return "RemoveOldHost"
-        case .rpc:
-            return "RPC"
         case .deleteWallet:
             return "DeleteWallet"
-        case .installLightning:
-            return "InstallLightning"
-        case .getLightningHostnames:
-            return "GetLightningHostname"
-        case .isLightningInstalled:
-            return "IsLightningInstalled"
-        case .isLightningRunning:
-            return "IsLightningRunning"
-        case .startLightning:
-            return "StartLightning"
-        case .stopLightning:
-            return "StopLightning"
-        case .getLightningRpcCreds:
-            return "GetLightningRpcCreds"
         case .startBitcoin:
             return "StartBitcoin"
         }
