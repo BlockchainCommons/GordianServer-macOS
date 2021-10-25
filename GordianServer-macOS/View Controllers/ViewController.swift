@@ -92,6 +92,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             self.setEnv()
             self.setScene()
         }
+        
     }
 
     override func viewWillAppear() {
@@ -133,6 +134,9 @@ class ViewController: NSViewController, NSWindowDelegate {
                 self.checkForGordian()
             }
         }
+        
+        let rpcAuthCreds = RPCAuth.generateRpcAuth(user: "GordianServer")
+        print(rpcAuthCreds)
     }
     
     @objc func enableRefresh() {
