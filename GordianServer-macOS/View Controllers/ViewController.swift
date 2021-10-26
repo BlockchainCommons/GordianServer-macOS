@@ -134,9 +134,6 @@ class ViewController: NSViewController, NSWindowDelegate {
                 self.checkForGordian()
             }
         }
-        
-        let rpcAuthCreds = RPCAuth.generateRpcAuth(user: "GordianServer")
-        print(rpcAuthCreds)
     }
     
     @objc func enableRefresh() {
