@@ -51,7 +51,7 @@ If you use *GordianServer-macOS* for real funds, please ensure that you backup a
 - macOS 10.15.7 Catalina or better (if you'd like to support ensuring it works back to at least Mojave, let us know!)
    - If you do not have a Mac that is supported for running Catalina, you may wish to investigate the [Catalina Patcher](http://dosdude1.com/catalina/).
 - ~320 GB of free space for a full mainnet node with txindex; or ~30 GB for a full testnet3 node; or substantially less if the full node is pruned.
-- In order to install *Bitcoin Core* and *Tor* on your behalf, *GordianServer-macOS* uses *Brew* and *XCode Command Line Tools*, these will be automatically downloaded and installed for you within the app using a popular well reviewed open sourced script called *Strap*, you can read more about *Strap* [here](https://github.com/MikeMcQuaid/strap/blob/master/README.md). In addition to installing *Brew* and *XCode Command Line Tools*, *Strap* also sets up your Macbook for best security practices; including full disc encryption with *FileVault*, enables *macOS Firewall* and disables *Java* for better security among others.
+- If you wish to verify your *GordianServer-macOS* installation, *GordianServer-macOS* will prompt you to download Brew and GPG. You may also install the Strap secure development environment: you can read more about *Strap* [here](https://github.com/MikeMcQuaid/strap/blob/master/README.md). 
 
 ## Installation Instructions
 
@@ -180,6 +180,7 @@ The following people directly contributed to this repository. You can add your n
 | ----------------- | ------------------- | ------------------------------------------------- | ----------------------------------------------------------- | -------------------------------------------------- |
 | Christopher Allen | Principal Architect | [@ChristopherA](https://github.com/ChristopherA) | \<ChristopherA@LifeWithAlacrity.com\>                       | FDFE 14A5 4ECB 30FC 5D22  74EF F8D3 6C91 3574 05ED |
 | Peter Denton      | Project Lead        | [@Fonta1n3](https://github.com/Fonta1n3)          | <[fontainedenton@gmail.com](mailto:fontainedenton@gmail.com)> | 1C72 2776 3647 A221 6E02  E539 025E 9AD2 D3AC 0FCA  |
+| Shannon Appelcline      |Release Manager        | [@shannona](https://github.com/shannona)          | <[shannon.appelcline@gmail.com](mailto:shannon.appelcline@gmail.com)> | A488 9A09 F981 9D8C 0540  0450 7EC6 B928 606F 27AD  |
 
 ## Responsible Disclosure
 
