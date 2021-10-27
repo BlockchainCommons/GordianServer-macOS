@@ -17,8 +17,6 @@ This repo includes the *GordianServer-macOS*, which allows you to run a full nod
 
 <img src="./Images/3_standup.png" alt="" width="800"/>
 
-<img src="./Images/4_standup.png" alt="" width="800"/>
-
 <img src="./Images/6_standup.png" alt="" width="800"/>
 
 <img src="./Images/7_standup.png" alt="" width="800"/>
