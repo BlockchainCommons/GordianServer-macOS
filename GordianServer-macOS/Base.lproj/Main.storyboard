@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19162"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -566,7 +566,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="K4o-Sf-dSl">
-                                <rect key="frame" x="258" y="543" width="29" height="12"/>
+                                <rect key="frame" x="258" y="548" width="29" height="12"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="em4-Ia-ulc">
                                     <font key="font" size="10" name="HelveticaNeue"/>
                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
@@ -1222,33 +1222,15 @@
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="blockchaincommons" id="7iz-Dc-FQy"/>
                             </imageView>
                             <progressIndicator wantsLayer="YES" maxValue="100" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="kdQ-HU-D0l">
-                                <rect key="frame" x="236" y="541" width="16" height="16"/>
+                                <rect key="frame" x="236" y="546" width="16" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="16" id="jF6-pf-xRn"/>
                                     <constraint firstAttribute="width" constant="16" id="uvl-am-ama"/>
                                 </constraints>
                             </progressIndicator>
-                            <button translatesAutoresizingMaskIntoConstraints="NO" id="HEa-N4-orm">
-                                <rect key="frame" x="37" y="-2.5" width="16" height="54"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="16" id="XN8-hZ-dVI"/>
-                                    <constraint firstAttribute="height" constant="49" id="va7-hN-JDw"/>
-                                </constraints>
-                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="qrcode" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="aWn-at-gFF">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="showQuickConnectAction:" target="XfG-lQ-9wD" id="4sV-sI-a8o"/>
-                                </connections>
-                            </button>
-                            <button translatesAutoresizingMaskIntoConstraints="NO" id="Hsc-NE-dUX">
-                                <rect key="frame" x="11" y="-3" width="16" height="56"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="49" id="HBF-jZ-8Ua"/>
-                                    <constraint firstAttribute="width" constant="16" id="dld-UM-EbP"/>
-                                </constraints>
-                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="gearshape" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="ZbP-8i-hFA">
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Hsc-NE-dUX">
+                                <rect key="frame" x="65" y="506" width="85" height="32"/>
+                                <buttonCell key="cell" type="push" title="Settings" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="ZbP-8i-hFA">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
@@ -1291,25 +1273,35 @@
                                     <action selector="refreshAction:" target="XfG-lQ-9wD" id="lAe-FJ-8wJ"/>
                                 </connections>
                             </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HEa-N4-orm">
+                                <rect key="frame" x="355" y="506" width="124" height="32"/>
+                                <buttonCell key="cell" type="push" title="Quick Connect" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="aWn-at-gFF">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="showQuickConnectAction:" target="XfG-lQ-9wD" id="4sV-sI-a8o"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="qja-rn-gD6" firstAttribute="leading" secondItem="nxx-XH-rol" secondAttribute="leading" id="3UD-3m-1IC"/>
-                            <constraint firstItem="K4o-Sf-dSl" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="13" id="6w1-WR-098"/>
+                            <constraint firstItem="nxx-XH-rol" firstAttribute="top" secondItem="Hsc-NE-dUX" secondAttribute="bottom" constant="8" id="4R5-S9-jCM"/>
                             <constraint firstItem="nxx-XH-rol" firstAttribute="centerY" secondItem="m2S-Jp-Qdl" secondAttribute="centerY" id="9iF-dC-I79"/>
                             <constraint firstItem="cIX-w1-69c" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="10" id="AWd-JL-gEK"/>
+                            <constraint firstItem="HEa-N4-orm" firstAttribute="centerY" secondItem="Hsc-NE-dUX" secondAttribute="centerY" id="AZS-Fe-7P8"/>
                             <constraint firstItem="K4o-Sf-dSl" firstAttribute="leading" secondItem="kdQ-HU-D0l" secondAttribute="trailing" constant="8" symbolic="YES" id="Cvt-fE-DvP"/>
                             <constraint firstItem="zZj-w8-TgT" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="10" id="JMI-56-47X"/>
                             <constraint firstItem="K4o-Sf-dSl" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="OIP-fp-qBZ"/>
                             <constraint firstItem="K4o-Sf-dSl" firstAttribute="centerY" secondItem="kdQ-HU-D0l" secondAttribute="centerY" id="RdP-O8-do3"/>
                             <constraint firstItem="zZj-w8-TgT" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="11" id="TLO-qG-jFZ"/>
                             <constraint firstItem="nxx-XH-rol" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="Ui2-5V-DnG"/>
-                            <constraint firstAttribute="bottom" secondItem="Hsc-NE-dUX" secondAttribute="bottom" id="YDt-3o-FIF"/>
                             <constraint firstAttribute="trailing" secondItem="cIX-w1-69c" secondAttribute="trailing" constant="20" symbolic="YES" id="bZg-FR-XJa"/>
-                            <constraint firstItem="HEa-N4-orm" firstAttribute="leading" secondItem="Hsc-NE-dUX" secondAttribute="trailing" constant="10" symbolic="YES" id="eaN-6a-0DJ"/>
+                            <constraint firstItem="K4o-Sf-dSl" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="8" id="cTg-Ka-Yzw"/>
+                            <constraint firstItem="HEa-N4-orm" firstAttribute="trailing" secondItem="nxx-XH-rol" secondAttribute="trailing" id="eim-Qx-9VP"/>
                             <constraint firstItem="ij1-9D-yib" firstAttribute="leading" secondItem="nxx-XH-rol" secondAttribute="leading" id="mdP-XC-6wy"/>
-                            <constraint firstItem="Hsc-NE-dUX" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="11" id="t9H-1g-XWR"/>
+                            <constraint firstItem="nxx-XH-rol" firstAttribute="leading" secondItem="Hsc-NE-dUX" secondAttribute="leading" id="p30-eN-woi"/>
                             <constraint firstItem="ij1-9D-yib" firstAttribute="top" secondItem="qja-rn-gD6" secondAttribute="bottom" constant="1" id="t9s-Q4-4dF"/>
-                            <constraint firstAttribute="bottom" secondItem="HEa-N4-orm" secondAttribute="bottom" id="xNM-Oo-aZv"/>
                             <constraint firstItem="qja-rn-gD6" firstAttribute="top" secondItem="nxx-XH-rol" secondAttribute="bottom" constant="8" symbolic="YES" id="xcf-s1-zqb"/>
                         </constraints>
                     </view>
@@ -2206,8 +2198,6 @@ Gw
         <image name="NSStatusNone" width="16" height="16"/>
         <image name="arrow.clockwise" catalog="system" width="11" height="13"/>
         <image name="blockchaincommons" width="256" height="256"/>
-        <image name="gearshape" catalog="system" width="16" height="16"/>
         <image name="info.circle" catalog="system" width="15" height="15"/>
-        <image name="qrcode" catalog="system" width="15" height="14"/>
     </resources>
 </document>
