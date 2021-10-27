@@ -2,7 +2,7 @@
 
 *GordianServer* for macOS uses *Bitcoin-Standup* to install Bitcoin Core and Tor on your system. The following description of functions and FAQs can provide additional insight into using the system.
 
-## GuardianNode Functions
+## GordianServer Functions
 
 *Adding Tor Public Keys.* Shortly after installing *GordianServer*, you will be prompted to add a Tor public key. This will allow you to connect to your *GordianServer* from an authorized client. The Tor public key can be retrieved from the client that you are using. For example, if you are using [GordianWallet](https://github.com/BlockchainCommons/GordianWallet-iOS), there is an "Export Tor V3 Authentication Public Key" option under its settings page. Your can later add addition public keys using the "Add" button to the right of the screen.
 
