@@ -55,6 +55,8 @@ If you use *GordianServer-macOS* for real funds, please ensure that you backup a
 
 ## Installation Instructions
 
+### Download from this Repo
+
 You must meet minimum OS and space requirements to install *GordianServer-macOS* on your Mac, as described below.     
 
 - Ensure you have a minimum macOS of 10.15.7 Catalina
@@ -62,6 +64,62 @@ You must meet minimum OS and space requirements to install *GordianServer-macOS*
 - Click to download `gordian-server-v0.1.0.0.dmg`
 - Check signatures and checksums
 - Open the DMG and drag the app to the Applications folder alias. That's it!
+
+#### How to Check Signatures & Checksums
+
+1. Also download the signature files from the Tagged release, which all end with "asc", as well as the SHA256SUMS file.
+2. Make sure you have GPG installed, as discussed in GPG Installation instructions (Optional), below.
+3. If you do not have the signatures of the signers, you must download them. One way is to download the GPG keys from GitHub. Just look at each signature file, and the signer's Github name will be after the first `.`. You can then download a public key directly from Github to assure yourself that it's from a trusted source:
+```
+$ curl https://github.com/ChristopherA.gpg | gpg --import
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 24303  100 24303    0     0  26885      0 --:--:-- --:--:-- --:--:-- 27033
+gpg: key F8D36C91357405ED: public key "Christopher Allen <ChristopherA@LifeWithAlacrity.com>" imported
+gpg: Total number processed: 1
+gpg:               imported: 1
+
+$ curl https://github.com/shannona.gpg | gpg --import 
+```
+4. If you are confident that the key you downloaded was from a trusted source, you can sign it to give it full validity. This is not required, but if you do not you will get a warning whenever you check the key's signatures, "WARNING: This key is not certified with a trusted signature!". You tell `gpg` to `--lsign-key` the keyid that you received, such as `F8D36C91357405ED`.
+```
+$ gpg --lsign-key F8D36C91357405ED
+```
+6. Verify the signatures of the DMG. This will tell you the DMG file was verified by the signing accounts.
+```
+$ gpg --verify gordian-server-1.0.0.dmg.ChristopherA.F8D36C91357405ED.asc gordian-server-1.0.0.dmg
+gpg: Signature made Wed Oct 27 12:41:08 2021 HST
+gpg:                using RSA key FDFE14A54ECB30FC5D2274EFF8D36C91357405ED
+gpg: Good signature from "Christopher Allen <ChristopherA@LifeWithAlacrity.com>" [full]
+gpg:                 aka "[jpeg image of size 9272]" [full]
+
+$ gpg --verify gordian-server-1.0.0.dmg.shannona.7EC6B928606F27AD.asc gordian-server-1.0.0.dmg
+gpg: Signature made Wed Oct 27 12:32:05 2021 HST
+gpg:                using RSA key A4889A09F9819D8C054004507EC6B928606F27AD
+gpg: Good signature from "Shannon Appelcline <shannon.appelcline@gmail.com>" [ultimate]
+```
+7. Verify the signatures of the Checksum. This tells you the Checksum file was verified by the signing accounts.
+```
+$ gpg --verify SHA256SUMS.ChristopherA.F8D36C91357405ED.asc SHA256SUMS
+gpg: Signature made Wed Oct 27 12:42:09 2021 HST
+gpg:                using RSA key FDFE14A54ECB30FC5D2274EFF8D36C91357405ED
+gpg: checking the trustdb
+gpg: Good signature from "Christopher Allen <ChristopherA@LifeWithAlacrity.com>" [full]
+
+$ gpg --verify SHA256SUMS.shannona.7EC6B928606F27AD.asc SHA256SUMS
+gpg: Signature made Wed Oct 27 12:33:34 2021 HST
+gpg:                using RSA key A4889A09F9819D8C054004507EC6B928606F27AD
+gpg: Good signature from "Shannon Appelcline <shannon.appelcline@gmail.com>" [ultimate]
+```
+8. Verify the Checksum of the DMG. This is a double-check that the checksum the signers verified matches the DMG that they verified.
+```
+$ shasum -c SHA256SUMS (for mac)
+gordian-server-1.0.0.dmg: OK
+
+$ sha256sum -c SHA256SUMS (for Linux)
+gordian-server-1.0.0.dmg: OK
+```
+If the signatures check out and the `shasum` is correct, the DMG should be safe.
 
 ### Build Mac App from source using Xcode
 
