@@ -85,7 +85,7 @@ $ curl https://github.com/shannona.gpg | gpg --import
 ```
 $ gpg --lsign-key F8D36C91357405ED
 ```
-6. Verify the signatures of the DMG. This will tell you the DMG file was verified by the signing accounts.
+5. Verify the signatures of the DMG. This will tell you the DMG file was verified by the signing accounts.
 ```
 $ gpg --verify gordian-server-1.0.0.dmg.ChristopherA.F8D36C91357405ED.asc gordian-server-1.0.0.dmg
 gpg: Signature made Wed Oct 27 12:41:08 2021 HST
@@ -98,7 +98,7 @@ gpg: Signature made Wed Oct 27 12:32:05 2021 HST
 gpg:                using RSA key A4889A09F9819D8C054004507EC6B928606F27AD
 gpg: Good signature from "Shannon Appelcline <shannon.appelcline@gmail.com>" [ultimate]
 ```
-7. Verify the signatures of the Checksum. This tells you the Checksum file was verified by the signing accounts.
+6. Verify the signatures of the Checksum. This tells you the Checksum file was verified by the signing accounts.
 ```
 $ gpg --verify SHA256SUMS.ChristopherA.F8D36C91357405ED.asc SHA256SUMS
 gpg: Signature made Wed Oct 27 12:42:09 2021 HST
@@ -111,7 +111,7 @@ gpg: Signature made Wed Oct 27 12:33:34 2021 HST
 gpg:                using RSA key A4889A09F9819D8C054004507EC6B928606F27AD
 gpg: Good signature from "Shannon Appelcline <shannon.appelcline@gmail.com>" [ultimate]
 ```
-8. Verify the Checksum of the DMG. This is a double-check that the checksum the signers verified matches the DMG that they verified.
+7. Verify the Checksum of the DMG. This is a double-check that the checksum the signers verified matches the DMG that they verified.
 ```
 $ shasum -c SHA256SUMS (for mac)
 gordian-server-1.0.0.dmg: OK
