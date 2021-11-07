@@ -1284,8 +1284,8 @@
                                 </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TnV-F8-Rqx">
-                                <rect key="frame" x="8" y="510" width="37" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="UA9-g8-bL0">
+                                <rect key="frame" x="8" y="510" width="53" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="$61,876" id="UA9-g8-bL0">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>

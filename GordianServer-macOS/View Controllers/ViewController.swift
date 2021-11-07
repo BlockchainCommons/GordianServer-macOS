@@ -88,7 +88,6 @@ class ViewController: NSViewController, NSWindowDelegate {
         
         let notificationCenter = NSWorkspace.shared.notificationCenter
         notificationCenter.addObserver(self, selector: #selector(sleepListener), name: NSWorkspace.willSleepNotification, object: nil)
-        //notificationCenter.addObserver(self, selector: #selector(wakeUpListener), name: NSWorkspace.didWakeNotification, object: nil)
         
         d.setDefaults { [weak self] in
             guard let self = self else { return }
@@ -96,7 +95,6 @@ class ViewController: NSViewController, NSWindowDelegate {
             self.setEnv()
             self.setScene()
         }
-        
     }
 
     override func viewWillAppear() {
@@ -107,10 +105,10 @@ class ViewController: NSViewController, NSWindowDelegate {
     override func viewWillDisappear() {
         autoRefreshTimer?.invalidate()
         autoRefreshTimer = nil
-        startTimer?.invalidate()
-        startTimer = nil
-        shutDownTimer?.invalidate()
-        shutDownTimer = nil
+//        startTimer?.invalidate()
+//        startTimer = nil
+//        shutDownTimer?.invalidate()
+//        shutDownTimer = nil
     }
 
     override func viewDidAppear() {
@@ -155,10 +153,6 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
     }
     
-//    @objc func wakeUpListener() {
-//        print("will wake up")
-//    }
-    
     @objc func enableRefresh() {
         if !isLoading {
             if self.mgr?.state != .started && self.mgr?.state != .connected  {
@@ -184,10 +178,10 @@ class ViewController: NSViewController, NSWindowDelegate {
             
             self.autoRefreshTimer?.invalidate()
             self.autoRefreshTimer = nil
-            self.startTimer?.invalidate()
-            self.startTimer = nil
-            self.shutDownTimer?.invalidate()
-            self.shutDownTimer = nil
+//            self.startTimer?.invalidate()
+//            self.startTimer = nil
+//            self.shutDownTimer?.invalidate()
+//            self.shutDownTimer = nil
         }
     }
     
@@ -393,7 +387,7 @@ class ViewController: NSViewController, NSWindowDelegate {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 
-                self.fxRateOutlet.stringValue = "$\(Int(fxRate).withCommas) / btc"
+                self.fxRateOutlet.stringValue = "$\(Int(fxRate).withCommas)"
             }
         }
     }
@@ -959,7 +953,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                         self.startMainnetOutlet.title = "Stop"
                         self.startMainnetOutlet.isEnabled = false
                         self.startTimer?.invalidate()
-                        self.startTimer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(self.queryStartStatus), userInfo: nil, repeats: true)
+                        self.startTimer = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(self.queryStartStatus), userInfo: nil, repeats: true)
                     }
                     
                 case _ where error.contains("Could not connect to the server"):
