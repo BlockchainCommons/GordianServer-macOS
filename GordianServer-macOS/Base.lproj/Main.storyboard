@@ -1283,6 +1283,14 @@
                                     <action selector="showQuickConnectAction:" target="XfG-lQ-9wD" id="4sV-sI-a8o"/>
                                 </connections>
                             </button>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TnV-F8-Rqx">
+                                <rect key="frame" x="8" y="510" width="37" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="UA9-g8-bL0">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
                             <constraint firstItem="qja-rn-gD6" firstAttribute="leading" secondItem="nxx-XH-rol" secondAttribute="leading" id="3UD-3m-1IC"/>
@@ -1290,6 +1298,7 @@
                             <constraint firstItem="nxx-XH-rol" firstAttribute="centerY" secondItem="m2S-Jp-Qdl" secondAttribute="centerY" id="9iF-dC-I79"/>
                             <constraint firstItem="cIX-w1-69c" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="10" id="AWd-JL-gEK"/>
                             <constraint firstItem="HEa-N4-orm" firstAttribute="centerY" secondItem="Hsc-NE-dUX" secondAttribute="centerY" id="AZS-Fe-7P8"/>
+                            <constraint firstItem="TnV-F8-Rqx" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="10" id="BHK-nu-Kzl"/>
                             <constraint firstItem="K4o-Sf-dSl" firstAttribute="leading" secondItem="kdQ-HU-D0l" secondAttribute="trailing" constant="8" symbolic="YES" id="Cvt-fE-DvP"/>
                             <constraint firstItem="zZj-w8-TgT" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="10" id="JMI-56-47X"/>
                             <constraint firstItem="K4o-Sf-dSl" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="OIP-fp-qBZ"/>
@@ -1303,6 +1312,7 @@
                             <constraint firstItem="nxx-XH-rol" firstAttribute="leading" secondItem="Hsc-NE-dUX" secondAttribute="leading" id="p30-eN-woi"/>
                             <constraint firstItem="ij1-9D-yib" firstAttribute="top" secondItem="qja-rn-gD6" secondAttribute="bottom" constant="1" id="t9s-Q4-4dF"/>
                             <constraint firstItem="qja-rn-gD6" firstAttribute="top" secondItem="nxx-XH-rol" secondAttribute="bottom" constant="8" symbolic="YES" id="xcf-s1-zqb"/>
+                            <constraint firstItem="TnV-F8-Rqx" firstAttribute="top" secondItem="zZj-w8-TgT" secondAttribute="bottom" constant="8" symbolic="YES" id="ygk-bN-AQc"/>
                         </constraints>
                     </view>
                     <connections>
@@ -1314,6 +1324,7 @@
                         <outlet property="bitcoinIsOnHeaderImage" destination="IZe-rf-ugH" id="Ncd-MN-zJ5"/>
                         <outlet property="blocksOutlet" destination="u4k-cA-eaA" id="uJ9-63-CBJ"/>
                         <outlet property="difficultyOutlet" destination="2M3-Q6-5tc" id="exO-G7-Fya"/>
+                        <outlet property="fxRateOutlet" destination="TnV-F8-Rqx" id="a6L-Py-MA9"/>
                         <outlet property="hashrateOutlet" destination="ObL-6X-0iZ" id="0B1-1z-zCg"/>
                         <outlet property="icon" destination="zZj-w8-TgT" id="mC2-fU-qbF"/>
                         <outlet property="mainnetIncomingPeersLabel" destination="PMt-yp-b2E" id="qSk-0Q-URx"/>
