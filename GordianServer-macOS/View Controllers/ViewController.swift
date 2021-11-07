@@ -87,6 +87,10 @@ class ViewController: NSViewController, NSWindowDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(disableRefresh), name: .disableRefresh, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(enableRefresh), name: .enableRefresh, object: nil)
         
+        let notificationCenter = NSWorkspace.shared.notificationCenter
+        notificationCenter.addObserver(self, selector: #selector(sleepListener), name: NSWorkspace.willSleepNotification, object: nil)
+        //notificationCenter.addObserver(self, selector: #selector(wakeUpListener), name: NSWorkspace.didWakeNotification, object: nil)
+        
         d.setDefaults { [weak self] in
             guard let self = self else { return }
             
@@ -135,6 +139,25 @@ class ViewController: NSViewController, NSWindowDelegate {
             }
         }
     }
+    
+    @objc func sleepListener() {
+        print("will sleep")
+        mgr?.resign()
+        mgr?.state = .stopped
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.torIsOn = false
+            self.startTorOutlet.title = "Start"
+            self.startTorOutlet.isEnabled = true
+            self.updateTorStatus(isOn: false)
+        }
+    }
+    
+//    @objc func wakeUpListener() {
+//        print("will wake up")
+//    }
     
     @objc func enableRefresh() {
         if !isLoading {
