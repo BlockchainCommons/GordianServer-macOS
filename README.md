@@ -40,11 +40,21 @@ GordianServer is primarily a wrapper to make it easy to stand up an existing ser
 
 Blockchain Commons apps do not phone home and do not run ads. Some are available through various app stores; all are available in our code repositories for your usage.
 
-## Status — Feature-Complete (1.0.0)
+## Status — Feature-Complete (1.0.1)
 
-The [v1.0.0](https://github.com/BlockchainCommons/GordianServer-macOS/releases/tag/v1.0.0) release of *GordianServer-macOS* is considered feature-complete. It is a polished and stabilized version of our v0.1 releases from 2020. We are aware of some minor nuisances with starting and stopping the server that appear in unusual circumstances. Please report these and any other issues to the [Gordian Bug Reports Discussion Area](https://github.com/BlockchainCommons/Gordian/discussions/categories/bug-reports). We also have plans to add some new RPC features to *GordianServer-macOS*, which we expect to release as v1.1.0.
+The [v1.0.1](https://github.com/BlockchainCommons/GordianServer-macOS/releases/tag/v1.0.1) release of *GordianServer-macOS* is considered feature-complete. It is a polished and stabilized version of our v0.1 releases from 2020. We are aware of some minor nuisances with starting and stopping the server that appear in unusual circumstances. Please report these and any other issues to the [Gordian Bug Reports Discussion Area](https://github.com/BlockchainCommons/Gordian/discussions/categories/bug-reports). We also have plans to add some new RPC features to *GordianServer-macOS*, which we expect to release as v1.1.0.
 
 If you use *GordianServer-macOS* for real funds, please ensure that you backup any seeds stored on the server. ***It has not yet been peer-reviewed or audited. It may not yet be ready for production uses. Use at your own risk.***
+
+### Version History
+
+#### 1.0.1, November 17, 2021
+
+* Fixed bug where Tor died on sleep.
+
+#### 1.0.0, October 27, 2021
+
+* First feature-complete version.
 
 ## Prerequisites
 
@@ -60,8 +70,8 @@ If you use *GordianServer-macOS* for real funds, please ensure that you backup a
 You must meet minimum OS and space requirements to install *GordianServer-macOS* on your Mac, as described below.     
 
 - Ensure you have a minimum macOS of 10.15.7 Catalina
-- Navigate to [Tagged release v1.0.0](https://github.com/BlockchainCommons/GordianServer-macOS/releases/tag/v1.0.0)
-- Click to download `gordian-server-v0.1.0.0.dmg`
+- Navigate to [Tagged release v1.0.1](https://github.com/BlockchainCommons/GordianServer-macOS/releases/tag/v1.0.1)
+- Click to download `gordian-server-1.0.1.dmg`
 - Check signatures and checksums
 - Open the DMG and drag the app to the Applications folder alias. That's it!
 
