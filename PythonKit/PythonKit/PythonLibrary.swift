@@ -80,7 +80,7 @@ extension PythonLibrary {
     private static let libraryPathVersionCharacter: Character = ":"
     
     #if canImport(Darwin)
-    private static var libraryNames = ["/Python/Versions/3.9/Python"]
+    private static var libraryNames = ["/Python/Versions/3.10/Python"]
     private static var libraryPathExtensions = [""]
     private static var librarySearchPaths = [Bundle.main.resourcePath!]
     private static var libraryVersionSeparator = "."

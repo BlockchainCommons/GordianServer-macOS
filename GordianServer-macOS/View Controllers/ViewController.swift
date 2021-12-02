@@ -95,6 +95,13 @@ class ViewController: NSViewController, NSWindowDelegate {
             self.setEnv()
             self.setScene()
         }
+        
+        let rpcauthCreds = RPCAuth.generateRpcAuth(user: "GordianServer")
+        
+        guard let rpcauth = rpcauthCreds.rpcauth, let rpcpassword = rpcauthCreds.rpcpassword else {
+            simpleAlert(message: "Error", info: "Unable to create rpcauth credentials.", buttonLabel: "OK")
+            return
+        }
     }
 
     override func viewWillAppear() {
