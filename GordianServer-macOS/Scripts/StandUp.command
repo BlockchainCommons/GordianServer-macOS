@@ -12,6 +12,10 @@ SHA_URL=$3
 SIGS_URL=$4
 VERSION=$5
 
+MAC_ARCH=`uname -m`
+BINARY_NAME="${BINARY_NAME}-${MAC_ARCH}-apple-darwin.tar.gz"
+MACOS_URL="${MACOS_URL}${BINARY_NAME}"
+
 function installBitcoin() {
   echo "Downloading $SHA_URL"
   curl $SHA_URL -o ~/.gordian/BitcoinCore/SHA256SUMS -s
@@ -27,7 +31,7 @@ function installBitcoin() {
 
   echo "Checking sha256 checksums $BINARY_NAME against provided SHA256SUMS"
   ACTUAL_SHA=$(shasum -a 256 $BINARY_NAME | awk '{print $1}')
-  EXPECTED_SHA=$(grep osx64 SHA256SUMS | awk '{print $1}')
+  EXPECTED_SHA=$(grep "${MAC_ARCH}-apple-darwin.tar.gz" SHA256SUMS | awk '{print $1}')
 
   echo "See two hashes (they should match):"
   echo $ACTUAL_SHA

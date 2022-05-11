@@ -169,7 +169,7 @@ class Defaults {
     }
     
     var existingVersion: String {
-        return ud.object(forKey: "version") as? String ?? "22.0"
+        return ud.object(forKey: "version") as? String ?? "23.0"
     }
     
     var existingBinary: String {
