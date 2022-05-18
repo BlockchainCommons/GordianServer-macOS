@@ -40,13 +40,19 @@ GordianServer is primarily a wrapper to make it easy to stand up an existing ser
 
 Blockchain Commons apps do not phone home and do not run ads. Some are available through various app stores; all are available in our code repositories for your usage.
 
-## Status — Feature-Complete (1.0.1)
+## Status — Feature-Complete (1.0.2)
 
-The [v1.0.1](https://github.com/BlockchainCommons/GordianServer-macOS/releases/tag/v1.0.1) release of *GordianServer-macOS* is considered feature-complete. It is a polished and stabilized version of our v0.1 releases from 2020. We are aware of some minor nuisances with starting and stopping the server that appear in unusual circumstances. Please report these and any other issues to the [Gordian Bug Reports Discussion Area](https://github.com/BlockchainCommons/Gordian/discussions/categories/bug-reports). We also have plans to add some new RPC features to *GordianServer-macOS*, which we expect to release as v1.1.0.
+The [v1.0.2](https://github.com/BlockchainCommons/GordianServer-macOS/releases/tag/v1.0.2) release of *GordianServer-macOS* is considered feature-complete. It is a polished and stabilized version of our v0.1 releases from 2020. We are aware of some minor nuisances with starting and stopping the server that appear in unusual circumstances. Please report these and any other issues to the [Gordian Bug Reports Discussion Area](https://github.com/BlockchainCommons/Gordian/discussions/categories/bug-reports). We also have plans to add some new RPC features to *GordianServer-macOS*, which we expect to release as v1.1.0.
 
-If you use *GordianServer-macOS* for real funds, please ensure that you backup any seeds stored on the server. ***It has not yet been peer-reviewed or audited. It may not yet be ready for production uses. Use at your own risk.***
+If you use *GordianServer-macOS* for real funds, please ensure that you backup any seeds stored on the server. ***It has not yet been peer-reviewed or audited. There are some known minor glitches. It may not yet be ready for production uses. Use at your own risk.***
 
 ### Version History
+
+#### 1.0.2 (patch release), May 18, 2022
+
+* Updated for changes in Bitcoin Core structure of downloadable files
+
+_There are still minor glitches that show up from time to time. The Tor framework now complains about permissions if you compile by hand. In addition, M1 Macs will not correctly use the `arm64` binary, because at time of release the arm64 `bitcoind` died on M1 macs with a "Killed: 9" error. In other words, use with caution; this bugfix release solely resolved issues with Bitcoin 23.0 file-name changes, which were preventing it from working correctly for new users._
 
 #### 1.0.1, November 17, 2021
 
