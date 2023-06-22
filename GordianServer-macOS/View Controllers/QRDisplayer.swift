@@ -50,7 +50,7 @@ class QRDisplayer: NSViewController {
         case "test":
             rpcport = "18332"
         case "regtest":
-            rpcport = "18334"
+            rpcport = "18443"
         case "signet":
             rpcport = "38332"
         default:

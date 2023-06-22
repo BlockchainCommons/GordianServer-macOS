@@ -26,7 +26,8 @@ function installBitcoin() {
 
   echo "Checking sha256 checksums $BINARY_NAME against provided SHA256SUMS"
   ACTUAL_SHA=$(shasum -a 256 $BINARY_NAME | awk '{print $1}')
-  EXPECTED_SHA=$(grep osx64 SHA256SUMS | awk '{print $1}')
+  # TODO: replace bitcoin-23.1-x86_64-apple-darwin.tar.gz with correct env variable
+  EXPECTED_SHA=$(grep $BINARY_NAME SHA256SUMS | awk '{print $1}')
 
   echo "See two hashes (they should match):"
   echo $ACTUAL_SHA

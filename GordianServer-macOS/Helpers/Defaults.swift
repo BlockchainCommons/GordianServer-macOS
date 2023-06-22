@@ -165,11 +165,11 @@ class Defaults {
     }
     
     var existingVersion: String {
-        return ud.object(forKey: "version") as? String ?? "22.0"
+        return ud.object(forKey: "version") as? String ?? "23.0"
     }
     
     var existingBinary: String {
-        return ud.object(forKey: "macosBinary") as? String ?? "bitcoin-\(existingVersion)-osx64.tar.gz"
+        return ud.object(forKey: "macosBinary") as? String ?? "bitcoin-\(existingVersion)-x86_64-apple-darwin.tar.gz"
     }
     
     var existingPrefix: String {

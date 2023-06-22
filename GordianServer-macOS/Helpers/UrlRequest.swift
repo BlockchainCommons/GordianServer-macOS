@@ -27,8 +27,8 @@ class FetchLatestRelease {
                                         let dict = [
                                             "version":"\(processedVersion)",
                                             "binaryPrefix":"bitcoin-\(processedVersion)",
-                                            "macosBinary":"bitcoin-\(processedVersion)-osx64.tar.gz",
-                                            "macosURL":"https://bitcoincore.org/bin/bitcoin-core-\(processedVersion)/bitcoin-\(processedVersion)-osx64.tar.gz",
+                                            "macosBinary":"bitcoin-\(processedVersion)-x86_64-apple-darwin.tar.gz",
+                                            "macosURL":"https://bitcoincore.org/bin/bitcoin-core-\(processedVersion)/bitcoin-\(processedVersion)-x86_64-apple-darwin.tar.gz",
                                             "shaURL":"https://bitcoincore.org/bin/bitcoin-core-\(processedVersion)/SHA256SUMS",
                                             "shasumsSignedUrl":"https://bitcoincore.org/bin/bitcoin-core-\(processedVersion)/SHA256SUMS.asc"
                                         ] as NSDictionary

@@ -146,7 +146,6 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
     
     @objc func sleepListener() {
-        print("will sleep")
         mgr?.resign()
         mgr?.state = .stopped
         
@@ -285,7 +284,8 @@ class ViewController: NSViewController, NSWindowDelegate {
                 
                 if success {
                     self.setEnv()
-                    if self.currentVersion.contains(self.d.existingVersion) {
+                    
+                    if self.currentVersion.contains(self.newestVersion) {
                         DispatchQueue.main.async { [weak self] in
                             guard let self = self else { return }
                             
@@ -1375,6 +1375,7 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     private func getLatestVersion(completion: @escaping ((success: Bool, errorMessage: String?)) -> Void) {
         FetchLatestRelease.get { [weak self] (dict, error) in
+            
             guard let self = self else { return }
             
             guard let dict = dict,
@@ -1384,7 +1385,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                       completion((false, error))
                       return
                   }
-                        
+                                    
             self.newestPrefix = prefix
             self.newestVersion = version
             self.newestBinaryName = binaryName
