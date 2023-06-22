@@ -81,6 +81,11 @@ class Torrc {
     ## HiddenServicePort x y:z says to redirect requests on port x to the
     ## address y:z.
     
+    
+    HiddenServiceDir \(TorClient.sharedInstance.hiddenServicePath)/joinmarket/
+    HiddenServiceVersion 3
+    HiddenServicePort 28183 127.0.0.1:28183
+    
     HiddenServiceDir \(TorClient.sharedInstance.hiddenServicePath)/bitcoin/rpc/main/
     HiddenServiceVersion 3
     HiddenServicePort 8332 127.0.0.1:8332

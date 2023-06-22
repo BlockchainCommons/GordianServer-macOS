@@ -7,8 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A2B4D722716FF7E00B607EE /* Python in Resources */ = {isa = PBXBuildFile; fileRef = 0A2B4D712716FF7E00B607EE /* Python */; };
+		0A2B4D742717003D00B607EE /* PythonKit in Resources */ = {isa = PBXBuildFile; fileRef = 0A2B4D732717003D00B607EE /* PythonKit */; };
+		0A2B4D762717006300B607EE /* PythonKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0A2B4D752717006300B607EE /* PythonKit */; };
+		0A2DDC30270F2AE300E19F14 /* FXRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2DDC2F270F2AE300E19F14 /* FXRate.swift */; };
 		0A2FE80126FD7A1B00B18859 /* LaunchBrewInstall.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A2FE80026FD7A1B00B18859 /* LaunchBrewInstall.command */; };
 		0A2FE80326FD7A4C00B18859 /* InstallBrew.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A2FE80226FD7A4C00B18859 /* InstallBrew.command */; };
+		0A53275A270DC79600A7130F /* rpcauth.py in Resources */ = {isa = PBXBuildFile; fileRef = 0A532759270DC79600A7130F /* rpcauth.py */; };
+		0A53275C270DC80600A7130F /* RPCAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A53275B270DC80600A7130F /* RPCAuth.swift */; };
 		0A8B41162702CB8B00815E65 /* IsProcessRunning.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A8B41152702CB8B00815E65 /* IsProcessRunning.command */; };
 		0A92AE3F26F75E310034B7B4 /* OpenFile.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A92AE3E26F75E310034B7B4 /* OpenFile.command */; };
 		0A92AE4126F761260034B7B4 /* StartBitcoin.command in Resources */ = {isa = PBXBuildFile; fileRef = 0A92AE4026F761260034B7B4 /* StartBitcoin.command */; };
@@ -33,12 +39,10 @@
 		D01B610A2487873F005D3090 /* AddAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01B61092487873F005D3090 /* AddAuthentication.swift */; };
 		D0211A4E250493CB00F7517A /* WalletDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0211A4D250493CB00F7517A /* WalletDetail.swift */; };
 		D0211A50250497C100F7517A /* DeleteWallet.command in Resources */ = {isa = PBXBuildFile; fileRef = D0211A4F250497C100F7517A /* DeleteWallet.command */; };
-		D042FAB8250B521B00E99D9B /* GetLightningHostname.command in Resources */ = {isa = PBXBuildFile; fileRef = D042FAB7250B521B00E99D9B /* GetLightningHostname.command */; };
 		D0534CC6237E4CC20093DE67 /* ok.png in Resources */ = {isa = PBXBuildFile; fileRef = D0534CC5237E4CC20093DE67 /* ok.png */; };
 		D0534CC8237E4CE70093DE67 /* paste.png in Resources */ = {isa = PBXBuildFile; fileRef = D0534CC7237E4CE70093DE67 /* paste.png */; };
 		D0534CCA237E4DF00093DE67 /* fullynoded_qr.png in Resources */ = {isa = PBXBuildFile; fileRef = D0534CC9237E4DF00093DE67 /* fullynoded_qr.png */; };
 		D06E3937236BE46E0072924A /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06E3935236BE46D0072924A /* Settings.swift */; };
-		D06E3938236BE46E0072924A /* Settings.xib in Resources */ = {isa = PBXBuildFile; fileRef = D06E3936236BE46E0072924A /* Settings.xib */; };
 		D0760106247DFEF200706F70 /* Strap.command in Resources */ = {isa = PBXBuildFile; fileRef = D0760105247DFEF200706F70 /* Strap.command */; };
 		D0760110247E084200706F70 /* CheckXCodeSelect.command in Resources */ = {isa = PBXBuildFile; fileRef = D076010F247E084200706F70 /* CheckXCodeSelect.command */; };
 		D0760114247F491E00706F70 /* LaunchStrap.command in Resources */ = {isa = PBXBuildFile; fileRef = D0760113247F491E00706F70 /* LaunchStrap.command */; };
@@ -51,8 +55,6 @@
 		D0B36C452373E521004B2D63 /* Verify.command in Resources */ = {isa = PBXBuildFile; fileRef = D0B36C442373E521004B2D63 /* Verify.command */; };
 		D0B9277123837AB400956651 /* UrlRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B9277023837AB400956651 /* UrlRequest.swift */; };
 		D0B9277A2383F8D400956651 /* CheckForBitcoinCore.command in Resources */ = {isa = PBXBuildFile; fileRef = D0B927792383F8D400956651 /* CheckForBitcoinCore.command */; };
-		D0B9277E2383FCD000956651 /* StopBitcoin.command in Resources */ = {isa = PBXBuildFile; fileRef = D0B9277D2383FCD000956651 /* StopBitcoin.command */; };
-		D0B9278A2384E54900956651 /* RemoveBitcoin.command in Resources */ = {isa = PBXBuildFile; fileRef = D0B927892384E54900956651 /* RemoveBitcoin.command */; };
 		D0B9278C2385045400956651 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B9278B2385045400956651 /* Log.swift */; };
 		D0BCB333236A6D22000D8FDE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BCB332236A6D22000D8FDE /* AppDelegate.swift */; };
 		D0BCB335236A6D22000D8FDE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BCB334236A6D22000D8FDE /* ViewController.swift */; };
@@ -61,25 +63,13 @@
 		D0BCB346236A6D28000D8FDE /* StandUpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BCB345236A6D28000D8FDE /* StandUpTests.swift */; };
 		D0BCB351236A6D28000D8FDE /* StandUpUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BCB350236A6D28000D8FDE /* StandUpUITests.swift */; };
 		D0C9439625009D0A00DF7339 /* WalletsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C9439525009D0A00DF7339 /* WalletsViewController.swift */; };
-		D0C9439E2500C5AA00DF7339 /* RPC.command in Resources */ = {isa = PBXBuildFile; fileRef = D0C9439D2500C5AA00DF7339 /* RPC.command */; };
-		D0DACF482512023B00846590 /* IsLightningInstalled.command in Resources */ = {isa = PBXBuildFile; fileRef = D0DACF472512023B00846590 /* IsLightningInstalled.command */; };
-		D0DACF4A2513146E00846590 /* IsLightningRunning.command in Resources */ = {isa = PBXBuildFile; fileRef = D0DACF492513146E00846590 /* IsLightningRunning.command */; };
-		D0DACF4C25131F2F00846590 /* StartLightning.command in Resources */ = {isa = PBXBuildFile; fileRef = D0DACF4B25131F2F00846590 /* StartLightning.command */; };
-		D0DACF4E25132E0C00846590 /* StopLightning.command in Resources */ = {isa = PBXBuildFile; fileRef = D0DACF4D25132E0C00846590 /* StopLightning.command */; };
-		D0DACF5425145EB300846590 /* GetLightningRpcCreds.command in Resources */ = {isa = PBXBuildFile; fileRef = D0DACF5325145EB300846590 /* GetLightningRpcCreds.command */; };
-		D0DCD8812508BAF100243916 /* InstallLightning.command in Resources */ = {isa = PBXBuildFile; fileRef = D0DCD8802508BAF100243916 /* InstallLightning.command */; };
 		D0DCD8E6236ACC9E00F2D15A /* ScriptEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DCD8E5236ACC9E00F2D15A /* ScriptEnum.swift */; };
 		D0DCD8E9236ACD5300F2D15A /* QRDisplayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DCD8E7236ACD5300F2D15A /* QRDisplayer.swift */; };
-		D0DCD8EA236ACD5300F2D15A /* QRDisplayer.xib in Resources */ = {isa = PBXBuildFile; fileRef = D0DCD8E8236ACD5300F2D15A /* QRDisplayer.xib */; };
 		D0DCD8ED236ACD6300F2D15A /* Installer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DCD8EB236ACD6300F2D15A /* Installer.swift */; };
-		D0DCD8EE236ACD6300F2D15A /* Installer.xib in Resources */ = {isa = PBXBuildFile; fileRef = D0DCD8EC236ACD6300F2D15A /* Installer.xib */; };
-		D0E74F2323B6A527008B1EC5 /* CheckStandUp.command in Resources */ = {isa = PBXBuildFile; fileRef = D0E74F2223B6A527008B1EC5 /* CheckStandUp.command */; };
 		D0EB5318237E4E9F002212F8 /* fullynoded_share.png in Resources */ = {isa = PBXBuildFile; fileRef = D0EB5315237E4E9F002212F8 /* fullynoded_share.png */; };
 		D0EB5319237E4E9F002212F8 /* fullynoded_generate.png in Resources */ = {isa = PBXBuildFile; fileRef = D0EB5316237E4E9F002212F8 /* fullynoded_generate.png */; };
 		D0EB531A237E4E9F002212F8 /* fullynoded_tap_pubkey.png in Resources */ = {isa = PBXBuildFile; fileRef = D0EB5317237E4E9F002212F8 /* fullynoded_tap_pubkey.png */; };
 		D0EBC0312377EE65008302D2 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EBC0302377EE65008302D2 /* Utilities.swift */; };
-		D0F613EC2489278B0057CC93 /* CheckForOldHost.command in Resources */ = {isa = PBXBuildFile; fileRef = D0F613EB2489278B0057CC93 /* CheckForOldHost.command */; };
-		D0F613EE24892B680057CC93 /* RemoveOldHost.command in Resources */ = {isa = PBXBuildFile; fileRef = D0F613ED24892B680057CC93 /* RemoveOldHost.command */; };
 		D0F9352C238CAC48001FF151 /* onion.png in Resources */ = {isa = PBXBuildFile; fileRef = D0F9352B238CAC48001FF151 /* onion.png */; };
 /* End PBXBuildFile section */
 
@@ -124,8 +114,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0A2B4D712716FF7E00B607EE /* Python */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Python; sourceTree = SOURCE_ROOT; };
+		0A2B4D732717003D00B607EE /* PythonKit */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PythonKit; sourceTree = SOURCE_ROOT; };
+		0A2DDC2F270F2AE300E19F14 /* FXRate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FXRate.swift; sourceTree = "<group>"; };
 		0A2FE80026FD7A1B00B18859 /* LaunchBrewInstall.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = LaunchBrewInstall.command; sourceTree = "<group>"; };
 		0A2FE80226FD7A4C00B18859 /* InstallBrew.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = InstallBrew.command; sourceTree = "<group>"; };
+		0A532759270DC79600A7130F /* rpcauth.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = rpcauth.py; sourceTree = "<group>"; };
+		0A53275B270DC80600A7130F /* RPCAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPCAuth.swift; sourceTree = "<group>"; };
 		0A8B41152702CB8B00815E65 /* IsProcessRunning.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = IsProcessRunning.command; sourceTree = "<group>"; };
 		0A92AE3E26F75E310034B7B4 /* OpenFile.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = OpenFile.command; sourceTree = "<group>"; };
 		0A92AE4026F761260034B7B4 /* StartBitcoin.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = StartBitcoin.command; sourceTree = "<group>"; };
@@ -136,7 +131,6 @@
 		0A92AE4D26F9D6730034B7B4 /* MiningInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiningInfo.swift; sourceTree = "<group>"; };
 		0A92AE4F26F9D7E10034B7B4 /* RPCWhitelist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPCWhitelist.swift; sourceTree = "<group>"; };
 		0A92AE5126F9D8490034B7B4 /* BitcoinConf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinConf.swift; sourceTree = "<group>"; };
-		0A92AE6A26FB20AF0034B7B4 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
 		0AC7A5CE272147650015CD9E /* LaunchInstaller.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = LaunchInstaller.command; sourceTree = "<group>"; };
 		0AC7A5D027218ABB0015CD9E /* InstallBitcoinCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallBitcoinCore.swift; sourceTree = "<group>"; };
 		0AC7A5D22721991F0015CD9E /* LaunchVerifier.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = LaunchVerifier.command; sourceTree = "<group>"; };
@@ -150,12 +144,10 @@
 		D01B61092487873F005D3090 /* AddAuthentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAuthentication.swift; sourceTree = "<group>"; };
 		D0211A4D250493CB00F7517A /* WalletDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletDetail.swift; sourceTree = "<group>"; };
 		D0211A4F250497C100F7517A /* DeleteWallet.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = DeleteWallet.command; sourceTree = "<group>"; };
-		D042FAB7250B521B00E99D9B /* GetLightningHostname.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = GetLightningHostname.command; sourceTree = "<group>"; };
 		D0534CC5237E4CC20093DE67 /* ok.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ok.png; sourceTree = "<group>"; };
 		D0534CC7237E4CE70093DE67 /* paste.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = paste.png; sourceTree = "<group>"; };
 		D0534CC9237E4DF00093DE67 /* fullynoded_qr.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fullynoded_qr.png; sourceTree = "<group>"; };
 		D06E3935236BE46D0072924A /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
-		D06E3936236BE46E0072924A /* Settings.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Settings.xib; sourceTree = "<group>"; };
 		D0760105247DFEF200706F70 /* Strap.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = Strap.command; sourceTree = "<group>"; };
 		D076010F247E084200706F70 /* CheckXCodeSelect.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = CheckXCodeSelect.command; sourceTree = "<group>"; };
 		D0760113247F491E00706F70 /* LaunchStrap.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = LaunchStrap.command; sourceTree = "<group>"; };
@@ -168,8 +160,6 @@
 		D0B36C442373E521004B2D63 /* Verify.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = Verify.command; sourceTree = "<group>"; };
 		D0B9277023837AB400956651 /* UrlRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlRequest.swift; sourceTree = "<group>"; };
 		D0B927792383F8D400956651 /* CheckForBitcoinCore.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = CheckForBitcoinCore.command; sourceTree = "<group>"; };
-		D0B9277D2383FCD000956651 /* StopBitcoin.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = StopBitcoin.command; sourceTree = "<group>"; };
-		D0B927892384E54900956651 /* RemoveBitcoin.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = RemoveBitcoin.command; sourceTree = "<group>"; };
 		D0B9278B2385045400956651 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		D0BCB32F236A6D22000D8FDE /* GordianServer-macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "GordianServer-macOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0BCB332236A6D22000D8FDE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -185,25 +175,13 @@
 		D0BCB350236A6D28000D8FDE /* StandUpUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandUpUITests.swift; sourceTree = "<group>"; };
 		D0BCB352236A6D28000D8FDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D0C9439525009D0A00DF7339 /* WalletsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletsViewController.swift; sourceTree = "<group>"; };
-		D0C9439D2500C5AA00DF7339 /* RPC.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = RPC.command; sourceTree = "<group>"; };
-		D0DACF472512023B00846590 /* IsLightningInstalled.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = IsLightningInstalled.command; sourceTree = "<group>"; };
-		D0DACF492513146E00846590 /* IsLightningRunning.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = IsLightningRunning.command; sourceTree = "<group>"; };
-		D0DACF4B25131F2F00846590 /* StartLightning.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = StartLightning.command; sourceTree = "<group>"; };
-		D0DACF4D25132E0C00846590 /* StopLightning.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = StopLightning.command; sourceTree = "<group>"; };
-		D0DACF5325145EB300846590 /* GetLightningRpcCreds.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = GetLightningRpcCreds.command; sourceTree = "<group>"; };
-		D0DCD8802508BAF100243916 /* InstallLightning.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = InstallLightning.command; sourceTree = "<group>"; };
 		D0DCD8E5236ACC9E00F2D15A /* ScriptEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptEnum.swift; sourceTree = "<group>"; };
 		D0DCD8E7236ACD5300F2D15A /* QRDisplayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRDisplayer.swift; sourceTree = "<group>"; };
-		D0DCD8E8236ACD5300F2D15A /* QRDisplayer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QRDisplayer.xib; sourceTree = "<group>"; };
 		D0DCD8EB236ACD6300F2D15A /* Installer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Installer.swift; sourceTree = "<group>"; };
-		D0DCD8EC236ACD6300F2D15A /* Installer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Installer.xib; sourceTree = "<group>"; };
-		D0E74F2223B6A527008B1EC5 /* CheckStandUp.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = CheckStandUp.command; sourceTree = "<group>"; };
 		D0EB5315237E4E9F002212F8 /* fullynoded_share.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fullynoded_share.png; sourceTree = "<group>"; };
 		D0EB5316237E4E9F002212F8 /* fullynoded_generate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fullynoded_generate.png; sourceTree = "<group>"; };
 		D0EB5317237E4E9F002212F8 /* fullynoded_tap_pubkey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fullynoded_tap_pubkey.png; sourceTree = "<group>"; };
 		D0EBC0302377EE65008302D2 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
-		D0F613EB2489278B0057CC93 /* CheckForOldHost.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = CheckForOldHost.command; sourceTree = "<group>"; };
-		D0F613ED24892B680057CC93 /* RemoveOldHost.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = RemoveOldHost.command; sourceTree = "<group>"; };
 		D0F9352B238CAC48001FF151 /* onion.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = onion.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -213,6 +191,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0AD5BAB726F568820091A075 /* Tor.xcframework in Frameworks */,
+				0A2B4D762717006300B607EE /* PythonKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -257,7 +236,6 @@
 		0AD5BAB526F568820091A075 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				0A92AE6A26FB20AF0034B7B4 /* ServiceManagement.framework */,
 				0AD5BAB626F568820091A075 /* Tor.xcframework */,
 			);
 			name = Frameworks;
@@ -277,11 +255,8 @@
 			children = (
 				D0BCB334236A6D22000D8FDE /* ViewController.swift */,
 				D0DCD8E7236ACD5300F2D15A /* QRDisplayer.swift */,
-				D0DCD8E8236ACD5300F2D15A /* QRDisplayer.xib */,
 				D0DCD8EB236ACD6300F2D15A /* Installer.swift */,
-				D0DCD8EC236ACD6300F2D15A /* Installer.xib */,
 				D06E3935236BE46D0072924A /* Settings.swift */,
-				D06E3936236BE46E0072924A /* Settings.xib */,
 				D01B61092487873F005D3090 /* AddAuthentication.swift */,
 				D0C9439525009D0A00DF7339 /* WalletsViewController.swift */,
 				D0211A4D250493CB00F7517A /* WalletDetail.swift */,
@@ -297,23 +272,10 @@
 				D0A3B6F023739FCF00253635 /* StandUp.command */,
 				D0B36C442373E521004B2D63 /* Verify.command */,
 				D0B927792383F8D400956651 /* CheckForBitcoinCore.command */,
-				D0B9277D2383FCD000956651 /* StopBitcoin.command */,
-				D0B927892384E54900956651 /* RemoveBitcoin.command */,
-				D0E74F2223B6A527008B1EC5 /* CheckStandUp.command */,
 				D0760105247DFEF200706F70 /* Strap.command */,
 				D076010F247E084200706F70 /* CheckXCodeSelect.command */,
 				D0760113247F491E00706F70 /* LaunchStrap.command */,
-				D0F613EB2489278B0057CC93 /* CheckForOldHost.command */,
-				D0F613ED24892B680057CC93 /* RemoveOldHost.command */,
-				D0C9439D2500C5AA00DF7339 /* RPC.command */,
 				D0211A4F250497C100F7517A /* DeleteWallet.command */,
-				D0DCD8802508BAF100243916 /* InstallLightning.command */,
-				D042FAB7250B521B00E99D9B /* GetLightningHostname.command */,
-				D0DACF472512023B00846590 /* IsLightningInstalled.command */,
-				D0DACF492513146E00846590 /* IsLightningRunning.command */,
-				D0DACF4B25131F2F00846590 /* StartLightning.command */,
-				D0DACF4D25132E0C00846590 /* StopLightning.command */,
-				D0DACF5325145EB300846590 /* GetLightningRpcCreds.command */,
 				0A92AE3E26F75E310034B7B4 /* OpenFile.command */,
 				0A92AE4026F761260034B7B4 /* StartBitcoin.command */,
 				0A92AE4226F81F490034B7B4 /* InstallXcode.command */,
@@ -369,6 +331,8 @@
 		D0BCB331236A6D22000D8FDE /* GordianServer-macOS */ = {
 			isa = PBXGroup;
 			children = (
+				0A2B4D732717003D00B607EE /* PythonKit */,
+				0A2B4D712716FF7E00B607EE /* Python */,
 				D0A871CD237E4B81006033C9 /* Images */,
 				D0BCB332236A6D22000D8FDE /* AppDelegate.swift */,
 				D099F3352375847700AC0EF6 /* View Controllers */,
@@ -383,6 +347,7 @@
 				0AD5BABE26F578230091A075 /* Tor */,
 				0A92AE4826F9D2A80034B7B4 /* Structs */,
 				0A92AE5326F9D9CF0034B7B4 /* Bitcoin */,
+				0A532759270DC79600A7130F /* rpcauth.py */,
 			);
 			path = "GordianServer-macOS";
 			sourceTree = "<group>";
@@ -420,6 +385,8 @@
 				D0B9277023837AB400956651 /* UrlRequest.swift */,
 				D0B9278B2385045400956651 /* Log.swift */,
 				D08210362389058B00E21EDC /* Defaults.swift */,
+				0A53275B270DC80600A7130F /* RPCAuth.swift */,
+				0A2DDC2F270F2AE300E19F14 /* FXRate.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -442,6 +409,9 @@
 			dependencies = (
 			);
 			name = "GordianServer-macOS";
+			packageProductDependencies = (
+				0A2B4D752717006300B607EE /* PythonKit */,
+			);
 			productName = StandUp;
 			productReference = D0BCB32F236A6D22000D8FDE /* GordianServer-macOS.app */;
 			productType = "com.apple.product-type.application";
@@ -514,6 +484,8 @@
 				Base,
 			);
 			mainGroup = D0BCB326236A6D22000D8FDE;
+			packageReferences = (
+			);
 			productRefGroup = D0BCB330236A6D22000D8FDE /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -533,48 +505,35 @@
 				D0B36C452373E521004B2D63 /* Verify.command in Resources */,
 				0A92AE4126F761260034B7B4 /* StartBitcoin.command in Resources */,
 				D0A3B6F123739FCF00253635 /* StandUp.command in Resources */,
-				D0B9278A2384E54900956651 /* RemoveBitcoin.command in Resources */,
 				D0EB531A237E4E9F002212F8 /* fullynoded_tap_pubkey.png in Resources */,
 				D0EB5319237E4E9F002212F8 /* fullynoded_generate.png in Resources */,
 				0A92AE4326F81F490034B7B4 /* InstallXcode.command in Resources */,
-				D0DACF4E25132E0C00846590 /* StopLightning.command in Resources */,
 				D0B9277A2383F8D400956651 /* CheckForBitcoinCore.command in Resources */,
-				D0DCD8EE236ACD6300F2D15A /* Installer.xib in Resources */,
 				D0F9352C238CAC48001FF151 /* onion.png in Resources */,
 				D0BCB337236A6D27000D8FDE /* Assets.xcassets in Resources */,
-				D0DACF4A2513146E00846590 /* IsLightningRunning.command in Resources */,
 				D0760114247F491E00706F70 /* LaunchStrap.command in Resources */,
 				D0534CCA237E4DF00093DE67 /* fullynoded_qr.png in Resources */,
+				0A2B4D722716FF7E00B607EE /* Python in Resources */,
 				0A92AE3F26F75E310034B7B4 /* OpenFile.command in Resources */,
 				0A8B41162702CB8B00815E65 /* IsProcessRunning.command in Resources */,
-				D0DCD8EA236ACD5300F2D15A /* QRDisplayer.xib in Resources */,
+				0A53275A270DC79600A7130F /* rpcauth.py in Resources */,
 				D0534CC6237E4CC20093DE67 /* ok.png in Resources */,
-				D0E74F2323B6A527008B1EC5 /* CheckStandUp.command in Resources */,
-				D0DACF4C25131F2F00846590 /* StartLightning.command in Resources */,
 				D0821040238AA76000E21EDC /* tor_logo_redesign copy.png in Resources */,
 				D0211A50250497C100F7517A /* DeleteWallet.command in Resources */,
 				D0821041238AA76000E21EDC /* btccore-copy.png in Resources */,
 				D0760110247E084200706F70 /* CheckXCodeSelect.command in Resources */,
 				0AC7A5D32721991F0015CD9E /* LaunchVerifier.command in Resources */,
-				D0F613EC2489278B0057CC93 /* CheckForOldHost.command in Resources */,
-				D0DCD8812508BAF100243916 /* InstallLightning.command in Resources */,
-				D042FAB8250B521B00E99D9B /* GetLightningHostname.command in Resources */,
 				0AC7A5CF272147650015CD9E /* LaunchInstaller.command in Resources */,
 				0A2FE80126FD7A1B00B18859 /* LaunchBrewInstall.command in Resources */,
 				0A2FE80326FD7A4C00B18859 /* InstallBrew.command in Resources */,
-				D0B9277E2383FCD000956651 /* StopBitcoin.command in Resources */,
-				D0C9439E2500C5AA00DF7339 /* RPC.command in Resources */,
+				0A2B4D742717003D00B607EE /* PythonKit in Resources */,
 				0A92AE4526F822090034B7B4 /* LaunchXcodeInstall.command in Resources */,
-				D0DACF5425145EB300846590 /* GetLightningRpcCreds.command in Resources */,
 				D0534CC8237E4CE70093DE67 /* paste.png in Resources */,
 				D0EB5318237E4E9F002212F8 /* fullynoded_share.png in Resources */,
 				D0BCB33A236A6D27000D8FDE /* Main.storyboard in Resources */,
 				D0821043238AA78900E21EDC /* blockchaincommons.png in Resources */,
-				D0F613EE24892B680057CC93 /* RemoveOldHost.command in Resources */,
-				D06E3938236BE46E0072924A /* Settings.xib in Resources */,
 				D0760106247DFEF200706F70 /* Strap.command in Resources */,
 				D0A871CF237E4B9D006033C9 /* yes.png in Resources */,
-				D0DACF482512023B00846590 /* IsLightningInstalled.command in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -616,6 +575,7 @@
 				0A92AE5026F9D7E10034B7B4 /* RPCWhitelist.swift in Sources */,
 				D0BCB335236A6D22000D8FDE /* ViewController.swift in Sources */,
 				0A92AE4726F9D2A10034B7B4 /* BlockchainInfo.swift in Sources */,
+				0A53275C270DC80600A7130F /* RPCAuth.swift in Sources */,
 				0AD5BABB26F572330091A075 /* TorClient.swift in Sources */,
 				0AF145A3270C04C300BD0327 /* InstallGordianPrompt.swift in Sources */,
 				0AC7A5D127218ABB0015CD9E /* InstallBitcoinCore.swift in Sources */,
@@ -624,6 +584,7 @@
 				D0BCB333236A6D22000D8FDE /* AppDelegate.swift in Sources */,
 				D0B9277123837AB400956651 /* UrlRequest.swift in Sources */,
 				D0C9439625009D0A00DF7339 /* WalletsViewController.swift in Sources */,
+				0A2DDC30270F2AE300E19F14 /* FXRate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -793,16 +754,23 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1.0.1;
-				DEVELOPMENT_TEAM = YZHG975W3A;
+				CURRENT_PROJECT_VERSION = 1.0.0;
+				DEVELOPMENT_TEAM = 8JHDU5M9KD;
 				ENABLE_HARDENED_RUNTIME = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+					/opt/homebrew/Frameworks,
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/GordianServer-macOS",
+				);
 				INFOPLIST_FILE = "GordianServer-macOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				MARKETING_VERSION = 1.0.1;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.blockchaincommons.gordianserver;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -818,16 +786,23 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1.0.1;
-				DEVELOPMENT_TEAM = YZHG975W3A;
+				CURRENT_PROJECT_VERSION = 1.0.0;
+				DEVELOPMENT_TEAM = 8JHDU5M9KD;
 				ENABLE_HARDENED_RUNTIME = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+					/opt/homebrew/Frameworks,
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/GordianServer-macOS",
+				);
 				INFOPLIST_FILE = "GordianServer-macOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				MARKETING_VERSION = 1.0.1;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.blockchaincommons.gordianserver;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -959,6 +934,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0A2B4D752717006300B607EE /* PythonKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PythonKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D0BCB327236A6D22000D8FDE /* Project object */;
 }

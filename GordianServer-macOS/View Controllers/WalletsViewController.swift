@@ -66,13 +66,7 @@ class WalletsViewController: NSViewController, NSTableViewDelegate, NSTableViewD
             break
         }
         
-        guard let rpcuser = UserDefaults.standard.object(forKey: "rpcuser") as? String,
-              let rpcpassword = UserDefaults.standard.object(forKey: "rpcpassword") as? String else {
-            simpleAlert(message: "Missing rpc credentials.", info: "Please refresh the home screen to refresh your rpc credentials first. You can add new credentials by clicking \"Go To\" > \"Bitcoin Config\" and adding a rpcuser and rpcpassword to the file.", buttonLabel: "OK")
-            return
-        }
-        
-        rpc.command(method: "listwalletdir", port: port, user: rpcuser, password: rpcpassword) { (response, error) in
+        rpc.command(method: "listwalletdir", port: port) { (response, error) in
             guard let response = response as? [String:Any], let wallets = response["wallets"] as? [[String:Any]] else {
                 simpleAlert(message: "There was an issue.", info: error ?? "Unknown error.", buttonLabel: "OK")
                 return

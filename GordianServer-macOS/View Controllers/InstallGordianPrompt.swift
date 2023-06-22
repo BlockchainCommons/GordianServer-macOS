@@ -15,6 +15,7 @@ class InstallGordianPrompt: NSViewController, NSWindowDelegate {
     var macosURL = ""
     var defaults = Defaults.shared
     var doneBlock: ((Bool) -> Void)?
+    var initialLoad = false
     
     @IBOutlet weak var headerOutlet: NSTextField!
     @IBOutlet weak var bodyOutlet: NSTextField!
@@ -24,11 +25,15 @@ class InstallGordianPrompt: NSViewController, NSWindowDelegate {
         super.viewDidLoad()
         // Do view setup here.
         setHeaderText()
+        initialLoad = true
     }
     
     override func viewDidAppear() {
-        window = self.view.window!
-        self.view.window?.title = "Installer"
+        if initialLoad {
+            window = self.view.window!
+            self.view.window?.title = "Installer"
+            initialLoad = false
+        }
         
         defaults.setDefaults { [weak self] in
             guard let self = self else { return }
