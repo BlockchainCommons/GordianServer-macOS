@@ -9,15 +9,13 @@
 
 **_GordianServer-macOS_** is a open source project and a suite of tools that helps users to install a [Bitcoin-Core](https://bitcoin.org/) full-node on a fresh computer or VPS and to add important privacy tools like onion services. It will eventually also support optional Bitcoin-related tools like [Electrum Personal Server](https://github.com/chris-belcher/electrum-personal-server), [C-Lightning](https://github.com/ElementsProject/lightning), [Esplora](https://github.com/Blockstream/esplora), and [BTCPay Server](https://github.com/btcpayserver/btcpayserver) as well as emerging technologies like Bitcoin-based Decentralized Identifiers. *GordianServer-macOS* strives to provide the community with an easy-to-use "one-click" setup for a full node, complete with a purpose-built remote app for securely connecting to your node over Tor from anywhere in the world, providing you with a powerful suite of tools.
 
-This tool will also harden and secure your OS to current best practices and will add sufficient system tools to support basic Bitcoin development. After setup, *GordianServer-macOS* will present a QR code and/or special URI that can be used to securely link your full-node to other devices, such as a remote desktop or a mobile phone using [Gordian Wallet 2](https://testflight.apple.com/join/OQHyL0a8) or [Fully Noded](https://apps.apple.com/us/app/fully-noded/id1436425586) on iOS.
+This tool will also harden and secure your OS to current best practices and will add sufficient system tools to support basic Bitcoin development. After setup, *GordianServer-macOS* will present a QR code and/or special URI that can be used to securely link your full-node to other devices, such as a remote desktop or a mobile phone using [Gordian Wallet](https://github.com/BlockchainCommons/GordianWallet-iOS) or [Fully Noded](https://apps.apple.com/us/app/fully-noded/id1436425586) on iOS.
 
 This repo includes the *GordianServer-macOS*, which allows you to run a full node and Tor on your Mac computer.
 
 <img src="./Images/2_standup.png" alt="" width="800"/>
 
 <img src="./Images/3_standup.png" alt="" width="800"/>
-
-<img src="./Images/4_standup.png" alt="" width="800"/>
 
 <img src="./Images/6_standup.png" alt="" width="800"/>
 
@@ -42,24 +40,28 @@ GordianServer is primarily a wrapper to make it easy to stand up an existing ser
 
 Blockchain Commons apps do not phone home and do not run ads. Some are available through various app stores; all are available in our code repositories for your usage.
 
-## Status — Work-in-Progress
+## Status — Feature-Complete (1.0.0)
 
-*GordianServer-macOS* is an early **Work-In-Progress**, so that we can prototype, discover additional requirements, and get feedback from the broader Bitcoin-Core Developer Community. ***It has not yet been peer-reviewed or audited. It is not yet ready for production uses. Use at your own risk.***
+The [v1.0.0](https://github.com/BlockchainCommons/GordianServer-macOS/releases/tag/v1.0.0) release of *GordianServer-macOS* is considered feature-complete. It is a polished and stabilized version of our v0.1 releases from 2020. We are aware of some minor nuisances with starting and stopping the server that appear in unusual circumstances. Please report these and any other issues to the [Gordian Bug Reports Discussion Area](https://github.com/BlockchainCommons/Gordian/discussions/categories/bug-reports). We also have plans to add some new RPC features to *GordianServer-macOS*, which we expect to release as v1.1.0.
+
+If you use *GordianServer-macOS* for real funds, please ensure that you backup any seeds stored on the server. ***It has not yet been peer-reviewed or audited. It may not yet be ready for production uses. Use at your own risk.***
 
 ## Prerequisites
 
 - macOS 10.15.7 Catalina or better (if you'd like to support ensuring it works back to at least Mojave, let us know!)
+   - If you do not have a Mac that is supported for running Catalina, you may wish to investigate the [Catalina Patcher](http://dosdude1.com/catalina/).
 - ~320 GB of free space for a full mainnet node with txindex; or ~30 GB for a full testnet3 node; or substantially less if the full node is pruned.
-- In order to install *Bitcoin Core* and *Tor* on your behalf, *GordianServer-macOS* uses *Brew* and *XCode Command Line Tools*, these will be automatically downloaded and installed for you within the app using a popular well reviewed open sourced script called *Strap*, you can read more about *Strap* [here](https://github.com/MikeMcQuaid/strap/blob/master/README.md). In addition to installing *Brew* and *XCode Command Line Tools*, *Strap* also sets up your Macbook for best security practices; including full disc encryption with *FileVault*, enables *macOS Firewall* and disables *Java* for better security among others.
+- If you wish to verify your *GordianServer-macOS* installation, *GordianServer-macOS* will prompt you to download Brew and GPG. You may also install the Strap secure development environment: you can read more about *Strap* [here](https://github.com/MikeMcQuaid/strap/blob/master/README.md). 
 
 ## Installation Instructions
 
 You must meet minimum OS and space requirements to install *GordianServer-macOS* on your Mac, as described below.     
 
-- minimum macOS 10.15.7 Catalina
+- Ensure you have a minimum macOS of 10.15.7 Catalina
 - Navigate to [Tagged release v1.0.0](https://github.com/BlockchainCommons/GordianServer-macOS/releases/tag/v1.0.0)
-- Click to download `GordianServer-macOS-v0.1.0.0.dmg`
-- Open the DMG and drag the app to the Applications folder. That's it!
+- Click to download `gordian-server-v0.1.0.0.dmg`
+- Check signatures and checksums
+- Open the DMG and drag the app to the Applications folder alias. That's it!
 
 ### Build Mac App from source using Xcode
 
@@ -84,27 +86,27 @@ If you had an installation of Gordian Server prior to 1.0.0 it may not be fully 
 
 1. Use your wallet (such as Gordian Wallet or Fully Noded) to backup any private keys or to sweep funds off of Server addresses. _If you do not do this, your funds will be lost._
 2. Shutdown your current network by clicking "Stop". Wait for it to finish.
-3. Remove Bitcoin by going to "Settings" (the Gear) and choosing "KILL ALL".
+3. Remove Bitcoin by going to the "Settings" button and choosing "KILL ALL".
 4. Restart Gordian Server, and agree to install the newest Bitcoin.
 
 This process will remove and reinstall Bitcoin, which will make sure any old, incompatible configuration files are removed and recreated.
 
 ### After Installation: Quick Connect
 
-Once the app has completely installed (by either method) and once it has launched *Bitcoin Core*, you can access a *Quick Connect QR code* that can be used to securely link your full node remotely over Tor to other devices, such as the iOS application [GordianWallet](https://github.com/BlockchainCommons/GordianWallet-iOS) or [Fully Noded](https://fullynoded.app/). Simply choose "Quick Connect > Quick Connect" from the main menu to see the QR code.
+Once the app has completely installed (by either method) and once it has launched *Bitcoin Core*, you can access a *Quick Connect QR code* that can be used to securely link your full node remotely over Tor to other devices, such as the iOS application [GordianWallet](https://github.com/BlockchainCommons/GordianWallet-iOS) or [Fully Noded](https://fullynoded.app/). Simply choose "Quick Connect > Quick Connect" from the main menu or click the "Quick Connect" button to see the QR code.
 
-Gordian Server allows you to run all three Bitcoin networks (`mainnet`, `testnet` and `regtest`) simultaneously via its user interface. It will present an independent *Quick Connect QR code* for each network so that you may remotely connect to and utilize each.
+Gordian Server allows you to run all four Bitcoin networks (`mainnet`, `testnet`, `signet` and `regtest`) simultaneously via its user interface. It will present an independent *Quick Connect QR code* for each network so that you may remotely connect to and utilize each.
 
 ### After Installation: Startup
 
 If'd you'd like your Gordian Server to start whenever your Mac does:
 
 1. In the dock, right click on Gordian Server and choose "Options > Keep in Doc".
-2. In Gordian Server, choose settings (the gear) and make sure that "Start Bitcoin on Open" is checked.
+2. In Gordian Server, click the "Settings" button and make sure that "Start Bitcoin on Open" is checked.
 
 ## GPG Installation instructions (Optional)
 
-If you are planning to use Gordian Server for an operational installation, you will want to maximize your security by checking the GPG signatures of the Bitcoin server as it's installed. This requires a bit of additional work that must be done before you startup Gordian Server for the first time (whether you installed from DMG or compiled the source code).
+If you are planning to use Gordian Server for an operational installation, you will want to maximize your security by checking the GPG signatures of the Bitcoin server after it's installed. This requires a bit of additional work that may be done either before or after your Gordian Server installation.
 
 We suggest using homebrew to install gpg.
 
@@ -120,31 +122,25 @@ If you prefer not to use the command line, you can install [GPG Suite](https://g
 
 ### Checking Signatures
 
-Now, when you install Gordian Server, the console will log an elongated process of finding and installing keys related to signatures. Don't worry that many are "skipped". The object is simply to collect enough public keys that you feel comfortable with the result.
+Now, you can click "Verify" and the console will log an elongated process of finding and installing keys related to signatures. Don't worry that many are "skipped". The object is simply to collect enough public keys that you feel comfortable with the result.
 
 When the public-key acquisition is complete, you should see a listing of good signatures. If more than a few are found you should feel comfortable:
 ```
-SIG VERIFICATION SUCCESS:       12 GOOD SIGNATURES FOUND.
-gpg: Good signature from ".0xB10C <0xb10c@gmail.com>" [unknown]
-gpg: Good signature from "Andrew Chow (Official New Key) <achow101@gmail.com>" [unknown]
 gpg: Good signature from "Ben Carman <benthecarman@live.com>" [unknown]
 gpg: Good signature from "Antoine Poinsot <darosior@protonmail.com>" [unknown]
-gpg: Good signature from "Duncan Dean <duncangleeddean@gmail.com>" [unknown]
 gpg: Good signature from "Stephan Oeste (it) <it@oeste.de>" [unknown]
 gpg: Good signature from "Michael Ford (bitcoin-otc) <fanquake@gmail.com>" [unknown]
 gpg: Good signature from "Oliver Gugger <gugger@gmail.com>" [unknown]
 gpg: Good signature from "Hennadii Stepanov (hebasto) <hebasto@gmail.com>" [unknown]
 gpg: Good signature from "Jon Atack <jon@atack.com>" [unknown]
 gpg: Good signature from "Wladimir J. van der Laan <laanwj@visucore.com>" [unknown]
-gpg: Good signature from "Will Clark <will8clark@gmail.com>" [unknown]
+SIG VERIFICATION SUCCESS:        9 GOOD SIGNATURES FOUND.
 ```
-The console will disappear after installation is done, so if you didn't see the final info, you can revisit it at "File > Gordian Server Log". Scroll to the bottom.
 
 ### Checking Checksums
 
-Besides checking the signatures on Bitcoin Core, it's also helpful to check the checksums to make sure they matched.  This will appear in your Gordian Log prior to the signature check:
+Besides checking the signatures on Bitcoin Core, it's also helpful to check the checksums to make sure they matched.  This will appear in the installation window, and can later be reviewed in your Gordian Log:
 ```
-Checking sha256 checksums bitcoin-22.0-osx64.tar.gz against provided SHA256SUMS
 See two hashes (they should match):
 2744d199c3343b2d94faffdfb2c94d75a630ba27301a70e47b0ad30a7e0155e9
 2744d199c3343b2d94faffdfb2c94d75a630ba27301a70e47b0ad30a7e0155e9
@@ -184,6 +180,7 @@ The following people directly contributed to this repository. You can add your n
 | ----------------- | ------------------- | ------------------------------------------------- | ----------------------------------------------------------- | -------------------------------------------------- |
 | Christopher Allen | Principal Architect | [@ChristopherA](https://github.com/ChristopherA) | \<ChristopherA@LifeWithAlacrity.com\>                       | FDFE 14A5 4ECB 30FC 5D22  74EF F8D3 6C91 3574 05ED |
 | Peter Denton      | Project Lead        | [@Fonta1n3](https://github.com/Fonta1n3)          | <[fontainedenton@gmail.com](mailto:fontainedenton@gmail.com)> | 1C72 2776 3647 A221 6E02  E539 025E 9AD2 D3AC 0FCA  |
+| Shannon Appelcline      |Release Manager        | [@shannona](https://github.com/shannona)          | <[shannon.appelcline@gmail.com](mailto:shannon.appelcline@gmail.com)> | A488 9A09 F981 9D8C 0540  0450 7EC6 B928 606F 27AD  |
 
 ## Responsible Disclosure
 
