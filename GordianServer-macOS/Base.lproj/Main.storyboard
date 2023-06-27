@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19162"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19455"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -458,7 +458,7 @@
         <scene sceneID="R2V-B0-nI4">
             <objects>
                 <windowController storyboardIdentifier="MainWindow" id="B8D-0N-5wS" sceneMemberID="viewController">
-                    <window key="window" title="Gordian Server v1.0.0" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
+                    <window key="window" title="Gordian Server v1.0.1" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES"/>
                         <windowPositionMask key="initialPositionMask" topStrut="YES"/>
                         <rect key="contentRect" x="226" y="275" width="436" height="480"/>
@@ -1033,7 +1033,7 @@
                                                 <rect key="frame" x="17" y="281" width="163" height="91"/>
                                                 <subviews>
                                                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Nzy-A1-ER9">
-                                                        <rect key="frame" x="6" y="27.5" width="25" height="31"/>
+                                                        <rect key="frame" x="6" y="27" width="25" height="31"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="25" id="62z-Hk-7bI"/>
                                                             <constraint firstAttribute="height" constant="25" id="ZnR-Fv-bts"/>
@@ -1041,7 +1041,7 @@
                                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSLockLockedTemplate" id="Wvy-Fk-KwH"/>
                                                     </imageView>
                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YDF-ZK-BZU">
-                                                        <rect key="frame" x="40" y="25" width="83" height="33"/>
+                                                        <rect key="frame" x="39" y="25" width="84" height="33"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="21" id="MmV-EM-zyq"/>
                                                         </constraints>
@@ -1055,7 +1055,7 @@
                                                         </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="whm-EA-eFM">
-                                                        <rect key="frame" x="40" y="1" width="83" height="33"/>
+                                                        <rect key="frame" x="39" y="1" width="84" height="33"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="21" id="GQd-AJ-7EZ"/>
                                                         </constraints>
@@ -1229,7 +1229,7 @@
                                 </constraints>
                             </progressIndicator>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Hsc-NE-dUX">
-                                <rect key="frame" x="65" y="506" width="85" height="32"/>
+                                <rect key="frame" x="65" y="506" width="86" height="32"/>
                                 <buttonCell key="cell" type="push" title="Settings" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="ZbP-8i-hFA">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -1259,7 +1259,7 @@
                                 </textFieldCell>
                             </textField>
                             <button translatesAutoresizingMaskIntoConstraints="NO" id="cIX-w1-69c">
-                                <rect key="frame" x="504" y="530.5" width="20" height="30"/>
+                                <rect key="frame" x="504" y="531" width="20" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="26" id="CCR-ja-avg"/>
                                     <constraint firstAttribute="width" constant="20" id="OxI-sC-ktD"/>
@@ -1283,6 +1283,14 @@
                                     <action selector="showQuickConnectAction:" target="XfG-lQ-9wD" id="4sV-sI-a8o"/>
                                 </connections>
                             </button>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TnV-F8-Rqx">
+                                <rect key="frame" x="8" y="510" width="53" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="$61,876" id="UA9-g8-bL0">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
                             <constraint firstItem="qja-rn-gD6" firstAttribute="leading" secondItem="nxx-XH-rol" secondAttribute="leading" id="3UD-3m-1IC"/>
@@ -1290,6 +1298,7 @@
                             <constraint firstItem="nxx-XH-rol" firstAttribute="centerY" secondItem="m2S-Jp-Qdl" secondAttribute="centerY" id="9iF-dC-I79"/>
                             <constraint firstItem="cIX-w1-69c" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="10" id="AWd-JL-gEK"/>
                             <constraint firstItem="HEa-N4-orm" firstAttribute="centerY" secondItem="Hsc-NE-dUX" secondAttribute="centerY" id="AZS-Fe-7P8"/>
+                            <constraint firstItem="TnV-F8-Rqx" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="10" id="BHK-nu-Kzl"/>
                             <constraint firstItem="K4o-Sf-dSl" firstAttribute="leading" secondItem="kdQ-HU-D0l" secondAttribute="trailing" constant="8" symbolic="YES" id="Cvt-fE-DvP"/>
                             <constraint firstItem="zZj-w8-TgT" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="10" id="JMI-56-47X"/>
                             <constraint firstItem="K4o-Sf-dSl" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="OIP-fp-qBZ"/>
@@ -1303,6 +1312,7 @@
                             <constraint firstItem="nxx-XH-rol" firstAttribute="leading" secondItem="Hsc-NE-dUX" secondAttribute="leading" id="p30-eN-woi"/>
                             <constraint firstItem="ij1-9D-yib" firstAttribute="top" secondItem="qja-rn-gD6" secondAttribute="bottom" constant="1" id="t9s-Q4-4dF"/>
                             <constraint firstItem="qja-rn-gD6" firstAttribute="top" secondItem="nxx-XH-rol" secondAttribute="bottom" constant="8" symbolic="YES" id="xcf-s1-zqb"/>
+                            <constraint firstItem="TnV-F8-Rqx" firstAttribute="top" secondItem="zZj-w8-TgT" secondAttribute="bottom" constant="8" symbolic="YES" id="ygk-bN-AQc"/>
                         </constraints>
                     </view>
                     <connections>
@@ -1314,6 +1324,7 @@
                         <outlet property="bitcoinIsOnHeaderImage" destination="IZe-rf-ugH" id="Ncd-MN-zJ5"/>
                         <outlet property="blocksOutlet" destination="u4k-cA-eaA" id="uJ9-63-CBJ"/>
                         <outlet property="difficultyOutlet" destination="2M3-Q6-5tc" id="exO-G7-Fya"/>
+                        <outlet property="fxRateOutlet" destination="TnV-F8-Rqx" id="a6L-Py-MA9"/>
                         <outlet property="hashrateOutlet" destination="ObL-6X-0iZ" id="0B1-1z-zCg"/>
                         <outlet property="icon" destination="zZj-w8-TgT" id="mC2-fU-qbF"/>
                         <outlet property="mainnetIncomingPeersLabel" destination="PMt-yp-b2E" id="qSk-0Q-URx"/>
@@ -1392,7 +1403,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView identifier="WalletNameCellID" id="BSt-3t-igI">
-                                                            <rect key="frame" x="11" y="1" width="565" height="17"/>
+                                                            <rect key="frame" x="1" y="1" width="565" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="W3g-V0-fUf">
@@ -1501,7 +1512,7 @@
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gDU-nR-GfR">
-                                        <rect key="frame" x="-7" y="21" width="119" height="32"/>
+                                        <rect key="frame" x="-7" y="21" width="120" height="32"/>
                                         <buttonCell key="cell" type="push" title="Show balance" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="uV4-mK-yRk">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
@@ -1649,7 +1660,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="EzB-3J-lbW">
-                                <rect key="frame" x="190" y="13" width="148" height="32"/>
+                                <rect key="frame" x="189" y="13" width="148" height="32"/>
                                 <buttonCell key="cell" type="push" title="Advanced Settings" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kPD-0u-0ul">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -1672,7 +1683,7 @@ Gw
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="V45-vB-xhm">
-                                <rect key="frame" x="336" y="13" width="101" height="32"/>
+                                <rect key="frame" x="335" y="13" width="102" height="32"/>
                                 <buttonCell key="cell" type="push" title="Install Now" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="5Iv-D7-hfy">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -1813,7 +1824,7 @@ Gw
                                 </customSpacing>
                             </stackView>
                             <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="6" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RMs-re-3OB">
-                                <rect key="frame" x="20" y="20" width="281" height="38"/>
+                                <rect key="frame" x="20" y="20" width="280" height="38"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="K8M-AP-QRh">
                                         <rect key="frame" x="-2" y="22" width="130" height="16"/>
@@ -1824,7 +1835,7 @@ Gw
                                         </textFieldCell>
                                     </textField>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0cQ-HR-WIM">
-                                        <rect key="frame" x="-2" y="0.0" width="285" height="16"/>
+                                        <rect key="frame" x="-2" y="0.0" width="284" height="16"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="/Users/You/Library/Application Support/Bitcoin" id="Kmd-GB-DqL">
                                             <font key="font" metaFont="message"/>
                                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
@@ -1842,7 +1853,7 @@ Gw
                                 </customSpacing>
                             </stackView>
                             <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="6" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="v7g-hi-JHl">
-                                <rect key="frame" x="20" y="66" width="281" height="38"/>
+                                <rect key="frame" x="20" y="66" width="280" height="38"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="an3-Sh-0Bs">
                                         <rect key="frame" x="-2" y="22" width="92" height="16"/>
@@ -1853,7 +1864,7 @@ Gw
                                         </textFieldCell>
                                     </textField>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HcW-Qw-X0U">
-                                        <rect key="frame" x="-2" y="0.0" width="285" height="16"/>
+                                        <rect key="frame" x="-2" y="0.0" width="284" height="16"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="/Users/You/Library/Application Support/Bitcoin" id="hBT-Zj-yb7">
                                             <font key="font" metaFont="message"/>
                                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
@@ -1913,7 +1924,7 @@ Gw
                                 </customSpacing>
                             </stackView>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="S1V-El-KRh">
-                                <rect key="frame" x="326" y="31" width="79" height="32"/>
+                                <rect key="frame" x="325" y="31" width="80" height="32"/>
                                 <buttonCell key="cell" type="push" title="choose" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="dQm-Nv-YtJ">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -1944,7 +1955,7 @@ Gw
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kUd-D3-U56">
-                                <rect key="frame" x="326" y="77" width="79" height="32"/>
+                                <rect key="frame" x="325" y="77" width="80" height="32"/>
                                 <buttonCell key="cell" type="push" title="choose" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="D3q-oW-k6F">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -2194,7 +2205,7 @@ Gw
     </inferredMetricsTieBreakers>
     <resources>
         <image name="NSActionTemplate" width="15" height="15"/>
-        <image name="NSLockLockedTemplate" width="14" height="15"/>
+        <image name="NSLockLockedTemplate" width="15" height="15"/>
         <image name="NSStatusNone" width="16" height="16"/>
         <image name="arrow.clockwise" catalog="system" width="11" height="13"/>
         <image name="blockchaincommons" width="256" height="256"/>

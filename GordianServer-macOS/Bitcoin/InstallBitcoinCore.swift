@@ -10,27 +10,55 @@ import Foundation
 
 class InstallBitcoinCore {
     class func checkExistingConf() {
-        var userExists = false
-        var passwordExists = false
         var proxyExists = false
         var onlynetExists = false
         var discoverExists = false
         var listenExists = false
         var externalIpExists = false
+        var gordianServerUserExists = false
+        var gordianServerWhitelistExists = false
         
         BitcoinConf.getBitcoinConf { (conf, error) in            
             guard let conf = conf, !error, conf.count > 0 else {
-                self.setBitcoinConf(BitcoinConf.bitcoinConf())
+                if let defaultConf = BitcoinConf.bitcoinConf() {
+                    self.setBitcoinConf(defaultConf)
+                } else {
+                    simpleAlert(message: "Something went wrong...", info: "Unable to create the default bitcoin.conf, please let us know about this bug.", buttonLabel: "OK")
+                }
                 return
             }
             
-            for setting in conf {
+            let rpcuser = "GordianServer"
+            let rpcauthCreds = RPCAuth.generateRpcAuth(user: "GordianServer")
+            
+            guard let rpcauth = rpcauthCreds.rpcauth, let rpcpassword = rpcauthCreds.rpcpassword else {
+                simpleAlert(message: "Error", info: "Unable to create rpcauth credentials.", buttonLabel: "OK")
+                return
+            }
+            
+            UserDefaults.standard.setValue(rpcpassword, forKey: "rpcpassword")
+            UserDefaults.standard.setValue(rpcuser, forKey: "rpcuser")
+            
+            var updatedConf = conf
+            
+            for (i, setting) in conf.enumerated() {
                 if setting.contains("=") {
                     let arr = setting.components(separatedBy: "=")
                     let k = arr[0]
                     let existingValue = arr[1]
                     
                     switch k {
+                    case "rpcauth":
+                        if existingValue.hasPrefix("GordianServer:") {
+                            gordianServerUserExists = true
+                            updatedConf[i] = rpcauth
+                        }
+                        
+                    case "rpcwhitelist":
+                        if existingValue.hasPrefix("GordianServer:") {
+                            gordianServerWhitelistExists = true
+                        }
+                        
                     case "onlynet", "#onlynet":
                         onlynetExists = true
                         
@@ -42,18 +70,6 @@ class InstallBitcoinCore {
                         
                     case "blocksdir":
                         UserDefaults.standard.setValue(existingValue, forKey: "blockDir")
-                        
-                    case "rpcuser":
-                        if existingValue != "" {
-                            userExists = true
-                            UserDefaults.standard.setValue(existingValue, forKey: "rpcuser")
-                        }
-                        
-                    case "rpcpassword":
-                        if existingValue != "" {
-                            passwordExists = true
-                            UserDefaults.standard.setValue(existingValue, forKey: "rpcpassword")
-                        }
                         
                     case "testnet", "regtest", "signet":
                         if existingValue != "" {
@@ -72,19 +88,14 @@ class InstallBitcoinCore {
                 }
             }
             
-            let newrpcpassword = randomString(length: 32)
-            let newrpcuser = randomString(length: 10)
+            var bitcoinConf = updatedConf.joined(separator: "\n")
             
-            var bitcoinConf = conf.joined(separator: "\n")
-            
-            if !passwordExists {
-                bitcoinConf = "rpcpassword=\(newrpcpassword)\n" + bitcoinConf
-                UserDefaults.standard.setValue(newrpcpassword, forKey: "rpcpassword")
+            if !gordianServerUserExists {
+                bitcoinConf = rpcauth + "\n" + bitcoinConf
             }
             
-            if !userExists {
-                bitcoinConf = "rpcuser=\(newrpcuser)\n" + bitcoinConf
-                UserDefaults.standard.setValue(newrpcuser, forKey: "rpcuser")
+            if !gordianServerWhitelistExists {
+                bitcoinConf = "rpcwhitelist=GordianServer:\(rpcWhiteList)\n" + bitcoinConf
             }
             
             if !proxyExists {
@@ -106,9 +117,6 @@ class InstallBitcoinCore {
             if !externalIpExists {
                 bitcoinConf = "externalip=\(TorClient.sharedInstance.p2pHostname(chain: "main") ?? "")\n" + bitcoinConf
             }
-                        
-            
-            
             
             setBitcoinConf(bitcoinConf)
         }

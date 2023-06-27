@@ -10,18 +10,24 @@ import Foundation
 
 class BitcoinConf {
     
-    static func bitcoinConf() -> String {
+    static func bitcoinConf() -> String? {
         let d = Defaults.shared
         let prune = d.prune
         let txindex = d.txindex
         let walletDisabled = d.walletdisabled
-        let rpcpassword = UserDefaults.standard.object(forKey: "rpcpassword") as? String ?? randomString(length: 32)
-        let rpcuser = UserDefaults.standard.object(forKey: "rpcuser") as? String ?? randomString(length: 10)
+        let rpcuser = "GordianServer"
+        let rpcauthCreds = RPCAuth.generateRpcAuth(user: "GordianServer")
+        
+        guard let rpcauth = rpcauthCreds.rpcauth, let rpcpassword = rpcauthCreds.rpcpassword else {
+            simpleAlert(message: "Error", info: "Unable to create rpcauth credentials.", buttonLabel: "OK")
+            return nil
+        }
+        
+        UserDefaults.standard.setValue(rpcpassword, forKey: "rpcpassword")
+        UserDefaults.standard.setValue(rpcuser, forKey: "rpcuser")
         
         return """
         disablewallet=\(walletDisabled)
-        rpcuser=\(rpcuser)
-        rpcpassword=\(rpcpassword)
         server=1
         prune=\(prune)
         txindex=\(txindex)
@@ -33,12 +39,13 @@ class BitcoinConf {
         proxy=127.0.0.1:19150
         listen=1
         discover=1
+        \(rpcauth)
+        rpcwhitelist=\(rpcuser):\(rpcWhiteList)
         [main]
         externalip=\(TorClient.sharedInstance.p2pHostname(chain: "main") ?? "")
         rpcport=8332
         rpcallowip=127.0.0.1
         rpcbind=127.0.0.1
-        rpcwhitelist=\(rpcuser):\(rpcWhiteList)
         [test]
         externalip=\(TorClient.sharedInstance.p2pHostname(chain: "test") ?? "")
         rpcport=18332

@@ -40,4 +40,10 @@ extension Int {
     var diffString: String {
         return "\(Int(self / 1000000000000)) trillion"
     }
+    
+    var withCommas: String {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = NumberFormatter.Style.decimal
+        return numberFormatter.string(from: NSNumber(value:self))!
+    }
 }

@@ -10,6 +10,7 @@ import Cocoa
 
 class ViewController: NSViewController, NSWindowDelegate {
     
+    @IBOutlet weak private var fxRateOutlet: NSTextField!
     @IBOutlet weak private var rpcAuthenticated: NSTextField!
     @IBOutlet weak private var bitcoinCoreModeOutlet: NSTextField!
     @IBOutlet weak private var rpcHostOutlet: NSTextField!
@@ -63,13 +64,10 @@ class ViewController: NSViewController, NSWindowDelegate {
     var newestVersion = ""
     var newestBinaryName = ""
     var newestPrefix = ""
-    var standingUp = false
     var bitcoinInstalled = false
     var torIsOn = false
     var bitcoinRunning = false
     var isLoading = false
-    var bitcoinConfigured = false
-    var ignoreExistingBitcoin = false
     var env = [String:String]()
     let d = Defaults.shared
     var infoMessage = ""
@@ -77,6 +75,7 @@ class ViewController: NSViewController, NSWindowDelegate {
     var installingXcode = false
     var currentVersion = ""
     var peerInfo = ""
+    var isPromptingForInstall = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -87,11 +86,21 @@ class ViewController: NSViewController, NSWindowDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(disableRefresh), name: .disableRefresh, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(enableRefresh), name: .enableRefresh, object: nil)
         
+        let notificationCenter = NSWorkspace.shared.notificationCenter
+        notificationCenter.addObserver(self, selector: #selector(sleepListener), name: NSWorkspace.willSleepNotification, object: nil)
+        
         d.setDefaults { [weak self] in
             guard let self = self else { return }
             
             self.setEnv()
             self.setScene()
+        }
+        
+        let rpcauthCreds = RPCAuth.generateRpcAuth(user: "GordianServer")
+        
+        guard let rpcauth = rpcauthCreds.rpcauth, let rpcpassword = rpcauthCreds.rpcpassword else {
+            simpleAlert(message: "Error", info: "Unable to create rpcauth credentials.", buttonLabel: "OK")
+            return
         }
     }
 
@@ -103,10 +112,10 @@ class ViewController: NSViewController, NSWindowDelegate {
     override func viewWillDisappear() {
         autoRefreshTimer?.invalidate()
         autoRefreshTimer = nil
-        startTimer?.invalidate()
-        startTimer = nil
-        shutDownTimer?.invalidate()
-        shutDownTimer = nil
+//        startTimer?.invalidate()
+//        startTimer = nil
+//        shutDownTimer?.invalidate()
+//        shutDownTimer = nil
     }
 
     override func viewDidAppear() {
@@ -136,6 +145,20 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
     }
     
+    @objc func sleepListener() {
+        mgr?.resign()
+        mgr?.state = .stopped
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.torIsOn = false
+            self.startTorOutlet.title = "Start"
+            self.startTorOutlet.isEnabled = true
+            self.updateTorStatus(isOn: false)
+        }
+    }
+    
     @objc func enableRefresh() {
         if !isLoading {
             if self.mgr?.state != .started && self.mgr?.state != .connected  {
@@ -161,10 +184,10 @@ class ViewController: NSViewController, NSWindowDelegate {
             
             self.autoRefreshTimer?.invalidate()
             self.autoRefreshTimer = nil
-            self.startTimer?.invalidate()
-            self.startTimer = nil
-            self.shutDownTimer?.invalidate()
-            self.shutDownTimer = nil
+//            self.startTimer?.invalidate()
+//            self.startTimer = nil
+//            self.shutDownTimer?.invalidate()
+//            self.shutDownTimer = nil
         }
     }
     
@@ -185,7 +208,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         switch modalResponse {
         case .alertFirstButtonReturn:
             if bitcoinRunning {
-                self.runScript(script: .stopBitcoin)
+                self.stopBitcoin()
             }
             self.mgr?.resign()
             
@@ -261,7 +284,8 @@ class ViewController: NSViewController, NSWindowDelegate {
                 
                 if success {
                     self.setEnv()
-                    if self.currentVersion.contains(self.d.existingVersion) {
+                    
+                    if self.currentVersion.contains(self.newestVersion) {
                         DispatchQueue.main.async { [weak self] in
                             guard let self = self else { return }
                             
@@ -362,6 +386,18 @@ class ViewController: NSViewController, NSWindowDelegate {
         
         checkForGordian()
     }
+    
+    private func getFxRate() {
+        FXRate.sharedInstance.getFxRate { fxRate in
+            guard let fxRate = fxRate else { return }
+            
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                
+                self.fxRateOutlet.stringValue = "$\(Int(fxRate).withCommas)"
+            }
+        }
+    }
 
     @IBAction func removeAuthAction(_ sender: Any) {
         let chain = UserDefaults.standard.string(forKey: "chain") ?? "main"
@@ -419,7 +455,18 @@ class ViewController: NSViewController, NSWindowDelegate {
             runScript(script: .startBitcoin)
         } else {
             addSpinnerDesc("stopping \(chain)...")
-            runScript(script: .stopBitcoin)
+            stopBitcoin()
+        }
+    }
+    
+    private func stopBitcoin() {
+        command(command: "stop") { [weak self] result in
+            guard let self = self else { return }
+            
+            guard let result = result as? String else { return }
+            
+            self.showBitcoinLog()
+            self.stopBitcoinParse(result: result)
         }
     }
 
@@ -480,30 +527,34 @@ class ViewController: NSViewController, NSWindowDelegate {
     }
 
     private func installNow() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            
-            self.autoRefreshTimer?.invalidate()
-            self.autoRefreshTimer = nil
-        }
-        
-        startSpinner(description: "Fetching latest Bitcoin Core version...")
-        FetchLatestRelease.get { [weak self] (dict, error) in
-            guard let self = self else { return }
-            
-            if error != nil {
-                self.hideSpinner()
-                simpleAlert(message: "Error", info: error ?? "We had an error fetching the latest version of Bitcoin Core, please check your internet connection and try again", buttonLabel: "OK")
-
-            } else {
-                self.hideSpinner()
-                self.version = dict!["version"] as! String
-                self.macosURL = dict!["macosURL"] as! String
+        if !isPromptingForInstall {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
+                self.autoRefreshTimer?.invalidate()
+                self.autoRefreshTimer = nil
+            }
+            
+            startSpinner(description: "Fetching latest Bitcoin Core version...")
+            
+            FetchLatestRelease.get { [weak self] (dict, error) in
+                guard let self = self else { return }
+                
+                if error != nil {
+                    self.hideSpinner()
+                    simpleAlert(message: "Error", info: error ?? "We had an error fetching the latest version of Bitcoin Core, please check your internet connection and try again", buttonLabel: "OK")
+
+                } else {
+                    self.hideSpinner()
+                    self.version = dict!["version"] as! String
+                    self.macosURL = dict!["macosURL"] as! String
+                    self.isPromptingForInstall = true
                     
-                    self.performSegue(withIdentifier: "segueToInstallBitcoinCore", sender: self)
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        
+                        self.performSegue(withIdentifier: "segueToInstallBitcoinCore", sender: self)
+                    }
                 }
             }
         }
@@ -611,7 +662,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         
         let bitcoinConfUrl = URL(fileURLWithPath: "\(Defaults.shared.dataDir)/bitcoin.conf")
         
-        guard let bitcoinConf = BitcoinConf.bitcoinConf().data(using: .utf8) else { return }
+        guard let bitcoinConf = BitcoinConf.bitcoinConf()?.data(using: .utf8) else { return }
         
         do {
             try bitcoinConf.write(to: bitcoinConfUrl)
@@ -625,8 +676,23 @@ class ViewController: NSViewController, NSWindowDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
-            self.taskDescription.stringValue = "checking for ~/.gordian/BitcoinCore directory..."
-            self.runScript(script: .checkForGordian)
+            self.startMainnetOutlet.isEnabled = false
+            self.networkButton.isEnabled = false
+            self.getFxRate()
+            self.taskDescription.stringValue = "checking for bitcoind..."
+            
+            guard let binaryPrefix = UserDefaults.standard.object(forKey: "binaryPrefix") as? String,
+                  FileManager.default.fileExists(atPath: "/Users/\(NSUserName())/.gordian/BitcoinCore/\(binaryPrefix)/bin/bitcoind") else {
+                      self.checkForXcodeSelect()
+                      return
+                  }
+            
+            if self.isPromptingForInstall {
+                simpleAlert(message: "Bitcoin Core Installed ✓", info: "You can click the Start button to get your node up and running.", buttonLabel: "OK")
+                self.isPromptingForInstall = false
+            }
+            
+            self.checkBitcoinConfForRPCCredentials()
         }
     }
 
@@ -662,15 +728,6 @@ class ViewController: NSViewController, NSWindowDelegate {
             if let errorOutput = String(data: errData, encoding: .utf8) {
                 #if DEBUG
                 print("error: \(errorOutput)")
-                if errorOutput != "" && !errorOutput.contains("Pruning blockstore") && !errorOutput.contains("not connect to the server") && !errorOutput.contains("block") && !errorOutput.contains("Loading P2P addresses")  {
-                    if errorOutput.contains("Cannot obtain a lock on data directory") {
-                        simpleAlert(message: "Shutdown in progress...", info: "Please be patient while Bitcoin Core shuts down, you will see \"Shutdown: done\" in the log output below when it has completely stopped.", buttonLabel: "OK")
-                    } else {
-                        simpleAlert(message: "Error", info: errorOutput, buttonLabel: "OK")
-                    }
-                    
-                }
-                
                 #endif
                 result += errorOutput
             }
@@ -721,12 +778,8 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     func parseScriptResult(script: SCRIPT, result: String) {
         switch script {
-        case .checkForGordian:
-            checkGordianParser(result: result)
-            
-        case .stopBitcoin:
-            showBitcoinLog()
-            stopBitcoinParse(result: result)
+//        case .checkForGordian:
+//            checkGordianParser(result: result)
             
         case .startBitcoin:
             showBitcoinLog()
@@ -854,13 +907,13 @@ class ViewController: NSViewController, NSWindowDelegate {
         }
     }
 
-    func checkGordianParser(result: String) {
-        if result.contains("False") {
-            checkForXcodeSelect()
-        } else {
-            checkBitcoinConfForRPCCredentials()
-        }
-    }
+//    func checkGordianParser(result: String) {
+//        if result.contains("False") {
+//            checkForXcodeSelect()
+//        } else {
+//            checkBitcoinConfForRPCCredentials()
+//        }
+//    }
 
     private func command(command: String, completion: @escaping ((Any?)) -> Void) {
         let rpc = MakeRpcCall.shared
@@ -877,7 +930,7 @@ class ViewController: NSViewController, NSWindowDelegate {
         default:
             break
         }
-        rpc.command(method: command, port: port, user: rpcuser, password: rpcpassword) { [weak self] (response, error) in
+        rpc.command(method: command, port: port) { [weak self] (response, error) in
             guard let self = self else { return }
             
             if error == nil {
@@ -907,12 +960,57 @@ class ViewController: NSViewController, NSWindowDelegate {
                         self.startMainnetOutlet.title = "Stop"
                         self.startMainnetOutlet.isEnabled = false
                         self.startTimer?.invalidate()
-                        self.startTimer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(self.queryStartStatus), userInfo: nil, repeats: true)
+                        self.startTimer = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(self.queryStartStatus), userInfo: nil, repeats: true)
                     }
                     
                 case _ where error.contains("Could not connect to the server"):
                     self.hideSpinner()
                     self.bitcoinIsOff()
+                    
+                case _ where error.contains("Looks like your rpc credentials are incorrect"):
+                    self.hideSpinner()
+                    
+                    actionAlert(message: "RPC credentials not valid!\n\nRefresh rpc authentication for Gordian Server?", info: "Gordian Server uses rpcauth to communicate to Bitcoin Core. It looks like the Gordian Server user's authentication needs to be refreshed. Click Yes to delete the existing Gordian Server rpc authentication, you will then be automatically prompted to add new credentials. If your node is running you will need to quit Bitcoin Core for the changes to take effect.") { [weak self] response in
+                        
+                        guard let self = self else { return }
+                        
+                        guard response else { return }
+                        
+                        BitcoinConf.getBitcoinConf { (conf, error) in
+                            guard let existingConf = conf else {
+                                simpleAlert(message: "No existing bitcoin.conf", info: "Please refresh the app to automatically add a defualt bitcoin.conf", buttonLabel: "OK")
+                                return
+                            }
+                            
+                            var updatedConf = existingConf
+                            
+                            for (i, setting) in updatedConf.enumerated() {
+                                if setting.hasPrefix("rpcauth=GordianServer:") {
+                                    updatedConf.remove(at: i)
+                                }
+                            }
+                            
+                            for (i, setting) in updatedConf.enumerated() {
+                                if setting.hasPrefix("rpcwhitelist=GordianServer:") {
+                                    updatedConf.remove(at: i)
+                                }
+                            }
+                            
+                            let bitcoinConf = updatedConf.joined(separator: "\n")
+                            
+                            let bitcoinConfPath = URL(fileURLWithPath: self.d.dataDir + "/bitcoin.conf")
+                            
+                            do {
+                                try bitcoinConf.data(using: .utf8)?.write(to: bitcoinConfPath)
+                            } catch {
+                                simpleAlert(message: "There was an issue...", info: "Could not edit bitcoin.conf: \(error.localizedDescription)", buttonLabel: "OK")
+                            }
+                        }
+                        
+                        if self.bitcoinRunning {
+                            simpleAlert(message: "Bitcoin Core is still running...", info: "Use Activity Monitor to search for bitcoind, then quit it. Once bitcoind has stopped you can refresh Gordian Server for the changes to take effect.", buttonLabel: "OK")
+                        }
+                    }
                 
                 default:
                     self.hideSpinner()
@@ -947,35 +1045,49 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     func checkForRPCCredentials(response: String) {
         let bitcoinConf = response.components(separatedBy: "\n")
+        var gordianServerUserExists = false
+        
         for item in bitcoinConf {
-            if item.contains("rpcuser") {
-                let arr = item.components(separatedBy: "rpcuser=")
-                rpcuser = arr[1]
-                UserDefaults.standard.setValue(rpcuser, forKey: "rpcuser")
+            if item.contains("rpcauth") && item.contains("rpcauth=GordianServer:") {
+                gordianServerUserExists = true
             }
-            if item.contains("rpcpassword") {
-                let arr = item.components(separatedBy: "rpcpassword=")
-                rpcpassword = arr[1]
-                UserDefaults.standard.setValue(rpcpassword, forKey: "rpcpassword")
-            }
+            
             if item.contains("testnet=1") || item.contains("testnet=0") || item.contains("regtest=1") || item.contains("regtest=0") || item.contains("signet=1") || item.contains("signet=0") {
                 simpleAlert(message: "Incompatible bitcoin.conf setting! Standup will not function properly.", info: "GordianServer allows you to run multiple networks simultaneously, we do this by specifying which chain we want to launch as a command line argument. Specifying a network in your bitcoin.conf is incompatible with this approach, please remove the line in your conf file which specifies a network to use GordianServer.", buttonLabel: "OK")
             }
         }
-        if rpcpassword != "" && rpcuser != "" {
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                
-                self.bitcoinConfigured = true
-            }
+        
+        if gordianServerUserExists {
             checkBitcoindVersion()
         } else {
-            DispatchQueue.main.async { [weak self] in
+            hideSpinner()
+            
+            actionAlert(message: "Add rpc authentication for Gordian Server?", info: "Gordian Server uses rpcauth to communicate to Bitcoin Core. It looks like the Gordian Server user is missing from your Bitcoin Core configuration file. Click Yes to add rpc authentication for Gordian Server. If your node is running you will need to quit Bitcoin Core for the changes to take effect.") { [weak self] response in
+                
                 guard let self = self else { return }
                 
-                self.hideSpinner()
-                self.bitcoinConfigured = false
-                simpleAlert(message: "RPC credentials missing...", info: "Something strange has happened and your rpc credentials disappeared. To fix this stop Bitcoin Core, then select the Bitcoin menu item > Bitcoin Core Config and add two lines to the config:\n\nrpcpassword=astrongpassword\nrpcuser=username\n\nSave the file and try again.", buttonLabel: "OK")
+                guard response else { return }
+                
+                let rpcAuthCreds = RPCAuth.generateRpcAuth(user: "GordianServer")
+                
+                guard let rpcauth = rpcAuthCreds.rpcauth, let rpcpassword = rpcAuthCreds.rpcpassword else {
+                    simpleAlert(message: "Error", info: "Unable to create rpcauth credentials.", buttonLabel: "OK")
+                    return
+                }
+                
+                UserDefaults.standard.setValue(rpcpassword, forKey: "rpcpassword")
+                UserDefaults.standard.setValue("GordianServer", forKey: "rpcuser")
+                
+                let updatedConf = rpcauth + "\n" + "rpcwhitelist=GordianServer:\(rpcWhiteList)\n" + bitcoinConf.joined(separator: "\n")
+                
+                let bitcoinConfPath = URL(fileURLWithPath: self.d.dataDir + "/bitcoin.conf")
+                
+                do {
+                    try updatedConf.data(using: .utf8)?.write(to: bitcoinConfPath)
+                    self.checkBitcoindVersion()
+                } catch {
+                    simpleAlert(message: "There was an issue...", info: "Could not edit bitcoin.conf: \(error.localizedDescription)", buttonLabel: "OK")
+                }
             }
         }
     }
@@ -1231,6 +1343,12 @@ class ViewController: NSViewController, NSWindowDelegate {
             self.mainnetSyncedLabel.stringValue = ""
             self.mainnetIncomingPeersLabel.stringValue = ""
             self.mainnetOutgoingPeersLabel.stringValue = ""
+            
+            if Defaults.shared.isPrivate == 1 {
+                self.bitcoinCoreModeOutlet.stringValue = "onion only"
+            } else {
+                self.bitcoinCoreModeOutlet.stringValue = "onion & clearnet"
+            }
         }
     }
     
@@ -1257,6 +1375,7 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     private func getLatestVersion(completion: @escaping ((success: Bool, errorMessage: String?)) -> Void) {
         FetchLatestRelease.get { [weak self] (dict, error) in
+            
             guard let self = self else { return }
             
             guard let dict = dict,
@@ -1266,7 +1385,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                       completion((false, error))
                       return
                   }
-            
+                                    
             self.newestPrefix = prefix
             self.newestVersion = version
             self.newestBinaryName = binaryName
@@ -1296,11 +1415,6 @@ class ViewController: NSViewController, NSWindowDelegate {
             
             self.p2pHostOutlet.stringValue = p2phostname
             self.rpcHostOutlet.stringValue = rpchostname
-            if Defaults.shared.isPrivate == 1 {
-                self.bitcoinCoreModeOutlet.stringValue = "onion only"
-            } else {
-                self.bitcoinCoreModeOutlet.stringValue = "onion & clearnet"
-            }
             
             let chain = UserDefaults.standard.string(forKey: "chain") ?? "main"
             let path = "\(TorClient.sharedInstance.hiddenServicePath)/bitcoin/rpc/\(chain)/authorized_clients/"
@@ -1348,6 +1462,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                         DispatchQueue.main.async { [weak self] in
                             guard let self = self else { return }
                             
+                            self.hideSpinner()
                             self.isLoading = false
                             InstallBitcoinCore.checkExistingConf()
                         }

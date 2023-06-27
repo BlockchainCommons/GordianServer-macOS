@@ -50,7 +50,7 @@ class QRDisplayer: NSViewController {
         case "test":
             rpcport = "18332"
         case "regtest":
-            rpcport = "18334"
+            rpcport = "18443"
         case "signet":
             rpcport = "38332"
         default:
@@ -71,9 +71,6 @@ class QRDisplayer: NSViewController {
         nodeLabel = nodeLabel.replacingOccurrences(of: "’", with: "")
         
         url = "btcstandup://\(rpcuser):\(rpcpassword)@\(torHostname):\(rpcport)/?label=\(nodeLabel)%20-%20\(network)"
-        if network == "lightning" {
-            url = "clightning-rpc://lightning:\(httpPass)@\(torHostname):8080/?label=Lightning"
-        }
         imageView.frame = CGRect(x: 30, y: 30, width: 100, height: 100)
         imageView.image = getQRCode(textInput: url)
     }
