@@ -1219,6 +1219,8 @@ class ViewController: NSViewController, NSWindowDelegate {
             let arr = result.components(separatedBy: "Copyright (C)")
             currentVersion = (arr[0]).replacingOccurrences(of: "Bitcoin Core Daemon version ", with: "")
             currentVersion = currentVersion.replacingOccurrences(of: "Bitcoin Core version ", with: "")
+            currentVersion = currentVersion.replacingOccurrences(of: d.existingPrefix, with: "")
+            currentVersion = currentVersion.replacingOccurrences(of: "\n", with: "")
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 
@@ -1262,7 +1264,7 @@ class ViewController: NSViewController, NSWindowDelegate {
 
     func setEnv() {
         let chain = UserDefaults.standard.string(forKey: "chain") ?? "main"
-        env = ["BINARY_NAME":d.existingBinary,"VERSION":d.existingPrefix,"PREFIX":d.existingPrefix,"DATADIR":d.dataDir, "CHAIN": chain]
+        env = ["BINARY_NAME":d.existingBinary,"VERSION":d.existingVersion,"PREFIX":d.existingPrefix,"DATADIR":d.dataDir, "CHAIN": chain]
         #if DEBUG
         print("env = \(env)")
         #endif

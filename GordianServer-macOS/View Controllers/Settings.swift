@@ -214,14 +214,17 @@ class Settings: NSViewController, NSTextFieldDelegate {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 
-                destructiveActionAlert(message: "Danger! Master kill switch!", info: "This action PERMANENTLY, IMMEDIATELY and IRREVERSIBLY deletes ALL WALLETS, Bitcoin Core binaries, and Gordian Server Tor related files and directories!") { [weak self] response in
+                let torrc = "/Users/\(NSUserName())/.torrc"
+                let gordian = "/Users/\(NSUserName())/.gordian"
+                
+                destructiveActionAlert(message: "Danger!", info: "This action IMMEDIATELY and IRREVERSIBLY deletes the \(torrc) and \(gordian) files and directories. This action can not be undone.\n\nWallets and blockchain data will not be affected.") { [weak self] response in
                     guard let self = self else { return }
                     
                     if response {
                         TorClient.sharedInstance.resign()
                         
-                        if self.deleteFile("/Users/\(NSUserName())/.torrc"),
-                           self.deleteFile("/Users/\(NSUserName())/.gordian"),
+                        if self.deleteFile(torrc),
+                           self.deleteFile(gordian),
                            self.deleteFile(Defaults.shared.dataDir) {
                             
                             DispatchQueue.main.async { [weak self] in
