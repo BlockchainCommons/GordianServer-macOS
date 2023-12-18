@@ -286,7 +286,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                 if success {
                     self.setEnv()
                     
-                    if let currentVersion = Double(self.env["VERSION"] as! String),
+                    if let currentVersion = Double(self.env["VERSION"]!),
                        let newestVersion = Double(newestVersion),
                        newestVersion > currentVersion {
                         DispatchQueue.main.async { [weak self] in
@@ -295,18 +295,18 @@ class ViewController: NSViewController, NSWindowDelegate {
                             self.updateOutlet.title = "Update"
                             self.updateOutlet.isEnabled = true
                             
-                            actionAlert(message: "A newer version of Bitcoin Core has been released. Upgrade to Bitcoin Core \(self.newestVersion)?", info: "") { (response) in
-                                if response {
-                                    DispatchQueue.main.async { [weak self] in
-                                        guard let self = self else { return }
-                                        
-                                        self.autoRefreshTimer?.invalidate()
-                                        self.autoRefreshTimer = nil
-                                        self.isLoading = false
-                                        InstallBitcoinCore.checkExistingConf()
-                                    }
-                                }
-                            }
+//                            actionAlert(message: "A newer version of Bitcoin Core has been released. Upgrade to Bitcoin Core \(self.newestVersion)?", info: "") { (response) in
+//                                if response {
+//                                    DispatchQueue.main.async { [weak self] in
+//                                        guard let self = self else { return }
+//                                        
+//                                        self.autoRefreshTimer?.invalidate()
+//                                        self.autoRefreshTimer = nil
+//                                        self.isLoading = false
+//                                        InstallBitcoinCore.checkExistingConf()
+//                                    }
+//                                }
+//                            }
                         }
                     } else {
                         DispatchQueue.main.async { [weak self] in
