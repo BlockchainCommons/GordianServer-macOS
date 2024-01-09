@@ -5,5 +5,5 @@
 #
 #  Created by Peter Denton on 9/19/21.
 #  Copyright © 2021 Peter. All rights reserved.
-open "$FILE"
+open -a "TextEdit" "$FILE"
 exit 1
