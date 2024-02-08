@@ -95,14 +95,6 @@ class ViewController: NSViewController, NSWindowDelegate {
             self.setEnv()
             self.setScene()
         }
-        
-        let rpcauthCreds = RPCAuth.generateRpcAuth(user: "GordianServer")
-        
-        guard let rpcauth = rpcauthCreds.rpcauth,
-                let rpcpassword = rpcauthCreds.rpcpassword else {
-            simpleAlert(message: "Error", info: "Unable to create rpcauth credentials.", buttonLabel: "OK")
-            return
-        }
     }
     
     override func viewWillAppear() {
@@ -1065,32 +1057,31 @@ class ViewController: NSViewController, NSWindowDelegate {
         } else {
             hideSpinner()
             
-            actionAlert(message: "Add rpc authentication for Gordian Server?", info: "Gordian Server uses rpcauth to communicate to Bitcoin Core. It looks like the Gordian Server user is missing from your Bitcoin Core configuration file. Click Yes to add rpc authentication for Gordian Server. If your node is running you will need to quit Bitcoin Core for the changes to take effect.") { [weak self] response in
-                
-                guard let self = self else { return }
-                
-                guard response else { return }
-                
-                let rpcAuthCreds = RPCAuth.generateRpcAuth(user: "GordianServer")
-                
-                guard let rpcauth = rpcAuthCreds.rpcauth, let rpcpassword = rpcAuthCreds.rpcpassword else {
-                    simpleAlert(message: "Error", info: "Unable to create rpcauth credentials.", buttonLabel: "OK")
-                    return
+            if #available(macOS 10.15, *) {
+                actionAlert(message: "Add rpc authentication for Gordian Server?", info: "Gordian Server uses rpcauth to communicate to Bitcoin Core. It looks like the Gordian Server user is missing from your Bitcoin Core configuration file. Click Yes to add rpc authentication for Gordian Server. If your node is running you will need to quit Bitcoin Core for the changes to take effect.") { [weak self] response in
+                    
+                    guard let self = self else { return }
+                    
+                    guard response else { return }
+                    
+                    guard let rpcAuthCreds = RPCAuth().generateCreds(username: "GordianServer", password: nil) else { return }
+                    
+                    UserDefaults.standard.setValue(rpcAuthCreds.rpcPassword, forKey: "rpcpassword")
+                    UserDefaults.standard.setValue("GordianServer", forKey: "rpcuser")
+                    
+                    let updatedConf = rpcAuthCreds.rpcAuth + "\n" + "rpcwhitelist=GordianServer:\(rpcWhiteList)\n" + bitcoinConf.joined(separator: "\n")
+                    
+                    let bitcoinConfPath = URL(fileURLWithPath: self.d.dataDir + "/bitcoin.conf")
+                    
+                    do {
+                        try updatedConf.data(using: .utf8)?.write(to: bitcoinConfPath)
+                        self.checkBitcoindVersion()
+                    } catch {
+                        simpleAlert(message: "There was an issue...", info: "Could not edit bitcoin.conf: \(error.localizedDescription)", buttonLabel: "OK")
+                    }
                 }
-                
-                UserDefaults.standard.setValue(rpcpassword, forKey: "rpcpassword")
-                UserDefaults.standard.setValue("GordianServer", forKey: "rpcuser")
-                
-                let updatedConf = rpcauth + "\n" + "rpcwhitelist=GordianServer:\(rpcWhiteList)\n" + bitcoinConf.joined(separator: "\n")
-                
-                let bitcoinConfPath = URL(fileURLWithPath: self.d.dataDir + "/bitcoin.conf")
-                
-                do {
-                    try updatedConf.data(using: .utf8)?.write(to: bitcoinConfPath)
-                    self.checkBitcoindVersion()
-                } catch {
-                    simpleAlert(message: "There was an issue...", info: "Could not edit bitcoin.conf: \(error.localizedDescription)", buttonLabel: "OK")
-                }
+            } else {
+                simpleAlert(message: "RPC Authentication", info: "macOS 10.15 is the minimum version required to generate rpcauth credentials.", buttonLabel: "OK")
             }
         }
     }

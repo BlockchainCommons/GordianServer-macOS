@@ -15,16 +15,13 @@ class BitcoinConf {
         let prune = d.prune
         let txindex = d.txindex
         let walletDisabled = d.walletdisabled
+        var rpcauth = "#rpcauth="
         let rpcuser = "GordianServer"
-        let rpcauthCreds = RPCAuth.generateRpcAuth(user: "GordianServer")
-        
-        guard let rpcauth = rpcauthCreds.rpcauth, let rpcpassword = rpcauthCreds.rpcpassword else {
-            simpleAlert(message: "Error", info: "Unable to create rpcauth credentials.", buttonLabel: "OK")
-            return nil
+        if let rpcAuthCreds = RPCAuth().generateCreds(username: rpcuser, password: nil) {
+            rpcauth = rpcAuthCreds.rpcAuth
+            UserDefaults.standard.setValue(rpcAuthCreds.rpcPassword, forKey: "rpcpassword")
+            UserDefaults.standard.setValue(rpcuser, forKey: "rpcuser")
         }
-        
-        UserDefaults.standard.setValue(rpcpassword, forKey: "rpcpassword")
-        UserDefaults.standard.setValue(rpcuser, forKey: "rpcuser")
         
         return """
         disablewallet=\(walletDisabled)

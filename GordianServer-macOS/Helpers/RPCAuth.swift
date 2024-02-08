@@ -1,44 +1,60 @@
 //
 //  RPCAuth.swift
-//  GordianServer-macOS
+//  FullyNoded
 //
-//  Created by Peter Denton on 10/6/21.
-//  Copyright © 2021 Peter. All rights reserved.
+//  Created by Peter Denton on 1/23/24.
+//  Copyright © 2024 Fontaine. All rights reserved.
 //
 
+import CryptoKit
 import Foundation
-import PythonKit
 
 class RPCAuth {
-    
-    static var rpcAuthPath: URL {
-        return URL(string: "file://\(NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first ?? "")/rpcauth.py")!
-    }
-    
-    static var directory: String {
-        return "\(NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first ?? "")/"
-    }
-    
-    class func generateRpcAuth(user: String) -> (rpcauth: String?, rpcpassword: String?) {
-        guard let filePath = Bundle.main.url(forResource: "rpcauth", withExtension: "py") else { print("can't get bundle path."); return (nil, nil) }
-        
-        guard let rpcauthFile = try? String(contentsOf: filePath, encoding: .utf8) else {
-            print("can not get rpcauth.py")
-            return (nil, nil)
-        }
-        
-        do {
-            try rpcauthFile.write(to: rpcAuthPath, atomically: false, encoding: .utf8)
-        } catch {
-            print("an error happened while creating the file: \(error.localizedDescription)")
-        }
-        
-        print("python version: \(Python.version)")
+ 
+    private func generateSalt() -> String? {
+        // Generates 16 random bytes, return as hex string.
+         var bytes = [UInt8](repeating: 0, count: 16)
+         let result = SecRandomCopyBytes(kSecRandomDefault, bytes.count, &bytes)
 
-        let sys = Python.import("sys")
-        sys.path.append(directory)
-        let rpcAuth = Python.import("rpcauth")
-        let response = rpcAuth.main(user)
-        return (response[0].description, response[1].description)
+         guard result == errSecSuccess else {
+             print("Problem generating random bytes")
+             return nil
+         }
+        
+        return Data(bytes).hexString
+    }
+
+    private func generatePassword() -> String? {
+        // Create 32 byte b64 password.
+        var bytes = [UInt8](repeating: 0, count: 32)
+        let result = SecRandomCopyBytes(kSecRandomDefault, bytes.count, &bytes)
+
+        guard result == errSecSuccess else {
+            print("Problem generating random bytes")
+            return nil
+        }
+        
+        return Data(bytes).urlSafeB64String
+    }
+
+    private func passwordToHmac(salt: String, password: String) -> String? {
+        if #available(macOS 10.15, *) {
+            let key = SymmetricKey(data: Data(salt.utf8))
+            let authenticationCode = HMAC<SHA256>.authenticationCode(for: Data(password.utf8), using: key)
+            return authenticationCode.compactMap { String(format: "%02x", $0) }.joined()
+        } else {
+            return nil
+        }
+    }
+
+    func generateCreds(username: String, password: String?) -> Credentials? {
+        guard let salt = generateSalt() else { return nil }
+        guard let password = password ?? generatePassword() else { return nil }
+        guard let passwordHmac = passwordToHmac(salt: salt, password: password) else { return nil }
+        let d: [String:String] = [
+            "rpcPassword": password,
+            "rpcAuth": "rpcauth=\(username):\(salt)$\(passwordHmac)"
+        ]
+        return Credentials(d)
     }
 }

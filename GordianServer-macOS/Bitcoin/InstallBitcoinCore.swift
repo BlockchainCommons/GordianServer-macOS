@@ -28,16 +28,13 @@ class InstallBitcoinCore {
                 return
             }
             
+            var rpcauth = "#rpcauth="
             let rpcuser = "GordianServer"
-            let rpcauthCreds = RPCAuth.generateRpcAuth(user: "GordianServer")
-            
-            guard let rpcauth = rpcauthCreds.rpcauth, let rpcpassword = rpcauthCreds.rpcpassword else {
-                simpleAlert(message: "Error", info: "Unable to create rpcauth credentials.", buttonLabel: "OK")
-                return
+            if let rpcAuthCreds = RPCAuth().generateCreds(username: rpcuser, password: nil) {
+                rpcauth = rpcAuthCreds.rpcAuth
+                UserDefaults.standard.setValue(rpcAuthCreds.rpcPassword, forKey: "rpcpassword")
+                UserDefaults.standard.setValue(rpcuser, forKey: "rpcuser")
             }
-            
-            UserDefaults.standard.setValue(rpcpassword, forKey: "rpcpassword")
-            UserDefaults.standard.setValue(rpcuser, forKey: "rpcuser")
             
             var updatedConf = conf
             
