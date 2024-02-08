@@ -279,7 +279,7 @@ class ViewController: NSViewController, NSWindowDelegate {
                     self.setEnv()
                     
                     if let currentVersion = Double(self.env["VERSION"]!),
-                       let newestVersion = Double(newestVersion),
+                       let newestVersion = Double(self.newestVersion),
                        newestVersion > currentVersion {
                         DispatchQueue.main.async { [weak self] in
                             guard let self = self else { return }
