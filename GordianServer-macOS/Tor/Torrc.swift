@@ -114,6 +114,10 @@ class Torrc {
     HiddenServiceVersion 3
     HiddenServicePort 38333 127.0.0.1:8334
     
+    #HiddenServiceDir \(TorClient.sharedInstance.hiddenServicePath)/cln/
+    #HiddenServiceVersion 3
+    #HiddenServicePort 9735 127.0.0.1:9735
+    
     ################ This section is just for relays #####################
     #
     ## See https://www.torproject.org/docs/tor-doc-relay for details.
