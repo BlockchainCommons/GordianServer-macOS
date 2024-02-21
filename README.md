@@ -40,11 +40,27 @@ GordianServer is primarily a wrapper to make it easy to stand up an existing ser
 
 Blockchain Commons apps do not phone home and do not run ads. Some are available through various app stores; all are available in our code repositories for your usage.
 
-## Status — Feature-Complete (1.0.0)
+## Status — Feature-Complete (1.0.2)
 
-The [v1.0.0](https://github.com/BlockchainCommons/GordianServer-macOS/releases/tag/v1.0.0) release of *GordianServer-macOS* is considered feature-complete. It is a polished and stabilized version of our v0.1 releases from 2020. We are aware of some minor nuisances with starting and stopping the server that appear in unusual circumstances. Please report these and any other issues to the [Gordian Bug Reports Discussion Area](https://github.com/BlockchainCommons/Gordian/discussions/categories/bug-reports). We also have plans to add some new RPC features to *GordianServer-macOS*, which we expect to release as v1.1.0.
+The [v1.0.2](https://github.com/BlockchainCommons/GordianServer-macOS/releases/tag/v1.0.2) release of *GordianServer-macOS* is considered feature-complete. It is a polished and stabilized version of our v0.1 releases from 2020. We are aware of some minor nuisances with starting and stopping the server that appear in unusual circumstances. Please report these and any other issues to the [Gordian Bug Reports Discussion Area](https://github.com/BlockchainCommons/Gordian/discussions/categories/bug-reports). We also have plans to add some new RPC features to *GordianServer-macOS*, which we expect to release as v1.1.0.
 
-If you use *GordianServer-macOS* for real funds, please ensure that you backup any seeds stored on the server. ***It has not yet been peer-reviewed or audited. It may not yet be ready for production uses. Use at your own risk.***
+If you use *GordianServer-macOS* for real funds, please ensure that you backup any seeds stored on the server. ***It has not yet been peer-reviewed or audited. There are some known minor glitches. It may not yet be ready for production uses. Use at your own risk.***
+
+### Version History
+
+#### 1.0.2 (patch release), May 18, 2022
+
+* Updated for changes in Bitcoin Core structure of downloadable files
+
+_There are still minor glitches that show up from time to time. The Tor framework now complains about permissions if you compile by hand. In addition, M1 Macs will not correctly use the `arm64` binary, because at time of release the arm64 `bitcoind` died on M1 macs with a "Killed: 9" error. In other words, use with caution; this bugfix release solely resolved issues with Bitcoin 23.0 file-name changes, which were preventing it from working correctly for new users._
+
+#### 1.0.1, November 17, 2021
+
+* Fixed bug where Tor died on sleep.
+
+#### 1.0.0, October 27, 2021
+
+* First feature-complete version.
 
 ## Prerequisites
 
@@ -55,13 +71,71 @@ If you use *GordianServer-macOS* for real funds, please ensure that you backup a
 
 ## Installation Instructions
 
+### Download from this Repo
+
 You must meet minimum OS and space requirements to install *GordianServer-macOS* on your Mac, as described below.     
 
 - Ensure you have a minimum macOS of 10.15.7 Catalina
-- Navigate to [Tagged release v1.0.0](https://github.com/BlockchainCommons/GordianServer-macOS/releases/tag/v1.0.0)
-- Click to download `gordian-server-v0.1.0.0.dmg`
+- Navigate to [Tagged release v1.0.1](https://github.com/BlockchainCommons/GordianServer-macOS/releases/tag/v1.0.1)
+- Click to download `gordian-server-1.0.1.dmg`
 - Check signatures and checksums
 - Open the DMG and drag the app to the Applications folder alias. That's it!
+
+#### How to Check Signatures & Checksums
+
+1. Also download the signature files from the Tagged release, which all end with "asc", as well as the SHA256SUMS file.
+2. Make sure you have GPG installed, as discussed in GPG Installation instructions (Optional), below.
+3. If you do not have the signatures of the signers, you must download them. One way is to download the GPG keys from GitHub. Just look at each signature file, and the signer's Github name will be after the first `.`. You can then download a public key directly from Github to assure yourself that it's from a trusted source:
+```
+$ curl https://github.com/ChristopherA.gpg | gpg --import
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 24303  100 24303    0     0  26885      0 --:--:-- --:--:-- --:--:-- 27033
+gpg: key F8D36C91357405ED: public key "Christopher Allen <ChristopherA@LifeWithAlacrity.com>" imported
+gpg: Total number processed: 1
+gpg:               imported: 1
+
+$ curl https://github.com/shannona.gpg | gpg --import 
+```
+4. If you are confident that the key you downloaded was from a trusted source, you can sign it to give it full validity. This is not required, but if you do not you will get a warning whenever you check the key's signatures, "WARNING: This key is not certified with a trusted signature!". You tell `gpg` to `--lsign-key` the keyid that you received, such as `F8D36C91357405ED`.
+```
+$ gpg --lsign-key F8D36C91357405ED
+```
+5. Verify the signatures of the DMG. This will tell you the DMG file was verified by the signing accounts.
+```
+$ gpg --verify gordian-server-1.0.0.dmg.ChristopherA.F8D36C91357405ED.asc gordian-server-1.0.0.dmg
+gpg: Signature made Wed Oct 27 12:41:08 2021 HST
+gpg:                using RSA key FDFE14A54ECB30FC5D2274EFF8D36C91357405ED
+gpg: Good signature from "Christopher Allen <ChristopherA@LifeWithAlacrity.com>" [full]
+gpg:                 aka "[jpeg image of size 9272]" [full]
+
+$ gpg --verify gordian-server-1.0.0.dmg.shannona.7EC6B928606F27AD.asc gordian-server-1.0.0.dmg
+gpg: Signature made Wed Oct 27 12:32:05 2021 HST
+gpg:                using RSA key A4889A09F9819D8C054004507EC6B928606F27AD
+gpg: Good signature from "Shannon Appelcline <shannon.appelcline@gmail.com>" [ultimate]
+```
+6. Verify the signatures of the Checksum. This tells you the Checksum file was verified by the signing accounts.
+```
+$ gpg --verify SHA256SUMS.ChristopherA.F8D36C91357405ED.asc SHA256SUMS
+gpg: Signature made Wed Oct 27 12:42:09 2021 HST
+gpg:                using RSA key FDFE14A54ECB30FC5D2274EFF8D36C91357405ED
+gpg: checking the trustdb
+gpg: Good signature from "Christopher Allen <ChristopherA@LifeWithAlacrity.com>" [full]
+
+$ gpg --verify SHA256SUMS.shannona.7EC6B928606F27AD.asc SHA256SUMS
+gpg: Signature made Wed Oct 27 12:33:34 2021 HST
+gpg:                using RSA key A4889A09F9819D8C054004507EC6B928606F27AD
+gpg: Good signature from "Shannon Appelcline <shannon.appelcline@gmail.com>" [ultimate]
+```
+7. Verify the Checksum of the DMG. This is a double-check that the checksum the signers verified matches the DMG that they verified.
+```
+$ shasum -c SHA256SUMS (for mac)
+gordian-server-1.0.0.dmg: OK
+
+$ sha256sum -c SHA256SUMS (for Linux)
+gordian-server-1.0.0.dmg: OK
+```
+If the signatures check out and the `shasum` is correct, the DMG should be safe.
 
 ### Build Mac App from source using Xcode
 
@@ -162,9 +236,10 @@ We encourage public contributions through issues and pull requests! Please revie
 
 The best place to talk about Blockchain Commons and its projects is in our GitHub Discussions areas.
 
-[**Gordian System Discussions**](https://github.com/BlockchainCommons/Gordian/discussions). For users and developers of the Gordian system, including the Gordian Server, Bitcoin Standup technology, QuickConnect, and the Gordian Wallet. If you want to talk about our linked full-node and wallet technology, suggest new additions to our Bitcoin Standup standards, or discuss the implementation our standalone wallet, the Discussions area of the [main Gordian repo](https://github.com/BlockchainCommons/Gordian) is the place.
+[**Gordian User Community**](https://github.com/BlockchainCommons/Gordian/discussions). For users of the Gordian reference apps, including [Gordian Coordinator](https://github.com/BlockchainCommons/iOS-GordianCoordinator), [Gordian Seed Tool](https://github.com/BlockchainCommons/GordianSeedTool-iOS), [Gordian Server](https://github.com/BlockchainCommons/GordianServer-macOS), [Gordian Wallet](https://github.com/BlockchainCommons/GordianWallet-iOS), and [SpotBit](https://github.com/BlockchainCommons/spotbit) as well as our whole series of [CLI apps](https://github.com/BlockchainCommons/Gordian/blob/master/Docs/Overview-Apps.md#cli-apps). This is a place to talk about bug reports and feature requests as well as to explore how our reference apps embody the [Gordian Principles](https://github.com/BlockchainCommons/Gordian#gordian-principles).
 
-[**Blockchain Commons Discussions**](https://github.com/BlockchainCommons/Community/discussions). For developers, interns, and patrons of Blockchain Commons, please use the discussions area of the [Community repo](https://github.com/BlockchainCommons/Community) to talk about general Blockchain Commons issues, the intern program, or topics other than the [Gordian System](https://github.com/BlockchainCommons/Gordian/discussions) or the [wallet standards](https://github.com/BlockchainCommons/AirgappedSigning/discussions), each of which have their own discussion areas.
+[**Blockchain Commons Discussions**](https://github.com/BlockchainCommons/Community/discussions). For developers, interns, and patrons of Blockchain Commons, please use the discussions area of the [Community repo](https://github.com/BlockchainCommons/Community) to talk about general Blockchain Commons issues, the intern program, or topics other than those covered by the [Gordian Developer Community](https://github.com/BlockchainCommons/Gordian-Developer-Community/discussions) or the 
+[Gordian User Community](https://github.com/BlockchainCommons/Gordian/discussions).
 
 ### Other Questions & Problems
 

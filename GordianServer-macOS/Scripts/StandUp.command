@@ -11,6 +11,16 @@ SHA_URL=$3
 SIGS_URL=$4
 VERSION=$5
 
+# MAC_ARCH=`uname -m`
+# Currently the arm64 bitcoind exits with an Error: 9 on a M1
+# When this is resolved, the Defaults file in Helpers should be updated too
+
+MAC_ARCH="x86_64"
+
+BINARY_NAME="${BINARY_NAME}-${MAC_ARCH}-apple-darwin.tar.gz"
+MACOS_URL="${MACOS_URL}${BINARY_NAME}"
+
+
 function installBitcoin() {
   echo "Downloading $SHA_URL"
   curl $SHA_URL -o ~/.gordian/BitcoinCore/SHA256SUMS -s

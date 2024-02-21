@@ -177,7 +177,7 @@ class Defaults {
         
         return ud.object(forKey: "macosBinary") as? String ?? "bitcoin-\(existingVersion)-\(arch)-apple-darwin.tar.gz"
     }
-    
+
     var existingPrefix: String {
         return ud.object(forKey: "binaryPrefix") as? String ?? "bitcoin-\(existingVersion)"
     }
