@@ -1,3 +1,7 @@
+_This repo is currently being maintained as an archive, but is no longer being updated. The Gordian Server has been deprecated. We instead suggest you use Fonta1n3's [Fully Noded Server](https://fullynoded.app/), which continues to expand the work done here to demonstrate the best practice of a personally owned Bitcion server that is segregated from actual funds._
+
+------------
+
 # 🛠 GordianServer-macOS
 
 ### _by [Peter Denton](https://github.com/Fonta1n3) and [Christopher Allen](https://github.com/ChristopherA)_
